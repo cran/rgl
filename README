@@ -1,0 +1,92 @@
+RGL - 3D visualization device system for R using OpenGL
+=======================================================
+
+INTRODUCTION
+------------
+The RGL package is a visualization device system for R, using 
+OpenGL as the rendering backend. An rgl device at its core 
+is a real-time 3D engine written in C++. It provides an 
+interactive viewpoint navigation facility (mouse + wheel support)
+and an R programming interface.
+
+
+LICENSE
+-------
+The software is released under the GNU Public License. 
+See "COPYING" textfile for details.
+
+
+FEATURES
+--------
+- portable R Plug-in using OpenGL on win32 and X11
+- R programming interface 
+- interactive viewpoint navigation
+- automatic data focus
+- geometry primitives: 
+  points, lines, triangles, quads, texts, point sprites
+- high-level geometry:
+  surface, spheres
+- up to 8 light sources
+- alpha-blending (transparency)
+- side-dependant fill-mode rendering (dots,wired and filled)
+- texture-mapping support (rgb, alpha and luminance)
+- environmental effects:
+  fogging, background sphere
+- bounding box with axis ticks marks
+- undo operation:
+  shapes and light-sources are managed on type stacks,
+  where the top-most objects can be pop'ed
+
+
+PLATFORMS & BUILD TOOLS
+-----------------------
+un*x/x11 (gcc)
+win32 (MinGW/gcc, MSVC 6, devcpp)
+
+
+REQUIREMENTS
+------------
+Windowing System (x11 or win32)
+OpenGL and GLU Library (implementation for X11 or Win32)
+png library (optional on un*x)
+
+
+BUILDING/INSTALLING THE SOURCE PACKAGE
+--------------------------------------
+The R build tool ("R CMD build" (un*x) / "Rcmd BUILD" (win32) ) 
+is the primary tool to build the RGL package.
+
+The building process comes in two flavours X11/Un*x and windows.
+
+Please read the appropriate README file:
+
+README.X11                  building on un*x/x11
+README.WIN32                building on windows
+ 
+For the windows platform, there are also precompiled binary
+zip packages available. 
+
+
+LOADING LIBRARY AND RUNNING DEMONSTRATIONS
+------------------------------------------
+
+> library(rgl)
+> demo(rgl)
+
+
+KNOWN BUGS
+----------
+- X11: rgl.close() and rgl.shutdown might crash
+
+
+CREDITS
+-------
+Daniel Adler <dadler@uni-goettingen.de>
+Oleg Nenadic <onenadi@uni-goettingen.de>
+Simon Urbanek <simon.urbanek@math.uni-augsburg.de>
+
+
+WEBSITE
+-------
+http://wsopuppenkiste.wiso.uni-goettingen.de/~dadler/rgl
+
