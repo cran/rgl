@@ -1,0 +1,18 @@
+TODO
+====
+- package vignette 
+- win32: window icon
+- rgl.bbox labels
+- z-sorted alpha-blended surfaces
+- R namespaces
+- pixmap index format
+- z-distance sorted rendering of alpha-blended faces 
+- bbox: non-uniform scale per axis
+- embedded multi-threaded framework
+- 3d util functions
+- parametric shapes
+- spheres,bg: specify sections and segments 
+- bg: sphere horizontal color range
+- multi-pass rendering (through accumulation) ... depth of field?!
+- win32/visualc++: built resets fpu word (detected with options(warn.FPU=t) )
+

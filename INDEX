@@ -1,0 +1,13 @@
+rgl.bbox                setup Bounding Box decoration
+rgl.bg                  setup Background
+rgl.light               add light source
+rgl.material            generic Appearance setup
+rgl.primitive           add primitive set shape
+rgl                     3D visualization device system
+rgl.clear               scene management
+rgl.snapshot            export screenshot
+rgl.spheres             add sphere set shape
+rgl.sprites             add sprite set shape
+rgl.surface             add height-field surface shape
+rgl.texts               add text set shape
+rgl.viewpoint           setup viewpoint
