@@ -94,3 +94,6 @@ v0.64-11
 v0.64-12
   - cran bugfix: permissions of cleanup fixed.
 
+v0.64-13
+  - DESCRIPTION fix: moved R 1.41 -> R 1.4.1 dependency
+
