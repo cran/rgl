@@ -13,7 +13,7 @@ AC_PREREQ(2.50)
 
 ## ---[ VERSION ]-------------------------------------------------------------
 
-AC_INIT([rgl], [0.64-10], [dadler@uni-goettingen.de])
+AC_INIT([rgl], [0.64-12], [dadler@uni-goettingen.de])
 AC_CONFIG_AUX_DIR(src/build/autoconf)
 
 ## ---[ check host ]----------------------------------------------------------
