@@ -80,3 +80,17 @@ v0.64-9
   - support for automatic downloading of zlib and lpng on win32 
   - added demo directory with several examples using demo(rgl)
 
+v0.64-10
+  - updated .C() calls using PACKAGE="rgl"
+  - updated Maintainer.mk using correct zlib version
+  - improved dynamic unload using library.dynam.unload()
+  - conditional macos x darwin code in .First.lib()
+
+v0.64-11
+  - removed several redundant semicolons, required by gcc 3.4 ansi-pedantic mode.
+  - win32: uses R's zlib and libpng sources
+  - win32: added virtual destructor in Win32GUIFactory (removes warning)
+ 
+v0.64-12
+  - cran bugfix: permissions of cleanup fixed.
+
