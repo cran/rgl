@@ -1,92 +1,103 @@
+#include "config.hpp"
+#ifdef RGL_W32
 // C++ source
 // This file is part of RGL.
 //
-// $Id: win32gui.cpp,v 1.5 2004/05/28 08:41:07 dadler Exp $
+// $Id: win32gui.cpp 376 2005-08-03 23:58:47Z dadler $
 
-#include "win32gui.h"
+#include "win32gui.hpp"
 
-#include "lib.h"
+#include "lib.hpp"
+#include "glgui.hpp"
 
 #include <winuser.h>
-
+// ---------------------------------------------------------------------------
 namespace gui {
-
-  //
-  // translate keycode
-  //
-
-  static int translate_key(int wParam) {
-
-    if ( (wParam >= VK_F1) && (wParam <= VK_F12) ) {
-      return ( GUI_KeyF1 + (wParam - VK_F1) );
-    } else {
-      switch(wParam) {
-        case VK_UP:
-          return GUI_KeyUp;
-        case VK_DOWN:
-          return GUI_KeyDown;
-        case VK_LEFT:
-          return GUI_KeyLeft;
-        case VK_RIGHT:
-          return GUI_KeyRight;
-        case VK_INSERT:
-          return GUI_KeyInsert;
-        default:
-          return 0;
-      }
+// ---------------------------------------------------------------------------
+//
+// translate keycode
+//
+// ---------------------------------------------------------------------------
+static int translate_key(int wParam) 
+{
+  if ( (wParam >= VK_F1) && (wParam <= VK_F12) ) {
+    return ( GUI_KeyF1 + (wParam - VK_F1) );
+  } else {
+    switch(wParam) {
+      case VK_UP:
+        return GUI_KeyUp;
+      case VK_DOWN:
+        return GUI_KeyDown;
+      case VK_LEFT:
+        return GUI_KeyLeft;
+      case VK_RIGHT:
+        return GUI_KeyRight;
+      case VK_INSERT:
+        return GUI_KeyInsert;
+      default:
+        return 0;
     }
-
   }
+}
+// ---------------------------------------------------------------------------
+class Win32WindowImpl : public WindowImpl
+{
+public:
+static ATOM classAtom;
 
-  class Win32WindowImpl : public WindowImpl
-  {
+void setTitle(const char* title)
+{
+  SetWindowText(windowHandle, title);
+}
 
-  public:
+void setLocation(int x, int y)
+{
+  // FIXME
+}
 
-    static ATOM classAtom;
+void setSize(int width, int height)
+{
+  // FIXME
+}
 
-    void setTitle(const char* title)
-    {
-      SetWindowText(windowHandle, title);
-    }
+void show(void)
+{
+  if (windowHandle) {
+    ShowWindow(windowHandle, SW_SHOW);
+    UpdateWindow(windowHandle);
+  } else
+    lib::printMessage("window not bound");
+}
 
-    void setLocation(int x, int y)
-    {
-      // FIXME
-    }
+void hide(void)
+{
+  if (windowHandle) {
+    ShowWindow(windowHandle, SW_HIDE);
+  }
+}
 
-    void setSize(int width, int height)
-    {
-      // FIXME
-    }
+int isTopmost(HWND handle)
+{
+  return GetWindowLong(handle, GWL_EXSTYLE) & WS_EX_TOPMOST;
+}
 
-    void show(void)
-    {
-      if (windowHandle) {
-        ShowWindow(windowHandle, SW_SHOW);
-        UpdateWindow(windowHandle);
-      } else
-        printMessage("window not bound");
-    }
+void bringToTop(int stay) /* stay=0 for regular, 1 for topmost, 2 for toggle */
+{
 
-    void hide(void)
-    {
-      if (windowHandle) {
-        ShowWindow(windowHandle, SW_HIDE);
-      }
-    }
+  if (windowHandle) {
+SetForegroundWindow(windowHandle); /* needed in Rterm */
+  BringWindowToTop(windowHandle);    /* needed in Rgui --mdi */
 
-#ifdef _WIN32
-    void bringToTop(void)
-    {
+  if (stay == 2) stay = !isTopmost(windowHandle);
 
-      if (windowHandle) {
-		SetForegroundWindow(windowHandle); /* needed in Rterm */
-    	BringWindowToTop(windowHandle);    /* needed in Rgui --mdi */
-      } else
-        printMessage("window not bound");
-    }
-#endif
+  if (stay) SetWindowPos(windowHandle, HWND_TOPMOST, 0, 0, 0, 0,
+          SWP_NOMOVE | SWP_NOSIZE);
+else SetWindowPos(windowHandle, HWND_NOTOPMOST, 0, 0, 0, 0,
+          SWP_NOMOVE | SWP_NOSIZE);
+
+  } else
+    lib::printMessage("window not bound");
+}
 
     void update(void)
     {
@@ -198,11 +209,11 @@ namespace gui {
           if ( ( glrcHandle = wglCreateContext( dcHandle ) ) )
               success = true;
           else
-            printMessage("wglCreateContext failed");
+            lib::printMessage("wglCreateContext failed");
 
         }
         else
-          printMessage("iPixelFormat == 0!");
+          lib::printMessage("iPixelFormat == 0!");
 
         ReleaseDC(windowHandle,dcHandle);
       }
@@ -268,10 +279,6 @@ namespace gui {
     bool  updateMode;             // window is currently updated
     bool  autoUpdate;             // update/refresh automatically
 
-    static void printMessage(const char* string) {
-      MessageBox(NULL, string, "RGL GUI/Win32 port", MB_OK|MB_ICONINFORMATION);
-    }
-
 
     LRESULT processMessage(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam) {
       LRESULT returnValue = 0;
@@ -317,7 +324,7 @@ namespace gui {
           break;
 
         case WM_CLOSE:
-          window->closeRequest();
+          window->on_close();
           break;
 
 
@@ -419,94 +426,73 @@ namespace gui {
 
   protected:
 
-    static HINSTANCE moduleHandle;
-
-    static bool registerClass(HINSTANCE inModuleHandle) {
-
+    static bool registerClass() {
       WNDCLASSEX wcex;
-
-      moduleHandle = inModuleHandle;
-
+      ZeroMemory( &wcex, sizeof(WNDCLASSEX) );
   	  wcex.cbSize = sizeof(WNDCLASSEX);
-
   	  wcex.style          = CS_HREDRAW | CS_VREDRAW | CS_OWNDC;
       wcex.lpfnWndProc    = (WNDPROC) windowProc;
-  	  wcex.cbClsExtra     = 0;
-  	  wcex.cbWndExtra     = 0;
-  	  wcex.hInstance      = moduleHandle;
   	  wcex.hIcon          = LoadIcon(NULL, IDI_APPLICATION);
   	  wcex.hCursor        = LoadCursor(NULL, IDC_ARROW);
-  	  wcex.hbrBackground  = NULL;
-  	  wcex.lpszMenuName   = NULL;
   	  wcex.lpszClassName  = "RGLDevice";
-  	  wcex.hIconSm        = NULL;
-
   	  classAtom = RegisterClassEx(&wcex);
-
       return (classAtom) ? true : false;
-
     }
 
     static void unregisterClass(void) {
       if (classAtom)
-        UnregisterClass(MAKEINTATOM(classAtom), (HINSTANCE) moduleHandle );
+        UnregisterClass(MAKEINTATOM(classAtom), NULL );
     }
 
     friend class Win32GUIFactory;
 
   };
 
-  ATOM Win32WindowImpl::classAtom = (ATOM) NULL;
-  HINSTANCE Win32WindowImpl::moduleHandle = NULL;
+ATOM Win32WindowImpl::classAtom = (ATOM) NULL;
+// ---------------------------------------------------------------------------
+//
+// Win32GUIFactory class
+//
+// ---------------------------------------------------------------------------
+Win32GUIFactory::Win32GUIFactory()
+{
 
-  //
-  // GUIFactory implementation
-  //
+  if ( !Win32WindowImpl::registerClass() )
+    lib::printMessage("error: window class registration failed");
+}
+// ---------------------------------------------------------------------------
+Win32GUIFactory::~Win32GUIFactory() {
+  Win32WindowImpl::unregisterClass();
+}
+// ---------------------------------------------------------------------------
+WindowImpl* Win32GUIFactory::createWindowImpl(Window* in_window)
+{
+  WindowImpl* impl = new Win32WindowImpl(in_window);
 
-  Win32GUIFactory::Win32GUIFactory(HINSTANCE inModuleHandle)
-  {
-    if (inModuleHandle==NULL)
-      inModuleHandle = GetModuleHandle(NULL);
+  RECT size;
 
-    if ( !Win32WindowImpl::registerClass(inModuleHandle) )
-      Win32WindowImpl::printMessage("error: window class registration failed");
-  }
+  size.left = 0;
+  size.right = in_window->width-1;
+  size.top  = 0;
+  size.bottom = in_window->height-1;
 
-  Win32GUIFactory::~Win32GUIFactory() {
-    Win32WindowImpl::unregisterClass();
-  }
+  // no menu
 
-  WindowImpl* Win32GUIFactory::createWindowImpl(Window* in_window)
-  {
-    WindowImpl* impl = new Win32WindowImpl(in_window);
+  AdjustWindowRect(&size, WS_CAPTION|WS_SYSMENU|WS_THICKFRAME|WS_MINIMIZEBOX|WS_MAXIMIZEBOX, false);
 
-    RECT size;
-
-    size.left = 0;
-    size.right = in_window->width-1;
-    size.top  = 0;
-    size.bottom = in_window->height-1;
-
-    // no menu
-
-    AdjustWindowRect(&size, WS_CAPTION|WS_SYSMENU|WS_THICKFRAME|WS_MINIMIZEBOX|WS_MAXIMIZEBOX, false);
-
-    HWND success = CreateWindow(
-      MAKEINTATOM(Win32WindowImpl::classAtom), in_window->title,
-      WS_OVERLAPPEDWINDOW,
-      CW_USEDEFAULT, 0,
-      size.right- size.left+1, size.bottom - size.top+1,
-      NULL, NULL,
-      (HINSTANCE) Win32WindowImpl::moduleHandle, (LPVOID) impl
-    );
-
-    if (!success) {
-      printMessage("gui/win32: unable to create window failed");
-      return NULL;
-    }
-
-    return impl;
-  }
-
+  HWND success = CreateWindow(
+    MAKEINTATOM(Win32WindowImpl::classAtom), in_window->title,
+    WS_OVERLAPPEDWINDOW,
+    CW_USEDEFAULT, 0,
+    size.right- size.left+1, size.bottom - size.top+1,
+    NULL, NULL,
+    NULL, (LPVOID) impl
+  );
+  assert(success);
+  return impl;
+}
+// ---------------------------------------------------------------------------
 } // namespace gui
+// ---------------------------------------------------------------------------
+#endif // RGL_W32
 

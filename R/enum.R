@@ -2,7 +2,7 @@
 ## R source file
 ## This file is part of rgl
 ##
-## $Id: enum.R,v 1.3 2004/03/03 22:59:20 dadler Exp $
+## $Id: enum.R 376 2005-08-03 23:58:47Z dadler $
 ##
 
 
@@ -52,7 +52,7 @@ rgl.enum.fogtype <- function (fogtype)
   return ( rgl.enum (fogtype, none=1, linear=2, exp=3, exp2=4) )
 
 rgl.enum.primtype <- function (primtype)
-  return ( rgl.enum( primtype, points=1, lines=2, triangles=3, quadrangles=4 ) )
+  return ( rgl.enum( primtype, points=1, lines=2, triangles=3, quadrangles=4, linestrips=5 ) )
 
 rgl.enum.halign <- function( halign)
   return ( rgl.enum (halign, left=-1, center=0, right=1 ) )
@@ -63,3 +63,6 @@ rgl.enum.texminfilter <- function (minfiltertype)
 rgl.enum.texmagfilter <- function (magfiltertype)
   return ( rgl.enum (magfiltertype, nearest=0, linear=1) )
 
+# see GL2PS_XXX defines in ../src/gl2ps.h
+rgl.enum.gl2ps <- function (postscripttype)
+  return ( rgl.enum (postscripttype, ps=1, eps=2, tex=3, pdf=4) )

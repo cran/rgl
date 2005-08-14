@@ -1,7 +1,7 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: math.cpp,v 1.2 2004/05/28 11:19:41 dadler Exp $
+// $Id: math.cpp 377 2005-08-04 03:15:09Z dmurdoch $
 
 #include "math.h"
 
@@ -11,19 +11,7 @@
 //   Vertex
 //
 
-Vertex::Vertex(float in_x, float in_y, float in_z)
-{
-  x = in_x;
-  y = in_y;
-  z = in_z;
-}
-
-float Vertex::getLength() const
-{
-  return sqrtf(x*x+y*y+z*z);
-}
-
-void Vertex::normalize()
+void Vec3::normalize()
 {
   float len = this->getLength();
   if (len != 0.0f) {
@@ -34,18 +22,26 @@ void Vertex::normalize()
   }
 }
 
-Vertex Vertex::cross(Vertex op2) const
+Vec3 Vec3::cross(Vec3 op2) const
 {
-  Vertex v;
+  Vec3 v;
   v.x = y * op2.z - z * op2.y;
   v.y = z * op2.x - x * op2.z;
   v.z = x * op2.y - y * op2.x;
   return v;
 }
 
-Vertex Vertex::operator * (float s)
+float Vec3::angle(const Vec3& that) const
 {
-  Vertex v;
+  float dot;
+  dot = x*that.x + y*that.y + z*that.z;
+  return math::rad2deg(math::acos( dot/(this->getLength() * that.getLength())));
+
+}
+
+Vec3 Vec3::operator * (float s)
+{
+  Vec3 v;
 
   v.x = x*s;
   v.y = y*s;
@@ -54,14 +50,14 @@ Vertex Vertex::operator * (float s)
   return v;
 }
 
-float Vertex::operator * (Vertex v)
+float Vec3::operator * (Vec3 v)
 {
   return (x*v.x + y*v.y + z*v.z);
 }
 
-Vertex Vertex::operator - (Vertex op2) const 
+Vec3 Vec3::operator - (Vec3 op2) const 
 {
-  Vertex v;
+  Vec3 v;
 
   v.x = x - op2.x;
   v.y = y - op2.y;
@@ -70,41 +66,41 @@ Vertex Vertex::operator - (Vertex op2) const
   return v;
 }
 
-void Vertex::operator += (Vertex op2) 
+void Vec3::operator += (Vec3 op2) 
 {
   x += op2.x;
   y += op2.y;
   z += op2.z;
 }
 
-Vertex Vertex::operator + (Vertex op2) const
+Vec3 Vertex::operator + (Vec3 op2) const
 {
-  Vertex t(*this);
+  Vec3 t(*this);
 
   t += op2;
 
   return t;
 }
 
-void Vertex::rotateX(float degree)
+void Vec3::rotateX(float degree)
 {
-  Vertex t(*this);
+  Vec3 t(*this);
 
-  float rad = deg2radf(degree);
-  float s = sinf(rad);
-  float c = cosf(rad);
+  float rad = math::deg2rad(degree);
+  float s = math::sin(rad);
+  float c = math::cos(rad);
 
   y = c*t.y + -s*t.z;
   z = s*t.y +  c*t.z;
 }
 
-void Vertex::rotateY(float degree)
+void Vec3::rotateY(float degree)
 {
-  Vertex t(*this);
+  Vec3 t(*this);
 
-  float rad = deg2radf(degree);
-  float s = sinf(rad);
-  float c = cosf(rad);
+  float rad = math::deg2rad(degree);
+  float s = math::sin(rad);
+  float c = math::cos(rad);
 
   x =  c*t.x + s*t.z;
   z = -s*t.x + c*t.z;
@@ -113,10 +109,10 @@ void Vertex::rotateY(float degree)
 //////////////////////////////////////////////////////////////////////////////
 //
 // CLASS
-//   Vertex4
+//   Vec4
 //
 
-Vertex4::Vertex4(const float in_x, const float in_y, const float in_z, const float in_w)
+Vec4::Vec4(const float in_x, const float in_y, const float in_z, const float in_w)
 {
   x = in_x;
   y = in_y;
@@ -124,14 +120,14 @@ Vertex4::Vertex4(const float in_x, const float in_y, const float in_z, const flo
   w = in_w;
 }
 
-float Vertex4::operator * (const Vertex4& v) const
+float Vec4::operator * (const Vec4& v) const
 {
   return (x*v.x + y*v.y + z*v.z + w*v.w);
 }
 
-Vertex4 Vertex4::operator * (const float s) const
+Vec4 Vec4::operator * (const float s) const
 {
-  Vertex4 r;
+  Vec4 r;
 
   r.x = x*s;
   r.y = y*s;
@@ -141,9 +137,9 @@ Vertex4 Vertex4::operator * (const float s) const
   return r;
 }
 
-Vertex4 Vertex4::operator + (const Vertex4& v) const
+Vec4 Vec4::operator + (const Vec4& v) const
 {
-  return Vertex4(x+v.x, y+v.y, z+v.z, w+v.w);
+  return Vec4(x+v.x, y+v.y, z+v.z, w+v.w);
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -168,8 +164,8 @@ Matrix4x4::Matrix4x4(const double* from)
     data[i] = (float) from[i];
 }
 
-Vertex Matrix4x4::operator * (const Vertex v) const {
-  Vertex r;
+Vec3 Matrix4x4::operator * (const Vec3 v) const {
+  Vec3 r;
   const float v_w = 1.0f;
 
   r.x = val(0,0) * v.x + val(0,1) * v.y + val(0,2) * v.z + val(0,3) * v_w;
@@ -179,9 +175,9 @@ Vertex Matrix4x4::operator * (const Vertex v) const {
   return r;
 }
 
-Vertex4 Matrix4x4::operator*(const Vertex4& v) const {
+Vec4 Matrix4x4::operator*(const Vec4& v) const {
 
-  Vertex4 r;
+  Vec4 r;
 
   r.x = val(0,0) * v.x + val(0,1) * v.y + val(0,2) * v.z + val(0,3) * v.w;
   r.y = val(1,0) * v.x + val(1,1) * v.y + val(1,2) * v.z + val(1,3) * v.w;
@@ -209,6 +205,17 @@ Matrix4x4 Matrix4x4::operator * (const Matrix4x4& op2) const {
   return r;
 }
 
+Vec4 Matrix4x4::getRow(int row) {
+  Vec4 r;
+  
+  r.x = val(row, 0);
+  r.y = val(row, 1);
+  r.z = val(row, 2);
+  r.w = val(row, 3);
+  
+  return r;
+}
+
 void Matrix4x4::setIdentity(void) {
   for(int i=0;i<16;i++)
     data[i] = 0.0f;
@@ -219,9 +226,9 @@ void Matrix4x4::setIdentity(void) {
 }
 
 void Matrix4x4::setRotate(const int axis, const float degree) {
-  float rad = deg2radf(degree);
-  float s   = sinf(rad);
-  float c   = cosf(rad);
+  float rad = math::deg2rad(degree);
+  float s   = math::sin(rad);
+  float c   = math::cos(rad);
   setIdentity();
   switch(axis) {
     case 0:
@@ -245,141 +252,18 @@ void Matrix4x4::setRotate(const int axis, const float degree) {
   }
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CLASS
-//   AABox
-//
-
-AABox::AABox()
+void Matrix4x4::getData(double* dest)
 {
-  invalidate();
+	for(int i=0;i<16;i++)
+    	dest[i] = data[i];
 }
 
-void AABox::invalidate(void)
-{
-  vmax = Vertex( -FLT_MAX, -FLT_MAX, -FLT_MAX );
-  vmin = Vertex(  FLT_MAX,  FLT_MAX,  FLT_MAX );
-}
-
-void AABox::operator += (const Vertex& v)
-{
-  vmin.x = getMin(vmin.x, v.x);
-  vmin.y = getMin(vmin.y, v.y);
-  vmin.z = getMin(vmin.z, v.z);
-
-  vmax.x = getMax(vmax.x, v.x);
-  vmax.y = getMax(vmax.y, v.y);
-  vmax.z = getMax(vmax.z, v.z);
-}
-
-void AABox::operator += (const AABox& aabox)
-{
-  *this += aabox.vmin;
-  *this += aabox.vmax;
-}
-
-void AABox::operator += (const Sphere& sphere)
-{
-  *this += sphere.center - Vertex(sphere.radius,sphere.radius,sphere.radius);
-  *this += sphere.center + Vertex(sphere.radius,sphere.radius,sphere.radius);
-}
-
-bool AABox::isValid(void) const
-{
-  return ((vmax.x >= vmin.x) && (vmax.y >= vmin.y) && (vmax.z >= vmin.z)) ? true : false;
-}
-
-Vertex AABox::getCenter(void) const
-{
-  return Vertex( (vmax + vmin) * 0.5f );
-}
-
-//////////////////////////////////////////////////////////////////////////////
-//
-// CLASS
-//   Sphere
-//
-
-Sphere::Sphere(const AABox& bbox)
-{
-  Vertex hdiagonal( (bbox.vmax - bbox.vmin) * 0.5f );
-
-  center = bbox.getCenter();
-  radius = hdiagonal.getLength();
-}
-
-Sphere::Sphere(const float in_radius)
-: center(0.0f, 0.0f, 0.0f), radius(in_radius)
-{
-}
-
-Sphere::Sphere(const Vertex& in_center, const float in_radius)
-: center(in_center), radius(in_radius)
-{
-}
-
-//////////////////////////////////////////////////////////////////////////////
-//
-// CLASS
-//   Frustum
-//
-
-//
-// setup frustum to enclose the space given by a bounding sphere, 
-// field-of-view angle and window size.
-//
-// window size is used to provide aspect ratio.
-//
-// 
-
-void Frustum::enclose(float sphere_radius, float fovangle, RectSize& winsize)
-{
-  float fovradians = deg2radf(fovangle/2.0f);
-
-  float s = sinf(fovradians);
-  float t = tanf(fovradians);
-
-  distance = sphere_radius / s;
-
-  znear = distance - sphere_radius;
-  zfar  = znear + sphere_radius*2.0f;
-
-  float hlen = t * znear;
-
-  // hold aspect ratio 1:1
-
-  float hwidth, hheight;
-
-  bool inside = false;
-
-  if (inside) {
-
-    // inside bounding sphere: fit to max(winsize)
-
-    if (winsize.width >= winsize.height) {
-      hwidth  = hlen;
-      hheight = hlen * ( (float)winsize.height ) /  ( (float)winsize.width );
-    } else {
-      hwidth  = hlen * ( (float)winsize.width  ) / ( (float) winsize.height );
-      hheight = hlen;
-    }
-  } else {
-
-    // outside(in front of) bounding sphere: fit to min(winsize)
-
-    if (winsize.width >= winsize.height) {
-      hwidth  = hlen * ( (float)winsize.width ) / ( (float)winsize.height );
-      hheight = hlen;
-    } else {
-      hwidth  = hlen;
-      hheight = hlen * ( (float)winsize.height ) / ( (float)winsize.width );
-    }
-
-  } 
-
-  left   = -hwidth;
-  right  =  hwidth;
-  bottom = -hheight;
-  top    =  hheight;
+Vertex PolarCoord::vector() const { 
+  float t = math::deg2rad(theta);
+  float p = math::deg2rad(phi);
+  return Vertex (
+    math::cos(p) * math::sin(t),
+    math::sin(p),
+    math::cos(p) * math::cos(t)
+  );
 }

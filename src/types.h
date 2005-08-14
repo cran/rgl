@@ -1,11 +1,12 @@
-#ifndef TYPES_H
-#define TYPES_H
+#ifndef RGL_TYPES_H
+#define RGL_TYPES_H
 
+#include "pragma.h"
 
 // C++ header file
 // This file is part of RGL
 //
-// $Id: types.h,v 1.5 2004/05/28 11:00:48 dadler Exp $
+// $Id: types.h 376 2005-08-03 23:58:47Z dadler $
 
 
 #include <cstring>
@@ -62,7 +63,7 @@ public:
   ~Ref() { if (ptr) ptr->unref(); }
   Ref& operator = (T* in_ptr) { if (ptr) ptr->unref(); ptr = in_ptr; if (ptr) ptr->ref(); return *this; }
   T* operator -> () { return ptr; }
-  operator bool () { return (ptr); }
+  operator bool () { return (ptr) ? true : false; }
 private:
   T* ptr;
 };
@@ -214,5 +215,33 @@ inline void copy(double* from, float* to, int size)
   }
 }
 
+/**
+ * get most significant bit
+ * @param x unsigned value
+ * @return bit position between 1..32 or 0 if value was 0
+ **/
+inline int msb(unsigned int x) {
+  if (x) {
+    int bit = sizeof(int)*8;
+    unsigned int mask = 1<<((sizeof(int)*8)-1);
+    while ( !(x & mask) ) {
+      --bit; mask >>= 1;
+    }
+    return bit;
+  } else
+    return 0;
+}
 
-#endif /* TYPES_H */
+
+// template<class T> T getMax(T a, T b) { return (a > b) ? a : b; }
+// template<class T> T getMin(T a, T b) { return (a < b) ? a : b; }
+
+inline int   getMin(int a, int b)     { return (a <= b) ? a : b; }
+inline float getMin(float a, float b) { return (a <= b) ? a : b; }
+inline int   getMax(int a, int b)     { return (a >= b) ? a : b; }
+inline float getMax(float a, float b) { return (a >= b) ? a : b; }
+inline float clamp(float v, float floor, float ceil) { return (v<floor) ? floor : ( (v>ceil) ? ceil : v ); }
+inline int   clamp(int   v, int   floor, int   ceil) { return (v<floor) ? floor : ( (v>ceil) ? ceil : v ); }
+
+#endif /* RGL_TYPES_H */
+

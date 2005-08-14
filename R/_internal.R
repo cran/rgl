@@ -2,7 +2,7 @@
 ## R source file
 ## This file is part of rgl
 ##
-## $Id: _internal.R,v 1.1.1.1 2003/03/25 00:13:21 dadler Exp $
+## $Id: _internal.R 376 2005-08-03 23:58:47Z dadler $
 ##
 
 ##

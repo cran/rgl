@@ -1,11 +1,11 @@
-#include "lib.h"
+#include "lib.hpp"
 #include "types.h"
 #include <png.h>
 
 // C++ header file
 // This file is part of RGL
 //
-// $Id: pngpixmap.h,v 1.2 2003/11/27 21:05:33 dadler Exp $
+// $Id: pngpixmap.h 376 2005-08-03 23:58:47Z dadler $
 
 class PNGPixmapFormat : public PixmapFormat {
 public:
@@ -31,10 +31,10 @@ public:
       bool success;
       success = load.process();
       if (!success)
-        printMessage("pixmap png loader: process failed");
+        lib::printMessage("pixmap png loader: process failed");
       return success;
     } else {
-      printMessage("pixmap png loader: init failed");
+      lib::printMessage("pixmap png loader: init failed");
       return false;
     }
   }
@@ -111,13 +111,13 @@ private:
     static void printError(const char* error_msg) {
       char buf[256];
       sprintf(buf, "PNG Pixmap Loader Error: %s", error_msg);
-      printMessage(buf);
+      lib::printMessage(buf);
     }
 
     static void printWarning(const char* warning_msg) {
       char buf[256];
       sprintf(buf, "PNG Pixmap Loader Warning: %s", warning_msg);
-      printMessage(buf);
+      lib::printMessage(buf);
     }
 
 
@@ -141,7 +141,7 @@ private:
       char buffer[256];
       Load* load = (Load*) png_get_progressive_ptr(png_ptr);
 
-      unsigned long width, height;
+      png_uint_32 width, height;
       int  bit_depth, color_type, interlace_type, compression_type, filter_type;
 
       png_get_IHDR(load->png_ptr, load->info_ptr, &width, &height,
@@ -189,7 +189,9 @@ private:
         case PNG_COLOR_TYPE_GRAY:
           typeID = GRAY8;
           goto init;
-        case PNG_COLOR_TYPE_RGB_ALPHA:        
+        case PNG_COLOR_TYPE_RGB_ALPHA:
+          typeID = RGBA32;
+          goto init;        
         case PNG_COLOR_TYPE_PALETTE:
         case PNG_COLOR_TYPE_GRAY_ALPHA:
         default:
@@ -205,7 +207,7 @@ init:
 
 unsupported:
       sprintf(buffer,"%s%s format unsupported: %lux%lu (%d bits per channel)", interlace_string, color_type_name, width, height, bit_depth);
-      printMessage(buffer);
+      lib::printMessage(buffer);
       load->error = true;
       png_read_update_info(load->png_ptr,load->info_ptr);
       return;
@@ -360,13 +362,13 @@ unsupported:
     static void printError(const char* error_msg) {
       char buf[256];
       sprintf(buf, "PNG Pixmap Saver Error: %s", error_msg);
-      printMessage(buf);
+      lib::printMessage(buf);
     }
 
     static void printWarning(const char* warning_msg) {
       char buf[256];
       sprintf(buf, "PNG Pixmap Saver Warning: %s", warning_msg);
-      printMessage(buf);
+      lib::printMessage(buf);
     }
 
 

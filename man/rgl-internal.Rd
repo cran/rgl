@@ -1,5 +1,5 @@
 \name{rgl-internal}
-\title{Internal rgl functions}
+\title{Internal rgl functions and data}
 \alias{rgl.bool}
 \alias{rgl.numeric}
 \alias{rgl.range}
@@ -10,6 +10,7 @@
 \alias{rgl.clamp}
 \alias{rgl.attr}
 \alias{rgl.enum}
+\alias{rgl.enum.gl2ps}
 \alias{rgl.enum.nodetype}
 \alias{rgl.enum.pixfmt}
 \alias{rgl.enum.polymode}
@@ -19,6 +20,16 @@
 \alias{rgl.enum.halign}
 \alias{rgl.enum.texmagfilter}
 \alias{rgl.enum.texminfilter}
+\alias{rgl.select}
+\alias{rgl.selectstate}
+\alias{rgl.setselectstate}
+\alias{edgemap}
+\alias{edgeindex}
+\alias{cube3d.ib}
+\alias{cube3d.vb}
+\alias{oh3d.ib}
+\alias{oh3d.vb}
+\alias{dev3d}
 \description{
   internal rgl functions
 }
@@ -33,6 +44,7 @@ rgl.mcolor(colors)
 rgl.clamp(value, low, high)
 rgl.attr(vattr, nvertex) 
 rgl.enum(name, ...)
+rgl.enum.gl2ps(postscripttype) 
 rgl.enum.nodetype(type)
 rgl.enum.pixfmt(fmt)
 rgl.enum.polymode(mode)
@@ -42,8 +54,14 @@ rgl.enum.primtype(primtype)
 rgl.enum.halign(halign)
 rgl.enum.texmagfilter(magfiltertype)
 rgl.enum.texminfilter(minfiltertype)
+rgl.selectstate()
+rgl.select()
+rgl.setselectstate(state)
+edgemap(size)
+edgeindex(from,to,size,row,col)
 }
 \details{
   These are not to be called by the user.
 }
 \keyword{internal}
+
