@@ -1,11 +1,11 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: pixmap.cpp,v 1.1.1.1 2003/03/25 00:13:21 dadler Exp $
+// $Id: pixmap.cpp 376 2005-08-03 23:58:47Z dadler $
 
 #include "pixmap.h"
 
-#include "lib.h"
+#include "lib.hpp"
 
 // PNG FORMAT IMPLEMENTATION
 
@@ -66,6 +66,8 @@ bool Pixmap::init(PixmapTypeID in_typeID, int in_width, int in_height, int in_bi
 
   if (typeID == RGB24)
     channels = 3;
+  else if (typeID == RGBA32)
+    channels = 4;
   else if (typeID == GRAY8)
     channels = 1;
   else
@@ -88,7 +90,7 @@ bool Pixmap::load(const char* filename)
   if (!file) {
     char buffer[256];
     sprintf(buffer, "Pixmap load: unable to open file '%s' for reading", filename);
-    printMessage(buffer);
+    lib::printMessage(buffer);
     return false;
   }
 
@@ -108,11 +110,11 @@ bool Pixmap::load(const char* filename)
   }
 
   if (!support) {
-    printMessage("Pixmap load: file format unsupported");
+    lib::printMessage("Pixmap load: file format unsupported");
   }
   
   if (!success) {
-    printMessage("Pixmap load: failed");
+    lib::printMessage("Pixmap load: failed");
   }
 
   fclose(file);
@@ -129,7 +131,7 @@ bool Pixmap::save(PixmapFormat* format, const char* filename)
   if (!file) {
     char buffer[256];
     sprintf(buffer, "Pixmap save: unable to open file '%s' for writing", filename);
-    printMessage(buffer);
+    lib::printMessage(buffer);
     return false;
   }
   

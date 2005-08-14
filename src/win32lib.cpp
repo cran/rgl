@@ -1,87 +1,56 @@
-// C++ source
-// This file is part of RGL.
-//
-// $Id: win32lib.cpp,v 1.2 2003/11/15 18:22:13 dadler Exp $
-
-#include "lib.h"
-
-
-//
-// ===[ GUI IMPLEMENTATION ]=================================================
-//
-
-#include "win32gui.h"
-
+#include "config.hpp"
+#ifdef RGL_W32
+// ---------------------------------------------------------------------------
+// W32 Library Implementation
+// $Id: win32lib.cpp 376 2005-08-03 23:58:47Z dadler $
+// ---------------------------------------------------------------------------
+#include "lib.hpp"
+#include "win32gui.hpp"
+#include <windows.h>
+#include <cassert>
+// ---------------------------------------------------------------------------
+namespace lib {
+// ---------------------------------------------------------------------------
+// GUI Factory
+// ---------------------------------------------------------------------------
 gui::Win32GUIFactory* gpWin32GUIFactory = NULL;
-
+// ---------------------------------------------------------------------------
 gui::GUIFactory* getGUIFactory()
 {
   return (gui::GUIFactory*) gpWin32GUIFactory;
 }
-
-//
-// ===[ R INTEGRATION ]=======================================================
-//
-
-bool lib_init()
+// ---------------------------------------------------------------------------
+// printMessage
+// ---------------------------------------------------------------------------
+void printMessage( const char* string ) {
+  ::MessageBox(NULL, string, "RGL library", MB_OK|MB_ICONINFORMATION);
+}
+// ---------------------------------------------------------------------------
+// getTime
+// ---------------------------------------------------------------------------
+double getTime() {
+  return ( (double) ::GetTickCount() ) * ( 1.0 / 1000.0 );
+}
+// ---------------------------------------------------------------------------
+// init
+// ---------------------------------------------------------------------------
+bool init()
 {
-  gpWin32GUIFactory = new gui::Win32GUIFactory(NULL);  
+  assert(gpWin32GUIFactory == NULL);
+  gpWin32GUIFactory = new gui::Win32GUIFactory();  
   return true;
 }
-
-void lib_quit()
+// ---------------------------------------------------------------------------
+// quit
+// ---------------------------------------------------------------------------
+void quit()
 {
-  if (gpWin32GUIFactory) {
-    delete gpWin32GUIFactory;
-    gpWin32GUIFactory = NULL;
-  }
+  assert(gpWin32GUIFactory != NULL);
+  delete gpWin32GUIFactory;
+  gpWin32GUIFactory = NULL;
 }
+// ---------------------------------------------------------------------------
+} // namespace lib
+// ---------------------------------------------------------------------------
+#endif // RGL_W32
 
-#include <windows.h>
-
-#define EXPORT_SYMBOL   __declspec(dllexport)
-
-extern "C" {
-void rgl_quit(int* successptr);
-EXPORT_SYMBOL BOOL APIENTRY DllMain( HINSTANCE moduleHandle, DWORD reason, LPVOID lpReserved );
-}
-
-BOOL APIENTRY DllMain( HINSTANCE moduleHandle, DWORD reason, LPVOID lpReserved )
-{
-  bool success = FALSE;
-
-  switch(reason) {
-    case DLL_PROCESS_ATTACH:
-      success = TRUE;
-      break;
-    case DLL_PROCESS_DETACH:
-      // shutdown sub-systems
-      {
-        int success;
-        rgl_quit(&success);
-      }
-      break;
-  }
-  return success;
-}
-
-
-//////////////////////////////////////////////////////////////////////////////
-//
-// UTILS
-//
-
-//
-// STATIC METHOD printMessage
-//
-// DESCRIPTION
-//   prints message to the user
-//
-
-void printMessage( const char* string ) {
-  MessageBox(NULL, string, "RGL library", MB_OK|MB_ICONINFORMATION);
-}
-
-double getTime() {
-  return ( (double) GetTickCount() ) * ( 1.0 / 1000.0 );
-}

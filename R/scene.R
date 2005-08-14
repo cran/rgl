@@ -2,7 +2,7 @@
 ## R source file
 ## This file is part of rgl
 ##
-## $Id: scene.R,v 1.5 2004/03/03 22:09:44 dadler Exp $
+## $Id: scene.R 377 2005-08-04 03:15:09Z dmurdoch $
 ##
 
 ##
@@ -64,14 +64,17 @@ rgl.pop <- function( type = "shapes" )
 ##
 ##
 
-rgl.viewpoint <- function( theta = 0.0, phi = 15.0, fov = 60.0, zoom = 0.0, interactive = TRUE )
+rgl.viewpoint <- function( theta = 0.0, phi = 15.0, fov = 60.0, zoom = 1.0, interactive = TRUE, userMatrix )
 {
-  zoom <- rgl.clamp(zoom,0,1)
+  zoom <- rgl.clamp(zoom,0,Inf)
   phi  <- rgl.clamp(phi,-90,90)
-  fov  <- rgl.clamp(fov,0,180)
+  fov  <- rgl.clamp(fov,1,179)
 
-  idata <- as.integer(c(interactive))
-  ddata <- as.numeric(c(theta,phi,fov,zoom))
+  polar <- missing(userMatrix)
+  if (polar) userMatrix <- diag(4)
+  
+  idata <- as.integer(c(interactive,polar))
+  ddata <- as.numeric(c(theta,phi,fov,zoom,userMatrix[1:16]))
 
   ret <- .C( symbol.C("rgl_viewpoint"),
     success=FALSE,
@@ -83,7 +86,6 @@ rgl.viewpoint <- function( theta = 0.0, phi = 15.0, fov = 60.0, zoom = 0.0, inte
   if (! ret$success)
     stop("rgl_viewpoint")
 }
-
 
 ##
 ## set background
@@ -214,6 +216,13 @@ rgl.primitive <- function( type, x, y, z, ... )
 
   type <- rgl.enum.primtype(type)
 
+  if (any(is.na(c(x,y,z)))) {
+    d <- complete.cases(cbind(x,y,z))
+    x <- x[d]
+    y <- y[d]
+    z <- z[d]
+    warning("NA/NaN values ignored")
+  }
   vertex  <- rgl.vertex(x,y,z)
   nvertex <- rgl.nvertex(vertex)
   idata   <- as.integer( c(type, nvertex ) )
@@ -249,12 +258,33 @@ rgl.quads <- function ( x, y, z, ... )
   rgl.primitive( "quadrangles", x, y, z, ... )
 }
 
+rgl.linestrips<- function ( x, y, z, ... )
+{
+  rgl.primitive( "linestrips", x, y, z, ... )
+}
+
 ##
 ## add surface
 ##
 ##
 
-rgl.surface <- function( x, z, y, ... )
+# Utility function:
+# calculates the parity of a permutation of integers
+
+perm_parity <- function(p) {  
+  x <- seq(along=p)
+  result <- 0
+  for (i in seq(along=p)) {
+    if (x[i] != p[i]) {
+      x[x==p[i]] <- x[i]
+      # x[i] <- p[i]     # not needed
+      result <- result+1
+    }
+  }
+  return(result %% 2)
+}
+
+rgl.surface <- function( x, z, y, coords=1:3, ... )
 {
   rgl.material(...)
 
@@ -270,15 +300,22 @@ rgl.surface <- function( x, z, y, ... )
   
   if ( nz < 2 )   
     stop("y length < 2")
+    
+  if ( length(coords) != 3 || !identical(all.equal(sort(coords), 1:3), TRUE) )
+    stop("coords must be a permutation of 1:3")
 
   idata <- as.integer( c( nx, nz ) )
 
+  parity <- (perm_parity(coords) + (x[2] < x[1]) + (z[2] < z[1]) ) %% 2
+  
   ret <- .C( symbol.C("rgl_surface"),
     success=FALSE,
     idata,
     as.numeric(x),
     as.numeric(z),
     as.numeric(y),
+    as.integer(coords),
+    as.integer(parity),
     PACKAGE="rgl"
   );
 
@@ -318,21 +355,26 @@ rgl.spheres <- function( x, y, z,radius=1.0,...)
 ## add texts
 ##
 
-rgl.texts <- function(x, y, z, text, justify="center", ... )
+rgl.texts <- function(x, y, z, text, adj = 0.5, justify, ... )
 {
   rgl.material( ... )
 
+  if (!missing(justify)) {
+     warning("justify is deprecated: please use adj instead")
+     if (!missing(adj)) {
+        warning("adj and justify both specified: justify ignored")
+     } else adj <- switch(justify,left=0,center=0.5,right=1)
+  }
   vertex  <- rgl.vertex(x,y,z)
   nvertex <- rgl.nvertex(vertex)
   text    <- rep(text, length.out=nvertex)
 
-  justify <- rgl.enum.halign( justify );
-
-  idata <- as.integer( c(nvertex, justify) )
+  idata <- as.integer(nvertex)
 
   ret <- .C( symbol.C("rgl_texts"),
     success=FALSE,
     idata,
+    as.double(adj),
     as.character(text),
     as.numeric(vertex),
     PACKAGE="rgl"
@@ -370,3 +412,140 @@ rgl.sprites <- function( x, y, z, radius=1.0, ... )
     print("rgl_sprites failed")
 
 }
+
+##
+## convert user coordinate to window coordinate
+## 
+
+rgl.user2window <- function( x, y, z, projection = rgl.projection())
+{
+  
+  points <- rbind(x,y,z)
+  idata  <- as.integer(ncol(points))
+  
+  ret <- .C( symbol.C("rgl_user2window"),
+  	success=FALSE,
+	idata,
+	as.double(points),
+	window=double(length(points)),
+	model=as.double(projection$model),
+	proj=as.double(projection$proj),
+	view=as.integer(projection$view),
+	PACKAGE="rgl"
+  )
+
+  if (! ret$success)
+    stop("rgl_user2window failed")
+  return(matrix(ret$window, ncol(points), 3, byrow = TRUE))
+}
+
+##
+## convert window coordiate to user coordiante
+## 
+
+rgl.window2user <- function( x, y, z = 0, projection = rgl.projection())
+{
+  
+  window <- rbind(x,y,z)
+  idata  <- as.integer(ncol(window))
+  
+  ret <- .C( symbol.C("rgl_window2user"),
+  	success=FALSE,
+	idata,
+	point=double(length(window)),
+	window,
+	model=as.double(projection$model),
+	proj=as.double(projection$proj),
+	view=as.integer(projection$view),
+	PACKAGE="rgl"
+  )
+
+  if (! ret$success)
+    stop("rgl_window2user failed")
+  return(matrix(ret$point, ncol(window), 3, byrow = TRUE))
+}
+
+
+rgl.selectstate <- function()
+{
+	ret <- .C( symbol.C("rgl_selectstate"),
+    	success=FALSE,
+    	state = as.integer(0),
+    	mouseposition = double(4),
+    	PACKAGE="rgl"
+  	)
+
+  	if (! ret$success)
+    	stop("rgl_selectstate")
+    return(ret)
+}
+
+
+rgl.select <- function(button = c("left", "middle", "right"))
+{
+	button <- match.arg(button)
+	
+	newhandler <- par3d("mouseMode")
+	newhandler[button] <- "selecting"
+	oldhandler <- par3d(mouseMode = newhandler)
+	on.exit(par3d(mouseMode = oldhandler))
+	
+	# number 3 means the mouse selection is done. ?? how to change 3 to done
+	while ((result <- rgl.selectstate())$state != 3)
+		Sys.sleep(0.1)
+	
+	rgl.setselectstate("none")
+	
+	return(result$mouseposition)
+}
+
+rgl.setselectstate <- function(state = "current")
+{
+	state = rgl.enum(state, current=0, none = 1, middle = 2, done = 3)
+	idata <- as.integer(c(state))
+	
+	  ret <- .C( symbol.C("rgl_setselectstate"), 
+	    success=FALSE,
+	    state = idata,
+	    PACKAGE="rgl"
+	  )
+	
+	  if (! ret$success)
+	    stop("rgl_setselectstate")
+
+	c("none", "middle", "done")[ret$state]
+}
+
+rgl.projection <- function()
+{
+    list(model = par3d("modelMatrix"),
+    	 proj = par3d("projMatrix"),
+    	 view = par3d("viewport"))
+}   
+     
+rgl.select3d <- function() {
+  rect <- rgl.select()
+  llx <- rect[1]
+  lly <- rect[2]
+  urx <- rect[3]
+  ury <- rect[4]
+  
+  if ( llx > urx ){
+  	temp <- llx
+  	llx <- urx
+  	urx <- temp
+  }
+  if ( lly > ury ){
+  	temp <- lly
+  	lly <- ury
+  	ury <- temp
+  }
+  proj <- rgl.projection();
+  function(x,y,z) {
+    pixel <- rgl.user2window(x,y,z,proj=proj)
+    apply(pixel,1,function(p) (llx <= p[1]) && (p[1] <= urx)
+                           && (lly <= p[2]) && (p[2] <= ury)
+                           && (0 <= p[3])   && (p[3] <= 1))
+  }
+}
+

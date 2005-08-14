@@ -1,11 +1,12 @@
 #
-# Makevars file for X11 port 
-# AUTO-GENERATED file from Makevars.in (using autoconf)
+# R Makevars file auto-generated using template Makevars.in 
+# AUTO-GENERATED from Makevars.in (using configure/configure.win)
+# This file is part of the RGL project.
 #
-# $Id: Makevars.in.in,v 1.1 2003/11/19 18:00:38 dadler Exp $
+# $Id: Makevars.in 376 2005-08-03 23:58:47Z dadler $
 #
-
-OBJS= x11lib.o x11gui.o types.o math.o fps.o pixmap.o gui.o api.o device.o devicemanager.o rglview.o scene.o glgui.o
 PKG_CPPFLAGS=@CPPFLAGS@
+PKG_CFLAGS=@CFLAGS@
 PKG_CXXFLAGS=@CXXFLAGS@
-PKG_LIBS=@LDFLAGS@ @LIBS@ 
+PKG_LIBS=@LIBS@ 
+

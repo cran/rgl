@@ -1,22 +1,28 @@
+#include "config.hpp"
+#ifdef RGL_X11
 // C++ source
 // This file is part of RGL.
 //
-// $Id: x11lib.cpp,v 1.4 2003/06/04 07:44:05 dadler Exp $
+// $Id: x11lib.cpp 376 2005-08-03 23:58:47Z dadler $
 
-#include "lib.h"
+#include "lib.hpp"
 
 
 //
 // ===[ GUI IMPLEMENTATION ]=================================================
 //
 
-#include "x11gui.h"
+#include "x11gui.hpp"
 
 gui::X11GUIFactory* gpX11GUIFactory = NULL;
+
+
+namespace lib {
 
 gui::GUIFactory* getGUIFactory()
 {
   return (gui::GUIFactory*) gpX11GUIFactory;
+}
 }
 
 //
@@ -57,9 +63,9 @@ static void unset_R_handler()
 //
 // ===[ LIB INIT / QUIT ]=====================================================
 //
+namespace lib {
 
-
-bool lib_init()
+bool init()
 {
   bool success = false;
 
@@ -74,7 +80,7 @@ bool lib_init()
   return success;
 }
 
-void lib_quit()
+void quit()
 {
   unset_R_handler();
   delete gpX11GUIFactory;
@@ -102,7 +108,12 @@ void printMessage( const char* string ) {
 #include <unistd.h>
 
 double getTime() {
-  struct timeval t;
+  struct ::timeval t;
   gettimeofday(&t,NULL);
   return ( (double) t.tv_sec ) * 1000.0 + ( ( (double) t.tv_usec ) / 1000.0 ); 
 }
+
+} // namespace lib
+// ---------------------------------------------------------------------------
+#endif // RGL_X11
+

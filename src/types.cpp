@@ -1,7 +1,7 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: types.cpp,v 1.2 2003/11/21 21:56:03 dadler Exp $
+// $Id: types.cpp 376 2005-08-03 23:58:47Z dadler $
 
 #include "types.h"
 

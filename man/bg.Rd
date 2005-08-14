@@ -1,30 +1,33 @@
-\name{rgl.bg}
+\name{bg}
 \alias{rgl.bg}
+\alias{bg3d}
 \title{setup Background}
 \description{
   Setup the background environment of the scene.
 }
 \usage{
+bg3d(color, ...) 
 rgl.bg( sphere = FALSE, fogtype = "none", color=c("black","white"), back="lines", ...)
+
 }
 \arguments{
   \item{fogtype}{fog type:
-    \itemize{
-      \item \code{"none"}   no fog
-      \item \code{"linear"} linear fog function
-      \item \code{"exp"}    exponential fog function
-      \item \code{"exp2"}   squared exponential fog function
+    \describe{
+      \item{"none"}{no fog}
+      \item{"linear"}{linear fog function}
+      \item{"exp"}{exponential fog function}
+      \item{"exp2"}{squared exponential fog function}
     }
   }
   \item{sphere}{
   logical, if true, an environmental sphere geometry is used for the background decoration.
   }
   \item{color}{
-  Primary color is used for background clearing.
-  Secondary color is used for sphere geometry. See \code{\line{rgl.material}} for details.
+  Primary color is used for background clearing and as fog color.
+  Secondary color is used for background sphere geometry. See \code{\link{rgl.material}} for details.
   }
   \item{back}{
-  Specifies the fill style of the sphere geometry. See \code{\line{rgl.material}} for details.
+  Specifies the fill style of the sphere geometry. See \code{\link{rgl.material}} for details.
   }
   \item{ ... }{Material properties. See \code{\link{rgl.material}} for details.}  
 }
@@ -32,6 +35,9 @@ rgl.bg( sphere = FALSE, fogtype = "none", color=c("black","white"), back="lines"
   If sphere is set to TRUE, an environmental sphere enclosing the whole scene is drawn.
 }
 \examples{
+  # a simple white background
+  
+  bg3d("white")
 
   # the holo-globe (inspired by star trek):
 
