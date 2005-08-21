@@ -1,6 +1,6 @@
 # demo: lsystem.r
 # author: Daniel Adler
-# $Id: lsystem.r 376 2005-08-03 23:58:47Z dadler $
+# $Id: lsystem.r 406 2005-08-22 00:03:18Z dmurdoch $
 
 #
 # geometry 
@@ -70,9 +70,7 @@ rotY <- function( v, degree ) {
 #
 
 turtle.init <- function(pos=c(0,0,0),head=0,pitch=90,roll=0,level=0) {
-  rgl.clear()
-  rgl.clear(type="bbox")
-  rgl.clear(type="light")
+  rgl.clear("all")
   rgl.bg(color="black")
   rgl.light()
   return( list(pos=pos,head=head,pitch=pitch,roll=roll,level=level) )

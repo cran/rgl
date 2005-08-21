@@ -1,21 +1,19 @@
 # RGL-Demo: animal abundance
 # Authors: Oleg Nenadic, Daniel Adler
-# $Id: abundance.r 377 2005-08-04 03:15:09Z dmurdoch $
+# $Id: abundance.r 416 2006-02-03 11:58:50Z dmurdoch $
 
 rgl.demo.abundance <- function()
 {
   # Clear scene:
-  clear3d()               # remove all shapes
-  clear3d(type="lights")  # remove all lights
-  clear3d(type="bbox")    # disable bounding-box
+  clear3d("all")               # remove all shapes, lights, bounding-box, and restore viewpoint
   
   # Setup environment:
   bg3d(col="#cccccc")     # setup background
   light3d()               # setup head-light
   
   # Importing animal data (created with wisp)
-  terrain<-dget(system.file("demo/region.dat",package="rgl"))
-  pop<-dget(system.file("demo/population.dat",package="rgl"))
+  terrain<-dget(system.file("demodata/region.dat",package="rgl"))
+  pop<-dget(system.file("demodata/population.dat",package="rgl"))
   
   # Define colors for terrain
   zlim <- range(terrain)

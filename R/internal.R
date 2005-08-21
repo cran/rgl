@@ -2,7 +2,7 @@
 ## R source file
 ## This file is part of rgl
 ##
-## $Id: _internal.R 376 2005-08-03 23:58:47Z dadler $
+## $Id: internal.R 416 2006-02-03 11:58:50Z dmurdoch $
 ##
 
 ##
@@ -78,9 +78,10 @@ rgl.numeric <- function ( x )
 # vertex data object
 #
 
-rgl.vertex <- function (x,y,z)
+rgl.vertex <- function (x,y=NULL,z=NULL)
 {
-  return ( matrix( rbind(x,y,z), nrow=3, dimnames=list( c("x","y","z"), NULL ) ) )
+  xyz <- xyz.coords(x,y,z,recycle=TRUE)
+  return ( matrix( rbind(xyz$x,xyz$y,xyz$z), nrow=3, dimnames=list( c("x","y","z"), NULL ) ) )
 }
 
 

@@ -5,7 +5,8 @@
 rgl.demo.envmap <- function()
 {
   # Clear scene:
-  clear3d()
+  clear3d("all")
+  light3d()
   bg3d(sphere=T, color="white", back="filled"
   , texture=system.file("textures/refmap.png",package="rgl")
   )

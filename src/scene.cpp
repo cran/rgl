@@ -1,7 +1,7 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: scene.cpp 377 2005-08-04 03:15:09Z dmurdoch $
+// $Id: scene.cpp 406 2005-08-22 00:03:18Z dmurdoch $
 
 
 #include "scene.h"
@@ -69,6 +69,8 @@ bool Scene::clear(TypeID typeID)
       bboxDeco = NULL;
       success = true;
       break;
+    case VIEWPOINT:
+      success = true;  // Handled in R code
     default:
       break;
   }

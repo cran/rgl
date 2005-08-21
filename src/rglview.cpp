@@ -1,7 +1,7 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: rglview.cpp 376 2005-08-03 23:58:47Z dadler $
+// $Id: rglview.cpp 413 2005-10-02 10:32:47Z dmurdoch $
 
 #include "rglview.h"
 #include "opengl.hpp"
@@ -73,7 +73,7 @@ void RGLView::paint(void) {
   double t    = lib::getTime();
 
   double dt   = (last != 0.0f) ? last - t : 0.0f;
-
+  
   renderContext.time = t;
   renderContext.deltaTime = dt;
 

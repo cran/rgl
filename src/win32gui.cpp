@@ -3,7 +3,7 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: win32gui.cpp 376 2005-08-03 23:58:47Z dadler $
+// $Id: win32gui.cpp 413 2005-10-02 10:32:47Z dmurdoch $
 
 #include "win32gui.hpp"
 
@@ -301,9 +301,10 @@ else SetWindowPos(windowHandle, HWND_NOTOPMOST, 0, 0, 0, 0,
           break;
 
         case WM_PAINT:
-
-          window->paint();
-          swap();
+	  if (!window->skipRedraw) {
+            window->paint();
+            swap();
+          }  
           ValidateRect(hwnd, NULL);
   /*
           if (autoUpdate)

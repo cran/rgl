@@ -4,7 +4,7 @@
 // C++ header file
 // This file is part of RGL
 //
-// $Id: gui.hpp 376 2005-08-03 23:58:47Z dadler $
+// $Id: gui.hpp 413 2005-10-02 10:32:47Z dmurdoch $
 // ---------------------------------------------------------------------------
 #include <string.h>
 #include "types.h"
@@ -170,6 +170,8 @@ public:
   void setTitle(const char* title);
   void setVisibility(bool state);
   void update(void);
+  int getSkipRedraw(void);
+  void setSkipRedraw(int in_skipRedraw);
 
 /**
  * Close the window. 
@@ -197,6 +199,7 @@ public:
 // data:
   View* child;
   const char* title;
+  bool skipRedraw;  
 };
 // ---------------------------------------------------------------------------
 } // namespace gui

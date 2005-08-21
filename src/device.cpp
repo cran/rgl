@@ -1,7 +1,7 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: device.cpp 376 2005-08-03 23:58:47Z dadler $
+// $Id: device.cpp 413 2005-10-02 10:32:47Z dmurdoch $
 // ---------------------------------------------------------------------------
 #include "Device.hpp"
 #include "lib.hpp"
@@ -54,6 +54,16 @@ void Device::close(void)
 void Device::bringToTop(int stay)
 {
   window->bringToTop(stay);
+}
+// ---------------------------------------------------------------------------
+int Device::getSkipRedraw(void)
+{
+  return window->getSkipRedraw();
+}
+// ---------------------------------------------------------------------------
+void Device::setSkipRedraw(int in_skipRedraw)
+{
+  window->setSkipRedraw(in_skipRedraw);
 }
 // ---------------------------------------------------------------------------
 bool Device::clear(TypeID stackTypeID)

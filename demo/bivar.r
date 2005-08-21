@@ -1,6 +1,6 @@
 # rgl demo: rgl-bivar.r
 # author: Daniel Adler
-# $Id: bivar.r 379 2005-08-04 17:43:23Z bbolker $
+# $Id: bivar.r 406 2005-08-22 00:03:18Z dmurdoch $
 
 rgl.demo.bivar <- function()
 {
@@ -26,9 +26,7 @@ rgl.demo.bivar <- function()
   zscale<-20
   
   # clear scene:
-  clear3d()
-  clear3d(type="bbox")
-  clear3d(type="lights")
+  clear3d("all")
   
   # setup env:
   bg3d(color="#887777")

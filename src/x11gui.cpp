@@ -4,7 +4,7 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: x11gui.cpp 376 2005-08-03 23:58:47Z dadler $
+// $Id: x11gui.cpp 414 2005-10-03 20:51:59Z dmurdoch $
 
 // Uncomment for verbose output on stderr:
 // #define RGL_X11_DEBUG
@@ -112,8 +112,10 @@ void X11WindowImpl::bringToTop(int stay)
 // ---------------------------------------------------------------------------
 void X11WindowImpl::on_paint()
 {
-  if (window)
+  if (window) {
+    if (window->skipRedraw) return;
     window->paint();
+  }  
   swap();
 }
 // ---------------------------------------------------------------------------
@@ -230,8 +232,10 @@ void X11WindowImpl::processEvent(XEvent& ev)
       break;
     case Expose:
       if (ev.xexpose.count == 0) {
-        if (window) 
+        if (window) {
+          if (window->skipRedraw) break;
           window->paint();
+        }  
         swap();
       }
       break;
