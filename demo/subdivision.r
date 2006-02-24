@@ -1,13 +1,11 @@
 # RGL-demo: subdivision surfaces
 # author: Daniel Adler
-# $Id: subdivision.r 396 2005-08-12 07:45:34Z dadler $
+# $Id: subdivision.r 406 2005-08-22 00:03:18Z dmurdoch $
 
 rgl.demo.subdivision <- function()
 {
   # setup environment
-  clear3d()
-  clear3d(type="bbox")
-  clear3d(type="lights")
+  rgl.clear("all")
   bg3d(color="gray")
   light3d()
 

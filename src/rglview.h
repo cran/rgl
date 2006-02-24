@@ -4,7 +4,7 @@
 // C++ header file
 // This file is part of RGL
 //
-// $Id: rglview.h 376 2005-08-03 23:58:47Z dadler $
+// $Id: rglview.h 413 2005-10-02 10:32:47Z dmurdoch $
 
 
 #include "gui.hpp"
@@ -45,6 +45,7 @@ public:
   double*     getMousePosition();
   void        getUserMatrix(double* dest);
   void        setUserMatrix(double* src);
+  
   // These are set after rendering the scene
   GLdouble modelMatrix[16], projMatrix[16];
   GLint viewport[4];

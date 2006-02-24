@@ -4,7 +4,7 @@
 // C++ header file
 // This file is part of RGL
 //
-// $Id: Device.hpp 384 2005-08-04 22:32:13Z dadler $
+// $Id: Device.hpp 413 2005-10-02 10:32:47Z dmurdoch $
 
 #include "Disposable.hpp"
 #include "types.h"
@@ -46,6 +46,9 @@ public: // -- all methods are blocking until action completed
   void bringToTop(int stay);
 
   RGLView* getRGLView(void);
+  int getSkipRedraw(void);
+  void setSkipRedraw(int in_skipRedraw);
+
 // event handlers
 protected:
   void notifyDisposed(Disposable* disposable);

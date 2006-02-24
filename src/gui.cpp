@@ -1,7 +1,7 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: gui.cpp 376 2005-08-03 23:58:47Z dadler $
+// $Id: gui.cpp 413 2005-10-02 10:32:47Z dmurdoch $
 // ---------------------------------------------------------------------------
 #include <string.h>
 #include "gui.hpp"
@@ -125,6 +125,7 @@ Window::Window(View* in_child, GUIFactory* factory)
 , child(in_child)
 , title("untitled")
 {
+  skipRedraw = false;  
   windowImpl = factory->createWindowImpl(this);
   if (child)
     child->setWindowImpl(windowImpl);
@@ -168,6 +169,17 @@ void Window::setVisibility(bool state)
 void Window::bringToTop(int stay)
 {
   windowImpl->bringToTop(stay);
+}
+// ---------------------------------------------------------------------------
+int Window::getSkipRedraw(void)
+{
+  return (int)skipRedraw;
+}
+// ---------------------------------------------------------------------------
+void Window::setSkipRedraw(int in_skipRedraw)
+{
+  skipRedraw = (bool)in_skipRedraw;
+  if (!skipRedraw) update();
 }
 // ---------------------------------------------------------------------------
 void Window::show(void)

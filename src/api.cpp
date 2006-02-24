@@ -1,7 +1,7 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: api.cpp 377 2005-08-04 03:15:09Z dmurdoch $
+// $Id: api.cpp 417 2006-02-04 12:33:31Z dmurdoch $
 
 #include "lib.hpp"
 
@@ -165,20 +165,23 @@ static Material currentMaterial(Color(1.0f,1.0f,1.0f),Color(1.0f,0.0f,0.0f));
 //
 // PARAMETERS
 //   idata
-//     [0]  TypeID
+//     [0]  count of types
+//     [1], [2], ...  TypeID 1, 2, ...
 //
 //
 
 void rgl_clear(int* successptr, int *idata)
 {
-  int success = RGL_FAIL;
+  int success = RGL_SUCCESS;
   Device* device = deviceManager->getAnyDevice();
+  int num = idata[0];
 
   if (device) {
+    for (int i=1; success && i<=num; i++) {
+      TypeID stackTypeID = (TypeID) idata[i];
 
-    TypeID stackTypeID = (TypeID) idata[0];
-
-    success = as_success( device->clear( stackTypeID ) );
+      success = as_success( device->clear( stackTypeID ) ); // viewpoint handled in R, background ignored
+    }
   }
 
   *successptr = success;
@@ -356,6 +359,30 @@ void rgl_setFOV(int* successptr, double* fov)
     Viewpoint* viewpoint = scene->getViewpoint();
     viewpoint->setFOV(*fov);
     rglview->update();
+    success = RGL_SUCCESS;
+  }
+  *successptr = success;
+}
+
+void rgl_getSkipRedraw(int* successptr, int* skipRedraw)
+{
+  int success = RGL_FAIL;
+  Device* device = deviceManager->getAnyDevice();
+
+  if ( device ) {
+    *skipRedraw = device->getSkipRedraw();
+    success = RGL_SUCCESS;
+  }
+  *successptr = success;
+}
+
+void rgl_setSkipRedraw(int* successptr, int* skipRedraw)
+{
+  int success = RGL_FAIL;
+  Device* device = deviceManager->getAnyDevice();
+
+  if ( device ) {
+    device->setSkipRedraw(*skipRedraw);
     success = RGL_SUCCESS;
   }
   *successptr = success;
