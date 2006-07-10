@@ -125,3 +125,29 @@ v0.66
     being rendered
   - fixed display list memory leak when drawing shapes (e.g. spheres)
   - Changes for compatibility with strict enforcement of file naming rules in R 2.3.0.
+
+v0.67
+  - added support for png files with palettes, and grayscale pngs with 1, 2 or 4 bits 
+    per pixel
+  - added "ignoreExtent" option to par3d:  objects plotted when this is true
+    are ignored when calculating the bounding box
+  - added axis3d, axes3d, box3d, mtext3d, title3d functions from djmrgl for 
+    annotating plots.
+  - added plot3d high level plot function
+  - added material3d, which can both set and query material properties; changed
+    most *3d functions so they leave material invariant across calls.
+  - changed open3d() to set background and material defaults
+  - added aspect3d to control the aspect ratio of the bounding box.
+  - added xAxis, yAxis and zAxis mouse modes, set zAxis as r3d default.
+  - added persp3d function
+  - changed error messages to go through REprintf in X11 and OSX
+  - fixed segfault if rgl_init failed
+  - converted type of viewport arg in user2window and window2user calls
+  - if the rgl_init call fails, the package will still load with a warning (but
+    most function calls will result in errors).
+  - added par3d("scale") to handle aspect3d operations internally.
+  - added ellipse3d() generic and methods for drawing confidence ellipsoids
+  - added decorate3d() to draw all the decorations, plot3d.qmesh3d() method.
+  - changed zoom to use ratio scale over larger range
+  - fixed bug causing jump after resize in Mac OSX (and maybe other platforms)  
+  - rgl.primitive now does sanity checks on inputs

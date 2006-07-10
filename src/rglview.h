@@ -4,7 +4,7 @@
 // C++ header file
 // This file is part of RGL
 //
-// $Id: rglview.h 413 2005-10-02 10:32:47Z dmurdoch $
+// $Id: rglview.h 458 2006-06-26 10:35:11Z murdoch $
 
 
 #include "gui.hpp"
@@ -15,7 +15,7 @@
 
 using namespace gui;
 
-enum MouseModeID {mmTRACKBALL = 1, mmPOLAR, mmSELECTING, mmZOOM, mmFOV};
+enum MouseModeID {mmTRACKBALL = 1, mmXAXIS, mmYAXIS, mmZAXIS, mmPOLAR, mmSELECTING, mmZOOM, mmFOV};
 enum MouseSelectionID {msNONE=1, msCHANGING, msDONE};
 
 class RGLView : public View
@@ -45,7 +45,9 @@ public:
   double*     getMousePosition();
   void        getUserMatrix(double* dest);
   void        setUserMatrix(double* src);
-  
+  void        getScale(double* dest);
+  void        setScale(double* src);
+
   // These are set after rendering the scene
   GLdouble modelMatrix[16], projMatrix[16];
   GLint viewport[4];
@@ -79,9 +81,12 @@ private:
   void trackballBegin(int mouseX, int mouseY);
   void trackballUpdate(int mouseX, int mouseY);
   void trackballEnd();
+  
+  void oneAxisBegin(int mouseX, int mouseY);
+  void oneAxisUpdate(int mouseX, int mouseY);  
 
   PolarCoord camBase, dragBase, dragCurrent;
-  Vertex rotBase, rotCurrent;
+  Vertex rotBase, rotCurrent, axis[3];
 
 
 // o DRAG FEATURE: adjustZoom

@@ -6,6 +6,7 @@
 \concept{modelMatrix}
 \concept{mouseMode}
 \concept{projMatrix}
+\concept{scale}
 \concept{userMatrix}
 \concept{viewport}
 \concept{zoom}
@@ -51,9 +52,13 @@ open3d(\dots, params=get("r3dDefaults", envir=.GlobalEnv))
   values for parameters.  As installed this sets the point of view to
   'world coordinates' (i.e. x running from left to right, y from front
   to back, z from bottom to top), the \code{mouseMode} to
-  \code{(trackball, zoom, fov)}, and the field of view to 30 degrees.
+  \code{(zAxis, zoom, fov)}, and the field of view to 30 degrees.
   Users may create their own variable of that name in the global
-  environment and it will override the installed one.
+  environment and it will override the installed one.  If there
+  is a \code{bg} element in the list or the arguments, it should be
+  a list of arguments to pass to the \code{\link{bg3d}} function to 
+  set the background.  A \code{material} element should be a list
+  of arguments to pass to \code{\link{material3d}} to set the material.
 }
 
 \value{
@@ -78,6 +83,8 @@ open3d(\dots, params=get("r3dDefaults", envir=.GlobalEnv))
       Isometric perspective (which would
       correspond to \code{FOV=0}) is not currently possible, but one can
       approximate it by specifying \code{par3d(FOV=1)}.}
+    \item{\code{ignoreExtent}}{logical.  Set to \code{TRUE} so that subsequently plotted objects
+      will be ignored in calculating the bounding box of the scene.}
     \item{\code{modelMatrix}}{\emph{\bold{R.O.}}; a 4 by 4 matrix describing the position
       of the user data.}
     \item{\code{mouseMode}}{character.  A vector of 3 strings describing
@@ -85,6 +92,9 @@ open3d(\dots, params=get("r3dDefaults", envir=.GlobalEnv))
 	\describe{
 	 \item{\code{"none"}}{No action for this button.}
 	 \item{\code{"trackball"}}{Mouse acts as a virtual trackball, rotating the scene.}
+	 \item{\code{"xAxis"}}{Similar to \code{"trackball"}, but restricted to X axis rotation.}
+	 \item{\code{"yAxis"}}{Y axis rotation.}
+	 \item{\code{"zAxis"}}{Z axis rotation.}
 	 \item{\code{"polar"}}{Mouse rotates the scene by moving in polar coordinates.}
 	 \item{\code{"selecting"}}{Mouse is used for selection.  This is not normally set by the
 	 user, but is used internally by the \code{\link{select3d}} function.}
@@ -94,6 +104,8 @@ open3d(\dots, params=get("r3dDefaults", envir=.GlobalEnv))
     }
     \item{\code{projMatrix}}{\emph{\bold{R.O.}}; a 4 by 4 matrix describing the current
       projection of the scene.}
+    \item{\code{scale}}{real.  A vector of 3 values indicating the amount by which to
+      rescale each axis before display.  Set by \code{\link{aspect3d}}.}
     \item{\code{skipRedraw}}{whether to update the display.  Set to \code{FALSE} to suspend
       updating while making multiple changes to the scene.  See \code{demo(hist3d)} for an example.}
     \item{\code{userMatrix}}{a 4 by 4 matrix describing user actions to
@@ -107,6 +119,11 @@ open3d(\dots, params=get("r3dDefaults", envir=.GlobalEnv))
   }
 }
 
+\section{note}{
+The \code{"xAxis"}, \code{"yAxis"} and \code{"zAxis"} mouse modes rotate relative to the coordinate
+system of the data, regardless of the current orientation of the scene.
+}
+
 \section{Rendering}{
 The parameters returned by \code{par3d} are sufficient to determine where rgl would render
 a point on the screen.  Given a column vector \code{(x,y,z)}, it performs the equivalent of 
@@ -116,7 +133,9 @@ the following operations:
 the vector \code{v = (x,y,z,1)}.
 \item It obtains the model matrix \code{M = par3d("modelMatrix")} and multiplies
 the point by this giving \code{u = M \%*\% v}.  Using this location and information on the
-normals (which have been similarly transformed), it performs lighting calculations.
+normals (which have been similarly transformed), it performs lighting calculations.  (The 
+\code{par3d("userMatrix")} is used in the construction of the model matrix, along with
+other transformations to center the object being displayed.)
 \item It obtains the projection matrix \code{P = par3d("projMatrix")} and
 multiplies the point by it giving \code{P \%*\% u = (x2, y2, z2, w2)}.
 \item It converts back to Euclidean coordinates by dividing the first 3 coordinates by \code{w2}.
@@ -137,12 +156,13 @@ OpenGL Architecture Review Board (1997).  OpenGL Programming Guide.  Addison-Wes
 }
 
 \examples{
+    r3dDefaults
     open3d()
-    
+    shade3d(cube3d(color=rep(rainbow(6),rep(4,6))))
     save <- par3d(userMatrix = rotationMatrix(90*pi/180, 1,0,0))
     save
     par3d("userMatrix")    
-    par3d(userMatrix = save)
+    par3d(save)
     par3d("userMatrix")
 }
 

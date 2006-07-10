@@ -4,7 +4,7 @@
 // C++ header file
 // This file is part of RGL
 //
-// $Id: scene.h 376 2005-08-03 23:58:47Z dadler $
+// $Id: scene.h 432 2006-03-05 15:45:47Z dmurdoch $
 
 #include "types.h"
 #include <vector>
@@ -70,6 +70,14 @@ public:
    * obtain bounded viewpoint
    **/
   Viewpoint* getViewpoint();
+  
+  /**
+   * Get and set flag to ignore elements in bounding box
+   **/
+  
+  int getIgnoreExtent(void);
+  void setIgnoreExtent(int in_ignoreExtent);
+  
 
 private:
 
@@ -129,6 +137,8 @@ private:
    * bounding box of overall scene
    **/
   AABox data_bbox;
+  
+  bool ignoreExtent;
 };
 
 

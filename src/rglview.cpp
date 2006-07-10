@@ -1,7 +1,7 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: rglview.cpp 413 2005-10-02 10:32:47Z dmurdoch $
+// $Id: rglview.cpp 463 2006-06-26 10:44:23Z murdoch $
 
 #include "rglview.h"
 #include "opengl.hpp"
@@ -17,8 +17,8 @@
 // CAMERA config
 //
 
-#define ZOOM_MIN  0.0f
-#define ZOOM_MAX  1.0f
+#define ZOOM_MIN  0.0001f
+#define ZOOM_MAX  10000.0f
 
 
 RGLView::RGLView(Scene* in_scene)
@@ -64,7 +64,7 @@ void RGLView::resize(int width, int height) {
 
   renderContext.rect.width = width;
   renderContext.rect.height = height;
-
+  if (drag) captureLost();
 }
 
 void RGLView::paint(void) {
@@ -150,15 +150,16 @@ void RGLView::wheelRotate(int dir)
   
   float zoom = viewpoint->getZoom();
 
-#define ZOOM_STEP   ((ZOOM_MAX - ZOOM_MIN) / 10)
+#define ZOOM_STEP  1.05f 
+#define ZOOM_PIXELLOGSTEP 0.02f
   
   switch(dir)
   {
     case GUI_WheelForward:
-      zoom += ZOOM_STEP;
+      zoom *= ZOOM_STEP;
       break;
     case GUI_WheelBackward:
-      zoom -= ZOOM_STEP;
+      zoom /= ZOOM_STEP;
       break;
   }
 
@@ -285,6 +286,24 @@ void RGLView::trackballEnd()
     viewpoint->mergeMouseMatrix();
 }
 
+void RGLView::oneAxisBegin(int mouseX, int mouseY)
+{
+	rotBase = screenToVector(width,height,mouseX,height/2);
+}
+
+void RGLView::oneAxisUpdate(int mouseX, int mouseY)
+{
+	Viewpoint* viewpoint = scene->getViewpoint();
+
+  	rotCurrent = screenToVector(width,height,mouseX,height/2);
+
+	windowImpl->beginGL();
+	viewpoint->mouseOneAxis(rotBase,rotCurrent,axis[drag-1]);
+	windowImpl->endGL();
+
+	View::update();
+}
+
 void RGLView::polarBegin(int mouseX, int mouseY)
 {
 	Viewpoint* viewpoint = scene->getViewpoint();
@@ -370,9 +389,7 @@ void RGLView::adjustZoomUpdate(int mouseX, int mouseY)
 
   int dy = mouseY - zoomBaseY;
 
-  float py = (float)dy/(float)height;
-
-  float zoom = clamp ( viewpoint->getZoom() + ( -py * ZOOM_MAX ), ZOOM_MIN, ZOOM_MAX);
+  float zoom = clamp ( viewpoint->getZoom() * exp(-dy*ZOOM_PIXELLOGSTEP), ZOOM_MIN, ZOOM_MAX);
   viewpoint->setZoom(zoom);
 
   View::update();
@@ -434,6 +451,16 @@ void RGLView::setMouseMode(int button, MouseModeID mode)
 	    	ButtonUpdateFunc[index] = &RGLView::trackballUpdate;
 	    	ButtonEndFunc[index] = &RGLView::trackballEnd;
 	    	break;
+	    case mmXAXIS:
+	    case mmYAXIS:
+	    case mmZAXIS:
+	    	ButtonBeginFunc[index] = &RGLView::oneAxisBegin;
+	    	ButtonUpdateFunc[index] = &RGLView::oneAxisUpdate;
+	    	ButtonEndFunc[index] = &RGLView::trackballEnd; // No need for separate function
+	    	if (mode == mmXAXIS)      axis[index] = Vertex(1,0,0);
+	    	else if (mode == mmYAXIS) axis[index] = Vertex(0,1,0);
+	    	else                      axis[index] = Vertex(0,0,1);
+	    	break;	    	
 	    case mmPOLAR:
  	    	ButtonBeginFunc[index] = &RGLView::polarBegin;
 	    	ButtonUpdateFunc[index] = &RGLView::polarUpdate;
@@ -519,6 +546,23 @@ void RGLView::setUserMatrix(double* src)
 
 	View::update();
 }
+
+void RGLView::getScale(double* dest)
+{
+	Viewpoint* viewpoint = scene->getViewpoint();
+	
+	viewpoint->getScale(dest);
+}
+
+void RGLView::setScale(double* src)
+{
+	Viewpoint* viewpoint = scene->getViewpoint();
+
+	viewpoint->setScale(src);
+
+	View::update();
+}
+
 
 void RGLView::setDefaultMouseFunc()
 {

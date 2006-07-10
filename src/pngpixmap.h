@@ -5,7 +5,7 @@
 // C++ header file
 // This file is part of RGL
 //
-// $Id: pngpixmap.h 376 2005-08-03 23:58:47Z dadler $
+// $Id: pngpixmap.h 426 2006-03-03 22:06:44Z dmurdoch $
 
 class PNGPixmapFormat : public PixmapFormat {
 public:
@@ -174,7 +174,11 @@ private:
 
       const char* interlace_string = (interlace_type == PNG_INTERLACE_ADAM7) ? "adam7 interlace " : "";
 
-      if (bit_depth != 8)
+      if (bit_depth == 16)
+        png_set_strip_16(png_ptr);
+      else if (bit_depth < 8  && color_type == PNG_COLOR_TYPE_GRAY)
+        png_set_gray_1_2_4_to_8(png_ptr);
+      else if (bit_depth != 8)  /* this should never happen with current formats... */
         goto unsupported;
       
       if (interlace_type == PNG_INTERLACE_ADAM7)
@@ -193,13 +197,24 @@ private:
           typeID = RGBA32;
           goto init;        
         case PNG_COLOR_TYPE_PALETTE:
+          png_set_palette_to_rgb(png_ptr);
+          typeID = RGB24;
+          goto init;
         case PNG_COLOR_TYPE_GRAY_ALPHA:
+          png_set_gray_to_rgb(png_ptr);
+          typeID = RGBA32;
+          goto init;
         default:
           goto unsupported;
           break;
       };
 
 init:
+      if (typeID == RGB24 && png_get_valid(png_ptr, info, PNG_INFO_tRNS)) {
+        png_set_tRNS_to_alpha(png_ptr);
+        typeID = RGBA32;
+      }
+      
       load->pixmap->init(typeID, width,height,bit_depth);
 
       png_read_update_info(load->png_ptr,load->info_ptr);

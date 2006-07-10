@@ -51,6 +51,8 @@ EXPORT_SYMBOL void rgl_clear    (int* successptr, int* idata);
 EXPORT_SYMBOL void rgl_pop      (int* successptr, int* idata);
 
 EXPORT_SYMBOL void rgl_material (int* successptr, int* idata, char** cdata, double* ddata);
+EXPORT_SYMBOL void rgl_getcolorcount(int* count);
+EXPORT_SYMBOL void rgl_getmaterial (int* successptr, int* idata, char** cdata, double* ddata);
 
 EXPORT_SYMBOL void rgl_light    (int* successptr, int* idata, double* ddata );
 
@@ -74,12 +76,16 @@ EXPORT_SYMBOL void rgl_selectstate(int* successptr, int* selectstate, double* lo
 EXPORT_SYMBOL void rgl_setselectstate(int* successptr, int *idata);
 EXPORT_SYMBOL void rgl_getUserMatrix(int* successptr, double* userMatrix);
 EXPORT_SYMBOL void rgl_setUserMatrix(int* successptr, double* userMatrix);
+EXPORT_SYMBOL void rgl_getScale(int* successptr, double* scale);
+EXPORT_SYMBOL void rgl_setScale(int* successptr, double* scale);
 EXPORT_SYMBOL void rgl_getZoom(int* successptr, double* zoom);
 EXPORT_SYMBOL void rgl_setZoom(int* successptr, double* zoom);
 EXPORT_SYMBOL void rgl_getFOV(int* successptr, double* fov);
 EXPORT_SYMBOL void rgl_setFOV(int* successptr, double* fov);
 EXPORT_SYMBOL void rgl_getModelMatrix(int* successptr, double* modelMatrix);
 EXPORT_SYMBOL void rgl_getProjMatrix(int* successptr, double* projMatrix);
+EXPORT_SYMBOL void rgl_getIgnoreExtent(int* successptr, int* ignoreExtent);
+EXPORT_SYMBOL void rgl_setIgnoreExtent(int* successptr, int* ignoreExtent);
 EXPORT_SYMBOL void rgl_getSkipRedraw(int* successptr, int* skipRedraw);
 EXPORT_SYMBOL void rgl_setSkipRedraw(int* successptr, int* skipRedraw);
 EXPORT_SYMBOL void rgl_getViewport(int* successptr, int* viewport);

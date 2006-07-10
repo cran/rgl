@@ -1,7 +1,7 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: device.cpp 413 2005-10-02 10:32:47Z dmurdoch $
+// $Id: device.cpp 432 2006-03-05 15:45:47Z dmurdoch $
 // ---------------------------------------------------------------------------
 #include "Device.hpp"
 #include "lib.hpp"
@@ -54,6 +54,16 @@ void Device::close(void)
 void Device::bringToTop(int stay)
 {
   window->bringToTop(stay);
+}
+// ---------------------------------------------------------------------------
+int Device::getIgnoreExtent(void)
+{
+  return scene->getIgnoreExtent();
+}
+// ---------------------------------------------------------------------------
+void Device::setIgnoreExtent(int in_ignoreExtent)
+{
+  scene->setIgnoreExtent(in_ignoreExtent);
 }
 // ---------------------------------------------------------------------------
 int Device::getSkipRedraw(void)

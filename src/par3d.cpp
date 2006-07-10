@@ -90,7 +90,8 @@ static void BoundsCheck(double x, double a, double b, char *s)
 
 /* These modes must match the definitions of mmTRACKBALL etc in rglview.h ! */ 
 
-char* mouseModes[] = {"none", "trackball", "polar", "selecting", "zoom", "fov"};
+char* mouseModes[] = {"none", "trackball", "xAxis", "yAxis", "zAxis", "polar", "selecting", "zoom", "fov"};
+#define mmLAST 9
 
 static void Specify(char *what, SEXP value)
 {
@@ -111,6 +112,10 @@ static void Specify(char *what, SEXP value)
 	BoundsCheck(v, 1.0, 179.0, what);
 	rgl_setFOV(&success, &v);
     }
+    else if (streql(what, "ignoreExtent")) {
+    	lengthCheck(what, value, 1);	iv = asLogical(value);
+    	rgl_setIgnoreExtent(&success, &iv);
+    }    
     else if (streql(what, "mouseMode")) {
     	value = coerceVector(value, STRSXP);
 	if (length(value) > 3) par_error(what);   
@@ -118,14 +123,14 @@ static void Specify(char *what, SEXP value)
             if (STRING_ELT(value, i-1) != NA_STRING) {
 		success = 0;
 		/* check exact first, then partial */
-		for (int mode = 0; mode < 6; mode++) {
+		for (int mode = 0; mode < mmLAST; mode++) {
 		    if (psmatch(mouseModes[mode], CHAR(STRING_ELT(value, i-1)), (Rboolean)TRUE)) {
 			rgl_setMouseMode(&success, &i, &mode);
 			break;
 		    }
 		}
 		if (!success) {
-		    for (int mode = 0; mode < 6; mode++) {
+		    for (int mode = 0; mode < mmLAST; mode++) {
 			if (psmatch(mouseModes[mode], CHAR(STRING_ELT(value, i-1)), (Rboolean)FALSE)) {
 			    rgl_setMouseMode(&success, &i, &mode);
 			    break;
@@ -146,6 +151,12 @@ static void Specify(char *what, SEXP value)
 	
 	rgl_setUserMatrix(&success, REAL(x));
     }
+    else if (streql(what, "scale")) {
+	lengthCheck(what, value, 3);
+	x = coerceVector(value, REALSXP);
+	
+	rgl_setScale(&success, REAL(x));
+    }    
     else if (streql(what, "zoom")) {
     	lengthCheck(what, value, 1);	v = asReal(value);
 	posRealCheck(v, what);
@@ -175,6 +186,10 @@ static SEXP Query(char *what)
 	value = allocVector(REALSXP, 1);
 	rgl_getFOV(&success, REAL(value));
     }
+    else if (streql(what, "ignoreExtent")) {
+    	value = allocVector(LGLSXP, 1);
+    	rgl_getIgnoreExtent(&success, LOGICAL(value));
+    }    
     else if (streql(what, "modelMatrix")) {
 	value = allocMatrix(REALSXP, 4, 4);
 	rgl_getModelMatrix(&success, REAL(value));
@@ -183,13 +198,13 @@ static SEXP Query(char *what)
     	PROTECT(value = allocVector(STRSXP, 3));
     	for (i=1; i<4; i++) {
 	    rgl_getMouseMode(&success, &i, &mode); 
-	    if (mode < 0 || mode > 5) mode = 0;
+	    if (mode < 0 || mode > mmLAST) mode = 0;
 	    SET_STRING_ELT(value, i-1, mkChar(mouseModes[mode]));
     	};    
     	PROTECT(names = allocVector(STRSXP, 3));
     	SET_STRING_ELT(names, 0, mkChar("left"));
-    	SET_STRING_ELT(names, 1, mkChar("middle"));  
-    	SET_STRING_ELT(names, 2, mkChar("right"));
+    	SET_STRING_ELT(names, 1, mkChar("right"));  
+    	SET_STRING_ELT(names, 2, mkChar("middle"));
     	UNPROTECT(2);
     	value = namesgets(value, names);
     	success = 1;
@@ -205,6 +220,10 @@ static SEXP Query(char *what)
     else if (streql(what, "userMatrix")) {
 	value = allocMatrix(REALSXP, 4, 4);
 	rgl_getUserMatrix(&success, REAL(value));
+    }
+    else if (streql(what, "scale")) {
+        value = allocVector(REALSXP, 3);
+        rgl_getScale(&success, REAL(value));
     }
     else if (streql(what, "viewport")) {
 	value = allocVector(INTSXP, 4);

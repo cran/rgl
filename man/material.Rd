@@ -24,8 +24,10 @@ rgl.material(
   front        = "fill", 
   back         = "fill",
   size         = 1.0, 
-  fog          = TRUE
+  fog          = TRUE, 
+  ...
 )
+material3d(...)
 }
 \arguments{
   \item{color}{
@@ -96,15 +98,31 @@ rgl.material(
     numeric, specifying the line and point size.
   }
   \item{fog}{logical, specifying if fog effect should be applied on the corresponding shape}
+  \item{...}{Any of the arguments above; see Details below.}
 }
 \details{
   Only one side at a time can be culled.
+  
+  \code{material3d} is an alternate interface to the material properties, modelled after
+\code{\link{par3d}}:  rather than setting defaults for parameters that are not specified, 
+they will be left unchanged.  \code{material3d} may also be used to query the material
+properties; see the examples below.
+
+  The current implementation does not return parameters for textures.
+  
+  The \code{...} parameter to \code{rgl.material} is ignored.
 }
 \seealso{
 \code{\link{rgl.primitive}},
 \code{\link{rgl.bbox}},
 \code{\link{rgl.bg}},
 \code{\link{rgl.light}}
+}
+\examples{
+save <- material3d("color")
+material3d(color="red")
+material3d("color")
+material3d(color=save)
 }
 \keyword{dynamic}
 

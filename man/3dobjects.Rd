@@ -17,7 +17,7 @@ quads3d(x, y = NULL, z = NULL, ...)
 }
 \arguments{
   \item{x, y, z}{coordinates. Any reasonable way of defining the
-    coordinates is acceptable.  See the function \code{\link{xyz.coords}}
+    coordinates is acceptable.  See the function \code{\link[grDevices]{xyz.coords}}
     for details.}
   \item{ ... }{Material properties. See \code{\link{rgl.material}} for details.}  
 }
@@ -32,7 +32,7 @@ Points are taken in pairs by \code{segments3d}, triplets as the vertices
 of the triangles, and quadruplets for the quadrilaterals.  Colours are applied vertex by vertex; 
 if different at each end of a line segment, or each vertex of a polygon, the colours
 are blended over the extent of the object.  Quadrilaterals must be entirely 
-in one plane, or the results are undefined.
+in one plane and convex, or the results are undefined.
 
 These functions call the lower level functions \code{\link{rgl.points}}, \code{\link{rgl.linestrips}},
 and so on, and are provided for convenience.
@@ -45,28 +45,41 @@ See \code{\link{rgl.material}} for details.
 }
 
 \examples{
-# Show 12 random vertices in various ways. Force 4-tuples into 
-# planes so that quads3d works.
-x <- rnorm(12)
-y <- rnorm(12)
-z <- rnorm(12)
-for (i in c(4,8,12)) 
-  z[i] <- predict(lm(z ~ x+y, 
-            data=data.frame(x=x[(i-3):i], y=y[(i-3):i], z=z[(i-3):i])))[4]
+# Show 12 random vertices in various ways. 
 
-rgl.open()
+M <- matrix(rnorm(36), 3, 12, dimnames=list(c('x','y','z'), 
+                                       rep(LETTERS[1:4], 3)))
 
-points3d(x,y,z)
-lines3d(x-3,y+3,z)
-segments3d(x-6,y+6,z)
-triangles3d(x-9,y+9,z,col='red')
-quads3d(x-12,y+12,z,col='green')  
-text3d(x-15,y+15,z,1:12)
+# Force 4-tuples to be convex in planes so that quads3d works.
+
+for (i in c(1,5,9)) {
+    quad <- as.data.frame(M[,i+0:3])
+    coeffs <- runif(2,0,3)
+    if (mean(coeffs) < 1) coeffs <- coeffs + 1 - mean(coeffs)
+    quad$C <- with(quad, coeffs[1]*(B-A) + coeffs[2]*(D-A) + A)
+    M[,i+0:3] <- as.matrix(quad)
+}
+
+open3d()
+
+# Rows of M are x, y, z coords; transpose to plot
+
+M <- t(M)
+shift <- matrix(c(-3,3,0), 12, 3, byrow=TRUE)
+
+points3d(M, size=2)
+lines3d(M + shift)
+segments3d(M + 2*shift)
+triangles3d(M + 3*shift, col='red')
+quads3d(M + 4*shift, col='green')  
+text3d(M + 5*shift, texts=1:12)
 
 # Add labels
 
-text3d(-3*(0:5)+3, 3*(0:5), 0, 
-       c('points3d','lines3d','segments3d',
+shift <- outer(0:5, shift[1,])
+shift[,1] <- shift[,1] + 3
+text3d(shift, 
+       texts = c('points3d','lines3d','segments3d',
          'triangles3d', 'quads3d','text3d'),
        adj = 0)
  rgl.bringtotop()
