@@ -3,7 +3,7 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: x11lib.cpp 376 2005-08-03 23:58:47Z dadler $
+// $Id: x11lib.cpp 455 2006-06-26 01:17:13Z murdoch $
 
 #include "lib.hpp"
 
@@ -94,10 +94,10 @@ void quit()
 // printMessage
 //
 
-#include <stdio.h>
+#include <R.h>
 
 void printMessage( const char* string ) {
-  fprintf(stderr, "RGL: %s\n", string);
+  REprintf("RGL: %s\n", string);
 }
 
 //

@@ -1,7 +1,7 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: scene.cpp 406 2005-08-22 00:03:18Z dmurdoch $
+// $Id: scene.cpp 458 2006-06-26 10:35:11Z murdoch $
 
 
 #include "scene.h"
@@ -24,6 +24,7 @@ Scene::Scene()
   viewpoint  = NULL;
   nlights    = 0;
   bboxDeco   = NULL;
+  ignoreExtent = false;
  
   add( new Background );
   add( new Viewpoint );
@@ -78,8 +79,10 @@ bool Scene::clear(TypeID typeID)
 }
 
 void Scene::addShape(Shape* shape) {
-  const AABox& bbox = shape->getBoundingBox();
-  data_bbox += bbox;
+  if (!shape->getIgnoreExtent()) {
+    const AABox& bbox = shape->getBoundingBox();
+    data_bbox += bbox;
+  }
 
   shapes.addTail(shape);
 
@@ -224,7 +227,11 @@ void Scene::render(RenderContext* renderContext)
   glClear(clearFlags);
   // renderContext.clear(viewport);
 
-
+  // userMatrix and scale might change the length of normals.  If this slows us
+  // down, we should test for that instead of just enabling GL_NORMALIZE
+  
+  glEnable(GL_NORMALIZE);
+  
   //
   // SETUP LIGHTING MODEL
   //
@@ -447,9 +454,19 @@ void Scene::calcDataBBox()
   for(iter.first(); !iter.isDone(); iter.next() ) {
     Shape* shape = (Shape*) iter.getCurrent();
 
-    data_bbox += shape->getBoundingBox();
+    if (!shape->getIgnoreExtent()) data_bbox += shape->getBoundingBox();
   }
 }
 
+// ---------------------------------------------------------------------------
+int Scene::getIgnoreExtent(void)
+{
+  return (int)ignoreExtent;
+}
+// ---------------------------------------------------------------------------
+void Scene::setIgnoreExtent(int in_ignoreExtent)
+{
+  ignoreExtent = (bool)in_ignoreExtent;
+}
 
 

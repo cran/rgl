@@ -2,7 +2,7 @@
 ## R source file
 ## This file is part of rgl
 ##
-## $Id: zzz.R 376 2005-08-03 23:58:47Z dadler $
+## $Id: zzz.R 457 2006-06-26 01:20:52Z murdoch $
 ##
 
 ##
@@ -27,13 +27,13 @@
     }
   }
 	
-  ret <- .C( symbol.C("rgl_init"), 
+  ret <- .C( "rgl_init", 
     success=FALSE , 
     PACKAGE="rgl"
   )
   
   if (!ret$success) {
-    stop("error rgl_init")
+    warning("error in rgl_init")
   }
   
 }
@@ -48,7 +48,7 @@
 { 
   # shutdown
   
-  ret <- .C( symbol.C("rgl_quit"), success=FALSE, PACKAGE="rgl" )
+  ret <- .C( "rgl_quit", success=FALSE, PACKAGE="rgl" )
   
 }
 

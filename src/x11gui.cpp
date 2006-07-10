@@ -4,7 +4,7 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: x11gui.cpp 414 2005-10-03 20:51:59Z dmurdoch $
+// $Id: x11gui.cpp 455 2006-06-26 01:17:13Z murdoch $
 
 // Uncomment for verbose output on stderr:
 // #define RGL_X11_DEBUG
@@ -414,8 +414,10 @@ X11GUIFactory::~X11GUIFactory()
 void X11GUIFactory::disconnect()
 {
   // process pending XDestroyNotify events
-  XSync(xdisplay, False);
-  processEvents();
+  if (xdisplay) {
+    XSync(xdisplay, False);
+    processEvents();
+  }
 
   // free XVisualInfo structure
   if (xvisualinfo) {

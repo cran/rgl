@@ -5,8 +5,8 @@
 #
 # $Id: Makevars.in 376 2005-08-03 23:58:47Z dadler $
 #
-PKG_CPPFLAGS=
+PKG_CPPFLAGS= -If:/R/R-2.3.1/src/extra/zlib -DHAVE_PNG_H -If:/R/R-2.3.1/src/gnuwin32/bitmap/libpng 
 PKG_CFLAGS=
 PKG_CXXFLAGS=-fno-exceptions -fno-rtti
-PKG_LIBS=-lgdi32 -lopengl32 -lglu32 
+PKG_LIBS=-lgdi32 -lopengl32 -lglu32 -Lf:/R/R-2.3.1/src/extra/zlib -lz -Lf:/R/R-2.3.1/src/gnuwin32/bitmap/libpng -lpng 
 

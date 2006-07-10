@@ -4,7 +4,7 @@
 // C++ header file
 // This file is part of RGL
 //
-// $Id: Device.hpp 413 2005-10-02 10:32:47Z dmurdoch $
+// $Id: Device.hpp 432 2006-03-05 15:45:47Z dmurdoch $
 
 #include "Disposable.hpp"
 #include "types.h"
@@ -46,6 +46,9 @@ public: // -- all methods are blocking until action completed
   void bringToTop(int stay);
 
   RGLView* getRGLView(void);
+  
+  int getIgnoreExtent(void);
+  void setIgnoreExtent(int in_ignoreExtent);  
   int getSkipRedraw(void);
   void setSkipRedraw(int in_skipRedraw);
 

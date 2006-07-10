@@ -2,7 +2,7 @@
 ## R source file
 ## This file is part of rgl
 ##
-## $Id: material.R 376 2005-08-03 23:58:47Z dadler $
+## $Id: material.R 460 2006-06-26 10:39:13Z murdoch $
 ##
 
 ##
@@ -27,7 +27,8 @@ rgl.material <- function (
   front        = "fill", 
   back         = "fill",
   size         = 1.0, 
-  fog          = TRUE
+  fog          = TRUE,
+  ...
 ) {
   # solid or diffuse component
 
@@ -78,11 +79,52 @@ rgl.material <- function (
   cdata <- as.character(c( texture ))
   ddata <- as.numeric(c( shininess, size, alpha ))
 
-  ret <- .C( symbol.C("rgl_material"),
+  ret <- .C( "rgl_material",
     success = FALSE,
     idata,
     cdata,
     ddata,
     PACKAGE="rgl"
   )
+}
+
+rgl.getcolorcount <- function() .C( "rgl_getcolorcount", count=integer(1), PACKAGE="rgl" )$count
+  
+rgl.getmaterial <- function(ncolors = rgl.getcolorcount()) {
+
+  idata <- rep(0, 21+3*ncolors)
+  idata[1] <- ncolors
+  idata[11] <- ncolors
+  
+  cdata <- character(0)
+  ddata <- rep(0, 2+ncolors)
+  
+  ret <- .C( "rgl_getmaterial",
+    success = FALSE,
+    idata = as.integer(idata),
+    cdata = cdata,
+    ddata = as.numeric(ddata),
+    PACKAGE="rgl"
+  )
+  
+  if (!ret$success) error('rgl.getmaterial')
+  
+  polymodes = c("filled", "lines", "points", "culled")
+  
+  idata <- ret$idata
+  ddata <- ret$ddata
+  
+  list(color = rgb(idata[19 + 3*(1:idata[1])], idata[20 + 3*(1:idata[1])], idata[21 + 3*(1:idata[1])], maxColorValue = 255),
+       alpha = ddata[seq(from=3, length=idata[11])],
+       lit = idata[2] > 0,
+       ambient = rgb(idata[12], idata[13], idata[14], maxColorValue = 255),
+       specular = rgb(idata[15], idata[16], idata[17], maxColorValue = 255),
+       emission = rgb(idata[18], idata[19], idata[20], maxColorValue = 255),
+       shininess = ddata[1],
+       smooth = idata[3] > 0,
+       front = polymodes[idata[4]],
+       back = polymodes[idata[5]],
+       size = ddata[2],
+       fog = idata[6] > 0)
+                   
 }
