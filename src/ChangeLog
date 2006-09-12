@@ -153,4 +153,18 @@ v0.67
   - rgl.primitive now does sanity checks on inputs
 
 v0.67-2
-  - typo correction
+  - minor correction
+
+v0.68
+  - fixed sphere drawing so spheres are spheres regardless of par3d("scale")
+  - added type="s" to plot3d to draw spheres
+  - fixed handling of "..." in axis related functions
+  - added full MDI support
+  - removed use of List and ListIterator internally
+  - fixed handling of axes and boxes when a coordinate had zero extent
+  - changed rgl.viewpoint default to be compatible with r3dDefaults
+  - added id return values to primitives and higher level functions, 
+    and to rgl.pop(); added rgl.ids() to report on them.
+  - updated gl2ps to version 1.3.1, adding support for svg and pgf output formats.
+  - added grid3d(), added nticks argument to bbox3d, axis3d and axes3d.
+    

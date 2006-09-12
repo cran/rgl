@@ -6,7 +6,7 @@
 // C++ header file
 // This file is part of RGL
 //
-// $Id: types.h 376 2005-08-03 23:58:47Z dadler $
+// $Id: types.h 494 2006-08-01 17:25:31Z dmurdoch $
 
 
 #include <cstring>
@@ -78,94 +78,6 @@ class DestroyHandler
 public:
   virtual void notifyDestroy(void* userdata) = 0;
 };
-
-//
-//
-// Nodes, Containers and Iterators
-//
-//
-
-
-//
-// CLASS
-//   Node
-//
-
-class Node;
-
-class Node
-{
-public:
-  Node();
-  virtual ~Node() {  }
-  
-protected:
-  Node* prev;
-  Node* next;
-  friend class List;
-  friend class ListIterator;
-  friend class RingIterator;
-
-public:
-  Node* getNext() { return next; }
-
-};
-
-
-//
-// CLASS
-//   List
-//
-
-class List
-{
-public:
-  List();
-  ~List();
-  void addTail(Node* node);
-  Node* remove(Node* node);
-  void deleteItems(void);
-  Node* getTail() { return tail; }
-private:
-  Node* head;
-  Node* tail;
-  friend class ListIterator;
-  friend class RingIterator;
-};
-
-
-//
-// CLASS
-//   ListIterator
-//
-
-class ListIterator
-{
-public:
-  ListIterator(List* list);
-  void operator() (List* list);
-  void  first();
-  void  next();
-  bool  isDone();
-  Node* getCurrent();
-protected:
-  List* list;
-  Node* nodePtr;
-};
-
-//
-// CLASS
-//   RingIterator
-//
-
-class RingIterator : public ListIterator
-{
-public:
-  RingIterator(List* list);
-  void  set(Node* node);
-  void  next();
-};
-
 
 //
 // TEMPLATE

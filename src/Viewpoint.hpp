@@ -35,16 +35,18 @@ public:
   void	      setUserMatrix(double* src);
   void	      getScale(double* dest);
   void	      setScale(double* src);
+  void 	      getPosition(double* dest);
+  void        setPosition(double* src);
   Frustum     frustum;
   Vertex      getCOP(const Sphere& viewvolumeSphere) const;
-
+  Vertex      scale;
+  bool        scaleChanged;
 private:
   PolarCoord  position;
   float       fov;
   float       zoom;
   bool        interactive;
   GLdouble    userMatrix[16], mouseMatrix[16];
-  GLdouble    scale[3];
 };
 
 #endif // VIEWPOINT_HPP

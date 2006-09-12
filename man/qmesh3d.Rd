@@ -41,6 +41,12 @@
   The default is an identity transformation.  Use \code{par3d("userMatrix")} to render the
   object vertically in the current user view.
 }
+\value{
+  \code{qmesh3d}, \code{cube3d}, and \code{oh3d} return \code{qmesh3d} objects.
+  
+  \code{dot3d}, \code{wire3d}, and \code{shade3d} are called for their side effect
+  of drawing an object into the scene; they return an object ID.
+}
 \examples{
 
   # generate a quad mesh object
@@ -58,7 +64,7 @@
   
   # render 4 meshes vertically in the current view
 
-  clear3d()  
+  open3d()  
   bg3d("gray")
   l0 <- oh3d(tran = par3d("userMatrix"), color = "green" )
   shade3d( translate3d( l0, -6, 0, 0 ))

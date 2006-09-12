@@ -1,6 +1,6 @@
 # demo: lsystem.r
 # author: Daniel Adler
-# $Id: lsystem.r 406 2005-08-22 00:03:18Z dmurdoch $
+# $Id: lsystem.r 491 2006-07-31 13:17:19Z dmurdoch $
 
 #
 # geometry 
@@ -187,5 +187,6 @@ rgl.demo.lsystem <- function (level=0) {
   lsystem.plot(plant,level)  
 }
 
+rgl.open()
 rgl.demo.lsystem(level=1)
 

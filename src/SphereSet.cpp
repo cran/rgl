@@ -1,4 +1,5 @@
 #include "SphereSet.hpp"
+#include "Viewpoint.hpp"
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -35,8 +36,8 @@ void SphereSet::drawElement(RenderContext* renderContext, int i)
 
    sphereMesh.setCenter( center.get(i) );
    sphereMesh.setRadius( radius.getRecycled(i) );
-
-   sphereMesh.update();
+   
+   sphereMesh.update( renderContext->viewpoint->scale );
 
    sphereMesh.draw(renderContext);
 }
@@ -48,6 +49,12 @@ void SphereSet::draw(RenderContext* renderContext)
   for(int i=0;i<center.size();i++) drawElement(renderContext, i);
   
   material.endUse(renderContext);
+}
+
+void SphereSet::render(RenderContext* renderContext) {
+  if (renderContext->viewpoint->scaleChanged) 
+    doUpdate = true;
+  Shape::render(renderContext);
 }
 
 void SphereSet::renderZSort(RenderContext* renderContext)

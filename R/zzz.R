@@ -2,7 +2,7 @@
 ## R source file
 ## This file is part of rgl
 ##
-## $Id: zzz.R 457 2006-06-26 01:20:52Z murdoch $
+## $Id: zzz.R 493 2006-07-31 17:21:03Z dmurdoch $
 ##
 
 ##
@@ -25,10 +25,18 @@
       # because it would override Apple's OpenGL framework
       Sys.putenv("DYLD_LIBRARY_PATH"=gsub("/usr/X11R6/lib","",Sys.getenv("DYLD_LIBRARY_PATH")))      
     }
-  }
-	
+  } 
+  
+  mdiHandle <- 0
+  
+  if ( .Platform$OS.type == "windows" ) {
+    if ( getWindowsHandle("Frame") ) mdiHandle <- getWindowsHandle("Console")
+  } 
+  
+  	
   ret <- .C( "rgl_init", 
-    success=FALSE , 
+    success=FALSE ,
+    as.integer(mdiHandle),
     PACKAGE="rgl"
   )
   

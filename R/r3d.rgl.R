@@ -1,6 +1,6 @@
 #
 # R3D rendering functions - rgl implementation
-# $Id: r3d.rgl.R 459 2006-06-26 10:37:34Z murdoch $
+# $Id: r3d.rgl.R 520 2006-09-12 18:53:15Z dmurdoch $
 # 
 
 # Node Management
@@ -80,13 +80,12 @@ view3d      <- function(theta=0,phi=15,...) {
   rgl.viewpoint(theta=theta,phi=phi,...)
 }
 
-bbox3d	    <- function(xat = pretty(xrange), yat = pretty(yrange), zat = pretty(zrange), 
-		        expand = 1.03, ...) {  
+bbox3d	    <- function(xat = pretty(ranges$x, nticks), 
+                        yat = pretty(ranges$y, nticks), 
+                        zat = pretty(ranges$z, nticks), 
+		        expand = 1.03, nticks = 5, ...) {  
   .check3d(); save <- material3d(); on.exit(material3d(save))
-  ranges <- par3d("bbox")
-  xrange <- ranges[1:2]
-  yrange <- ranges[3:4]
-  zrange <- ranges[5:6]
+  ranges <- .getRanges(expand = expand)
   do.call("rgl.bbox", c(list(xat=xat, yat=yat, zat=zat, expand=expand), 
                         .fixMaterialArgs(..., Params = save)))
 }
@@ -200,3 +199,5 @@ open3d <- function(..., params = get("r3dDefaults", envir=.GlobalEnv))
     if (result<-rgl.cur()) return(result)
     else return(open3d())
 }
+
+snapshot3d <- function(...) rgl.snapshot(...)

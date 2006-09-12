@@ -1,7 +1,7 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: rglview.cpp 463 2006-06-26 10:44:23Z murdoch $
+// $Id: rglview.cpp 502 2006-08-08 22:54:11Z dmurdoch $
 
 #include "rglview.h"
 #include "opengl.hpp"
@@ -561,6 +561,19 @@ void RGLView::setScale(double* src)
 	viewpoint->setScale(src);
 
 	View::update();
+}
+
+void RGLView::getPosition(double* dest)
+{    
+    Viewpoint* viewpoint = scene->getViewpoint();
+    viewpoint->getPosition(dest);
+}
+
+void RGLView::setPosition(double* src)
+{
+	Viewpoint* viewpoint = scene->getViewpoint();
+
+	viewpoint->setPosition(src);
 }
 
 

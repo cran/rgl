@@ -29,7 +29,7 @@ extern "C" {
 
 /* library service */
 
-EXPORT_SYMBOL void rgl_init          (int* successptr);
+EXPORT_SYMBOL void rgl_init          (int* successptr, int* ioptions);
 EXPORT_SYMBOL void rgl_quit          (int* successptr);
 
 /* device management */
@@ -49,6 +49,8 @@ EXPORT_SYMBOL void rgl_postscript (int* successptr, int* idata, char** cdata);
 
 EXPORT_SYMBOL void rgl_clear    (int* successptr, int* idata);
 EXPORT_SYMBOL void rgl_pop      (int* successptr, int* idata);
+EXPORT_SYMBOL void rgl_id_count (int* type, int* count);
+EXPORT_SYMBOL void rgl_ids       (int* type, int* ids, char** types);
 
 EXPORT_SYMBOL void rgl_material (int* successptr, int* idata, char** cdata, double* ddata);
 EXPORT_SYMBOL void rgl_getcolorcount(int* count);
@@ -90,6 +92,10 @@ EXPORT_SYMBOL void rgl_getSkipRedraw(int* successptr, int* skipRedraw);
 EXPORT_SYMBOL void rgl_setSkipRedraw(int* successptr, int* skipRedraw);
 EXPORT_SYMBOL void rgl_getViewport(int* successptr, int* viewport);
 EXPORT_SYMBOL void rgl_getBoundingbox(int* successptr, double* bboxvec);
+
+/* not for users:  does not maintain consistency */
+EXPORT_SYMBOL void rgl_setPosition(double* position);
+EXPORT_SYMBOL void rgl_getPosition(double* position);
 
 #ifdef __cplusplus
 }
