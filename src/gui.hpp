@@ -4,7 +4,7 @@
 // C++ header file
 // This file is part of RGL
 //
-// $Id: gui.hpp 413 2005-10-02 10:32:47Z dmurdoch $
+// $Id: gui.hpp 494 2006-08-01 17:25:31Z dmurdoch $
 // ---------------------------------------------------------------------------
 #include <string.h>
 #include "types.h"
@@ -113,7 +113,7 @@ namespace gui {
 // ---------------------------------------------------------------------------
 #define WINDOW_IMPL_OWNER   (1<<0)
 // ---------------------------------------------------------------------------
-class View : public Node
+class View 
 {
 public:
   View();

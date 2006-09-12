@@ -1,5 +1,6 @@
-\name{rgl}
+\name{rgl-package}
 \title{3D visualization device system}
+\alias{rgl-package}
 \alias{rgl}
 \alias{rgl.open}
 \alias{rgl.close}
@@ -12,12 +13,12 @@
 \usage{
 rgl.open()     # open new device
 rgl.close()    # close current device
-rgl.cur()      # returns active device id
+rgl.cur()      # returns active device ID
 rgl.set(which) # set device as active
 rgl.quit()     # shutdown rgl device system
 }
 \arguments{
-  \item{which}{device id}
+  \item{which}{device ID}
 }
 \details{
   RGL is a 3D real-time rendering device driver system for R.
@@ -32,7 +33,8 @@ rgl.quit()     # shutdown rgl device system
   detaches the package including the shared library and additional system libraries.
 }
 \examples{
-example(rgl.surface)
+example(surface3d)
+example(plot3d)
 }
 \seealso{
 \code{\link{rgl.clear}}, 

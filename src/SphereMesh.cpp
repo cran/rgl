@@ -62,6 +62,13 @@ void SphereMesh::setRadius(float in_radius)
 
 void SphereMesh::update()
 {
+  Vertex scale;
+  scale.x = scale.y = scale.z = 1.0;
+  update(scale);
+}
+
+void SphereMesh::update(const Vertex& scale)
+{
   int i = 0;
 
   for(int iy=0;iy<=sections;iy++) {
@@ -82,10 +89,17 @@ void SphereMesh::update()
       Vertex q(p);
 
       q.rotateY( theta );
+      
+      q.x /= scale.x;
+      q.y /= scale.y;
+      q.z /= scale.z;
 
       vertexArray[i] = center + q;
 
       if (genNormal) {
+	q.x *= scale.x*scale.x;
+	q.y *= scale.y*scale.y;
+	q.z *= scale.z*scale.z;
         normalArray[i] = q;
         normalArray[i].normalize();
       }

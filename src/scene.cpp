@@ -1,7 +1,7 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: scene.cpp 458 2006-06-26 10:35:11Z murdoch $
+// $Id: scene.cpp 511 2006-08-24 20:00:43Z dmurdoch $
 
 
 #include "scene.h"
@@ -9,6 +9,8 @@
 #include "render.h"
 #include "geom.hpp"
 #include <map>
+#include <algorithm>
+#include "R.h"
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -48,20 +50,38 @@ Viewpoint* Scene::getViewpoint()
   return viewpoint;
 }
 
+void Scene::deleteShapes()
+{
+  std::vector<Shape*>::iterator iter;
+  for (iter = shapes.begin(); iter != shapes.end(); ++iter) {
+    delete *iter;
+  }
+  shapes.clear();
+}
+
+void Scene::deleteLights()
+{
+  std::vector<Light*>::iterator iter;
+  for (iter = lights.begin(); iter != lights.end(); ++iter) {
+    delete *iter;
+  }
+  lights.clear();
+}
+
 bool Scene::clear(TypeID typeID)
 {
   bool success = false;
 
   switch(typeID) {
     case SHAPE:
-      shapes.deleteItems();
+      deleteShapes();
       zsortShapes.clear();
       unsortedShapes.clear();
       data_bbox.invalidate();
       success = true;
       break;
     case LIGHT:
-      lights.deleteItems();
+      deleteLights();
       nlights = 0;
       success = true;
       break;
@@ -84,7 +104,7 @@ void Scene::addShape(Shape* shape) {
     data_bbox += bbox;
   }
 
-  shapes.addTail(shape);
+  shapes.push_back(shape);
 
   if ( shape->getMaterial().isBlended() ) {
     zsortShapes.push_back(shape);
@@ -104,7 +124,7 @@ bool Scene::add(SceneNode* node)
 
         light->id = gl_light_ids[ nlights++ ];
 
-        lights.addTail( light );
+        lights.push_back( light );
 
         success = true;
       }
@@ -147,38 +167,80 @@ bool Scene::add(SceneNode* node)
   return success;
 }
 
+bool sameID(SceneNode* node, int id) { return node->getObjID() == id; }
 
-bool Scene::pop(TypeID type)
+bool Scene::pop(TypeID type, int id)
 {
   bool success = false;
+  std::vector<Shape*>::iterator ishape;
+  std::vector<Light*>::iterator ilight;
+  
+  switch(type) {
+    case SHAPE: {
+      if (id == BBOXID) {
+        type = BBOXDECO; 
+        id = 0;
+      }
+      else if (shapes.empty()) 
+        return false;
+      break;
+    }
+    case LIGHT: if (lights.empty()) return false;
+    default: break;
+  }
+  
+  if (id == 0) {
+    switch(type) {
+    case SHAPE:  
+      ishape = shapes.end() - 1;
+      id = (*ishape)->getObjID(); /* for zsort or unsort */
+      break;
+    case LIGHT:
+      ilight = lights.end() - 1;
+      break;
+    default:
+      break;
+    }
+  } else {
+    switch(type) {
+    case SHAPE:
+      ishape = std::find_if(shapes.begin(), shapes.end(), 
+                            std::bind2nd(std::ptr_fun(&sameID), id));
+      if (ishape == shapes.end()) return false;
+      break;
+    case LIGHT:
+      ilight = std::find_if(lights.begin(), lights.end(),
+      						std::bind2nd(std::ptr_fun(&sameID), id));
+      if (ilight == lights.end()) return false;
+      break;
+    default:
+      return false;
+    }
+  }
 
   switch(type) {
   case SHAPE:
     {
-      Node* tail = shapes.getTail();
-      if (tail) {
-        Shape* shape = (Shape*) tail;
-        if ( shape->getMaterial().isBlended() )
-          zsortShapes.pop_back();
-        else
-          unsortedShapes.pop_back();
-
-        delete shapes.remove(tail);
-
-        calcDataBBox();
-
-        success = true;
-      }
-    }
+      Shape* shape = *ishape;
+      shapes.erase(ishape);
+      if ( shape->getMaterial().isBlended() )
+          zsortShapes.erase(std::find_if(zsortShapes.begin(), zsortShapes.end(),
+                                         std::bind2nd(std::ptr_fun(&sameID), id)));
+      else
+        unsortedShapes.erase(std::find_if(unsortedShapes.begin(), unsortedShapes.end(),
+                                       std::bind2nd(std::ptr_fun(&sameID), id)));
+      delete shape;
+      calcDataBBox();
+      success = true;
+    }  
     break;
   case LIGHT:
     {
-      Node* tail = lights.getTail();
-      if (tail) {
-        delete lights.remove(tail);
-        nlights--;
-        success = true;
-      }
+      Light* light = *ilight;
+      lights.erase(ilight);
+      delete light;
+      nlights--;
+      success = true;
     }
     break;
   case BBOXDECO:
@@ -196,6 +258,41 @@ bool Scene::pop(TypeID type)
 
   return success;
 }
+
+int Scene::get_id_count(TypeID type)
+{
+  switch(type) {
+  case SHAPE:  return shapes.size();
+  case LIGHT:  return lights.size();
+  default:     return 0;
+  }
+}
+
+void Scene::get_ids(TypeID type, int* ids, char** types)
+{
+  char buffer[20];
+  switch(type) {
+  case SHAPE: 
+    for (std::vector<Shape*>::iterator i = shapes.begin(); i != shapes.end() ; ++ i ) {
+      *ids++ = (*i)->getObjID();
+      buffer[19] = 0;
+      (*i)->getShapeName(buffer, 20);
+      *types = R_alloc(strlen(buffer), 1);
+      strcpy(*types, buffer);
+      types++;
+    }
+    return;
+  case LIGHT: 
+    for (std::vector<Light*>::iterator i = lights.begin(); i != lights.end() ; ++ i ) {
+      *ids++ = (*i)->getObjID();
+      *types = R_alloc(strlen("light"), 1);
+      strcpy(*types, "light");
+      types++;
+    }
+    return;
+  default:	return;
+  }
+}  
 
 void Scene::render(RenderContext* renderContext)
 {
@@ -385,6 +482,8 @@ void Scene::render(RenderContext* renderContext)
       }
     }
 #endif
+    /* Reset flag(s) now that scene has been rendered */
+    renderContext->viewpoint->scaleChanged = false;
   }
 }
 
@@ -410,11 +509,11 @@ void Scene::setupLightModel(RenderContext* rctx)
 
   rctx->viewpoint->setupOrientation(rctx);
 
-  ListIterator iter(&lights);
+  std::vector<Light*>::const_iterator iter;
 
-  for(iter.first(); !iter.isDone() ; iter.next() ) {
+  for(iter = lights.begin(); iter != lights.end() ; ++iter ) {
 
-    Light* light = (Light*) iter.getCurrent();
+    Light* light = *iter;
 
     if (!light->viewpoint)
       light->setup(rctx);
@@ -427,9 +526,9 @@ void Scene::setupLightModel(RenderContext* rctx)
   glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();
 
-  for(iter.first(); !iter.isDone() ; iter.next() ) {
+  for(iter = lights.begin(); iter != lights.end() ; ++iter ) {
 
-    Light* light = (Light*) iter.getCurrent();
+    Light* light = *iter;
 
     if (light->viewpoint)
       light->setup(rctx);
@@ -449,10 +548,10 @@ void Scene::calcDataBBox()
 {
   data_bbox.invalidate();
 
-  ListIterator iter(&shapes);
+  std::vector<Shape*>::const_iterator iter;
 
-  for(iter.first(); !iter.isDone(); iter.next() ) {
-    Shape* shape = (Shape*) iter.getCurrent();
+  for(iter = shapes.begin(); iter != shapes.end(); ++iter) {
+    Shape* shape = *iter;
 
     if (!shape->getIgnoreExtent()) data_bbox += shape->getBoundingBox();
   }

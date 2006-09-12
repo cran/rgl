@@ -1,7 +1,7 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: device.cpp 432 2006-03-05 15:45:47Z dmurdoch $
+// $Id: device.cpp 511 2006-08-24 20:00:43Z dmurdoch $
 // ---------------------------------------------------------------------------
 #include "Device.hpp"
 #include "lib.hpp"
@@ -84,19 +84,20 @@ bool Device::clear(TypeID stackTypeID)
   return success;
 }
 // ---------------------------------------------------------------------------
-bool Device::add(SceneNode* node)
+int Device::add(SceneNode* node)
 {
   bool success;
   success = scene->add(node);
   rglview->update();
-  return success;
+  if (success) return node->getObjID();
+  else return 0;
 }
 // ---------------------------------------------------------------------------
 
-bool Device::pop(TypeID stackTypeID)
+bool Device::pop(TypeID stackTypeID, int id)
 {
   bool success;
-  success = scene->pop(stackTypeID);
+  success = scene->pop(stackTypeID, id);
   rglview->update();
   return success;
 }

@@ -4,7 +4,7 @@
 // C++ header file
 // This file is part of RGL
 //
-// $Id: rglview.h 458 2006-06-26 10:35:11Z murdoch $
+// $Id: rglview.h 502 2006-08-08 22:54:11Z dmurdoch $
 
 
 #include "gui.hpp"
@@ -47,6 +47,11 @@ public:
   void        setUserMatrix(double* src);
   void        getScale(double* dest);
   void        setScale(double* src);
+  
+  /* NB:  these functions do not maintain consistency with userMatrix */
+  
+  void        getPosition(double* dest);
+  void 	      setPosition(double* src);
 
   // These are set after rendering the scene
   GLdouble modelMatrix[16], projMatrix[16];

@@ -1,7 +1,7 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: api.cpp 463 2006-06-26 10:44:23Z murdoch $
+// $Id: api.cpp 511 2006-08-24 20:00:43Z dmurdoch $
 
 #include "lib.hpp"
 
@@ -27,7 +27,9 @@ DeviceManager* deviceManager = NULL;
 //
 #define RGL_FAIL     0
 #define RGL_SUCCESS  1
-inline int as_success(bool b) { return (b) ? RGL_SUCCESS : RGL_FAIL; }
+inline int as_success(int b) { return (b) ; }
+
+
 
 //
 // data type conversion utilities:
@@ -39,10 +41,28 @@ inline bool as_bool(int idata) { return (idata) ? true : false; }
 //   rgl_init
 //
 
-void rgl_init(int* successptr)
+namespace gui {
+
+int gMDIHandle;
+
+}
+
+//
+// FUNCTION
+//   rgl_init
+//
+// PARAMETERS
+//   ioptions
+//     [0]  multiple-document-interface console handle (MDI) 
+//          or 0 (SDI)
+//
+
+void rgl_init(int* successptr, int* ioptions)
 {
   int success = RGL_FAIL;
-
+  
+  gMDIHandle =  ioptions[0];
+  
   if ( lib::init() ) {
     deviceManager = new DeviceManager();
     success = RGL_SUCCESS;
@@ -196,6 +216,7 @@ void rgl_clear(int* successptr, int *idata)
 // PARAMETERS
 //   idata
 //     [0]  stack TypeID
+//     [1]  id SceneNode identifier
 //
 //
 
@@ -208,15 +229,48 @@ void rgl_pop(int* successptr, int* idata)
   if (deviceManager && (device = deviceManager->getCurrentDevice())) {
 
     TypeID stackTypeID = (TypeID) idata[0];
+    int id = idata[1];
  
-    success = as_success( device->pop( stackTypeID ) );
+    success = as_success( device->pop( stackTypeID, id ) );
 
   }
 
   *successptr = success;
 }
 
+//
+// FUNCTION
+//   rgl_id_count
+//
 
+void rgl_id_count(int* type, int* count)
+{
+  Device* device;
+  if (deviceManager && (device = deviceManager->getCurrentDevice())) {
+    RGLView* rglview = device->getRGLView();
+    Scene* scene = rglview->getScene();
+    
+    *count = scene->get_id_count((TypeID) *type);
+  } else {
+    *count = 0;
+  }
+}  
+
+//
+// FUNCTION
+//   rgl_ids
+//
+
+void rgl_ids(int* type, int* ids, char** types)
+{
+  Device* device;
+  if (deviceManager && (device = deviceManager->getCurrentDevice())) {
+    RGLView* rglview = device->getRGLView();
+    Scene* scene = rglview->getScene();
+    
+    scene->get_ids((TypeID) *type, ids, types);
+  }
+} 
 //
 // FUNCTION
 //   rgl_bg   ( successPtr, idata )
@@ -292,7 +346,7 @@ void rgl_viewpoint(int* successptr, int* idata, double* ddata)
     float phi	      = static_cast<float>( ddata[1] );
     float fov         = static_cast<float>( ddata[2] );
     float zoom        = static_cast<float>( ddata[3] );
-    Vec3  scale       = Vec3( ddata[4], ddata[5], ddata[6] );
+    Vertex scale      = Vertex( ddata[4], ddata[5], ddata[6] );
     
     int   interactive = idata[0];
     int   polar       = idata[1];
@@ -850,6 +904,30 @@ void rgl_setUserMatrix(int* successptr, double* userMatrix)
 
   *successptr = success;
 
+}
+
+void rgl_getPosition(double* position)
+{
+   Device* device;
+
+  if (deviceManager && (device = deviceManager->getAnyDevice())) {
+
+		RGLView* rglview = device->getRGLView();
+		rglview->getPosition(position);
+
+  	}
+}
+
+void rgl_setPosition(double* position)
+{
+  	Device* device;
+
+  if (deviceManager && (device = deviceManager->getAnyDevice())) {
+
+		RGLView* rglview = device->getRGLView();
+		rglview->setPosition(position);
+
+  	}
 }
 
 void rgl_getScale(int* successptr, double* scale)

@@ -43,6 +43,9 @@ rgl.surface(x, z, y, coords=1:3, ...)
   the top and bottom differently; see \code{\link{rgl.material}} and
   the example below.
 }
+\value{
+  The object ID of the displayed surface is returned invisibly.
+}
 \examples{
 
 #
@@ -63,7 +66,7 @@ colorlut <- terrain.colors(ylen) # height color lookup table
 
 col <- colorlut[ y-ylim[1]+1 ] # assign colors to heights for each point
 
-rgl.clear()
+rgl.open()
 rgl.surface(x, z, y, color=col, back="lines")
 
 }

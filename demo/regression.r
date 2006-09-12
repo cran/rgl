@@ -1,6 +1,6 @@
 # demo: regression
 # author: Daniel Adler
-# $Id: regression.r 406 2005-08-22 00:03:18Z dmurdoch $
+# $Id: regression.r 491 2006-07-31 13:17:19Z dmurdoch $
 
 rgl.demo.regression <- function(n=100,xa=3,za=8,xb=0.02,zb=0.01,xlim=c(0,100),zlim=c(0,100)) {
 
@@ -33,5 +33,6 @@ rgl.demo.regression <- function(n=100,xa=3,za=8,xb=0.02,zb=0.01,xlim=c(0,100),zl
   rgl.quads(lx,ly,lz,color="red",size=5,front="lines",back="lines",lit=F)
 }
 
+rgl.open()
 rgl.demo.regression()
 

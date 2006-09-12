@@ -1,6 +1,6 @@
 # RGL-demo: subdivision surfaces
 # author: Daniel Adler
-# $Id: subdivision.r 406 2005-08-22 00:03:18Z dmurdoch $
+# $Id: subdivision.r 491 2006-07-31 13:17:19Z dmurdoch $
 
 rgl.demo.subdivision <- function()
 {
@@ -30,5 +30,6 @@ rgl.demo.subdivision <- function()
 
 }
 
+rgl.open()
 rgl.demo.subdivision()
 

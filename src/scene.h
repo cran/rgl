@@ -4,7 +4,7 @@
 // C++ header file
 // This file is part of RGL
 //
-// $Id: scene.h 432 2006-03-05 15:45:47Z dmurdoch $
+// $Id: scene.h 511 2006-08-24 20:00:43Z dmurdoch $
 
 #include "types.h"
 #include <vector>
@@ -46,9 +46,15 @@ public:
   bool add(SceneNode* node);
   
   /**
-   * remove last-added node of given type.
+   * remove specified node of given type, or last-added if id==0
    **/
-  bool pop(TypeID stackTypeID);
+  bool pop(TypeID stackTypeID, int id);
+  
+  /**
+   * get information about stacks
+   */
+  int get_id_count(TypeID type);
+  void get_ids(TypeID type, int* ids, char** types);
 
   // ---[ grouping component ]-----------------------------------------------
   
@@ -121,16 +127,21 @@ private:
   /**
    * list of light sources
    **/
-  List lights;
+  std::vector<Light*> lights;
 
   /**
    * list of shapes
    **/
-  List shapes;
+  std::vector<Shape*> shapes;
 
   std::vector<Shape*> unsortedShapes;
   std::vector<Shape*> zsortShapes;
+  
+  void deleteAll(std::vector<SceneNode*> list);
 
+  void deleteShapes();
+  void deleteLights();
+  
   // ---[ grouping data ]----------------------------------------------------
   
   /**

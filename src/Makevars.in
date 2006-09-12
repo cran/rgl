@@ -3,9 +3,9 @@
 # AUTO-GENERATED from Makevars.in (using configure/configure.win)
 # This file is part of the RGL project.
 #
-# $Id: Makevars.in 376 2005-08-03 23:58:47Z dadler $
-#
-PKG_CPPFLAGS=@CPPFLAGS@
+# $Id: Makevars.in 475 2006-07-24 15:43:35Z dmurdoch $
+#-DGL_VERSION_1_2 
+PKG_CPPFLAGS=@CPPFLAGS@ -Iext
 PKG_CFLAGS=@CFLAGS@
 PKG_CXXFLAGS=@CXXFLAGS@
 PKG_LIBS=@LIBS@ 
