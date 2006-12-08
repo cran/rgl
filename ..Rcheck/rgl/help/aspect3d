@@ -1,0 +1,58 @@
+aspect3d                 package:rgl                 R Documentation
+
+_S_e_t _t_h_e _a_s_p_e_c_t _r_a_t_i_o_s _o_f _t_h_e _c_u_r_r_e_n_t _p_l_o_t
+
+_D_e_s_c_r_i_p_t_i_o_n:
+
+     This function sets the apparent ratios of the x, y, and z axes of
+     the current bounding box.
+
+_U_s_a_g_e:
+
+     aspect3d(x, y = NULL, z = NULL)
+
+_A_r_g_u_m_e_n_t_s:
+
+       x: The ratio for the x axis, or all three ratios, or '"iso"' 
+
+       y: The ratio for the y axis 
+
+       z: The ratio for the z axis 
+
+_D_e_t_a_i_l_s:
+
+     If the ratios are all 1, the bounding box will be displayed as a
+     cube approximately filling the display. Values may be set larger
+     or smaller as desired.  Aspect '"iso"' signifies that the
+     coordinates should all be displayed at the same scale, i.e. the
+     bounding box should not be rescaled.  (This corresponds to the
+     default display before 'aspect3d' has been called.) Partial
+     matches to '"iso"' are allowed.
+
+     'aspect3d' works by modifying 'par3d("scale")'.
+
+_V_a_l_u_e:
+
+     The previous value of the scale is returned invisibly.
+
+_A_u_t_h_o_r(_s):
+
+     Duncan Murdoch
+
+_S_e_e _A_l_s_o:
+
+     'plot3d', 'par3d'
+
+_E_x_a_m_p_l_e_s:
+
+       x <- rnorm(100)
+       y <- rnorm(100)*2
+       z <- rnorm(100)*3
+       
+       open3d()
+       plot3d(x, y, z)
+       aspect3d(1,1,0.5)
+       open3d()
+       plot3d(x, y, z)
+       aspect3d("iso")
+

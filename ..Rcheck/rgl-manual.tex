@@ -1,0 +1,2283 @@
+\documentclass{article}
+\usepackage[ae,hyper]{Rd}
+\begin{document}
+\HeaderA{points3d}{add primitive set shape}{points3d}
+\aliasA{lines3d}{points3d}{lines3d}
+\aliasA{quads3d}{points3d}{quads3d}
+\aliasA{segments3d}{points3d}{segments3d}
+\aliasA{triangles3d}{points3d}{triangles3d}
+\keyword{dynamic}{points3d}
+\begin{Description}\relax
+Adds a shape node to the current scene
+\end{Description}
+\begin{Usage}
+\begin{verbatim}
+points3d(x, y = NULL, z = NULL,  ...)
+lines3d(x, y = NULL, z = NULL,  ...)
+segments3d(x, y = NULL, z = NULL, ...)
+triangles3d(x, y = NULL, z = NULL, ...)
+quads3d(x, y = NULL, z = NULL, ...)
+\end{verbatim}
+\end{Usage}
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{x, y, z}] coordinates. Any reasonable way of defining the
+coordinates is acceptable.  See the function \code{\LinkA{xyz.coords}{xyz.coords}}
+for details.
+\item[\code{ ... }] Material properties. See \code{\LinkA{rgl.material}{rgl.material}} for details.
+\end{ldescription}
+\end{Arguments}
+\begin{Details}\relax
+The functions \code{points3d}, \code{lines3d}, \code{segments3d},
+\code{triangles3d} and \code{quads3d} add points, joined lines, line segments,
+filled triangles or quadrilaterals to the plots.  They correspond to the OpenGL types
+\code{GL\_POINTS, GL\_LINE\_STRIP, GL\_LINES, GL\_TRIANGLES} and \code{GL\_QUADS} respectively.  
+
+Points are taken in pairs by \code{segments3d}, triplets as the vertices
+of the triangles, and quadruplets for the quadrilaterals.  Colours are applied vertex by vertex; 
+if different at each end of a line segment, or each vertex of a polygon, the colours
+are blended over the extent of the object.  Quadrilaterals must be entirely 
+in one plane and convex, or the results are undefined.
+
+These functions call the lower level functions \code{\LinkA{rgl.points}{rgl.points}}, \code{\LinkA{rgl.linestrips}{rgl.linestrips}},
+and so on, and are provided for convenience.
+
+The appearance of the new objects are defined by the material properties.
+See \code{\LinkA{rgl.material}{rgl.material}} for details.
+\end{Details}
+\begin{Value}
+Each function returns the integer object ID of the shape that
+was added to the scene.  These can be passed to \code{\LinkA{rgl.pop}{rgl.pop}}
+to remove the object from the scene.
+\end{Value}
+\begin{Author}\relax
+Ming Chen and Duncan Murdoch
+\end{Author}
+\begin{Examples}
+\begin{ExampleCode}
+# Show 12 random vertices in various ways. 
+
+M <- matrix(rnorm(36), 3, 12, dimnames=list(c('x','y','z'), 
+                                       rep(LETTERS[1:4], 3)))
+
+# Force 4-tuples to be convex in planes so that quads3d works.
+
+for (i in c(1,5,9)) {
+    quad <- as.data.frame(M[,i+0:3])
+    coeffs <- runif(2,0,3)
+    if (mean(coeffs) < 1) coeffs <- coeffs + 1 - mean(coeffs)
+    quad$C <- with(quad, coeffs[1]*(B-A) + coeffs[2]*(D-A) + A)
+    M[,i+0:3] <- as.matrix(quad)
+}
+
+open3d()
+
+# Rows of M are x, y, z coords; transpose to plot
+
+M <- t(M)
+shift <- matrix(c(-3,3,0), 12, 3, byrow=TRUE)
+
+points3d(M, size=2)
+lines3d(M + shift)
+segments3d(M + 2*shift)
+triangles3d(M + 3*shift, col='red')
+quads3d(M + 4*shift, col='green')  
+text3d(M + 5*shift, texts=1:12)
+
+# Add labels
+
+shift <- outer(0:5, shift[1,])
+shift[,1] <- shift[,1] + 3
+text3d(shift, 
+       texts = c('points3d','lines3d','segments3d',
+         'triangles3d', 'quads3d','text3d'),
+       adj = 0)
+ rgl.bringtotop()
+\end{ExampleCode}
+\end{Examples}
+
+\HeaderA{aspect3d}{Set the aspect ratios of the current plot}{aspect3d}
+\keyword{dynamic}{aspect3d}
+\begin{Description}\relax
+This function sets the apparent ratios of the x, y, and z axes
+of the current bounding box.
+\end{Description}
+\begin{Usage}
+\begin{verbatim}
+aspect3d(x, y = NULL, z = NULL)
+\end{verbatim}
+\end{Usage}
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{x}] The ratio for the x axis, or all three ratios, or \code{"iso"} 
+\item[\code{y}] The ratio for the y axis 
+\item[\code{z}] The ratio for the z axis 
+\end{ldescription}
+\end{Arguments}
+\begin{Details}\relax
+If the ratios are all 1, the bounding box will be displayed as a cube approximately filling the display.
+Values may be set larger or smaller as desired.  Aspect \code{"iso"} signifies that the
+coordinates should all be displayed at the same scale, i.e. the bounding box should not be
+rescaled.  (This corresponds to the default display before \code{aspect3d} has been called.)
+Partial matches to \code{"iso"} are allowed.
+
+\code{aspect3d} works by modifying \code{par3d("scale")}.
+\end{Details}
+\begin{Value}
+The previous value of the scale is returned invisibly.
+\end{Value}
+\begin{Author}\relax
+Duncan Murdoch
+\end{Author}
+\begin{SeeAlso}\relax
+\code{\LinkA{plot3d}{plot3d}}, \code{\LinkA{par3d}{par3d}}
+\end{SeeAlso}
+\begin{Examples}
+\begin{ExampleCode}
+  x <- rnorm(100)
+  y <- rnorm(100)*2
+  z <- rnorm(100)*3
+  
+  open3d()
+  plot3d(x, y, z)
+  aspect3d(1,1,0.5)
+  open3d()
+  plot3d(x, y, z)
+  aspect3d("iso")
+\end{ExampleCode}
+\end{Examples}
+
+\HeaderA{axes3d}{Draw boxes, axes and other text outside the data}{axes3d}
+\aliasA{axis3d}{axes3d}{axis3d}
+\aliasA{box3d}{axes3d}{box3d}
+\aliasA{mtext3d}{axes3d}{mtext3d}
+\aliasA{title3d}{axes3d}{title3d}
+\keyword{dynamic}{axes3d}
+\begin{Description}\relax
+These functions draw axes, boxes and text outside the range of the data.
+\code{axes3d}, \code{box3d} and \code{title3d} are the higher level functions; 
+normally the others need not be called directly by users.
+\end{Description}
+\begin{Usage}
+\begin{verbatim}
+axes3d(edges = "bbox", labels = TRUE, tick = TRUE, nticks = 5, ...)
+box3d(...) 
+title3d(main = NULL, sub = NULL, xlab = NULL, ylab = NULL, 
+    zlab = NULL, line = NA, ...) 
+axis3d(edge, at = NULL, labels = TRUE, tick = TRUE, line = 0, 
+    pos = NULL, nticks = 5, ...) 
+mtext3d(text, edge, line = 0, at = NULL, pos = NA, ...) 
+\end{verbatim}
+\end{Usage}
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{edges}] a code to describe which edge(s) of the box to use; see Details below 
+\item[\code{labels}] whether to label the axes, or (for \code{axis3d}) the
+labels to use
+\item[\code{tick}] whether to use tick marks 
+\item[\code{nticks}] suggested number of ticks 
+\item[\code{main}] the main title for the plot 
+\item[\code{sub}] the subtitle for the plot 
+\item[\code{xlab, ylab, zlab}] the axis labels for the plot 
+\item[\code{line}] the ``line'' of the plot margin to draw the label on 
+\item[\code{edge, pos}] the position at which to draw the axis or text 
+\item[\code{text}] the text to draw 
+\item[\code{at}] the value of a coordinate at which to draw the axis 
+\item[\code{...}] additional parameters which are passed to \code{\LinkA{bbox3d}{bbox3d}} or \code{\LinkA{material3d}{material3d}} 
+\end{ldescription}
+\end{Arguments}
+\begin{Details}\relax
+The rectangular prism holding the 3D plot has 12 edges.  They are identified
+using 3 character strings.  The first character (`x', `y', or `z') selects 
+the direction of the axis.  The next two characters are each `-' or `+',
+selecting the lower or upper end of one of the other coordinates.  If only
+one or two characters are given, the remaining characters default to `-'.  
+For example \code{edge = 'x+'} draws an x-axis at the high level of y and the
+low level of z.
+
+By default, \code{axes3d} uses the \code{\LinkA{bbox3d}{bbox3d}} function to draw the axes.  
+The labels will move so that they do not obscure the data.  Alternatively,
+a vector of arguments as described above may be used, in which case
+fixed axes are drawn using \code{axis3d}.
+
+If \code{pos} is a numeric vector of length 3, \code{edge} determines
+the direction of the axis and the tick marks, and the values of the
+other two coordinates in \code{pos} determine the position.  See the
+examples.
+\end{Details}
+\begin{Value}
+These functions are called for their side effects.  They return the object IDs of
+objects added to the scene.
+\end{Value}
+\begin{Author}\relax
+Duncan Murdoch
+\end{Author}
+\begin{SeeAlso}\relax
+\code{\LinkA{axis}{axis}}, \code{\LinkA{box}{box}},
+\code{title}, \code{mtext}, \LinkA{bbox3d}{bbox3d}
+\end{SeeAlso}
+\begin{Examples}
+\begin{ExampleCode}
+  open3d()
+  points3d(rnorm(10),rnorm(10),rnorm(10), size=3)
+
+  # First add standard axes
+  axes3d()  
+
+  # and one in the middle (the NA will be ignored, a number would 
+  # do as well)
+  axis3d('x',pos=c(NA, 0, 0))
+
+  # add titles
+  title3d('main','sub','xlab','ylab','zlab')
+
+  rgl.bringtotop()
+  
+  open3d()
+  points3d(rnorm(10),rnorm(10),rnorm(10), size=3)
+  
+  # Use fixed axes
+  
+  axes3d(c('x','y','z'))
+         
+  # Put 4 x-axes on the plot
+  axes3d(c('x--','x-+','x+-','x++'))         
+  
+  axis3d('x',pos=c(NA, 0, 0))     
+  title3d('main','sub','xlab','ylab','zlab')
+\end{ExampleCode}
+\end{Examples}
+
+\HeaderA{rgl.bbox}{Set up Bounding Box decoration}{rgl.bbox}
+\aliasA{bbox3d}{rgl.bbox}{bbox3d}
+\keyword{dynamic}{rgl.bbox}
+\begin{Description}\relax
+Set up the bounding box decoration.
+\end{Description}
+\begin{Usage}
+\begin{verbatim}
+rgl.bbox( 
+  xat=NULL, xlab=NULL, xunit=0, xlen=5, 
+  yat=NULL, ylab=NULL, yunit=0, ylen=5,
+  zat=NULL, zlab=NULL, zunit=0, zlen=5,
+  marklen=15.0, marklen.rel=TRUE, expand=1, ...)
+bbox3d(xat, yat, zat, expand=1.03, nticks=5, ...)  
+\end{verbatim}
+\end{Usage}
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{xat,yat,zat}] vector specifying the tickmark positions
+\item[\code{xlab,ylab,zlab}] character vector specifying the tickmark labeling
+\item[\code{xunit,yunit,zunit}] value specifying the tick mark base for uniform tick mark layout
+\item[\code{xlen,ylen,zlen}] value specifying the number of tickmarks
+\item[\code{marklen}] value specifying the length of the tickmarks
+\item[\code{marklen.rel}] logical, if TRUE tick mark length is calculated using 1/\code{marklen} * axis length, otherwise tick mark length is \code{marklen} in coordinate space
+\item[\code{expand}] value specifying how much to expand the bounding box around the data
+\item[\code{nticks}] suggested number of ticks to use on axes
+\item[\code{ ... }] Material properties (or other \code{rgl.bbox} parameters
+in the case of \code{bbox3d}). See \code{\LinkA{rgl.material}{rgl.material}} for details.
+\end{ldescription}
+\end{Arguments}
+\begin{Details}\relax
+Three different types of tick mark layouts are possible.
+If \code{at} is not \code{NULL}, the ticks are set up at custom positions.
+If \code{unit} is not zero, it defines the tick mark base.
+If \code{length} is not zero, it specifies the number of ticks that are automatically specified.
+The first colour specifies the bounding box, while the second one specifies the tick mark and font colour.
+
+\code{bbox3d} defaults to \code{\LinkA{pretty}{pretty}} locations for the axis labels and a slightly larger
+box, whereas \code{rgl.bbox} covers the exact range.
+
+\code{\LinkA{axes3d}{axes3d}} offers more flexibility in the specification of the axes, but 
+they are static, unlike those drawn by \code{\LinkA{rgl.bbox}{rgl.bbox}} and \code{\LinkA{bbox3d}{bbox3d}}.
+\end{Details}
+\begin{Value}
+This function is called for the side effect of setting the bounding box decoration.
+A shape ID is returned to allow \code{\LinkA{rgl.pop}{rgl.pop}} to delete it.
+\end{Value}
+\begin{SeeAlso}\relax
+\code{\LinkA{rgl.material}{rgl.material}}, \code{\LinkA{axes3d}{axes3d}}
+\end{SeeAlso}
+\begin{Examples}
+\begin{ExampleCode}
+  rgl.open()
+  rgl.points(rnorm(100), rnorm(100), rnorm(100))
+  rgl.bbox(color=c("#333377","white"), emission="#333377", 
+           specular="#3333FF", shininess=5, alpha=0.8 )
+  
+  open3d()
+  points3d(rnorm(100), rnorm(100), rnorm(100))
+  bbox3d(color=c("#333377","white"), emission="#333377", 
+         specular="#3333FF", shininess=5, alpha=0.8)
+\end{ExampleCode}
+\end{Examples}
+
+\HeaderA{bg}{Set up Background}{bg}
+\aliasA{bg3d}{bg}{bg3d}
+\aliasA{rgl.bg}{bg}{rgl.bg}
+\keyword{dynamic}{bg}
+\begin{Description}\relax
+Setup the background environment of the scene.
+\end{Description}
+\begin{Usage}
+\begin{verbatim}
+bg3d(...) 
+rgl.bg( sphere = FALSE, fogtype = "none", color=c("black","white"), 
+        back="lines", ...)
+
+\end{verbatim}
+\end{Usage}
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{fogtype}] fog type:
+\describe{
+\item["none"] no fog
+\item["linear"] linear fog function
+\item["exp"] exponential fog function
+\item["exp2"] squared exponential fog function
+}
+
+\item[\code{sphere}] logical, if true, an environmental sphere geometry is used for the background decoration.
+
+\item[\code{color}] Primary color is used for background clearing and as fog color.
+Secondary color is used for background sphere geometry. See \code{\LinkA{rgl.material}{rgl.material}} for details.
+
+\item[\code{back}] Specifies the fill style of the sphere geometry. See \code{\LinkA{rgl.material}{rgl.material}} for details.
+
+\item[\code{ ... }] Material properties. See \code{\LinkA{rgl.material}{rgl.material}} for details.
+\end{ldescription}
+\end{Arguments}
+\begin{Details}\relax
+If sphere is set to TRUE, an environmental sphere enclosing the whole scene is drawn.
+\end{Details}
+\begin{SeeAlso}\relax
+\code{\LinkA{rgl.material}{rgl.material}}
+\end{SeeAlso}
+\begin{Examples}
+\begin{ExampleCode}
+  rgl.open()
+  
+  # a simple white background
+  
+  bg3d("white")
+
+  # the holo-globe (inspired by star trek):
+
+  rgl.bg(sphere=TRUE, color=c("black","green"), lit=FALSE, back="lines" )
+
+  # an environmental sphere with a nice texture.
+
+  rgl.bg(sphere=TRUE, texture=system.file("textures/sunsleep.png", package="rgl"), 
+         back="filled" )
+\end{ExampleCode}
+\end{Examples}
+
+\HeaderA{ellipse3d}{Make an ellipsoid}{ellipse3d}
+\methaliasA{ellipse3d.default}{ellipse3d}{ellipse3d.default}
+\methaliasA{ellipse3d.glm}{ellipse3d}{ellipse3d.glm}
+\methaliasA{ellipse3d.lm}{ellipse3d}{ellipse3d.lm}
+\methaliasA{ellipse3d.nls}{ellipse3d}{ellipse3d.nls}
+\keyword{dplot}{ellipse3d}
+\begin{Description}\relax
+A generic function and several methods
+returning an ellipsoid or other outline of a confidence region
+for three parameters.
+\end{Description}
+\begin{Usage}
+\begin{verbatim}
+ellipse3d(x, ...)
+## Default S3 method:
+ellipse3d(x, scale = c(1, 1, 1), centre = c(0, 0, 0), level = 0.95, 
+            t = sqrt(qchisq(level, 3)), which = 1:3, subdivide = 4, ...)
+## S3 method for class 'lm':
+ellipse3d(x, which = 1:3, level = 0.95, t = sqrt(3 * qf(level, 
+                                                3, x$df.residual)), ...)     
+## S3 method for class 'glm':
+ellipse3d(x, which = 1:3, level = 0.95, t, dispersion, ...) 
+## S3 method for class 'nls':
+ellipse3d(x, which = 1:3, level = 0.95, t = sqrt(3 * qf(level, 
+                                                3, s$df[2])), ...) 
+\end{verbatim}
+\end{Usage}
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{x}] An object. In the default method the parameter \code{x} should be a 
+square positive definite matrix at least 3x3
+in size. It will be treated as the correlation or covariance 
+of a multivariate normal distribution.
+
+\item[\code{...}] Additional parameters to pass to the default method or to \code{\LinkA{qmesh3d}{qmesh3d}}.
+
+\item[\code{scale}] If \code{x} is a correlation matrix, then the standard deviations of each
+parameter can be given in the scale parameter.  This defaults to \code{c(1, 1, 1)},
+so no rescaling will be done.
+
+\item[\code{centre}] The centre of the ellipse will be at this position.
+
+\item[\code{level}] The confidence level of a simulataneous confidence region.  The default is
+0.95, for a 95\% region.  This is used to control the size of the ellipsoid.
+
+\item[\code{t}] The size of the ellipse may also be controlled by specifying the value
+of a t-statistic on its boundary.  This defaults to the appropriate
+value for the confidence region.
+
+\item[\code{which}] This parameter selects which variables from the object will be
+plotted.  The default is the first 3.
+
+\item[\code{subdivide}] This controls the number of subdivisions (see \code{\LinkA{subdivision3d}{subdivision3d}})
+used in constructing the ellipsoid.  Higher numbers give a smoother shape.
+
+\item[\code{dispersion}] The value of dispersion to use.  If specified, it is treated as fixed,
+and chi-square limits for \code{t} are used. If missing, it is 
+taken from \code{summary(x)}.
+
+\end{ldescription}
+\end{Arguments}
+\begin{Value}
+A \code{\LinkA{qmesh3d}{qmesh3d}} object representing the ellipsoid.
+\end{Value}
+\begin{Examples}
+\begin{ExampleCode}
+# Plot a random sample and an ellipsoid of concentration corresponding to a 95% 
+# probability region for a
+# trivariate normal distribution with mean 0, unit variances and 
+# correlation 0.8.
+if (require(MASS)) {
+  Sigma <- matrix(c(10,3,0,3,2,0,0,0,1), 3,3)
+  Mean <- 1:3
+  x <- mvrnorm(1000, Mean, Sigma)
+  
+  open3d()
+  
+  plot3d(x, size=3, box=FALSE)
+  
+  plot3d( ellipse3d(Sigma, centre=Mean), col="green", alpha=0.5, add = TRUE)
+}  
+
+# Plot the estimate and joint 90% confidence region for the displacement and cylinder
+# count linear coefficients in the mtcars dataset
+
+data(mtcars)
+fit <- lm(mpg ~ disp + cyl , mtcars)
+
+open3d()
+plot3d(ellipse3d(fit, level = 0.90), col="blue", alpha=0.5, aspect=TRUE)
+\end{ExampleCode}
+\end{Examples}
+
+\HeaderA{grid3d}{Add a grid to a 3D plot}{grid3d}
+\keyword{dynamic}{grid3d}
+\begin{Description}\relax
+This function adds a reference grid to an RGL plot.
+\end{Description}
+\begin{Usage}
+\begin{verbatim}
+grid3d(side, at = NULL, col = "gray", lwd = 1, lty = 1, n = 5)
+\end{verbatim}
+\end{Usage}
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{side}] Where to put the grid; see the Details section. 
+\item[\code{at}] How to draw the grid; see the Details section. 
+\item[\code{col}] The color of the grid lines. 
+\item[\code{lwd}] The line width of the grid lines. 
+\item[\code{lty}] The line type of the grid lines. 
+\item[\code{n}] Suggested number of grid lines; see the Details section. 
+\end{ldescription}
+\end{Arguments}
+\begin{Details}\relax
+This function is similar to \code{\LinkA{grid}{grid}} in classic graphics,
+except that it draws a 3D grid in the plot.
+
+The grid is drawn in a plane perpendicular to the coordinate axes. The
+first letter of the \code{side} argument specifies the direction of
+the plane: \code{"x"}, \code{"y"} or \code{"z"} (or uppercase
+versions) to specify the coordinate which is constant on the plane.
+
+If \code{at = NULL} (the default), the grid is drawn at the limit of 
+the box around the data.  If the second letter of the \code{side} argument
+is \code{"-"} or is not present, it is the lower limit; if \code{"+"}
+then at the upper limit.  The grid lines are drawn at values
+chosen by \code{\LinkA{pretty}{pretty}} with \code{n} suggested locations.
+The default locations should match those chosen by \code{\LinkA{axis3d}{axis3d}}
+with \code{nticks = n}.
+
+If \code{at} is a numeric vector, the grid lines are drawn at those values.
+
+If \code{at} is a list, then the \code{"x"} component is used to
+specify the x location, the \code{"y"} component specifies the y location, and
+the \code{"z"} component specifies the z location.  Missing components
+are handled using the default as for \code{at = NULL}.
+
+Multiple grids may be drawn by specifying multiple values for \code{side}
+or for the component of \code{at} that specifies the grid location.
+\end{Details}
+\begin{Value}
+A vector or matrix of object ids is returned invisibly.
+\end{Value}
+\begin{Author}\relax
+Ben Bolker and Duncan Murdoch
+\end{Author}
+\begin{SeeAlso}\relax
+\code{\LinkA{axis3d}{axis3d}}
+\end{SeeAlso}
+\begin{Examples}
+\begin{ExampleCode}
+x <- 1:10
+y <- 1:10
+z <- matrix(outer(x-5,y-5) + rnorm(100), 10, 10)
+open3d()
+persp3d(x, y, z, col="red", alpha=0.7, aspect=c(1,1,0.5))
+grid3d(c("x", "y+", "z"))
+\end{ExampleCode}
+\end{Examples}
+
+\HeaderA{light}{add light source}{light}
+\aliasA{light3d}{light}{light3d}
+\aliasA{rgl.light}{light}{rgl.light}
+\keyword{dynamic}{light}
+\begin{Description}\relax
+add a light source to the scene.
+\end{Description}
+\begin{Usage}
+\begin{verbatim}
+light3d(theta = 0, phi = 15, ...)
+rgl.light( theta = 0, phi = 0, viewpoint.rel = TRUE, ambient = "#FFFFFF", 
+           diffuse = "#FFFFFF", specular = "#FFFFFF")
+\end{verbatim}
+\end{Usage}
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{theta, phi}] polar coordinates
+\item[\code{viewpoint.rel}] logical, if TRUE light is a viewpoint light that is positioned relative to the current viewpoint
+\item[\code{ambient, diffuse, specular }] 
+\item[\code{...}] generic arguments passed through to RGL-specific (or other) functions
+\end{ldescription}
+\end{Arguments}
+\begin{Details}\relax
+Up to 8 light sources are supported. They are positioned either in world space
+or relative to the camera using polar coordinates. Light sources are directional.
+\end{Details}
+\begin{Value}
+This function is called for the side effect of adding a light.  A light ID is
+returned to allow \code{\LinkA{rgl.pop}{rgl.pop}} to remove it.
+\end{Value}
+\begin{SeeAlso}\relax
+\code{\LinkA{rgl.clear}{rgl.clear}}
+\code{\LinkA{rgl.pop}{rgl.pop}}
+\end{SeeAlso}
+
+\HeaderA{rgl.material}{Generic Appearance setup}{rgl.material}
+\aliasA{material3d}{rgl.material}{material3d}
+\keyword{dynamic}{rgl.material}
+\begin{Description}\relax
+Set material properties for geometry appearance.
+\end{Description}
+\begin{Usage}
+\begin{verbatim}
+rgl.material(
+  color        = c("white"),
+  alpha        = c(1.0),
+  lit          = TRUE, 
+  ambient      = "black",
+  specular     = "white", 
+  emission     = "black", 
+  shininess    = 50.0, 
+  smooth       = TRUE,
+  texture      = NULL, 
+  textype      = "rgb", 
+  texmipmap    = FALSE, 
+  texminfilter = "linear", 
+  texmagfilter = "linear",
+  texenvmap    = FALSE,
+  front        = "fill", 
+  back         = "fill",
+  size         = 1.0, 
+  fog          = TRUE, 
+  ...
+)
+material3d(...)
+\end{verbatim}
+\end{Usage}
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{color}] vector of R color characters. Represents the diffuse component in case of lighting calculation (lit = TRUE),
+otherwise it describes the solid color characteristics.
+
+\item[\code{lit}] logical, specifying if lighting calculation should take place on geometry
+
+\item[\code{ambient, specular, emission, shininess}] properties for lighting calculation. ambient, specular, emission are R color character string values; shininess represents a
+numerical.
+
+\item[\code{alpha}] vector of alpha values between 0.0 (fully transparent) .. 1.0 (opaque).
+
+\item[\code{smooth}] logical, specifying whether gourad shading (smooth) or flat shading should be used.
+
+\item[\code{texture}] path to a texture image file. Supported formats: png.
+
+\item[\code{textype}] specifies what is defined with the pixmap
+\describe{
+\item["alpha"] alpha values
+\item["luminance"] luminance
+\item["luminance.alpha"] luminance and alpha
+\item["rgb"] color
+\item["rgba"] color and alpha texture
+}
+
+\item[\code{texmipmap}] Logical, specifies if the texture should be mipmapped.
+
+\item[\code{texmagfilter}] specifies the magnification filtering type (sorted by ascending quality):
+\describe{
+\item["nearest"] texel nearest to the center of the pixel
+\item["linear"] weighted linear average of a 2x2 array of texels
+}
+
+\item[\code{texminfilter}] specifies the minification filtering type (sorted by ascending quality):
+\describe{
+\item["nearest"] texel nearest to the center of the pixel
+\item["linear"] weighted linear average of a 2x2 array of texels
+\item["nearest.mipmap.nearest"] low quality mipmapping
+\item["nearest.mipmap.linear"] medium quality mipmapping
+\item["linear.mipmap.nearest"] medium quality mipmapping
+\item["linear.mipmap.linear"] high quality mipmapping
+}
+
+\item[\code{texenvmap}] logical, specifies if auto-generated texture coordinates for environment-mapping 
+should be performed on geometry.
+
+\item[\code{front, back}] Determines the polygon mode for the specified side:
+\describe{
+\item["fill"] filled polygon
+\item["line"] wireframed polygon
+\item["points"] point polygon
+\item["cull"] culled (hidden) polygon
+}
+
+\item[\code{size}] numeric, specifying the line and point size.
+
+\item[\code{fog}] logical, specifying if fog effect should be applied on the corresponding shape
+\item[\code{...}] Any of the arguments above; see Details below.
+\end{ldescription}
+\end{Arguments}
+\begin{Details}\relax
+Only one side at a time can be culled.
+
+\code{material3d} is an alternate interface to the material properties, modelled after
+\code{\LinkA{par3d}{par3d}}:  rather than setting defaults for parameters that are not specified, 
+they will be left unchanged.  \code{material3d} may also be used to query the material
+properties; see the examples below.
+
+The current implementation does not return parameters for textures.
+
+The \code{...} parameter to \code{rgl.material} is ignored.
+\end{Details}
+\begin{Value}
+\code{rgl.material()} is called for the side effect of setting the material properties.
+It returns a value invisibly which is not intended for use by the user.
+
+Users should use \code{material3d()} to query material properties.  It returns values similarly
+to \code{\LinkA{par3d}{par3d}} as follows:
+When setting properties, it returns the previous values in a named list.  A named list is also
+returned when more than one value is queried.  When a single value is queried it is returned 
+directly.
+\end{Value}
+\begin{SeeAlso}\relax
+\code{\LinkA{rgl.primitive}{rgl.primitive}},
+\code{\LinkA{rgl.bbox}{rgl.bbox}},
+\code{\LinkA{rgl.bg}{rgl.bg}},
+\code{\LinkA{rgl.light}{rgl.light}}
+\end{SeeAlso}
+\begin{Examples}
+\begin{ExampleCode}
+save <- material3d("color")
+material3d(color="red")
+material3d("color")
+material3d(color=save)
+\end{ExampleCode}
+\end{Examples}
+
+\HeaderA{matrices}{Work with homogeneous coordinates}{matrices}
+\aliasA{asEuclidean}{matrices}{asEuclidean}
+\aliasA{asHomogeneous}{matrices}{asHomogeneous}
+\aliasA{identityMatrix}{matrices}{identityMatrix}
+\aliasA{rotate3d}{matrices}{rotate3d}
+\aliasA{rotationMatrix}{matrices}{rotationMatrix}
+\aliasA{scale3d}{matrices}{scale3d}
+\aliasA{scaleMatrix}{matrices}{scaleMatrix}
+\aliasA{transform3d}{matrices}{transform3d}
+\aliasA{translate3d}{matrices}{translate3d}
+\aliasA{translationMatrix}{matrices}{translationMatrix}
+\keyword{dynamic}{matrices}
+\begin{Description}\relax
+These functions construct 4x4 matrices for transformations
+in the homogeneous coordinate system used by OpenGL, and translate
+vectors between homogeneous and Euclidean coordinates.
+\end{Description}
+\begin{Usage}
+\begin{verbatim}
+identityMatrix()
+scaleMatrix(x, y, z)
+translationMatrix(x, y, z)
+rotationMatrix(angle, x, y, z, matrix)
+asHomogeneous(x)
+asEuclidean(x)
+
+scale3d(obj, x, y, z, ...)
+translate3d(obj, x, y, z, ...)
+rotate3d(obj, angle, x, y, z, matrix, ...)
+
+transform3d(obj, matrix, ...)
+
+\end{verbatim}
+\end{Usage}
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{x, y, z, angle, matrix}] See details
+\item[\code{obj}] An object to be transformed
+\item[\code{...}] Additional parameters to be passed to methods
+\end{ldescription}
+\end{Arguments}
+\begin{Details}\relax
+OpenGL uses homogeneous coordinates to handle perspective and affine
+transformations.  The homogeneous point \code{(x, y, z, w)} corresponds
+to the Euclidean point \code{(x/w, y/w, z/w)}.  The matrices produced by
+the functions \code{scaleMatrix}, \code{translationMatrix}, and \code{rotationMatrix}
+are to be left-multiplied by a row vector 
+of homogeneous coordinates; alternatively, the transpose of the result
+can be right-multiplied by a column vector.  The generic functions
+\code{scale3d}, \code{translate3d} and \code{rotate3d} apply these transformations
+to the \code{obj} argument.  The \code{transform3d} function is a synonym 
+for \code{rotate3d(obj, matrix=matrix)}.
+
+By default, it is assumed that \code{obj} is a row vector
+(or a matrix of row vectors) which will be multiplied on the right by
+the corresponding matrix, but users may write methods for these generics
+which operate differently.  Methods are supplied for \code{\LinkA{qmesh3d}{qmesh3d}}
+objects.
+
+To compose transformations, use matrix multiplication.  The effect is
+to apply the matrix on the left first, followed by the one on the right.
+
+\code{identityMatrix} returns an identity matrix.
+
+\code{scaleMatrix} scales each coordinate by the given factor.  In Euclidean
+coordinates, \code{(u, v, w)} is transformed to \code{(x*u, y*v, z*w)}.
+
+\code{translationMatrix} translates each coordinate by the given translation, i.e.
+\code{(u,v,w)} is transformed to \code{(u+x,v+y,w+z)}.
+
+\code{rotationMatrix} can be called in three ways.  With 
+arguments \code{angle, x, y, z} it represents a rotation 
+of \code{angle} radians about the axis 
+\code{x, y, z}.  If a 3x3 rotation matrix can be given;
+it will be converted into the corresponding matrix in 4x4 homogeneous
+coordinates.  Finally, if a 4x4 matrix is given, it will be returned unchanged.
+(The latter behaviour is used to allow \code{transform3d} to act like a 
+generic function, even though it is not.)
+
+Use \code{asHomogeneous(x)} to convert the Euclidean vector \code{x} to
+homogeneous coordinates, and \code{asEuclidean(x)} for the reverse transformation.
+\end{Details}
+\begin{Value}
+\code{identityMatrix},
+\code{scaleMatrix}, \code{translationMatrix}, and \code{rotationMatrix} produce
+a 4x4 matrix representing the requested transformation
+in homogeneous coordinates.  
+
+\code{scale3d}, \code{translate3d} and \code{rotate3d} transform the object
+and produce a new object of the same class.
+\end{Value}
+\begin{Author}\relax
+Duncan Murdoch
+\end{Author}
+\begin{SeeAlso}\relax
+\code{\LinkA{par3d}{par3d}} for a description of how rgl uses matrices in
+rendering.
+\end{SeeAlso}
+\begin{Examples}
+\begin{ExampleCode}
+# A 90 degree rotation about the x axis:
+
+rotationMatrix(pi/2, 1, 0, 0)
+
+# Find what happens when you rotate (2,0,0) by 45 degrees about the y axis:
+
+x <- asHomogeneous(c(2,0,0))
+y <- x 
+asEuclidean(y)
+
+# or more simply...
+
+rotate3d(c(2,0,0), pi/4, 0, 1, 0)
+
+\end{ExampleCode}
+\end{Examples}
+
+\HeaderA{par3d}{Set or Query RGL Parameters}{par3d}
+\aliasA{open3d}{par3d}{open3d}
+\aliasA{r3dDefaults}{par3d}{r3dDefaults}
+\keyword{dynamic}{par3d}
+\begin{Description}\relax
+\code{par3d} can be used to set or query graphical parameters in rgl.
+Parameters can be set by specifying them as arguments to \code{par3d} in
+\code{tag = value} form, or by passing them as a list of tagged
+values.
+\end{Description}
+\begin{Usage}
+\begin{verbatim}
+par3d(..., no.readonly = FALSE)
+
+open3d(..., params=get("r3dDefaults", envir=.GlobalEnv))
+
+\end{verbatim}
+\end{Usage}
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{...}] arguments in \code{tag = value} form, or a list of tagged
+values.  The tags must come from the graphical parameters described
+below.
+\item[\code{no.readonly}] logical; if \code{TRUE} and there are no other
+arguments, only those parameters which can be set by a
+subsequent \code{par3d()} call are returned.
+\item[\code{params}] a list of graphical parameters
+\end{ldescription}
+\end{Arguments}
+\begin{Details}\relax
+Parameters are queried by giving one or more character vectors to
+\code{par3d}.
+
+\code{par3d()} (no arguments) or \code{par3d(no.readonly=TRUE)} is used to
+get \emph{all} the graphical parameters (as a named list).  
+
+\emph{\bold{R.O.}} indicates \emph{\bold{read-only arguments}}: These
+may only be used in queries, i.e., they do \emph{not} set anything.
+
+\code{open3d} opens a new rgl device, and sets the parameters as
+requested.  The \code{r3dDefaults} list will be used as default
+values for parameters.  As installed this sets the point of view to
+'world coordinates' (i.e. x running from left to right, y from front
+to back, z from bottom to top), the \code{mouseMode} to
+\code{(zAxis, zoom, fov)}, and the field of view to 30 degrees.
+Users may create their own variable of that name in the global
+environment and it will override the installed one.  If there
+is a \code{bg} element in the list or the arguments, it should be
+a list of arguments to pass to the \code{\LinkA{bg3d}{bg3d}} function to 
+set the background.  A \code{material} element should be a list
+of arguments to pass to \code{\LinkA{material3d}{material3d}} to set the material.
+\end{Details}
+\begin{Value}
+When parameters are set, their former values are returned in an
+invisible named list.  Such a list can be passed as an argument to
+\code{par3d} to restore the parameter values.
+Use \code{par3d(no.readonly = TRUE)} for the full list of parameters
+that can be restored.
+
+When just one parameter is queried, its value is returned directly.
+When two or more parameters are queried, the result is a list of
+values, with the list names giving the parameters.
+
+Note the inconsistency: setting one parameter returns a list, but
+querying one parameter returns an object.
+\end{Value}
+\begin{Section}{Parameters}
+\describe{
+\item[\code{FOV}] real.  The field of view, from 1 to 179 degrees.  This controls
+the degree of parallax in the perspective view.
+Isometric perspective (which would
+correspond to \code{FOV=0}) is not currently possible, but one can
+approximate it by specifying \code{par3d(FOV=1)}.
+\item[\code{ignoreExtent}] logical.  Set to \code{TRUE} so that subsequently plotted objects
+will be ignored in calculating the bounding box of the scene.
+\item[\code{modelMatrix}] \emph{\bold{R.O.}}; a 4 by 4 matrix describing the position
+of the user data.
+\item[\code{mouseMode}] character.  A vector of 3 strings describing
+what the 3 mouse buttons do. Partial matching is used.  Possible values for \code{mouseMode} are 
+\describe{
+\item[\code{"none"}] No action for this button.
+\item[\code{"trackball"}] Mouse acts as a virtual trackball, rotating the scene.
+\item[\code{"xAxis"}] Similar to \code{"trackball"}, but restricted to X axis rotation.
+\item[\code{"yAxis"}] Y axis rotation.
+\item[\code{"zAxis"}] Z axis rotation.
+\item[\code{"polar"}] Mouse rotates the scene by moving in polar coordinates.
+\item[\code{"selecting"}] Mouse is used for selection.  This is not normally set by the
+user, but is used internally by the \code{\LinkA{select3d}{select3d}} function.
+\item[\code{"zoom"}] Mouse is used to zoom the display.
+\item[\code{"fov"}] Mouse changes the field of view of the display.
+}
+
+\item[\code{projMatrix}] \emph{\bold{R.O.}}; a 4 by 4 matrix describing the current
+projection of the scene.
+\item[\code{scale}] real.  A vector of 3 values indicating the amount by which to
+rescale each axis before display.  Set by \code{\LinkA{aspect3d}{aspect3d}}.
+\item[\code{skipRedraw}] whether to update the display.  Set to \code{FALSE} to suspend
+updating while making multiple changes to the scene.  See \code{demo(hist3d)} for an example.
+\item[\code{userMatrix}] a 4 by 4 matrix describing user actions to
+display the scene.
+\item[\code{viewport}] \emph{\bold{R.O.}}; real.  A vector giving the dimensions of the
+window in pixels.
+\item[\code{zoom}] real. A positive value indicating the current
+magnification of the scene.
+\item[\code{bbox}] \emph{\bold{R.O.}}; real. A vector of six values indicating the current values of the
+bounding box of the scene (xmin, xmax, ymin, ymax, zmin, zmax)
+}
+\end{Section}
+\begin{Section}{note}
+The \code{"xAxis"}, \code{"yAxis"} and \code{"zAxis"} mouse modes rotate relative to the coordinate
+system of the data, regardless of the current orientation of the scene.
+\end{Section}
+\begin{Section}{Rendering}
+The parameters returned by \code{par3d} are sufficient to determine where rgl would render
+a point on the screen.  Given a column vector \code{(x,y,z)}, it performs the equivalent of 
+the following operations:
+\Enumerate{
+\item It converts the point to homogeneous coordinates by appending \code{w=1}, giving
+the vector \code{v = (x,y,z,1)}.
+\item It obtains the model matrix \code{M = par3d("modelMatrix")} and multiplies
+the point by this giving \code{u = M \%*\% v}.  Using this location and information on the
+normals (which have been similarly transformed), it performs lighting calculations.  (The 
+\code{par3d("userMatrix")} is used in the construction of the model matrix, along with
+other transformations to center the object being displayed.)
+\item It obtains the projection matrix \code{P = par3d("projMatrix")} and
+multiplies the point by it giving \code{P \%*\% u = (x2, y2, z2, w2)}.
+\item It converts back to Euclidean coordinates by dividing the first 3 coordinates by \code{w2}.
+\item The new value \code{z2/w2} represents the depth into the scene of the point.  Depending
+on what has already been plotted, this depth might be obscured, in which case nothing more is plotted.
+\item If the point is not culled due to depth, the \code{x2} and \code{y2} values are used
+to determine the point in the image.  The \code{par3d("viewport")} values are used to translate
+from the range \code{(-1, 1)} to pixel locations, and the point is plotted.
+}
+See ?\LinkA{matrices}{matrices} for more information on homogeneous and Euclidean coordinates.
+\end{Section}
+\begin{References}\relax
+OpenGL Architecture Review Board (1997).  OpenGL Programming Guide.  Addison-Wesley.
+\end{References}
+\begin{SeeAlso}\relax
+\code{\LinkA{rgl.viewpoint}{rgl.viewpoint}} to set \code{FOV} and \code{zoom}.
+\end{SeeAlso}
+\begin{Examples}
+\begin{ExampleCode}
+    r3dDefaults
+    open3d()
+    shade3d(cube3d(color=rep(rainbow(6),rep(4,6))))
+    save <- par3d(userMatrix = rotationMatrix(90*pi/180, 1,0,0))
+    save
+    par3d("userMatrix")    
+    par3d(save)
+    par3d("userMatrix")
+\end{ExampleCode}
+\end{Examples}
+
+\HeaderA{persp3d}{Surface plots}{persp3d}
+\methaliasA{persp3d.default}{persp3d}{persp3d.default}
+\keyword{dynamic}{persp3d}
+\begin{Description}\relax
+This function draws plots of surfaces over the
+x-y plane. \code{persp3d} is a generic function.
+\end{Description}
+\begin{Usage}
+\begin{verbatim}
+persp3d(x, ...)
+
+## Default S3 method:
+persp3d(x = seq(0, 1, len = nrow(z)), y = seq(0, 1, len = ncol(z)),
+    z, xlim = range(x), ylim = range(y), zlim = range(z, na.rm = TRUE),
+    xlab = NULL, ylab = NULL, zlab = NULL, add = FALSE, aspect = !add, ...)
+\end{verbatim}
+\end{Usage}
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{x, y}] locations of grid lines at which the values in \code{z} are
+measured.  These must be in ascending order.  By default, equally
+spaced values from 0 to 1 are used.  If \code{x} is a \code{list},
+its components \code{x\$x} and \code{x\$y} are used for \code{x}
+and \code{y}, respectively.
+\item[\code{z}] a matrix containing the values to be plotted.  
+Note that \code{x} can be used instead of \code{z} for
+convenience.
+\item[\code{xlim, ylim, zlim}] x-, y-  and z-limits.  The plot is produced
+so that the rectangular volume defined by these limits is visible.
+\item[\code{xlab, ylab, zlab}] titles for the axes.  N.B. These must be
+character strings; expressions are not accepted.  Numbers will be
+coerced to character strings.
+\item[\code{add}] whether to add the points to an existing plot.
+\item[\code{aspect}] either a logical indicating whether to adjust the aspect ratio, or a new ratio
+\item[\code{...}] additional material parameters to be passed to \code{\LinkA{surface3d}{surface3d}}
+and \code{\LinkA{decorate3d}{decorate3d}}.
+\end{ldescription}
+\end{Arguments}
+\begin{Details}\relax
+This is similar to \code{\LinkA{persp}{persp}} with user interaction.  See \code{\LinkA{plot3d}{plot3d}}
+for more details.
+\end{Details}
+\begin{Value}
+This function is called for the side effect of drawing the plot.  A vector 
+of shape IDs is returned.
+\end{Value}
+\begin{Author}\relax
+Duncan Murdoch
+\end{Author}
+\begin{SeeAlso}\relax
+\code{\LinkA{plot3d}{plot3d}}, \code{\LinkA{persp}{persp}}
+\end{SeeAlso}
+\begin{Examples}
+\begin{ExampleCode}
+
+# (1) The Obligatory Mathematical surface.
+#     Rotated sinc function.
+
+x <- seq(-10, 10, length= 30)
+y <- x
+f <- function(x,y) { r <- sqrt(x^2+y^2); 10 * sin(r)/r }
+z <- outer(x, y, f)
+z[is.na(z)] <- 1
+open3d()
+bg3d("white")
+material3d(col="black")
+persp3d(x, y, z, aspect=c(1, 1, 0.5), col = "lightblue",
+        xlab = "X", ylab = "Y", zlab = "Sinc( r )")
+
+# (2) Add to existing persp plot:
+
+xE <- c(-10,10); xy <- expand.grid(xE, xE)
+points3d(xy[,1], xy[,2], 6, col = 2, size = 3)
+lines3d(x, y=10, z= 6 + sin(x), col = 3)
+
+phi <- seq(0, 2*pi, len = 201)
+r1 <- 7.725 # radius of 2nd maximum
+xr <- r1 * cos(phi)
+yr <- r1 * sin(phi)
+lines3d(xr,yr, f(xr,yr), col = "pink", size = 2)
+
+# (3) Visualizing a simple DEM model
+
+z <- 2 * volcano        # Exaggerate the relief
+x <- 10 * (1:nrow(z))   # 10 meter spacing (S to N)
+y <- 10 * (1:ncol(z))   # 10 meter spacing (E to W)
+
+open3d()
+bg3d("slategray")
+material3d(col="black")
+persp3d(x, y, z, col = "green3", aspect="iso",
+      axes = FALSE, box = FALSE)
+\end{ExampleCode}
+\end{Examples}
+
+\HeaderA{plot3d}{3D Scatterplot}{plot3d}
+\aliasA{decorate3d}{plot3d}{decorate3d}
+\methaliasA{plot3d.default}{plot3d}{plot3d.default}
+\methaliasA{plot3d.qmesh3d}{plot3d}{plot3d.qmesh3d}
+\keyword{dynamic}{plot3d}
+\begin{Description}\relax
+Draws a 3D scatterplot.
+\end{Description}
+\begin{Usage}
+\begin{verbatim}
+plot3d(x, ...)
+## Default S3 method:
+plot3d(x, y, z,  
+        xlab, ylab, zlab, type = "p", col,  
+        size, radius,
+        add = FALSE, aspect = !add, ...)
+## S3 method for class 'qmesh3d':
+plot3d(x, xlab = "x", ylab = "y", zlab = "z", type = c("shade", "wire", "dots"),
+        add = FALSE, ...)       
+decorate3d(xlim, ylim, zlim, 
+        xlab = "x", ylab = "y", zlab = "z", 
+        box = TRUE, axes = TRUE, main = NULL, sub = NULL,
+        top = TRUE, aspect = FALSE, ...)
+\end{verbatim}
+\end{Usage}
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{x, y, z}] vectors of points to be plotted. Any reasonable way of defining the
+coordinates is acceptable.  See the function \code{\LinkA{xyz.coords}{xyz.coords}}
+for details.
+\item[\code{xlab, ylab, zlab}] labels for the coordinates.
+\item[\code{type}] For the default method, a single character indicating the type of item to plot.  
+Supported types are: 'p' for points, 's' for spheres, 
+'l' for lines, 'h' for line segments 
+from \code{z=0}, and 'n' for nothing.  For the \code{qmesh3d} method, one of 
+'shade', 'wire', or 'dots'.  Partial matching is used.
+
+\item[\code{col}] the colour to be used for plotted items.
+\item[\code{size}] the size for plotted items.
+\item[\code{radius}] the radius of spheres:  see Details below.
+\item[\code{add}] whether to add the points to an existing plot.
+\item[\code{aspect}] either a logical indicating whether to adjust the aspect ratio, or a new ratio.
+\item[\code{...}] additional parameters which will be passed to \code{\LinkA{par3d}{par3d}}, \code{\LinkA{material3d}{material3d}}
+or \code{decorate3d}.
+\item[\code{xlim, ylim, zlim}] limits to use for the coordinates.
+\item[\code{box, axes}] whether to draw a box and axes.
+\item[\code{main, sub}] main title and subtitle.
+\item[\code{top}] whether to bring the window to the top when done.
+\end{ldescription}
+\end{Arguments}
+\begin{Details}\relax
+\code{plot3d} is a partial 3D analogue of plot.default.
+
+Note that since \code{rgl} does not currently support
+clipping, all points will be plotted, and \code{xlim}, \code{ylim}, and \code{zlim}
+will only be used to increase the respective ranges.
+
+Missing values in the data are skipped, as in standard graphics.
+
+If \code{aspect} is \code{TRUE}, aspect ratios of \code{c(1,1,1)} are passed to
+\code{\LinkA{aspect3d}{aspect3d}}.  If \code{FALSE}, no aspect adjustment is done.  In other
+cases, the value is passed to \code{\LinkA{aspect3d}{aspect3d}}.
+
+With \code{type = "s"}, spheres are drawn centered at the specified locations.
+The radius may be controlled by \code{size} (specifying the size relative
+to the plot display, with \code{size=1} giving a radius 
+about 1/20 of the plot region) or \code{radius} (specifying it on the data scale
+if an isometric aspect ratio is chosen, or on an average scale
+if not).
+\end{Details}
+\begin{Value}
+\code{plot3d} is called for the side effect of drawing the plot; a vector
+of object IDs is returned.
+
+\code{decorate3d} adds the usual decorations to a plot:  labels, axes, etc.
+\end{Value}
+\begin{Author}\relax
+Duncan Murdoch
+\end{Author}
+\begin{SeeAlso}\relax
+\code{\LinkA{plot.default}{plot.default}},  
+\code{\LinkA{open3d}{open3d}}, \code{\LinkA{par3d}{par3d}}.
+\end{SeeAlso}
+\begin{Examples}
+\begin{ExampleCode}
+  open3d()
+  x <- sort(rnorm(1000))
+  y <- rnorm(1000)
+  z <- rnorm(1000) + atan2(x,y)
+  plot3d(x, y, z, col=rainbow(1000), size=2)
+\end{ExampleCode}
+\end{Examples}
+
+\HeaderA{rgl.postscript}{export screenshot}{rgl.postscript}
+\keyword{dynamic}{rgl.postscript}
+\begin{Description}\relax
+Saves the screenshot as PostScript file.
+\end{Description}
+\begin{Usage}
+\begin{verbatim}
+rgl.postscript( filename, fmt="eps" )
+\end{verbatim}
+\end{Usage}
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{filename}] full path to filename.
+\item[\code{fmt}] export format, currently supported: ps, eps, tex, pdf, svg, pgf 
+\end{ldescription}
+\end{Arguments}
+\begin{Details}\relax
+Animations can be created in a loop modifying the scene and saving 
+a screenshot to a file. (See example below)
+\end{Details}
+\begin{Author}\relax
+Christophe Geuzaine / Albrecht Gebhardt
+\end{Author}
+\begin{References}\relax
+GL2PS: an OpenGL to PostScript printing library by Christophe Geuzaine
+\end{References}
+\begin{SeeAlso}\relax
+\code{\LinkA{rgl.viewpoint}{rgl.viewpoint}}, \code{\LinkA{rgl.snapshot}{rgl.snapshot}}
+\end{SeeAlso}
+\begin{Examples}
+\begin{ExampleCode}
+
+## Not run: 
+
+#
+# create a series of frames for an animation
+#
+
+rgl.open()
+shade3d(oh3d(), color="red")
+rgl.viewpoint(0,20)
+
+for (i in 1:45) {
+  rgl.viewpoint(i,20)
+  filename <- paste("pic",formatC(i,digits=1,flag="0"),".eps",sep="") 
+  rgl.postscript(filename, fmt="eps")
+}
+
+## End(Not run)
+
+\end{ExampleCode}
+\end{Examples}
+
+\HeaderA{rgl.primitive}{add primitive set shape}{rgl.primitive}
+\aliasA{rgl.lines}{rgl.primitive}{rgl.lines}
+\aliasA{rgl.linestrips}{rgl.primitive}{rgl.linestrips}
+\aliasA{rgl.points}{rgl.primitive}{rgl.points}
+\aliasA{rgl.quads}{rgl.primitive}{rgl.quads}
+\aliasA{rgl.triangles}{rgl.primitive}{rgl.triangles}
+\keyword{dynamic}{rgl.primitive}
+\begin{Description}\relax
+Adds a shape node to the current scene
+\end{Description}
+\begin{Usage}
+\begin{verbatim}
+rgl.points(x, y = NULL, z = NULL, ... )
+rgl.lines(x, y = NULL, z = NULL, ... )
+rgl.linestrips(x, y = NULL, z = NULL, ...)
+rgl.triangles(x, y = NULL, z = NULL, ... )
+rgl.quads(x, y = NULL, z = NULL, ... )
+\end{verbatim}
+\end{Usage}
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{x, y, z}] coordinates.  Any reasonable way of defining the
+coordinates is acceptable.  See the function \code{\LinkA{xyz.coords}{xyz.coords}}
+for details.
+\item[\code{ ... }] Material properties. See \code{\LinkA{rgl.material}{rgl.material}} for details.
+\end{ldescription}
+\end{Arguments}
+\begin{Details}\relax
+Adds a shape node to the scene. The appearance is defined by the material properties.
+See \code{\LinkA{rgl.material}{rgl.material}} for details.
+\end{Details}
+\begin{Value}
+Each primitive function returns the integer object ID of the shape that
+was added to the scene.  These can be passed to \code{\LinkA{rgl.pop}{rgl.pop}}
+to remove the object from the scene.
+\end{Value}
+\begin{SeeAlso}\relax
+\code{\LinkA{rgl.material}{rgl.material}},
+\code{\LinkA{rgl.spheres}{rgl.spheres}},
+\code{\LinkA{rgl.texts}{rgl.texts}},
+\code{\LinkA{rgl.surface}{rgl.surface}},
+\code{\LinkA{rgl.sprites}{rgl.sprites}}
+\end{SeeAlso}
+\begin{Examples}
+\begin{ExampleCode}
+rgl.open()
+rgl.points(rnorm(1000), rnorm(1000), rnorm(1000), color=heat.colors(1000), size=2)
+\end{ExampleCode}
+\end{Examples}
+
+\HeaderA{qmesh3d}{3D Quadrangle Mesh objects}{qmesh3d}
+\aliasA{cube3d}{qmesh3d}{cube3d}
+\aliasA{dot3d}{qmesh3d}{dot3d}
+\methaliasA{dot3d.qmesh3d}{qmesh3d}{dot3d.qmesh3d}
+\aliasA{oh3d}{qmesh3d}{oh3d}
+\aliasA{shade3d}{qmesh3d}{shade3d}
+\methaliasA{shade3d.qmesh3d}{qmesh3d}{shade3d.qmesh3d}
+\aliasA{wire3d}{qmesh3d}{wire3d}
+\methaliasA{wire3d.qmesh3d}{qmesh3d}{wire3d.qmesh3d}
+\keyword{dynamic}{qmesh3d}
+\begin{Description}\relax
+3D Quadrangle Mesh object creation and a collection of sample objects.
+\end{Description}
+\begin{Usage}
+\begin{verbatim}
+  qmesh3d(vertices, indices, homogeneous = TRUE, material = NULL)
+  cube3d(trans = identityMatrix(), ...)  # cube object
+  oh3d(trans = identityMatrix(), ...)    # an 'o' object
+  
+  dot3d(x, ...)   # draw dots at the vertices of an object
+  ## S3 method for class 'qmesh3d':
+  dot3d(x, override = TRUE, ...)
+  wire3d(x, ...)  # draw a wireframe object
+  ## S3 method for class 'qmesh3d':
+  wire3d(x, override = TRUE, ...)
+  shade3d(x, ...) # draw a shaded object
+  ## S3 method for class 'qmesh3d':
+  shade3d(x, override = TRUE, ...)
+\end{verbatim}
+\end{Usage}
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{x}] a qmesh3d object (class qmesh3d)
+\item[\code{vertices}] 3- or 4-component vector of coordinates
+\item[\code{indices}] 4-component vector of quad indices
+\item[\code{homogeneous}] logical indicating if homogeneous (four component) coordinates are used.
+\item[\code{material}] material properties for later rendering
+\item[\code{trans}] transformation to apply to objects; see below for defaults
+\item[\code{...}] additional rendering parameters
+\item[\code{override}] should the parameters specified here override those stored in the object?
+\end{ldescription}
+\end{Arguments}
+\begin{Details}\relax
+The \code{cube3d} and \code{oh3d} objects optionally take a matrix transformation as 
+an argument.  This transformation is applied to all vertices of the default shape.
+
+The default is an identity transformation.  Use \code{par3d("userMatrix")} to render the
+object vertically in the current user view.
+\end{Details}
+\begin{Value}
+\code{qmesh3d}, \code{cube3d}, and \code{oh3d} return \code{qmesh3d} objects.
+
+\code{dot3d}, \code{wire3d}, and \code{shade3d} are called for their side effect
+of drawing an object into the scene; they return an object ID.
+\end{Value}
+\begin{SeeAlso}\relax
+\code{\LinkA{r3d}{r3d}}, \code{\LinkA{par3d}{par3d}}
+\end{SeeAlso}
+\begin{Examples}
+\begin{ExampleCode}
+
+  # generate a quad mesh object
+
+  vertices <- c( 
+     -1.0, -1.0, 0, 1.0,
+      1.0, -1.0, 0, 1.0,
+      1.0,  1.0, 0, 1.0,
+     -1.0,  1.0, 0, 1.0
+  )
+  indices <- c( 1, 2, 3, 4 )
+  
+  open3d()  
+  wire3d( qmesh3d(vertices,indices) )
+  
+  # render 4 meshes vertically in the current view
+
+  open3d()  
+  bg3d("gray")
+  l0 <- oh3d(tran = par3d("userMatrix"), color = "green" )
+  shade3d( translate3d( l0, -6, 0, 0 ))
+  l1 <- subdivision3d( l0 )
+  shade3d( translate3d( l1 , -2, 0, 0 ), color="red", override = FALSE )
+  l2 <- subdivision3d( l1 )
+  shade3d( translate3d( l2 , 2, 0, 0 ), color="red", override = TRUE )
+  l3 <- subdivision3d( l2 )
+  shade3d( translate3d( l3 , 6, 0, 0 ), color="red" )
+  
+\end{ExampleCode}
+\end{Examples}
+
+\HeaderA{r3d}{Generic 3D interface}{r3d}
+\keyword{dynamic}{r3d}
+\begin{Description}\relax
+Generic 3D interface for 3D rendering and computational geometry.
+\end{Description}
+\begin{Details}\relax
+R3d is a design for an interface for 3d rendering and computation without dependency
+on a specific rendering implementation. R3d includes a collection
+of 3D objects and geometry algorithms.
+All r3d interface functions are named \code{*3d}.  They represent generic functions that delegate 
+to implementation functions.
+
+The interface can be grouped into 8 categories: Scene Management, Primitive Shapes,
+High-level Shapes, Geometry Objects, Visualization, Interaction, Transformation,
+Subdivision.  
+
+The rendering interface gives an abstraction to the underlying rendering model. It can
+be grouped into four categories:    
+\Enumerate{
+\item[Scene Management:] A 3D scene consists of shapes, lights and background environment. 
+\item[Primitive Shapes:] Generic primitive 3D graphics shapes such as points, lines, triangles, quadrangles and texts. 
+\item[High-level Shapes:] Generic high-level 3D graphics shapes such as spheres, sprites and terrain.
+\item[Interaction:] Generic interface to select points in 3D space using the pointer device.
+}
+
+In this package we include an implementation of r3d using the underlying \code{rgl.*} functions.
+
+3D computation is supported through the use of object structures that live entirely in R.
+\Enumerate{
+\item[Geometry Objects:] Geometry and mesh objects allow to define high-level geometry for computational purpose such as quadrangle meshes (qmesh3d).
+\item[Transformation:] Generic interface to transform 3d objects.
+\item[Visualization:] Generic rendering of 3d objects such as dotted, wired or shaded.
+\item[Computation:] Generic subdivision of 3d objects.
+}
+
+At present, there are two main practical differences between the r3d functions
+and the \code{rgl.*} functions is that the r3d functions call
+\code{\LinkA{open3d}{open3d}} if there is no device open, and the
+\code{rgl.*} functions call \code{\LinkA{rgl.open}{rgl.open}}. By default
+\code{\LinkA{open3d}{open3d}} sets the initial orientation of the coordinate
+system in 'world coordinates', i.e. a right-handed coordinate system
+in which the x-axis increasingfrom left to right, the y-axis
+increases with depth into the scene, and the z-axis increases from
+bottom to top of the screen.  \code{rgl.*} functions, on the other
+hand, use a right-handed coordinate system similar to that used in
+OpenGL.  The x-axis matches that of r3d, but the y-axis increases
+from bottom to top, and the z-axis decreases with depth into the
+scene.  Since the user can manipulate the scene, either system can
+be rotated into the other one.  
+
+The r3d functions also preserve the \code{rgl.material} setting across
+calls (except for texture elements, in the current implementation), whereas
+the \code{rgl.*} functions leave it as set by the last call.
+
+The example code below illustrates the two coordinate systems.
+\end{Details}
+\begin{SeeAlso}\relax
+\code{\LinkA{points3d}{points3d}}
+\code{\LinkA{lines3d}{lines3d}}
+\code{\LinkA{segments3d}{segments3d}}
+\code{\LinkA{triangles3d}{triangles3d}}
+\code{\LinkA{quads3d}{quads3d}}
+\code{\LinkA{text3d}{text3d}}
+\code{\LinkA{spheres3d}{spheres3d}}
+\code{\LinkA{sprites3d}{sprites3d}}
+\code{\LinkA{terrain3d}{terrain3d}}
+\code{\LinkA{select3d}{select3d}}
+\code{\LinkA{dot3d}{dot3d}}
+\code{\LinkA{wire3d}{wire3d}}
+\code{\LinkA{shade3d}{shade3d}}
+\code{\LinkA{transform3d}{transform3d}}
+\code{\LinkA{rotate3d}{rotate3d}}
+\code{\LinkA{subdivision3d}{subdivision3d}}
+\code{\LinkA{qmesh3d}{qmesh3d}}
+\code{\LinkA{cube3d}{cube3d}}
+\code{\LinkA{rgl}{rgl}}
+\end{SeeAlso}
+\begin{Examples}
+\begin{ExampleCode}
+    
+     x <- c(0,1,0,0)
+     y <- c(0,0,1,0)
+     z <- c(0,0,0,1)
+     labels <- c("Origin", "X", "Y", "Z")
+     i <- c(1,2,1,3,1,4)
+
+     rgl.open()
+     rgl.texts(x,y,z,labels)
+     rgl.texts(1,1,1,"rgl.* coordinates")
+     rgl.lines(x[i],y[i],z[i])
+
+     open3d()
+     text3d(x,y,z,labels)
+     text3d(1,1,1,"*3d coordinates")
+     segments3d(x[i],y[i],z[i])
+\end{ExampleCode}
+\end{Examples}
+
+\HeaderA{rgl-internal}{Internal rgl functions and data}{rgl.Rdash.internal}
+\aliasA{cube3d.ib}{rgl-internal}{cube3d.ib}
+\aliasA{cube3d.vb}{rgl-internal}{cube3d.vb}
+\aliasA{dev3d}{rgl-internal}{dev3d}
+\aliasA{edgeindex}{rgl-internal}{edgeindex}
+\aliasA{edgemap}{rgl-internal}{edgemap}
+\aliasA{oh3d.ib}{rgl-internal}{oh3d.ib}
+\aliasA{oh3d.vb}{rgl-internal}{oh3d.vb}
+\aliasA{rgl.attr}{rgl-internal}{rgl.attr}
+\aliasA{rgl.bool}{rgl-internal}{rgl.bool}
+\aliasA{rgl.clamp}{rgl-internal}{rgl.clamp}
+\aliasA{rgl.color}{rgl-internal}{rgl.color}
+\aliasA{rgl.enum}{rgl-internal}{rgl.enum}
+\methaliasA{rgl.enum.fogtype}{rgl-internal}{rgl.enum.fogtype}
+\methaliasA{rgl.enum.gl2ps}{rgl-internal}{rgl.enum.gl2ps}
+\methaliasA{rgl.enum.halign}{rgl-internal}{rgl.enum.halign}
+\methaliasA{rgl.enum.nodetype}{rgl-internal}{rgl.enum.nodetype}
+\methaliasA{rgl.enum.pixfmt}{rgl-internal}{rgl.enum.pixfmt}
+\methaliasA{rgl.enum.polymode}{rgl-internal}{rgl.enum.polymode}
+\methaliasA{rgl.enum.primtype}{rgl-internal}{rgl.enum.primtype}
+\methaliasA{rgl.enum.texmagfilter}{rgl-internal}{rgl.enum.texmagfilter}
+\methaliasA{rgl.enum.texminfilter}{rgl-internal}{rgl.enum.texminfilter}
+\methaliasA{rgl.enum.textype}{rgl-internal}{rgl.enum.textype}
+\aliasA{rgl.mcolor}{rgl-internal}{rgl.mcolor}
+\aliasA{rgl.numeric}{rgl-internal}{rgl.numeric}
+\aliasA{rgl.nvertex}{rgl-internal}{rgl.nvertex}
+\aliasA{rgl.range}{rgl-internal}{rgl.range}
+\aliasA{rgl.select}{rgl-internal}{rgl.select}
+\aliasA{rgl.selectstate}{rgl-internal}{rgl.selectstate}
+\aliasA{rgl.setselectstate}{rgl-internal}{rgl.setselectstate}
+\aliasA{rgl.vertex}{rgl-internal}{rgl.vertex}
+\keyword{internal}{rgl-internal}
+\begin{Description}\relax
+internal rgl functions
+\end{Description}
+\begin{Usage}
+\begin{verbatim}
+rgl.bool(x)
+rgl.numeric(x)
+rgl.range(x, low, high)
+rgl.vertex(x, y = NULL, z = NULL)
+rgl.nvertex(vertex)
+rgl.color(color)
+rgl.mcolor(colors)
+rgl.clamp(value, low, high)
+rgl.attr(vattr, nvertex) 
+rgl.enum(name, ..., multi = FALSE)
+rgl.enum.gl2ps(postscripttype) 
+rgl.enum.nodetype(type)
+rgl.enum.pixfmt(fmt)
+rgl.enum.polymode(mode)
+rgl.enum.textype(textype)
+rgl.enum.fogtype(fogtype)
+rgl.enum.primtype(primtype)
+rgl.enum.halign(halign)
+rgl.enum.texmagfilter(magfiltertype)
+rgl.enum.texminfilter(minfiltertype)
+rgl.select(button = c("left", "middle", "right"))
+rgl.selectstate()
+rgl.setselectstate(state)
+edgemap(size)
+edgeindex(from,to,size,row,col)
+\end{verbatim}
+\end{Usage}
+\begin{Details}\relax
+These are not to be called by the user.
+\end{Details}
+
+\HeaderA{rgl-package}{3D visualization device system}{rgl.Rdash.package}
+\aliasA{rgl}{rgl-package}{rgl}
+\aliasA{rgl.close}{rgl-package}{rgl.close}
+\aliasA{rgl.cur}{rgl-package}{rgl.cur}
+\aliasA{rgl.open}{rgl-package}{rgl.open}
+\aliasA{rgl.quit}{rgl-package}{rgl.quit}
+\aliasA{rgl.set}{rgl-package}{rgl.set}
+\keyword{dynamic}{rgl-package}
+\begin{Description}\relax
+3D real-time rendering device-driver system
+\end{Description}
+\begin{Usage}
+\begin{verbatim}
+rgl.open()     # open new device
+rgl.close()    # close current device
+rgl.cur()      # returns active device ID
+rgl.set(which) # set device as active
+rgl.quit()     # shutdown rgl device system
+\end{verbatim}
+\end{Usage}
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{which}] device ID
+\end{ldescription}
+\end{Arguments}
+\begin{Details}\relax
+RGL is a 3D real-time rendering device driver system for R.
+Multiple devices are managed at a time, where one has the current focus
+that receives instructions from the R command-line.
+The device design is oriented towards the R device metaphor. If you send
+scene management instructions, and there's no device open, it will be opened
+automatically.
+Opened devices automatically get the current device focus. The focus may be
+changed by using rgl.set().
+rgl.quit() shuts down the rgl subsystem and all open devices, 
+detaches the package including the shared library and additional system libraries.
+\end{Details}
+\begin{SeeAlso}\relax
+\code{\LinkA{rgl.clear}{rgl.clear}}, 
+\code{\LinkA{rgl.pop}{rgl.pop}},
+\code{\LinkA{rgl.viewpoint}{rgl.viewpoint}},
+\code{\LinkA{rgl.light}{rgl.light}},
+\code{\LinkA{rgl.bg}{rgl.bg}},
+\code{\LinkA{rgl.bbox}{rgl.bbox}},
+\code{\LinkA{rgl.points}{rgl.points}},
+\code{\LinkA{rgl.lines}{rgl.lines}},
+\code{\LinkA{rgl.triangles}{rgl.triangles}},
+\code{\LinkA{rgl.quads}{rgl.quads}},
+\code{\LinkA{rgl.texts}{rgl.texts}},
+\code{\LinkA{rgl.surface}{rgl.surface}},
+\code{\LinkA{rgl.spheres}{rgl.spheres}},
+\code{\LinkA{rgl.sprites}{rgl.sprites}},
+\code{\LinkA{rgl.snapshot}{rgl.snapshot}}
+\end{SeeAlso}
+\begin{Examples}
+\begin{ExampleCode}
+example(surface3d)
+example(plot3d)
+\end{ExampleCode}
+\end{Examples}
+
+\HeaderA{rgl.bringtotop}{Assign focus to an RGL window}{rgl.bringtotop}
+\keyword{dynamic}{rgl.bringtotop}
+\begin{Description}\relax
+'rgl.bringtotop' brings the current RGL window to the
+front of the window stack (and gives it focus).
+\end{Description}
+\begin{Usage}
+\begin{verbatim}
+rgl.bringtotop(stay = FALSE)
+\end{verbatim}
+\end{Usage}
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{stay}] whether to make the window stay on top.
+\end{ldescription}
+\end{Arguments}
+\begin{Details}\relax
+If \code{stay} is \code{TRUE}, then the window will stay on top
+of normal windows.
+\end{Details}
+\begin{Note}\relax
+not completely implemented for X11 graphics (stay not implemented;
+window managers such as KDE may block this action
+(set "Focus stealing prevention level" to None in Control Center/Window Behavior/Advanced)).
+Not currently implemented under OS/X.
+\end{Note}
+\begin{Author}\relax
+Ming Chen/Duncan Murdoch
+\end{Author}
+\begin{SeeAlso}\relax
+\code{\LinkA{bringToTop}{bringToTop}}
+\end{SeeAlso}
+\begin{Examples}
+\begin{ExampleCode}
+rgl.open()
+rgl.points(rnorm(1000), rnorm(1000), rnorm(1000), color=heat.colors(1000), size=2)
+rgl.bringtotop(stay = TRUE)    
+\end{ExampleCode}
+\end{Examples}
+
+\HeaderA{rgl.user2window}{Convert between rgl user and window coordinates}{rgl.user2window}
+\aliasA{rgl.projection}{rgl.user2window}{rgl.projection}
+\aliasA{rgl.window2user}{rgl.user2window}{rgl.window2user}
+\keyword{dynamic}{rgl.user2window}
+\begin{Description}\relax
+This function converts from 3-dimensional user coordinates
+to 3-dimensional window coordinates.
+\end{Description}
+\begin{Usage}
+\begin{verbatim}
+rgl.user2window(x, y = NULL, z = NULL, projection = rgl.projection())
+rgl.window2user(x, y = NULL, z = 0, projection = rgl.projection())
+rgl.projection()
+\end{verbatim}
+\end{Usage}
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{x, y, z}] Input coordinates.  Any reasonable way of defining the
+coordinates is acceptable.  See the function \code{\LinkA{xyz.coords}{xyz.coords}}
+for details.
+\item[\code{projection}] The rgl projection to use 
+\end{ldescription}
+\end{Arguments}
+\begin{Details}\relax
+These functions convert between user coordinates and window coordinates.
+
+Window coordinates run from 0 to 1 in X, Y, and Z.  X runs from 0 on the
+left to 1 on the right; Y runs from 0 at the bottom to 1 at the top;
+Z runs from 0 foremost to 1 in the background.  \code{rgl} does not currently
+display vertices plotted outside of this range, but in normal circumstances will automatically resize the
+display to show them.  In the example below this has been suppressed.
+\end{Details}
+\begin{Value}
+The coordinate conversion functions produce a matrix with columns corresponding 
+to the X, Y, and Z coordinates.
+
+\code{rgl.projection()} returns a list containing the model matrix, projection matrix
+and viewport.  See \code{\LinkA{par3d}{par3d}} for more details.
+\end{Value}
+\begin{Author}\relax
+Ming Chen / Duncan Murdoch
+\end{Author}
+\begin{SeeAlso}\relax
+\code{\LinkA{select3d}{select3d}}
+\end{SeeAlso}
+\begin{Examples}
+\begin{ExampleCode}
+open3d()
+points3d(rnorm(100), rnorm(100), rnorm(100))
+if (interactive() || !.Platform$OS=="unix") {
+# Calculate a square in the middle of the display and plot it
+square <- rgl.window2user(c(0.25, 0.25, 0.75, 0.75, 0.25), 
+                          c(0.25, 0.75, 0.75, 0.25, 0.25), 0.5)
+par3d(ignoreExtent = TRUE)
+lines3d(square)
+par3d(ignoreExtent = FALSE)
+}
+\end{ExampleCode}
+\end{Examples}
+
+\HeaderA{scene}{scene management}{scene}
+\aliasA{clear3d}{scene}{clear3d}
+\aliasA{pop3d}{scene}{pop3d}
+\aliasA{rgl.clear}{scene}{rgl.clear}
+\aliasA{rgl.ids}{scene}{rgl.ids}
+\aliasA{rgl.pop}{scene}{rgl.pop}
+\keyword{dynamic}{scene}
+\begin{Description}\relax
+Clear shapes, lights, bbox
+\end{Description}
+\begin{Usage}
+\begin{verbatim}
+clear3d( type = c("shapes", "bboxdeco") ) 
+rgl.clear( type = "shapes" )
+pop3d( ... )
+rgl.pop( type = "shapes", id = 0 )  
+rgl.ids( type = "shapes" )
+\end{verbatim}
+\end{Usage}
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{type}] Select subtype(s):
+\describe{
+\item["shapes"] shape stack
+\item["lights"] light stack
+\item["bboxdeco"] bounding box
+\item["viewpoint"] viewpoint
+\item["all"] all of the above
+}
+
+\item[\code{id}] vector of ID numbers of items to remove
+\item[\code{...}] generic arguments passed through to RGL-specific (or other) functions
+\end{ldescription}
+\end{Arguments}
+\begin{Details}\relax
+RGL holds two stacks. One is for shapes and the other is for lights. 
+\code{clear3d} and \code{rgl.clear} clear the specified stack, or restore
+the defaults for the bounding box (not visible) or viewpoint.  By default
+with \code{id=0} \code{rgl.pop} removes 
+the top-most (last added) node on the shape stack.  The \code{id} argument
+may be used to specify arbitrary item(s) to remove from the specified stack.
+
+\code{rgl.ids} returns a dataframe containing the IDs in the currently active
+rgl window, along with an indicator of their type.
+
+For convenience, \code{type="shapes"} and 
+\code{id=1} signifies the bounding box.
+
+Note that clearing the light stack leaves the scene in darkness; it should normally
+be followed by a call to \code{\LinkA{rgl.light}{rgl.light}} or \code{\LinkA{light3d}{light3d}}.
+\end{Details}
+\begin{SeeAlso}\relax
+\code{\LinkA{rgl}{rgl}}
+\code{\LinkA{rgl.bbox}{rgl.bbox}}
+\code{\LinkA{rgl.light}{rgl.light}}
+\end{SeeAlso}
+\begin{Examples}
+\begin{ExampleCode}
+  x <- rnorm(100)
+  y <- rnorm(100)
+  z <- rnorm(100)
+  p <- plot3d(x, y, z, type='s')
+  rgl.ids()
+  lines3d(x, y, z)
+  rgl.ids()
+  if (interactive()) {
+    readline("Hit enter to change spheres")
+    rgl.pop(id = p[c("data", "box.lines")])
+    spheres3d(x, y, z, col="red", radius=1/5)
+    box3d()
+  }
+\end{ExampleCode}
+\end{Examples}
+
+\HeaderA{select3d}{Select a rectangle in an RGL scene}{select3d}
+\aliasA{rgl.select3d}{select3d}{rgl.select3d}
+\keyword{dynamic}{select3d}
+\begin{Description}\relax
+This function allows the user to use the mouse to
+select a region in an RGL scene.
+\end{Description}
+\begin{Usage}
+\begin{verbatim}
+rgl.select3d(button = c("left", "middle", "right"))
+select3d(...)
+\end{verbatim}
+\end{Usage}
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{ button }] Which button to use for selection.
+\item[\code{ ... }] Button argument to pass to \code{rgl.select3d}
+\end{ldescription}
+\end{Arguments}
+\begin{Details}\relax
+This function selects 3-dimensional regions by allowing the
+user to use a mouse to draw a rectangle showing
+the projection of the region onto the screen.  It returns
+a function which tests points for inclusion in the selected region.
+
+If the scene is later moved or rotated, the selected region will 
+remain the same, no longer corresponding to a rectangle on the screen.
+\end{Details}
+\begin{Value}
+Returns a function \code{f(x,y,z)} which tests whether each
+of the points \code{(x,y,z)} is in the selected region, returning
+a logical vector.  This function accepts input in a wide
+variety of formats as it uses \code{\LinkA{xyz.coords}{xyz.coords}} 
+to interpret its parameters.
+\end{Value}
+\begin{Author}\relax
+Ming Chen / Duncan Murdoch
+\end{Author}
+\begin{SeeAlso}\relax
+\code{\LinkA{locator}{locator}}
+\end{SeeAlso}
+\begin{Examples}
+\begin{ExampleCode}
+
+# Allow the user to select some points, and then redraw them
+# in a different color
+
+if (interactive()) {
+ x <- rnorm(1000)
+ y <- rnorm(1000)
+ z <- rnorm(1000)
+ open3d()
+ points3d(x,y,z,size=2)
+ f <- select3d()
+ keep <- f(x,y,z)
+ rgl.pop()
+ points3d(x[keep],y[keep],z[keep],size=2,color='red')
+ points3d(x[!keep],y[!keep],z[!keep],size=2)
+}
+\end{ExampleCode}
+\end{Examples}
+
+\HeaderA{rgl.snapshot}{export screenshot}{rgl.snapshot}
+\aliasA{snapshot3d}{rgl.snapshot}{snapshot3d}
+\keyword{dynamic}{rgl.snapshot}
+\begin{Description}\relax
+Saves the screenshot as png file.
+\end{Description}
+\begin{Usage}
+\begin{verbatim}
+rgl.snapshot( filename, fmt="png" )
+snapshot3d( ... )
+\end{verbatim}
+\end{Usage}
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{filename}] full path to filename.
+\item[\code{fmt}] image export format, currently supported: png 
+\item[\code{...}] arguments to pass to \code{rgl.snapshot} 
+\end{ldescription}
+\end{Arguments}
+\begin{Details}\relax
+Animations can be created in a loop modifying the scene and saving 
+each screenshot to a file. Various graphics programs (e.g. ImageMagick)
+can put these together into a single animation. (See example below)
+\end{Details}
+\begin{SeeAlso}\relax
+\code{\LinkA{rgl.viewpoint}{rgl.viewpoint}}
+\end{SeeAlso}
+\begin{Examples}
+\begin{ExampleCode}
+
+## Not run: 
+
+#
+# create animation
+#
+
+shade3d(oh3d(), color="red")
+rgl.viewpoint(0,20)
+
+setwd(tempdir())
+for (i in 1:45) {
+  rgl.viewpoint(i,20)
+  filename <- paste("pic",formatC(i,digits=1,flag="0"),".png",sep="")
+  rgl.snapshot(filename)
+}
+## Now run ImageMagick command:
+##    convert -delay 10 *.png -loop 0 pic.gif
+## End(Not run)
+
+\end{ExampleCode}
+\end{Examples}
+
+\HeaderA{spheres}{add sphere set shape}{spheres}
+\aliasA{rgl.spheres}{spheres}{rgl.spheres}
+\aliasA{spheres3d}{spheres}{spheres3d}
+\keyword{dynamic}{spheres}
+\begin{Description}\relax
+Adds a sphere set shape node to the scene
+\end{Description}
+\begin{Usage}
+\begin{verbatim}
+spheres3d(x, y = NULL, z = NULL, radius = 1, ...)
+rgl.spheres(x, y = NULL, z = NULL, radius, ...)
+\end{verbatim}
+\end{Usage}
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{x, y, z}] Numeric vector of point coordinates corresponding to
+the center of each sphere.  Any reasonable way of defining the
+coordinates is acceptable.  See the function \code{\LinkA{xyz.coords}{xyz.coords}}
+for details.
+\item[\code{radius}] Vector or single value defining the sphere radius/radii
+\item[\code{ ... }] Material properties. See \code{\LinkA{rgl.material}{rgl.material}} for details.
+\end{ldescription}
+\end{Arguments}
+\begin{Details}\relax
+If a non-isometric aspect ratio is chosen, these functions will still draw
+objects that appear to the viewer to be spheres.  Use \code{\LinkA{ellipse3d}{ellipse3d}} 
+to draw shapes that are spherical in the data scale.
+
+When the scale is not isometric, the radius is measured in an average scale.
+Note that the bounding box calculation is always done assuming an 
+isometric scale, so in this case it is inaccurate:  the extent of axes 
+with \code{scale < 1} is underestimated, and that of axes with 
+\code{scale > 1} is overestimated.
+
+If any coordinate or radius is \code{NA}, the sphere is not plotted.
+\end{Details}
+\begin{Value}
+A shape ID of the spheres object is returned.
+\end{Value}
+\begin{SeeAlso}\relax
+\code{\LinkA{rgl.material}{rgl.material}}, \code{\LinkA{aspect3d}{aspect3d}} for setting non-isometric scales
+\end{SeeAlso}
+\begin{Examples}
+\begin{ExampleCode}
+open3d()
+spheres3d(rnorm(10), rnorm(10), rnorm(10), radius=runif(10), color=rainbow(10))
+\end{ExampleCode}
+\end{Examples}
+
+\HeaderA{sprites}{add sprite set shape}{sprites}
+\aliasA{particles3d}{sprites}{particles3d}
+\aliasA{rgl.sprites}{sprites}{rgl.sprites}
+\aliasA{sprites3d}{sprites}{sprites3d}
+\keyword{dynamic}{sprites}
+\begin{Description}\relax
+Adds a sprite set shape node to the scene.
+\end{Description}
+\begin{Usage}
+\begin{verbatim}
+sprites3d(x, y = NULL, z = NULL, radius = 1, ...)
+particles3d(x, y = NULL, z = NULL, radius = 1, ...)
+rgl.sprites(x, y = NULL, z = NULL, radius = 1, ...)
+\end{verbatim}
+\end{Usage}
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{ x, y, z }] point coordinates.  Any reasonable way of defining the
+coordinates is acceptable.  See the function \code{\LinkA{xyz.coords}{xyz.coords}}
+for details.
+\item[\code{ radius }] 
+\item[\code{ ... }] material properties, texture mapping is supported
+\end{ldescription}
+\end{Arguments}
+\begin{Details}\relax
+Sprites are rectangle planes that are directed towards the viewpoint.
+Their primary use is for fast (and faked) atmospherical effects, e.g. particles and clouds
+using alpha blended textures.
+Particles are Sprites using an alpha-blended particle texture giving
+the illusion of clouds and gasses.
+
+If any coordinate is \code{NA}, the sprite is not plotted.
+\end{Details}
+\begin{Value}
+These functions are called for the side effect of displaying the sprites.
+The shape ID of the displayed object is returned.
+\end{Value}
+\begin{SeeAlso}\relax
+\code{\LinkA{rgl.material}{rgl.material}}
+\end{SeeAlso}
+\begin{Examples}
+\begin{ExampleCode}
+open3d()
+particles3d( rnorm(100), rnorm(100), rnorm(100), color=rainbow(100) )
+# is the same as
+sprites3d( rnorm(100), rnorm(100), rnorm(100), color=rainbow(100),
+  lit=FALSE, alpha=.2,
+  textype="alpha", texture=system.file("textures/particle.png", package="rgl") )
+\end{ExampleCode}
+\end{Examples}
+
+\HeaderA{subdivision3d}{generic subdivision surface method}{subdivision3d}
+\aliasA{deform.qmesh3d}{subdivision3d}{deform.qmesh3d}
+\aliasA{divide.qmesh3d}{subdivision3d}{divide.qmesh3d}
+\aliasA{normalize.qmesh3d}{subdivision3d}{normalize.qmesh3d}
+\methaliasA{subdivision3d.qmesh3d}{subdivision3d}{subdivision3d.qmesh3d}
+\keyword{dynamic}{subdivision3d}
+\begin{Description}\relax
+The Subdivision surface algorithm divide and refine (deform) a
+given mesh recursively to certain degree (depth).
+The qmesh3d algorithm consists of two stages: divide and deform.
+The divide step generates for each quad four new quads, the deform
+step drags the points (refinement step).
+\end{Description}
+\begin{Usage}
+\begin{verbatim}
+  subdivision3d( x,  ...)
+  subdivision3d.qmesh3d( x, depth=1, normalize=FALSE, deform=TRUE, ... )
+  divide.qmesh3d(mesh,  vb=mesh$vb, ib=mesh$ib )
+  normalize.qmesh3d(mesh)
+  deform.qmesh3d(mesh,vb=mesh$vb,ib=mesh$ib)
+\end{verbatim}
+\end{Usage}
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{x}] 3d geometry mesh
+\item[\code{mesh}] 3d geometry mesh
+\item[\code{depth}] recursion depth
+\item[\code{normalize}] normalize qmesh3d coordinates after division if deform is TRUE otherwise
+\item[\code{deform}] deform mesh after normalization
+\item[\code{ib}] vector of indices (i.e., which sets of vertices to combine
+into quads); 4xn matrix or equivalent vector
+\item[\code{vb}] vector of vertices: 4xn matrix (rows x,y,z,h) or equivalent
+vector, where h indicates scaling of each plotted quad
+\item[\code{...}] other arguments (unused)
+\end{ldescription}
+\end{Arguments}
+\begin{Details}\relax
+Generic subdivision surface method. Currently there exists
+an algorithm that can be applied on qmesh3d objects.
+\end{Details}
+\begin{SeeAlso}\relax
+\code{\LinkA{r3d}{r3d}}
+\code{\LinkA{qmesh3d}{qmesh3d}}
+\end{SeeAlso}
+\begin{Examples}
+\begin{ExampleCode}
+  open3d()
+  shade3d( subdivision3d( cube3d(), depth=3 ), color="red", alpha=0.5 )
+\end{ExampleCode}
+\end{Examples}
+
+\HeaderA{rgl.surface}{add height-field surface shape}{rgl.surface}
+\keyword{dynamic}{rgl.surface}
+\begin{Description}\relax
+Adds a surface to the current scene. The surface is defined by 
+a matrix defining the height of each grid point and two vectors
+defining the grid.
+\end{Description}
+\begin{Usage}
+\begin{verbatim}
+rgl.surface(x, z, y, coords=1:3, ...)
+\end{verbatim}
+\end{Usage}
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{ x }] values corresponding to rows of \code{y}
+
+\item[\code{ y }] matrix of height values
+
+\item[\code{ z }] values corresponding to columns of \code{y}
+
+\item[\code{ coords }] See details
+
+\item[\code{ ... }] Material and texture properties. See \code{\LinkA{rgl.material}{rgl.material}} for details.
+\end{ldescription}
+\end{Arguments}
+\begin{Details}\relax
+Adds a surface mesh to the current scene. The surface is defined by 
+the matrix of height values in \code{y}, with rows corresponding 
+to the values in \code{x} and columns corresponding to the values in 
+\code{z}.
+
+The \code{coords} parameter can be used to change the geometric
+interpretation of \code{x}, \code{y}, and \code{z}.  The first entry 
+of \code{coords} indicates which coordinate (\code{1=X}, 
+\code{2=Y}, \code{3=Z}) corresponds to the \code{x} parameter.
+Similarly the second entry corresponds to the \code{y} parameter,
+and the third entry to the \code{z} parameter.  In this way 
+surfaces may be defined over any coordinate plane.
+
+\code{rgl.surface} always draws the surface with the `front' upwards
+(i.e. towards higher \code{y} values).  This can be used to render
+the top and bottom differently; see \code{\LinkA{rgl.material}{rgl.material}} and
+the example below.
+
+\code{NA} values in the height matrix are not drawn.
+\end{Details}
+\begin{Value}
+The object ID of the displayed surface is returned invisibly.
+\end{Value}
+\begin{SeeAlso}\relax
+\code{\LinkA{rgl.material}{rgl.material}}, \code{\LinkA{surface3d}{surface3d}}, \code{\LinkA{terrain3d}{terrain3d}}
+\end{SeeAlso}
+\begin{Examples}
+\begin{ExampleCode}
+
+#
+# volcano example taken from "persp"
+#
+
+data(volcano)
+
+y <- 2 * volcano        # Exaggerate the relief
+
+x <- 10 * (1:nrow(y))   # 10 meter spacing (S to N)
+z <- 10 * (1:ncol(y))   # 10 meter spacing (E to W)
+
+ylim <- range(y)
+ylen <- ylim[2] - ylim[1] + 1
+
+colorlut <- terrain.colors(ylen) # height color lookup table
+
+col <- colorlut[ y-ylim[1]+1 ] # assign colors to heights for each point
+
+rgl.open()
+rgl.surface(x, z, y, color=col, back="lines")
+
+\end{ExampleCode}
+\end{Examples}
+
+\HeaderA{surface3d}{add height-field surface shape}{surface3d}
+\aliasA{terrain3d}{surface3d}{terrain3d}
+\keyword{dynamic}{surface3d}
+\begin{Description}\relax
+Adds a surface to the current scene. The surface is defined by 
+a matrix defining the height of each grid point and two vectors
+defining the grid.
+\end{Description}
+\begin{Usage}
+\begin{verbatim}
+surface3d(x, y, z, ...)
+terrain3d(x, y, z, ...)
+\end{verbatim}
+\end{Usage}
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{ x }] values corresponding to rows of \code{z}
+
+\item[\code{ y }] values corresponding to the columns of \code{z}
+
+\item[\code{ z }] matrix of heights
+
+\item[\code{ ... }] Material and texture properties. See \code{\LinkA{rgl.material}{rgl.material}} for details.
+\end{ldescription}
+\end{Arguments}
+\begin{Details}\relax
+Adds a surface mesh to the current scene. The surface is defined by 
+the matrix of height values in \code{z}, with rows corresponding 
+to the values in \code{x} and columns corresponding to the values in 
+\code{y}.  This is the same parametrization as used in \code{\LinkA{persp}{persp}}.
+
+\code{surface3d} always draws the surface with the `front' upwards
+(i.e. towards higher \code{z} values).  This can be used to render
+the top and bottom differently; see \code{\LinkA{rgl.material}{rgl.material}} and
+the example below.
+
+For more flexibility in defining the surface, use \code{\LinkA{rgl.surface}{rgl.surface}}.
+
+\code{surface3d} and \code{terrain3d} are synonyms.
+\end{Details}
+\begin{SeeAlso}\relax
+\code{\LinkA{rgl.material}{rgl.material}}, \code{\LinkA{rgl.surface}{rgl.surface}}, \code{\LinkA{persp}{persp}}
+\end{SeeAlso}
+\begin{Examples}
+\begin{ExampleCode}
+
+#
+# volcano example taken from "persp"
+#
+
+data(volcano)
+
+z <- 2 * volcano        # Exaggerate the relief
+
+x <- 10 * (1:nrow(z))   # 10 meter spacing (S to N)
+y <- 10 * (1:ncol(z))   # 10 meter spacing (E to W)
+
+zlim <- range(y)
+zlen <- zlim[2] - zlim[1] + 1
+
+colorlut <- terrain.colors(zlen) # height color lookup table
+
+col <- colorlut[ z-zlim[1]+1 ] # assign colors to heights for each point
+
+open3d()
+surface3d(x, y, z, color=col, back="lines")
+
+\end{ExampleCode}
+\end{Examples}
+
+\HeaderA{texts}{add text}{texts}
+\aliasA{rgl.texts}{texts}{rgl.texts}
+\aliasA{text3d}{texts}{text3d}
+\aliasA{texts3d}{texts}{texts3d}
+\keyword{dynamic}{texts}
+\begin{Description}\relax
+Adds text to the scene. The text is positioned in 3D space. 
+A bitmap font which is always oriented towards the camera is used.
+\end{Description}
+\begin{Usage}
+\begin{verbatim}
+rgl.texts(x, y = NULL, z = NULL, text, adj = 0.5, justify, ...)
+text3d(x, y = NULL, z = NULL, texts, adj = 0.5, justify, ...) 
+texts3d(x, y = NULL, z = NULL, texts, adj = 0.5, justify, ...) 
+\end{verbatim}
+\end{Usage}
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{x, y, z}] point coordinates.  Any reasonable way of defining the
+coordinates is acceptable.  See the function \code{\LinkA{xyz.coords}{xyz.coords}}
+for details.
+\item[\code{text}] text character vector to draw
+\item[\code{texts}] text character vector to draw
+\item[\code{adj}] one value specifying the horizontal adjustment 
+\item[\code{justify}] (deprecated, please use adj instead) character string
+specifying the horizontal adjustment; options are \code{"left"}, \code{"right"},
+\code{"center"}.
+
+\item[\code{ ... }] Material properties. See \code{\LinkA{rgl.material}{rgl.material}} for details.
+\end{ldescription}
+\end{Arguments}
+\begin{Details}\relax
+The \code{adj} parameter determines the position of the text relative to the 
+specified coordinate.  Use \code{adj = 0} to place the left bottom corner at
+\code{(x,y,z)}, \code{adj = 0.5} to center the text there, and \code{adj = 1}
+to put the right bottom corner there.
+
+\code{text3d} and \code{texts3d} draw text using the \LinkA{r3d}{r3d}
+conventions. These are synonyms; the former is singular to be
+consistent with the classic 2-D graphics functions, and the latter is
+plural to be consistent with all the other graphics primitives.  Take
+your choice!
+
+If any coordinate or text is \code{NA}, that text is not plotted.
+\end{Details}
+\begin{Value}
+The object ID of the text object is returned invisibly.
+\end{Value}
+\begin{SeeAlso}\relax
+\code{\LinkA{r3d}{r3d}}
+\end{SeeAlso}
+\begin{Examples}
+\begin{ExampleCode}
+open3d()
+text3d(rnorm(10)*100,rnorm(10)*100,rnorm(10)*100,text=1:10,adj = 0.5, 
+       color=heat.colors(10))
+\end{ExampleCode}
+\end{Examples}
+
+\HeaderA{viewpoint}{Set up viewpoint}{viewpoint}
+\aliasA{rgl.viewpoint}{viewpoint}{rgl.viewpoint}
+\aliasA{view3d}{viewpoint}{view3d}
+\keyword{dynamic}{viewpoint}
+\begin{Description}\relax
+Set the viewpoint orientation.
+\end{Description}
+\begin{Usage}
+\begin{verbatim}
+view3d( theta = 0, phi = 15, ...)
+rgl.viewpoint( theta = 0, phi = 15, fov = 60, zoom = 1, scale = par3d("scale"), 
+               interactive = TRUE, userMatrix )
+\end{verbatim}
+\end{Usage}
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{theta,phi}] polar coordinates
+\item[\code{...}] additional parameters to pass to \code{rgl.viewpoint}
+\item[\code{fov}] field-of-view angle
+\item[\code{zoom}] zoom factor
+\item[\code{scale}] real length 3 vector specifying the rescaling to apply to each axis
+\item[\code{interactive}] logical, specifying if interactive navigation is allowed
+\item[\code{userMatrix}] 4x4 matrix specifying user point of view
+\end{ldescription}
+\end{Arguments}
+\begin{Details}\relax
+The viewpoint can be set in an orbit around the data model, using the polar coordinates \code{\\theta}
+and \code{phi}.  Alternatively, it can be set in a completely general way using the 4x4 matrix
+\code{userMatrix}.  If \code{userMatrix} is specified, \code{theta} and \code{phi} are ignored.
+
+The pointing device of your graphics user-interface can also be used to 
+set the viewpoint interactively. With the pointing device the buttons are by default set as follows:
+
+\Itemize{
+\item[left] adjust viewpoint position
+\item[middle] adjust field of view angle
+\item[right or wheel] adjust zoom factor
+}
+\end{Details}
+\begin{SeeAlso}\relax
+\code{\LinkA{par3d}{par3d}}
+\end{SeeAlso}
+\begin{Examples}
+\begin{ExampleCode}
+
+# animated round trip tour for 10 seconds
+
+rgl.open()
+shade3d(oh3d(), color="red")
+
+start <- proc.time()[3]
+while ((i <- 36*(proc.time()[3]-start)) < 360) {
+  rgl.viewpoint(i,i/4); 
+}
+
+\end{ExampleCode}
+\end{Examples}
+
+\end{document}

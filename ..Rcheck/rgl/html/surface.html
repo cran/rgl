@@ -1,0 +1,122 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head><title>R: add height-field surface shape</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" type="text/css" href="../../R.css">
+</head><body>
+
+<table width="100%" summary="page for rgl.surface {rgl}"><tr><td>rgl.surface {rgl}</td><td align="right">R Documentation</td></tr></table>
+<h2>add height-field surface shape</h2>
+
+
+<h3>Description</h3>
+
+<p>
+Adds a surface to the current scene. The surface is defined by 
+a matrix defining the height of each grid point and two vectors
+defining the grid.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+rgl.surface(x, z, y, coords=1:3, ...)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code> x </code></td>
+<td>
+values corresponding to rows of <code>y</code>
+</td></tr>
+<tr valign="top"><td><code> y </code></td>
+<td>
+matrix of height values
+</td></tr>
+<tr valign="top"><td><code> z </code></td>
+<td>
+values corresponding to columns of <code>y</code>
+</td></tr>
+<tr valign="top"><td><code> coords </code></td>
+<td>
+See details
+</td></tr>
+<tr valign="top"><td><code> ... </code></td>
+<td>
+Material and texture properties. See <code><a href="material.html">rgl.material</a></code> for details.</td></tr>
+</table>
+
+<h3>Details</h3>
+
+<p>
+Adds a surface mesh to the current scene. The surface is defined by 
+the matrix of height values in <code>y</code>, with rows corresponding 
+to the values in <code>x</code> and columns corresponding to the values in 
+<code>z</code>.
+</p>
+<p>
+The <code>coords</code> parameter can be used to change the geometric
+interpretation of <code>x</code>, <code>y</code>, and <code>z</code>.  The first entry 
+of <code>coords</code> indicates which coordinate (<code>1=X</code>, 
+<code>2=Y</code>, <code>3=Z</code>) corresponds to the <code>x</code> parameter.
+Similarly the second entry corresponds to the <code>y</code> parameter,
+and the third entry to the <code>z</code> parameter.  In this way 
+surfaces may be defined over any coordinate plane.
+</p>
+<p>
+<code>rgl.surface</code> always draws the surface with the `front' upwards
+(i.e. towards higher <code>y</code> values).  This can be used to render
+the top and bottom differently; see <code><a href="material.html">rgl.material</a></code> and
+the example below.
+</p>
+<p>
+<code>NA</code> values in the height matrix are not drawn.
+</p>
+
+
+<h3>Value</h3>
+
+<p>
+The object ID of the displayed surface is returned invisibly.</p>
+
+<h3>See Also</h3>
+
+<p>
+<code><a href="material.html">rgl.material</a></code>, <code><a href="surface3d.html">surface3d</a></code>, <code><a href="surface3d.html">terrain3d</a></code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+
+#
+# volcano example taken from "persp"
+#
+
+data(volcano)
+
+y &lt;- 2 * volcano        # Exaggerate the relief
+
+x &lt;- 10 * (1:nrow(y))   # 10 meter spacing (S to N)
+z &lt;- 10 * (1:ncol(y))   # 10 meter spacing (E to W)
+
+ylim &lt;- range(y)
+ylen &lt;- ylim[2] - ylim[1] + 1
+
+colorlut &lt;- terrain.colors(ylen) # height color lookup table
+
+col &lt;- colorlut[ y-ylim[1]+1 ] # assign colors to heights for each point
+
+rgl.open()
+rgl.surface(x, z, y, color=col, back="lines")
+
+</pre>
+
+
+
+<hr><div align="center">[Package <em>rgl</em> version 0.68.529 <a href="00Index.html">Index]</a></div>
+
+</body></html>

@@ -1,0 +1,67 @@
+\HeaderA{grid3d}{Add a grid to a 3D plot}{grid3d}
+\keyword{dynamic}{grid3d}
+\begin{Description}\relax
+This function adds a reference grid to an RGL plot.
+\end{Description}
+\begin{Usage}
+\begin{verbatim}
+grid3d(side, at = NULL, col = "gray", lwd = 1, lty = 1, n = 5)
+\end{verbatim}
+\end{Usage}
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{side}] Where to put the grid; see the Details section. 
+\item[\code{at}] How to draw the grid; see the Details section. 
+\item[\code{col}] The color of the grid lines. 
+\item[\code{lwd}] The line width of the grid lines. 
+\item[\code{lty}] The line type of the grid lines. 
+\item[\code{n}] Suggested number of grid lines; see the Details section. 
+\end{ldescription}
+\end{Arguments}
+\begin{Details}\relax
+This function is similar to \code{\LinkA{grid}{grid}} in classic graphics,
+except that it draws a 3D grid in the plot.
+
+The grid is drawn in a plane perpendicular to the coordinate axes. The
+first letter of the \code{side} argument specifies the direction of
+the plane: \code{"x"}, \code{"y"} or \code{"z"} (or uppercase
+versions) to specify the coordinate which is constant on the plane.
+
+If \code{at = NULL} (the default), the grid is drawn at the limit of 
+the box around the data.  If the second letter of the \code{side} argument
+is \code{"-"} or is not present, it is the lower limit; if \code{"+"}
+then at the upper limit.  The grid lines are drawn at values
+chosen by \code{\LinkA{pretty}{pretty}} with \code{n} suggested locations.
+The default locations should match those chosen by \code{\LinkA{axis3d}{axis3d}}
+with \code{nticks = n}.
+
+If \code{at} is a numeric vector, the grid lines are drawn at those values.
+
+If \code{at} is a list, then the \code{"x"} component is used to
+specify the x location, the \code{"y"} component specifies the y location, and
+the \code{"z"} component specifies the z location.  Missing components
+are handled using the default as for \code{at = NULL}.
+
+Multiple grids may be drawn by specifying multiple values for \code{side}
+or for the component of \code{at} that specifies the grid location.
+\end{Details}
+\begin{Value}
+A vector or matrix of object ids is returned invisibly.
+\end{Value}
+\begin{Author}\relax
+Ben Bolker and Duncan Murdoch
+\end{Author}
+\begin{SeeAlso}\relax
+\code{\LinkA{axis3d}{axis3d}}
+\end{SeeAlso}
+\begin{Examples}
+\begin{ExampleCode}
+x <- 1:10
+y <- 1:10
+z <- matrix(outer(x-5,y-5) + rnorm(100), 10, 10)
+open3d()
+persp3d(x, y, z, col="red", alpha=0.7, aspect=c(1,1,0.5))
+grid3d(c("x", "y+", "z"))
+\end{ExampleCode}
+\end{Examples}
+

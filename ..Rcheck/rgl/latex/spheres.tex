@@ -1,0 +1,49 @@
+\HeaderA{spheres}{add sphere set shape}{spheres}
+\aliasA{rgl.spheres}{spheres}{rgl.spheres}
+\aliasA{spheres3d}{spheres}{spheres3d}
+\keyword{dynamic}{spheres}
+\begin{Description}\relax
+Adds a sphere set shape node to the scene
+\end{Description}
+\begin{Usage}
+\begin{verbatim}
+spheres3d(x, y = NULL, z = NULL, radius = 1, ...)
+rgl.spheres(x, y = NULL, z = NULL, radius, ...)
+\end{verbatim}
+\end{Usage}
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{x, y, z}] Numeric vector of point coordinates corresponding to
+the center of each sphere.  Any reasonable way of defining the
+coordinates is acceptable.  See the function \code{\LinkA{xyz.coords}{xyz.coords}}
+for details.
+\item[\code{radius}] Vector or single value defining the sphere radius/radii
+\item[\code{ ... }] Material properties. See \code{\LinkA{rgl.material}{rgl.material}} for details.
+\end{ldescription}
+\end{Arguments}
+\begin{Details}\relax
+If a non-isometric aspect ratio is chosen, these functions will still draw
+objects that appear to the viewer to be spheres.  Use \code{\LinkA{ellipse3d}{ellipse3d}} 
+to draw shapes that are spherical in the data scale.
+
+When the scale is not isometric, the radius is measured in an average scale.
+Note that the bounding box calculation is always done assuming an 
+isometric scale, so in this case it is inaccurate:  the extent of axes 
+with \code{scale < 1} is underestimated, and that of axes with 
+\code{scale > 1} is overestimated.
+
+If any coordinate or radius is \code{NA}, the sphere is not plotted.
+\end{Details}
+\begin{Value}
+A shape ID of the spheres object is returned.
+\end{Value}
+\begin{SeeAlso}\relax
+\code{\LinkA{rgl.material}{rgl.material}}, \code{\LinkA{aspect3d}{aspect3d}} for setting non-isometric scales
+\end{SeeAlso}
+\begin{Examples}
+\begin{ExampleCode}
+open3d()
+spheres3d(rnorm(10), rnorm(10), rnorm(10), radius=runif(10), color=rainbow(10))
+\end{ExampleCode}
+\end{Examples}
+

@@ -1,0 +1,52 @@
+sprites                 package:rgl                 R Documentation
+
+_a_d_d _s_p_r_i_t_e _s_e_t _s_h_a_p_e
+
+_D_e_s_c_r_i_p_t_i_o_n:
+
+     Adds a sprite set shape node to the scene.
+
+_U_s_a_g_e:
+
+     sprites3d(x, y = NULL, z = NULL, radius = 1, ...)
+     particles3d(x, y = NULL, z = NULL, radius = 1, ...)
+     rgl.sprites(x, y = NULL, z = NULL, radius = 1, ...)
+
+_A_r_g_u_m_e_n_t_s:
+
+ x, y, z : point coordinates.  Any reasonable way of defining the
+          coordinates is acceptable.  See the function 'xyz.coords' for
+          details.
+
+ radius : 
+
+    ... : material properties, texture mapping is supported
+
+_D_e_t_a_i_l_s:
+
+     Sprites are rectangle planes that are directed towards the
+     viewpoint. Their primary use is for fast (and faked) atmospherical
+     effects, e.g. particles and clouds using alpha blended textures.
+     Particles are Sprites using an alpha-blended particle texture
+     giving the illusion of clouds and gasses.
+
+     If any coordinate is 'NA', the sprite is not plotted.
+
+_V_a_l_u_e:
+
+     These functions are called for the side effect of displaying the
+     sprites. The shape ID of the displayed object is returned.
+
+_S_e_e _A_l_s_o:
+
+     'rgl.material'
+
+_E_x_a_m_p_l_e_s:
+
+     open3d()
+     particles3d( rnorm(100), rnorm(100), rnorm(100), color=rainbow(100) )
+     # is the same as
+     sprites3d( rnorm(100), rnorm(100), rnorm(100), color=rainbow(100),
+       lit=FALSE, alpha=.2,
+       textype="alpha", texture=system.file("textures/particle.png", package="rgl") )
+

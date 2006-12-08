@@ -24,9 +24,9 @@ plot3d.default <- function(x, y = NULL, z = NULL,
     if (is.null(zlab)) zlab <- xyz$zlab
 
     if (type == "s" && missing(radius)) {
-	avgscale <- sqrt(sum(c(diff(range(x)), 
-                               diff(range(y)), 
-                               diff(range(z)))^2/3))
+	avgscale <- sqrt(sum(c(diff(range(x,na.rm=TRUE)), 
+                               diff(range(y,na.rm=TRUE)), 
+                               diff(range(z,na.rm=TRUE)))^2/3))
     }
     result <- c( data=switch(type,
 		p = points3d(x, y, z, color=col, size=size, ...),
@@ -56,12 +56,13 @@ plot3d.qmesh3d <- function(x, xlab = "x", ylab = "y", zlab = "z", type = c("shad
     if (missing(ylab) && !is.null(x$ylab)) ylab <- x$ylab
     if (missing(zlab) && !is.null(x$zlab)) zlab <- x$zlab
     
-    switch(match.arg(type),
+    result <- switch(match.arg(type),
     	shade = shade3d(x, ...),
     	wire = wire3d(x, ...),
     	dots = dot3d(x, ...))
     
-    if (!add) decorate3d(xlab = xlab, ylab = ylab, zlab = zlab, ...)
+    if (!add) result <- c(result, decorate3d(xlab = xlab, ylab = ylab, zlab = zlab, ...))
+    invisible(result)
 }
 
 decorate3d <- function(xlim = ranges$xlim, ylim = ranges$ylim, zlim = ranges$zlim, 

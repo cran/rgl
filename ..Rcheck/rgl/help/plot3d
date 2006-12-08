@@ -1,0 +1,105 @@
+plot3d                  package:rgl                  R Documentation
+
+_3_D _S_c_a_t_t_e_r_p_l_o_t
+
+_D_e_s_c_r_i_p_t_i_o_n:
+
+     Draws a 3D scatterplot.
+
+_U_s_a_g_e:
+
+     plot3d(x, ...)
+     ## Default S3 method:
+     plot3d(x, y, z,  
+             xlab, ylab, zlab, type = "p", col,  
+             size, radius,
+             add = FALSE, aspect = !add, ...)
+     ## S3 method for class 'qmesh3d':
+     plot3d(x, xlab = "x", ylab = "y", zlab = "z", type = c("shade", "wire", "dots"),
+             add = FALSE, ...)       
+     decorate3d(xlim, ylim, zlim, 
+             xlab = "x", ylab = "y", zlab = "z", 
+             box = TRUE, axes = TRUE, main = NULL, sub = NULL,
+             top = TRUE, aspect = FALSE, ...)
+
+_A_r_g_u_m_e_n_t_s:
+
+ x, y, z: vectors of points to be plotted. Any reasonable way of
+          defining the coordinates is acceptable.  See the function
+          'xyz.coords' for details.
+
+xlab, ylab, zlab: labels for the coordinates.
+
+    type: For the default method, a single character indicating the
+          type of item to plot.   Supported types are: 'p' for points,
+          's' for spheres,  'l' for lines, 'h' for line segments  from
+          'z=0', and 'n' for nothing.  For the 'qmesh3d' method, one of
+           'shade', 'wire', or 'dots'.  Partial matching is used. 
+
+     col: the colour to be used for plotted items.
+
+    size: the size for plotted items.
+
+  radius: the radius of spheres:  see Details below.
+
+     add: whether to add the points to an existing plot.
+
+  aspect: either a logical indicating whether to adjust the aspect
+          ratio, or a new ratio.
+
+     ...: additional parameters which will be passed to 'par3d',
+          'material3d' or 'decorate3d'.
+
+xlim, ylim, zlim: limits to use for the coordinates.
+
+box, axes: whether to draw a box and axes.
+
+main, sub: main title and subtitle.
+
+     top: whether to bring the window to the top when done.
+
+_D_e_t_a_i_l_s:
+
+     'plot3d' is a partial 3D analogue of plot.default.
+
+     Note that since 'rgl' does not currently support clipping, all
+     points will be plotted, and 'xlim', 'ylim', and 'zlim' will only
+     be used to increase the respective ranges.
+
+     Missing values in the data are skipped, as in standard graphics.
+
+     If 'aspect' is 'TRUE', aspect ratios of 'c(1,1,1)' are passed to
+     'aspect3d'.  If 'FALSE', no aspect adjustment is done.  In other
+     cases, the value is passed to 'aspect3d'.
+
+     With 'type = "s"', spheres are drawn centered at the specified
+     locations. The radius may be controlled by 'size' (specifying the
+     size relative to the plot display, with 'size=1' giving a radius 
+     about 1/20 of the plot region) or 'radius' (specifying it on the
+     data scale if an isometric aspect ratio is chosen, or on an
+     average scale if not).
+
+_V_a_l_u_e:
+
+     'plot3d' is called for the side effect of drawing the plot; a
+     vector of object IDs is returned.
+
+     'decorate3d' adds the usual decorations to a plot:  labels, axes,
+     etc.
+
+_A_u_t_h_o_r(_s):
+
+     Duncan Murdoch
+
+_S_e_e _A_l_s_o:
+
+     'plot.default',   'open3d', 'par3d'.
+
+_E_x_a_m_p_l_e_s:
+
+       open3d()
+       x <- sort(rnorm(1000))
+       y <- rnorm(1000)
+       z <- rnorm(1000) + atan2(x,y)
+       plot3d(x, y, z, col=rainbow(1000), size=2)
+

@@ -1,0 +1,64 @@
+select3d                 package:rgl                 R Documentation
+
+_S_e_l_e_c_t _a _r_e_c_t_a_n_g_l_e _i_n _a_n _R_G_L _s_c_e_n_e
+
+_D_e_s_c_r_i_p_t_i_o_n:
+
+     This function allows the user to use the mouse to select a region
+     in an RGL scene.
+
+_U_s_a_g_e:
+
+     rgl.select3d(button = c("left", "middle", "right"))
+     select3d(...)
+
+_A_r_g_u_m_e_n_t_s:
+
+ button : Which button to use for selection.
+
+    ... : Button argument to pass to 'rgl.select3d'
+
+_D_e_t_a_i_l_s:
+
+     This function selects 3-dimensional regions by allowing the user
+     to use a mouse to draw a rectangle showing the projection of the
+     region onto the screen.  It returns a function which tests points
+     for inclusion in the selected region.
+
+     If the scene is later moved or rotated, the selected region will 
+     remain the same, no longer corresponding to a rectangle on the
+     screen.
+
+_V_a_l_u_e:
+
+     Returns a function 'f(x,y,z)' which tests whether each of the
+     points '(x,y,z)' is in the selected region, returning a logical
+     vector.  This function accepts input in a wide variety of formats
+     as it uses 'xyz.coords'  to interpret its parameters.
+
+_A_u_t_h_o_r(_s):
+
+     Ming Chen / Duncan Murdoch
+
+_S_e_e _A_l_s_o:
+
+     'locator'
+
+_E_x_a_m_p_l_e_s:
+
+     # Allow the user to select some points, and then redraw them
+     # in a different color
+
+     if (interactive()) {
+      x <- rnorm(1000)
+      y <- rnorm(1000)
+      z <- rnorm(1000)
+      open3d()
+      points3d(x,y,z,size=2)
+      f <- select3d()
+      keep <- f(x,y,z)
+      rgl.pop()
+      points3d(x[keep],y[keep],z[keep],size=2,color='red')
+      points3d(x[!keep],y[!keep],z[!keep],size=2)
+     }
+

@@ -1,0 +1,51 @@
+\HeaderA{subdivision3d}{generic subdivision surface method}{subdivision3d}
+\aliasA{deform.qmesh3d}{subdivision3d}{deform.qmesh3d}
+\aliasA{divide.qmesh3d}{subdivision3d}{divide.qmesh3d}
+\aliasA{normalize.qmesh3d}{subdivision3d}{normalize.qmesh3d}
+\methaliasA{subdivision3d.qmesh3d}{subdivision3d}{subdivision3d.qmesh3d}
+\keyword{dynamic}{subdivision3d}
+\begin{Description}\relax
+The Subdivision surface algorithm divide and refine (deform) a
+given mesh recursively to certain degree (depth).
+The qmesh3d algorithm consists of two stages: divide and deform.
+The divide step generates for each quad four new quads, the deform
+step drags the points (refinement step).
+\end{Description}
+\begin{Usage}
+\begin{verbatim}
+  subdivision3d( x,  ...)
+  subdivision3d.qmesh3d( x, depth=1, normalize=FALSE, deform=TRUE, ... )
+  divide.qmesh3d(mesh,  vb=mesh$vb, ib=mesh$ib )
+  normalize.qmesh3d(mesh)
+  deform.qmesh3d(mesh,vb=mesh$vb,ib=mesh$ib)
+\end{verbatim}
+\end{Usage}
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{x}] 3d geometry mesh
+\item[\code{mesh}] 3d geometry mesh
+\item[\code{depth}] recursion depth
+\item[\code{normalize}] normalize qmesh3d coordinates after division if deform is TRUE otherwise
+\item[\code{deform}] deform mesh after normalization
+\item[\code{ib}] vector of indices (i.e., which sets of vertices to combine
+into quads); 4xn matrix or equivalent vector
+\item[\code{vb}] vector of vertices: 4xn matrix (rows x,y,z,h) or equivalent
+vector, where h indicates scaling of each plotted quad
+\item[\code{...}] other arguments (unused)
+\end{ldescription}
+\end{Arguments}
+\begin{Details}\relax
+Generic subdivision surface method. Currently there exists
+an algorithm that can be applied on qmesh3d objects.
+\end{Details}
+\begin{SeeAlso}\relax
+\code{\LinkA{r3d}{r3d}}
+\code{\LinkA{qmesh3d}{qmesh3d}}
+\end{SeeAlso}
+\begin{Examples}
+\begin{ExampleCode}
+  open3d()
+  shade3d( subdivision3d( cube3d(), depth=3 ), color="red", alpha=0.5 )
+\end{ExampleCode}
+\end{Examples}
+

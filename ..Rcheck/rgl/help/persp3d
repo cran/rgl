@@ -1,0 +1,102 @@
+persp3d                 package:rgl                 R Documentation
+
+_S_u_r_f_a_c_e _p_l_o_t_s
+
+_D_e_s_c_r_i_p_t_i_o_n:
+
+     This function draws plots of surfaces over the x-y plane.
+     'persp3d' is a generic function.
+
+_U_s_a_g_e:
+
+     persp3d(x, ...)
+
+     ## Default S3 method:
+     persp3d(x = seq(0, 1, len = nrow(z)), y = seq(0, 1, len = ncol(z)),
+         z, xlim = range(x), ylim = range(y), zlim = range(z, na.rm = TRUE),
+         xlab = NULL, ylab = NULL, zlab = NULL, add = FALSE, aspect = !add, ...)
+
+_A_r_g_u_m_e_n_t_s:
+
+    x, y: locations of grid lines at which the values in 'z' are
+          measured.  These must be in ascending order.  By default,
+          equally spaced values from 0 to 1 are used.  If 'x' is a
+          'list', its components 'x$x' and 'x$y' are used for 'x' and
+          'y', respectively.
+
+       z: a matrix containing the values to be plotted.   Note that 'x'
+          can be used instead of 'z' for convenience.
+
+xlim, ylim, zlim: x-, y-  and z-limits.  The plot is produced so that
+          the rectangular volume defined by these limits is visible.
+
+xlab, ylab, zlab: titles for the axes.  N.B. These must be character
+          strings; expressions are not accepted.  Numbers will be
+          coerced to character strings.
+
+     add: whether to add the points to an existing plot.
+
+  aspect: either a logical indicating whether to adjust the aspect
+          ratio, or a new ratio
+
+     ...: additional material parameters to be passed to 'surface3d'
+          and 'decorate3d'.
+
+_D_e_t_a_i_l_s:
+
+     This is similar to 'persp' with user interaction.  See 'plot3d'
+     for more details.
+
+_V_a_l_u_e:
+
+     This function is called for the side effect of drawing the plot. 
+     A vector  of shape IDs is returned.
+
+_A_u_t_h_o_r(_s):
+
+     Duncan Murdoch
+
+_S_e_e _A_l_s_o:
+
+     'plot3d', 'persp'
+
+_E_x_a_m_p_l_e_s:
+
+     # (1) The Obligatory Mathematical surface.
+     #     Rotated sinc function.
+
+     x <- seq(-10, 10, length= 30)
+     y <- x
+     f <- function(x,y) { r <- sqrt(x^2+y^2); 10 * sin(r)/r }
+     z <- outer(x, y, f)
+     z[is.na(z)] <- 1
+     open3d()
+     bg3d("white")
+     material3d(col="black")
+     persp3d(x, y, z, aspect=c(1, 1, 0.5), col = "lightblue",
+             xlab = "X", ylab = "Y", zlab = "Sinc( r )")
+
+     # (2) Add to existing persp plot:
+
+     xE <- c(-10,10); xy <- expand.grid(xE, xE)
+     points3d(xy[,1], xy[,2], 6, col = 2, size = 3)
+     lines3d(x, y=10, z= 6 + sin(x), col = 3)
+
+     phi <- seq(0, 2*pi, len = 201)
+     r1 <- 7.725 # radius of 2nd maximum
+     xr <- r1 * cos(phi)
+     yr <- r1 * sin(phi)
+     lines3d(xr,yr, f(xr,yr), col = "pink", size = 2)
+
+     # (3) Visualizing a simple DEM model
+
+     z <- 2 * volcano        # Exaggerate the relief
+     x <- 10 * (1:nrow(z))   # 10 meter spacing (S to N)
+     y <- 10 * (1:ncol(z))   # 10 meter spacing (E to W)
+
+     open3d()
+     bg3d("slategray")
+     material3d(col="black")
+     persp3d(x, y, z, col = "green3", aspect="iso",
+           axes = FALSE, box = FALSE)
+

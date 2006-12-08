@@ -1,0 +1,61 @@
+\HeaderA{rgl-package}{3D visualization device system}{rgl.Rdash.package}
+\aliasA{rgl}{rgl-package}{rgl}
+\aliasA{rgl.close}{rgl-package}{rgl.close}
+\aliasA{rgl.cur}{rgl-package}{rgl.cur}
+\aliasA{rgl.open}{rgl-package}{rgl.open}
+\aliasA{rgl.quit}{rgl-package}{rgl.quit}
+\aliasA{rgl.set}{rgl-package}{rgl.set}
+\keyword{dynamic}{rgl-package}
+\begin{Description}\relax
+3D real-time rendering device-driver system
+\end{Description}
+\begin{Usage}
+\begin{verbatim}
+rgl.open()     # open new device
+rgl.close()    # close current device
+rgl.cur()      # returns active device ID
+rgl.set(which) # set device as active
+rgl.quit()     # shutdown rgl device system
+\end{verbatim}
+\end{Usage}
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{which}] device ID
+\end{ldescription}
+\end{Arguments}
+\begin{Details}\relax
+RGL is a 3D real-time rendering device driver system for R.
+Multiple devices are managed at a time, where one has the current focus
+that receives instructions from the R command-line.
+The device design is oriented towards the R device metaphor. If you send
+scene management instructions, and there's no device open, it will be opened
+automatically.
+Opened devices automatically get the current device focus. The focus may be
+changed by using rgl.set().
+rgl.quit() shuts down the rgl subsystem and all open devices, 
+detaches the package including the shared library and additional system libraries.
+\end{Details}
+\begin{SeeAlso}\relax
+\code{\LinkA{rgl.clear}{rgl.clear}}, 
+\code{\LinkA{rgl.pop}{rgl.pop}},
+\code{\LinkA{rgl.viewpoint}{rgl.viewpoint}},
+\code{\LinkA{rgl.light}{rgl.light}},
+\code{\LinkA{rgl.bg}{rgl.bg}},
+\code{\LinkA{rgl.bbox}{rgl.bbox}},
+\code{\LinkA{rgl.points}{rgl.points}},
+\code{\LinkA{rgl.lines}{rgl.lines}},
+\code{\LinkA{rgl.triangles}{rgl.triangles}},
+\code{\LinkA{rgl.quads}{rgl.quads}},
+\code{\LinkA{rgl.texts}{rgl.texts}},
+\code{\LinkA{rgl.surface}{rgl.surface}},
+\code{\LinkA{rgl.spheres}{rgl.spheres}},
+\code{\LinkA{rgl.sprites}{rgl.sprites}},
+\code{\LinkA{rgl.snapshot}{rgl.snapshot}}
+\end{SeeAlso}
+\begin{Examples}
+\begin{ExampleCode}
+example(surface3d)
+example(plot3d)
+\end{ExampleCode}
+\end{Examples}
+

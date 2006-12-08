@@ -1,0 +1,51 @@
+\HeaderA{sprites}{add sprite set shape}{sprites}
+\aliasA{particles3d}{sprites}{particles3d}
+\aliasA{rgl.sprites}{sprites}{rgl.sprites}
+\aliasA{sprites3d}{sprites}{sprites3d}
+\keyword{dynamic}{sprites}
+\begin{Description}\relax
+Adds a sprite set shape node to the scene.
+\end{Description}
+\begin{Usage}
+\begin{verbatim}
+sprites3d(x, y = NULL, z = NULL, radius = 1, ...)
+particles3d(x, y = NULL, z = NULL, radius = 1, ...)
+rgl.sprites(x, y = NULL, z = NULL, radius = 1, ...)
+\end{verbatim}
+\end{Usage}
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{ x, y, z }] point coordinates.  Any reasonable way of defining the
+coordinates is acceptable.  See the function \code{\LinkA{xyz.coords}{xyz.coords}}
+for details.
+\item[\code{ radius }] 
+\item[\code{ ... }] material properties, texture mapping is supported
+\end{ldescription}
+\end{Arguments}
+\begin{Details}\relax
+Sprites are rectangle planes that are directed towards the viewpoint.
+Their primary use is for fast (and faked) atmospherical effects, e.g. particles and clouds
+using alpha blended textures.
+Particles are Sprites using an alpha-blended particle texture giving
+the illusion of clouds and gasses.
+
+If any coordinate is \code{NA}, the sprite is not plotted.
+\end{Details}
+\begin{Value}
+These functions are called for the side effect of displaying the sprites.
+The shape ID of the displayed object is returned.
+\end{Value}
+\begin{SeeAlso}\relax
+\code{\LinkA{rgl.material}{rgl.material}}
+\end{SeeAlso}
+\begin{Examples}
+\begin{ExampleCode}
+open3d()
+particles3d( rnorm(100), rnorm(100), rnorm(100), color=rainbow(100) )
+# is the same as
+sprites3d( rnorm(100), rnorm(100), rnorm(100), color=rainbow(100),
+  lit=FALSE, alpha=.2,
+  textype="alpha", texture=system.file("textures/particle.png", package="rgl") )
+\end{ExampleCode}
+\end{Examples}
+

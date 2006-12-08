@@ -1,0 +1,52 @@
+spheres                 package:rgl                 R Documentation
+
+_a_d_d _s_p_h_e_r_e _s_e_t _s_h_a_p_e
+
+_D_e_s_c_r_i_p_t_i_o_n:
+
+     Adds a sphere set shape node to the scene
+
+_U_s_a_g_e:
+
+     spheres3d(x, y = NULL, z = NULL, radius = 1, ...)
+     rgl.spheres(x, y = NULL, z = NULL, radius, ...)
+
+_A_r_g_u_m_e_n_t_s:
+
+ x, y, z: Numeric vector of point coordinates corresponding to the
+          center of each sphere.  Any reasonable way of defining the
+          coordinates is acceptable.  See the function 'xyz.coords' for
+          details.
+
+  radius: Vector or single value defining the sphere radius/radii
+
+    ... : Material properties. See 'rgl.material' for details.
+
+_D_e_t_a_i_l_s:
+
+     If a non-isometric aspect ratio is chosen, these functions will
+     still draw objects that appear to the viewer to be spheres.  Use
+     'ellipse3d'  to draw shapes that are spherical in the data scale.
+
+     When the scale is not isometric, the radius is measured in an
+     average scale. Note that the bounding box calculation is always
+     done assuming an  isometric scale, so in this case it is
+     inaccurate:  the extent of axes  with 'scale < 1' is
+     underestimated, and that of axes with  'scale > 1' is
+     overestimated.
+
+     If any coordinate or radius is 'NA', the sphere is not plotted.
+
+_V_a_l_u_e:
+
+     A shape ID of the spheres object is returned.
+
+_S_e_e _A_l_s_o:
+
+     'rgl.material', 'aspect3d' for setting non-isometric scales
+
+_E_x_a_m_p_l_e_s:
+
+     open3d()
+     spheres3d(rnorm(10), rnorm(10), rnorm(10), radius=runif(10), color=rainbow(10))
+

@@ -1,0 +1,154 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head><title>R: 3D Scatterplot</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" type="text/css" href="../../R.css">
+</head><body>
+
+<table width="100%" summary="page for plot3d {rgl}"><tr><td>plot3d {rgl}</td><td align="right">R Documentation</td></tr></table>
+<h2>3D Scatterplot</h2>
+
+
+<h3>Description</h3>
+
+<p>
+Draws a 3D scatterplot.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+plot3d(x, ...)
+## Default S3 method:
+plot3d(x, y, z,  
+        xlab, ylab, zlab, type = "p", col,  
+        size, radius,
+        add = FALSE, aspect = !add, ...)
+## S3 method for class 'qmesh3d':
+plot3d(x, xlab = "x", ylab = "y", zlab = "z", type = c("shade", "wire", "dots"),
+        add = FALSE, ...)       
+decorate3d(xlim, ylim, zlim, 
+        xlab = "x", ylab = "y", zlab = "z", 
+        box = TRUE, axes = TRUE, main = NULL, sub = NULL,
+        top = TRUE, aspect = FALSE, ...)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x, y, z</code></td>
+<td>
+vectors of points to be plotted. Any reasonable way of defining the
+coordinates is acceptable.  See the function <code><a href="../../grDevices/html/xyz.coords.html">xyz.coords</a></code>
+for details.</td></tr>
+<tr valign="top"><td><code>xlab, ylab, zlab</code></td>
+<td>
+labels for the coordinates.</td></tr>
+<tr valign="top"><td><code>type</code></td>
+<td>
+For the default method, a single character indicating the type of item to plot.  
+Supported types are: 'p' for points, 's' for spheres, 
+'l' for lines, 'h' for line segments 
+from <code>z=0</code>, and 'n' for nothing.  For the <code>qmesh3d</code> method, one of 
+'shade', 'wire', or 'dots'.  Partial matching is used.
+</td></tr>
+<tr valign="top"><td><code>col</code></td>
+<td>
+the colour to be used for plotted items.</td></tr>
+<tr valign="top"><td><code>size</code></td>
+<td>
+the size for plotted items.</td></tr>
+<tr valign="top"><td><code>radius</code></td>
+<td>
+the radius of spheres:  see Details below.</td></tr>
+<tr valign="top"><td><code>add</code></td>
+<td>
+whether to add the points to an existing plot.</td></tr>
+<tr valign="top"><td><code>aspect</code></td>
+<td>
+either a logical indicating whether to adjust the aspect ratio, or a new ratio.</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+additional parameters which will be passed to <code><a href="par3d.html">par3d</a></code>, <code><a href="material.html">material3d</a></code>
+or <code>decorate3d</code>.</td></tr>
+<tr valign="top"><td><code>xlim, ylim, zlim</code></td>
+<td>
+limits to use for the coordinates.</td></tr>
+<tr valign="top"><td><code>box, axes</code></td>
+<td>
+whether to draw a box and axes.</td></tr>
+<tr valign="top"><td><code>main, sub</code></td>
+<td>
+main title and subtitle.</td></tr>
+<tr valign="top"><td><code>top</code></td>
+<td>
+whether to bring the window to the top when done.</td></tr>
+</table>
+
+<h3>Details</h3>
+
+<p>
+<code>plot3d</code> is a partial 3D analogue of plot.default.
+</p>
+<p>
+Note that since <code>rgl</code> does not currently support
+clipping, all points will be plotted, and <code>xlim</code>, <code>ylim</code>, and <code>zlim</code>
+will only be used to increase the respective ranges.
+</p>
+<p>
+Missing values in the data are skipped, as in standard graphics.
+</p>
+<p>
+If <code>aspect</code> is <code>TRUE</code>, aspect ratios of <code>c(1,1,1)</code> are passed to
+<code><a href="aspect3d.html">aspect3d</a></code>.  If <code>FALSE</code>, no aspect adjustment is done.  In other
+cases, the value is passed to <code><a href="aspect3d.html">aspect3d</a></code>.
+</p>
+<p>
+With <code>type = "s"</code>, spheres are drawn centered at the specified locations.
+The radius may be controlled by <code>size</code> (specifying the size relative
+to the plot display, with <code>size=1</code> giving a radius 
+about 1/20 of the plot region) or <code>radius</code> (specifying it on the data scale
+if an isometric aspect ratio is chosen, or on an average scale
+if not).
+</p>
+
+
+<h3>Value</h3>
+
+<p>
+<code>plot3d</code> is called for the side effect of drawing the plot; a vector
+of object IDs is returned.
+<br>
+<code>decorate3d</code> adds the usual decorations to a plot:  labels, axes, etc.</p>
+
+<h3>Author(s)</h3>
+
+<p>
+Duncan Murdoch
+</p>
+
+
+<h3>See Also</h3>
+
+<p>
+<code><a href="../../graphics/html/plotdefault.html">plot.default</a></code>,  
+<code><a href="par3d.html">open3d</a></code>, <code><a href="par3d.html">par3d</a></code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+  open3d()
+  x &lt;- sort(rnorm(1000))
+  y &lt;- rnorm(1000)
+  z &lt;- rnorm(1000) + atan2(x,y)
+  plot3d(x, y, z, col=rainbow(1000), size=2)
+</pre>
+
+
+
+<hr><div align="center">[Package <em>rgl</em> version 0.68.529 <a href="00Index.html">Index]</a></div>
+
+</body></html>

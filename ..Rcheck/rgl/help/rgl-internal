@@ -1,0 +1,40 @@
+rgl-internal               package:rgl               R Documentation
+
+_I_n_t_e_r_n_a_l _r_g_l _f_u_n_c_t_i_o_n_s _a_n_d _d_a_t_a
+
+_D_e_s_c_r_i_p_t_i_o_n:
+
+     internal rgl functions
+
+_U_s_a_g_e:
+
+     rgl.bool(x)
+     rgl.numeric(x)
+     rgl.range(x, low, high)
+     rgl.vertex(x, y = NULL, z = NULL)
+     rgl.nvertex(vertex)
+     rgl.color(color)
+     rgl.mcolor(colors)
+     rgl.clamp(value, low, high)
+     rgl.attr(vattr, nvertex) 
+     rgl.enum(name, ..., multi = FALSE)
+     rgl.enum.gl2ps(postscripttype) 
+     rgl.enum.nodetype(type)
+     rgl.enum.pixfmt(fmt)
+     rgl.enum.polymode(mode)
+     rgl.enum.textype(textype)
+     rgl.enum.fogtype(fogtype)
+     rgl.enum.primtype(primtype)
+     rgl.enum.halign(halign)
+     rgl.enum.texmagfilter(magfiltertype)
+     rgl.enum.texminfilter(minfiltertype)
+     rgl.select(button = c("left", "middle", "right"))
+     rgl.selectstate()
+     rgl.setselectstate(state)
+     edgemap(size)
+     edgeindex(from,to,size,row,col)
+
+_D_e_t_a_i_l_s:
+
+     These are not to be called by the user.
+

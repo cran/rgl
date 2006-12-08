@@ -4,7 +4,7 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: x11gui.cpp 455 2006-06-26 01:17:13Z murdoch $
+// $Id: x11gui.cpp 532 2006-12-08 14:25:42Z dmurdoch $
 
 // Uncomment for verbose output on stderr:
 // #define RGL_X11_DEBUG
@@ -365,7 +365,7 @@ X11GUIFactory::X11GUIFactory(const char* displayname)
   xdisplay = XOpenDisplay(displayname);
   
   if (xdisplay == 0) {
-    throw_error("unable to open display"); return;
+    throw_error("unable to open X11 display"); return;
   }
   
   // Load System font

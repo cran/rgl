@@ -1,0 +1,96 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head><title>R: Set up Background</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" type="text/css" href="../../R.css">
+</head><body>
+
+<table width="100%" summary="page for bg {rgl}"><tr><td>bg {rgl}</td><td align="right">R Documentation</td></tr></table>
+<h2>Set up Background</h2>
+
+
+<h3>Description</h3>
+
+<p>
+Setup the background environment of the scene.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+bg3d(...) 
+rgl.bg( sphere = FALSE, fogtype = "none", color=c("black","white"), 
+        back="lines", ...)
+
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>fogtype</code></td>
+<td>
+fog type:
+<dl>
+<dt>"none"</dt><dd>no fog</dd>
+<dt>"linear"</dt><dd>linear fog function</dd>
+<dt>"exp"</dt><dd>exponential fog function</dd>
+<dt>"exp2"</dt><dd>squared exponential fog function</dd>
+</dl>
+</td></tr>
+<tr valign="top"><td><code>sphere</code></td>
+<td>
+logical, if true, an environmental sphere geometry is used for the background decoration.
+</td></tr>
+<tr valign="top"><td><code>color</code></td>
+<td>
+Primary color is used for background clearing and as fog color.
+Secondary color is used for background sphere geometry. See <code><a href="material.html">rgl.material</a></code> for details.
+</td></tr>
+<tr valign="top"><td><code>back</code></td>
+<td>
+Specifies the fill style of the sphere geometry. See <code><a href="material.html">rgl.material</a></code> for details.
+</td></tr>
+<tr valign="top"><td><code> ... </code></td>
+<td>
+Material properties. See <code><a href="material.html">rgl.material</a></code> for details.</td></tr>
+</table>
+
+<h3>Details</h3>
+
+<p>
+If sphere is set to TRUE, an environmental sphere enclosing the whole scene is drawn.
+</p>
+
+
+<h3>See Also</h3>
+
+<p>
+<code><a href="material.html">rgl.material</a></code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+  rgl.open()
+  
+  # a simple white background
+  
+  bg3d("white")
+
+  # the holo-globe (inspired by star trek):
+
+  rgl.bg(sphere=TRUE, color=c("black","green"), lit=FALSE, back="lines" )
+
+  # an environmental sphere with a nice texture.
+
+  rgl.bg(sphere=TRUE, texture=system.file("textures/sunsleep.png", package="rgl"), 
+         back="filled" )
+</pre>
+
+
+
+<hr><div align="center">[Package <em>rgl</em> version 0.68.529 <a href="00Index.html">Index]</a></div>
+
+</body></html>

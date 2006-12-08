@@ -1,0 +1,53 @@
+rgl.snapshot               package:rgl               R Documentation
+
+_e_x_p_o_r_t _s_c_r_e_e_n_s_h_o_t
+
+_D_e_s_c_r_i_p_t_i_o_n:
+
+     Saves the screenshot as png file.
+
+_U_s_a_g_e:
+
+     rgl.snapshot( filename, fmt="png" )
+     snapshot3d( ... )
+
+_A_r_g_u_m_e_n_t_s:
+
+filename: full path to filename.
+
+     fmt: image export format, currently supported: png 
+
+     ...: arguments to pass to 'rgl.snapshot' 
+
+_D_e_t_a_i_l_s:
+
+     Animations can be created in a loop modifying the scene and saving
+      each screenshot to a file. Various graphics programs (e.g.
+     ImageMagick) can put these together into a single animation. (See
+     example below)
+
+_S_e_e _A_l_s_o:
+
+     'rgl.viewpoint'
+
+_E_x_a_m_p_l_e_s:
+
+     ## Not run: 
+
+     #
+     # create animation
+     #
+
+     shade3d(oh3d(), color="red")
+     rgl.viewpoint(0,20)
+
+     setwd(tempdir())
+     for (i in 1:45) {
+       rgl.viewpoint(i,20)
+       filename <- paste("pic",formatC(i,digits=1,flag="0"),".png",sep="")
+       rgl.snapshot(filename)
+     }
+     ## Now run ImageMagick command:
+     ##    convert -delay 10 *.png -loop 0 pic.gif
+     ## End(Not run)
+

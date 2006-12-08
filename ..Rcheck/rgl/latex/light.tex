@@ -1,0 +1,35 @@
+\HeaderA{light}{add light source}{light}
+\aliasA{light3d}{light}{light3d}
+\aliasA{rgl.light}{light}{rgl.light}
+\keyword{dynamic}{light}
+\begin{Description}\relax
+add a light source to the scene.
+\end{Description}
+\begin{Usage}
+\begin{verbatim}
+light3d(theta = 0, phi = 15, ...)
+rgl.light( theta = 0, phi = 0, viewpoint.rel = TRUE, ambient = "#FFFFFF", 
+           diffuse = "#FFFFFF", specular = "#FFFFFF")
+\end{verbatim}
+\end{Usage}
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{theta, phi}] polar coordinates
+\item[\code{viewpoint.rel}] logical, if TRUE light is a viewpoint light that is positioned relative to the current viewpoint
+\item[\code{ambient, diffuse, specular }] 
+\item[\code{...}] generic arguments passed through to RGL-specific (or other) functions
+\end{ldescription}
+\end{Arguments}
+\begin{Details}\relax
+Up to 8 light sources are supported. They are positioned either in world space
+or relative to the camera using polar coordinates. Light sources are directional.
+\end{Details}
+\begin{Value}
+This function is called for the side effect of adding a light.  A light ID is
+returned to allow \code{\LinkA{rgl.pop}{rgl.pop}} to remove it.
+\end{Value}
+\begin{SeeAlso}\relax
+\code{\LinkA{rgl.clear}{rgl.clear}}
+\code{\LinkA{rgl.pop}{rgl.pop}}
+\end{SeeAlso}
+
