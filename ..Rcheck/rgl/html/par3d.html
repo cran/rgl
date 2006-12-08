@@ -1,0 +1,205 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head><title>R: Set or Query RGL Parameters</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" type="text/css" href="../../R.css">
+</head><body>
+
+<table width="100%" summary="page for par3d {rgl}"><tr><td>par3d {rgl}</td><td align="right">R Documentation</td></tr></table>
+<h2>Set or Query RGL Parameters</h2>
+
+
+<h3>Description</h3>
+
+<p>
+<code>par3d</code> can be used to set or query graphical parameters in rgl.
+Parameters can be set by specifying them as arguments to <code>par3d</code> in
+<code>tag = value</code> form, or by passing them as a list of tagged
+values.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+par3d(..., no.readonly = FALSE)
+
+open3d(..., params=get("r3dDefaults", envir=.GlobalEnv))
+
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>...</code></td>
+<td>
+arguments in <code>tag = value</code> form, or a list of tagged
+values.  The tags must come from the graphical parameters described
+below.</td></tr>
+<tr valign="top"><td><code>no.readonly</code></td>
+<td>
+logical; if <code>TRUE</code> and there are no other
+arguments, only those parameters which can be set by a
+subsequent <code>par3d()</code> call are returned.</td></tr>
+<tr valign="top"><td><code>params</code></td>
+<td>
+a list of graphical parameters</td></tr>
+</table>
+
+<h3>Details</h3>
+
+<p>
+Parameters are queried by giving one or more character vectors to
+<code>par3d</code>.
+</p>
+<p>
+<code>par3d()</code> (no arguments) or <code>par3d(no.readonly=TRUE)</code> is used to
+get <EM>all</EM> the graphical parameters (as a named list).  
+</p>
+<p>
+<EM><B>R.O.</B></EM> indicates <EM><B>read-only arguments</B></EM>: These
+may only be used in queries, i.e., they do <EM>not</EM> set anything.
+</p>
+<p>
+<code>open3d</code> opens a new rgl device, and sets the parameters as
+requested.  The <code>r3dDefaults</code> list will be used as default
+values for parameters.  As installed this sets the point of view to
+'world coordinates' (i.e. x running from left to right, y from front
+to back, z from bottom to top), the <code>mouseMode</code> to
+<code>(zAxis, zoom, fov)</code>, and the field of view to 30 degrees.
+Users may create their own variable of that name in the global
+environment and it will override the installed one.  If there
+is a <code>bg</code> element in the list or the arguments, it should be
+a list of arguments to pass to the <code><a href="bg.html">bg3d</a></code> function to 
+set the background.  A <code>material</code> element should be a list
+of arguments to pass to <code><a href="material.html">material3d</a></code> to set the material.
+</p>
+
+
+<h3>Value</h3>
+
+<p>
+When parameters are set, their former values are returned in an
+invisible named list.  Such a list can be passed as an argument to
+<code>par3d</code> to restore the parameter values.
+Use <code>par3d(no.readonly = TRUE)</code> for the full list of parameters
+that can be restored.
+<br>
+When just one parameter is queried, its value is returned directly.
+When two or more parameters are queried, the result is a list of
+values, with the list names giving the parameters.
+<br>
+Note the inconsistency: setting one parameter returns a list, but
+querying one parameter returns an object.</p>
+
+<h3>Parameters</h3>
+
+<dl>
+<dt><code>FOV</code></dt><dd>real.  The field of view, from 1 to 179 degrees.  This controls
+the degree of parallax in the perspective view.
+Isometric perspective (which would
+correspond to <code>FOV=0</code>) is not currently possible, but one can
+approximate it by specifying <code>par3d(FOV=1)</code>.</dd>
+<dt><code>ignoreExtent</code></dt><dd>logical.  Set to <code>TRUE</code> so that subsequently plotted objects
+will be ignored in calculating the bounding box of the scene.</dd>
+<dt><code>modelMatrix</code></dt><dd><EM><B>R.O.</B></EM>; a 4 by 4 matrix describing the position
+of the user data.</dd>
+<dt><code>mouseMode</code></dt><dd>character.  A vector of 3 strings describing
+what the 3 mouse buttons do. Partial matching is used.  Possible values for <code>mouseMode</code> are 
+<dl>
+<dt><code>"none"</code></dt><dd>No action for this button.</dd>
+<dt><code>"trackball"</code></dt><dd>Mouse acts as a virtual trackball, rotating the scene.</dd>
+<dt><code>"xAxis"</code></dt><dd>Similar to <code>"trackball"</code>, but restricted to X axis rotation.</dd>
+<dt><code>"yAxis"</code></dt><dd>Y axis rotation.</dd>
+<dt><code>"zAxis"</code></dt><dd>Z axis rotation.</dd>
+<dt><code>"polar"</code></dt><dd>Mouse rotates the scene by moving in polar coordinates.</dd>
+<dt><code>"selecting"</code></dt><dd>Mouse is used for selection.  This is not normally set by the
+user, but is used internally by the <code><a href="select3d.html">select3d</a></code> function.</dd>
+<dt><code>"zoom"</code></dt><dd>Mouse is used to zoom the display.</dd>
+<dt><code>"fov"</code></dt><dd>Mouse changes the field of view of the display.</dd>
+</dl>
+</dd>
+<dt><code>projMatrix</code></dt><dd><EM><B>R.O.</B></EM>; a 4 by 4 matrix describing the current
+projection of the scene.</dd>
+<dt><code>scale</code></dt><dd>real.  A vector of 3 values indicating the amount by which to
+rescale each axis before display.  Set by <code><a href="aspect3d.html">aspect3d</a></code>.</dd>
+<dt><code>skipRedraw</code></dt><dd>whether to update the display.  Set to <code>FALSE</code> to suspend
+updating while making multiple changes to the scene.  See <code>demo(hist3d)</code> for an example.</dd>
+<dt><code>userMatrix</code></dt><dd>a 4 by 4 matrix describing user actions to
+display the scene.</dd>
+<dt><code>viewport</code></dt><dd><EM><B>R.O.</B></EM>; real.  A vector giving the dimensions of the
+window in pixels.</dd>
+<dt><code>zoom</code></dt><dd>real. A positive value indicating the current
+magnification of the scene.</dd>
+<dt><code>bbox</code></dt><dd><EM><B>R.O.</B></EM>; real. A vector of six values indicating the current values of the
+bounding box of the scene (xmin, xmax, ymin, ymax, zmin, zmax)</dd>
+</dl>
+
+<h3>note</h3>
+
+<p>
+The <code>"xAxis"</code>, <code>"yAxis"</code> and <code>"zAxis"</code> mouse modes rotate relative to the coordinate
+system of the data, regardless of the current orientation of the scene.
+</p>
+
+
+<h3>Rendering</h3>
+
+<p>
+The parameters returned by <code>par3d</code> are sufficient to determine where rgl would render
+a point on the screen.  Given a column vector <code>(x,y,z)</code>, it performs the equivalent of 
+the following operations:
+<ol>
+<li>It converts the point to homogeneous coordinates by appending <code>w=1</code>, giving
+the vector <code>v = (x,y,z,1)</code>.
+<li>It obtains the model matrix <code>M = par3d("modelMatrix")</code> and multiplies
+the point by this giving <code>u = M %*% v</code>.  Using this location and information on the
+normals (which have been similarly transformed), it performs lighting calculations.  (The 
+<code>par3d("userMatrix")</code> is used in the construction of the model matrix, along with
+other transformations to center the object being displayed.)
+<li>It obtains the projection matrix <code>P = par3d("projMatrix")</code> and
+multiplies the point by it giving <code>P %*% u = (x2, y2, z2, w2)</code>.
+<li>It converts back to Euclidean coordinates by dividing the first 3 coordinates by <code>w2</code>.
+<li>The new value <code>z2/w2</code> represents the depth into the scene of the point.  Depending
+on what has already been plotted, this depth might be obscured, in which case nothing more is plotted.
+<li>If the point is not culled due to depth, the <code>x2</code> and <code>y2</code> values are used
+to determine the point in the image.  The <code>par3d("viewport")</code> values are used to translate
+from the range <code>(-1, 1)</code> to pixel locations, and the point is plotted.
+</ol>
+<p>
+See ?<a href="matrices.html">matrices</a> for more information on homogeneous and Euclidean coordinates.
+</p>
+
+
+<h3>References</h3>
+
+<p>
+OpenGL Architecture Review Board (1997).  OpenGL Programming Guide.  Addison-Wesley.
+</p>
+
+
+<h3>See Also</h3>
+
+<p>
+<code><a href="viewpoint.html">rgl.viewpoint</a></code> to set <code>FOV</code> and <code>zoom</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+    r3dDefaults
+    open3d()
+    shade3d(cube3d(color=rep(rainbow(6),rep(4,6))))
+    save &lt;- par3d(userMatrix = rotationMatrix(90*pi/180, 1,0,0))
+    save
+    par3d("userMatrix")    
+    par3d(save)
+    par3d("userMatrix")
+</pre>
+
+
+
+<hr><div align="center">[Package <em>rgl</em> version 0.68.529 <a href="00Index.html">Index]</a></div>
+
+</body></html>

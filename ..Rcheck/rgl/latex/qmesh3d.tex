@@ -1,0 +1,90 @@
+\HeaderA{qmesh3d}{3D Quadrangle Mesh objects}{qmesh3d}
+\aliasA{cube3d}{qmesh3d}{cube3d}
+\aliasA{dot3d}{qmesh3d}{dot3d}
+\methaliasA{dot3d.qmesh3d}{qmesh3d}{dot3d.qmesh3d}
+\aliasA{oh3d}{qmesh3d}{oh3d}
+\aliasA{shade3d}{qmesh3d}{shade3d}
+\methaliasA{shade3d.qmesh3d}{qmesh3d}{shade3d.qmesh3d}
+\aliasA{wire3d}{qmesh3d}{wire3d}
+\methaliasA{wire3d.qmesh3d}{qmesh3d}{wire3d.qmesh3d}
+\keyword{dynamic}{qmesh3d}
+\begin{Description}\relax
+3D Quadrangle Mesh object creation and a collection of sample objects.
+\end{Description}
+\begin{Usage}
+\begin{verbatim}
+  qmesh3d(vertices, indices, homogeneous = TRUE, material = NULL)
+  cube3d(trans = identityMatrix(), ...)  # cube object
+  oh3d(trans = identityMatrix(), ...)    # an 'o' object
+  
+  dot3d(x, ...)   # draw dots at the vertices of an object
+  ## S3 method for class 'qmesh3d':
+  dot3d(x, override = TRUE, ...)
+  wire3d(x, ...)  # draw a wireframe object
+  ## S3 method for class 'qmesh3d':
+  wire3d(x, override = TRUE, ...)
+  shade3d(x, ...) # draw a shaded object
+  ## S3 method for class 'qmesh3d':
+  shade3d(x, override = TRUE, ...)
+\end{verbatim}
+\end{Usage}
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{x}] a qmesh3d object (class qmesh3d)
+\item[\code{vertices}] 3- or 4-component vector of coordinates
+\item[\code{indices}] 4-component vector of quad indices
+\item[\code{homogeneous}] logical indicating if homogeneous (four component) coordinates are used.
+\item[\code{material}] material properties for later rendering
+\item[\code{trans}] transformation to apply to objects; see below for defaults
+\item[\code{...}] additional rendering parameters
+\item[\code{override}] should the parameters specified here override those stored in the object?
+\end{ldescription}
+\end{Arguments}
+\begin{Details}\relax
+The \code{cube3d} and \code{oh3d} objects optionally take a matrix transformation as 
+an argument.  This transformation is applied to all vertices of the default shape.
+
+The default is an identity transformation.  Use \code{par3d("userMatrix")} to render the
+object vertically in the current user view.
+\end{Details}
+\begin{Value}
+\code{qmesh3d}, \code{cube3d}, and \code{oh3d} return \code{qmesh3d} objects.
+
+\code{dot3d}, \code{wire3d}, and \code{shade3d} are called for their side effect
+of drawing an object into the scene; they return an object ID.
+\end{Value}
+\begin{SeeAlso}\relax
+\code{\LinkA{r3d}{r3d}}, \code{\LinkA{par3d}{par3d}}
+\end{SeeAlso}
+\begin{Examples}
+\begin{ExampleCode}
+
+  # generate a quad mesh object
+
+  vertices <- c( 
+     -1.0, -1.0, 0, 1.0,
+      1.0, -1.0, 0, 1.0,
+      1.0,  1.0, 0, 1.0,
+     -1.0,  1.0, 0, 1.0
+  )
+  indices <- c( 1, 2, 3, 4 )
+  
+  open3d()  
+  wire3d( qmesh3d(vertices,indices) )
+  
+  # render 4 meshes vertically in the current view
+
+  open3d()  
+  bg3d("gray")
+  l0 <- oh3d(tran = par3d("userMatrix"), color = "green" )
+  shade3d( translate3d( l0, -6, 0, 0 ))
+  l1 <- subdivision3d( l0 )
+  shade3d( translate3d( l1 , -2, 0, 0 ), color="red", override = FALSE )
+  l2 <- subdivision3d( l1 )
+  shade3d( translate3d( l2 , 2, 0, 0 ), color="red", override = TRUE )
+  l3 <- subdivision3d( l2 )
+  shade3d( translate3d( l3 , 6, 0, 0 ), color="red" )
+  
+\end{ExampleCode}
+\end{Examples}
+

@@ -2,7 +2,7 @@
 ## R source file
 ## This file is part of rgl
 ##
-## $Id: scene.R 518 2006-09-11 20:42:46Z dmurdoch $
+## $Id: scene.R 531 2006-10-09 16:28:07Z dmurdoch $
 ##
 
 ##
@@ -242,13 +242,6 @@ rgl.primitive <- function( type, x, y=NULL, z=NULL, ... )
   y <- xyz$y
   z <- xyz$z
 
-  if (any(is.na(c(x,y,z)))) {
-    d <- complete.cases(cbind(x,y,z))
-    x <- x[d]
-    y <- y[d]
-    z <- z[d]
-    warning("NA/NaN values ignored")
-  }
   vertex  <- rgl.vertex(x,y,z)
   nvertex <- rgl.nvertex(vertex)
   if (nvertex > 0) {
@@ -263,6 +256,7 @@ rgl.primitive <- function( type, x, y=NULL, z=NULL, ... )
       success = as.integer(FALSE),
       idata,
       as.numeric(vertex),
+      NAOK = TRUE,
       PACKAGE="rgl"
     );
   
@@ -351,6 +345,7 @@ rgl.surface <- function( x, z, y, coords=1:3, ... )
     as.numeric(y),
     as.integer(coords),
     as.integer(parity),
+    NAOK=TRUE,
     PACKAGE="rgl"
   );
 
@@ -372,7 +367,7 @@ rgl.spheres <- function( x, y=NULL, z=NULL, radius=1.0,...)
   nvertex <- rgl.nvertex(vertex)
   radius  <- rgl.attr(radius, nvertex)
   nradius <- length(radius)
- 
+  
   idata <- as.integer( c( nvertex, nradius ) )
    
   ret <- .C( "rgl_spheres",
@@ -380,6 +375,7 @@ rgl.spheres <- function( x, y=NULL, z=NULL, radius=1.0,...)
     idata,
     as.numeric(vertex),    
     as.numeric(radius),
+    NAOK=TRUE,
     PACKAGE="rgl"
   )
 
@@ -407,7 +403,7 @@ rgl.texts <- function(x, y=NULL, z=NULL, text, adj = 0.5, justify, ... )
   vertex  <- rgl.vertex(x,y,z)
   nvertex <- rgl.nvertex(vertex)
   text    <- rep(text, length.out=nvertex)
-
+  
   idata <- as.integer(nvertex)
 
   ret <- .C( "rgl_texts",
@@ -416,6 +412,7 @@ rgl.texts <- function(x, y=NULL, z=NULL, text, adj = 0.5, justify, ... )
     as.double(adj),
     as.character(text),
     as.numeric(vertex),
+    NAOK=TRUE,
     PACKAGE="rgl"
   )
   
@@ -437,7 +434,7 @@ rgl.sprites <- function( x, y=NULL, z=NULL, radius=1.0, ... )
   ncenter <- rgl.nvertex(center)
   radius  <- rgl.attr(radius, ncenter)
   nradius <- length(radius)
- 
+  
   idata   <- as.integer( c(ncenter,nradius) )
    
   ret <- .C( "rgl_sprites",
@@ -445,6 +442,7 @@ rgl.sprites <- function( x, y=NULL, z=NULL, radius=1.0, ... )
     idata,
     as.numeric(center),
     as.numeric(radius),
+    NAOK=TRUE,
     PACKAGE="rgl"
   )
 
@@ -565,8 +563,8 @@ rgl.projection <- function()
     	 view = par3d("viewport"))
 }   
      
-rgl.select3d <- function() {
-  rect <- rgl.select()
+rgl.select3d <- function(button = c("left", "middle", "right")) {
+  rect <- rgl.select(button = button)
   llx <- rect[1]
   lly <- rect[2]
   urx <- rect[3]

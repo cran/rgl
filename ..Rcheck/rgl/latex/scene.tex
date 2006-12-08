@@ -1,0 +1,74 @@
+\HeaderA{scene}{scene management}{scene}
+\aliasA{clear3d}{scene}{clear3d}
+\aliasA{pop3d}{scene}{pop3d}
+\aliasA{rgl.clear}{scene}{rgl.clear}
+\aliasA{rgl.ids}{scene}{rgl.ids}
+\aliasA{rgl.pop}{scene}{rgl.pop}
+\keyword{dynamic}{scene}
+\begin{Description}\relax
+Clear shapes, lights, bbox
+\end{Description}
+\begin{Usage}
+\begin{verbatim}
+clear3d( type = c("shapes", "bboxdeco") ) 
+rgl.clear( type = "shapes" )
+pop3d( ... )
+rgl.pop( type = "shapes", id = 0 )  
+rgl.ids( type = "shapes" )
+\end{verbatim}
+\end{Usage}
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{type}] Select subtype(s):
+\describe{
+\item["shapes"] shape stack
+\item["lights"] light stack
+\item["bboxdeco"] bounding box
+\item["viewpoint"] viewpoint
+\item["all"] all of the above
+}
+
+\item[\code{id}] vector of ID numbers of items to remove
+\item[\code{...}] generic arguments passed through to RGL-specific (or other) functions
+\end{ldescription}
+\end{Arguments}
+\begin{Details}\relax
+RGL holds two stacks. One is for shapes and the other is for lights. 
+\code{clear3d} and \code{rgl.clear} clear the specified stack, or restore
+the defaults for the bounding box (not visible) or viewpoint.  By default
+with \code{id=0} \code{rgl.pop} removes 
+the top-most (last added) node on the shape stack.  The \code{id} argument
+may be used to specify arbitrary item(s) to remove from the specified stack.
+
+\code{rgl.ids} returns a dataframe containing the IDs in the currently active
+rgl window, along with an indicator of their type.
+
+For convenience, \code{type="shapes"} and 
+\code{id=1} signifies the bounding box.
+
+Note that clearing the light stack leaves the scene in darkness; it should normally
+be followed by a call to \code{\LinkA{rgl.light}{rgl.light}} or \code{\LinkA{light3d}{light3d}}.
+\end{Details}
+\begin{SeeAlso}\relax
+\code{\LinkA{rgl}{rgl}}
+\code{\LinkA{rgl.bbox}{rgl.bbox}}
+\code{\LinkA{rgl.light}{rgl.light}}
+\end{SeeAlso}
+\begin{Examples}
+\begin{ExampleCode}
+  x <- rnorm(100)
+  y <- rnorm(100)
+  z <- rnorm(100)
+  p <- plot3d(x, y, z, type='s')
+  rgl.ids()
+  lines3d(x, y, z)
+  rgl.ids()
+  if (interactive()) {
+    readline("Hit enter to change spheres")
+    rgl.pop(id = p[c("data", "box.lines")])
+    spheres3d(x, y, z, col="red", radius=1/5)
+    box3d()
+  }
+\end{ExampleCode}
+\end{Examples}
+

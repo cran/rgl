@@ -1,0 +1,55 @@
+subdivision3d              package:rgl              R Documentation
+
+_g_e_n_e_r_i_c _s_u_b_d_i_v_i_s_i_o_n _s_u_r_f_a_c_e _m_e_t_h_o_d
+
+_D_e_s_c_r_i_p_t_i_o_n:
+
+     The Subdivision surface algorithm divide and refine (deform) a
+     given mesh recursively to certain degree (depth). The qmesh3d
+     algorithm consists of two stages: divide and deform. The divide
+     step generates for each quad four new quads, the deform step drags
+     the points (refinement step).
+
+_U_s_a_g_e:
+
+       subdivision3d( x,  ...)
+       subdivision3d.qmesh3d( x, depth=1, normalize=FALSE, deform=TRUE, ... )
+       divide.qmesh3d(mesh,  vb=mesh$vb, ib=mesh$ib )
+       normalize.qmesh3d(mesh)
+       deform.qmesh3d(mesh,vb=mesh$vb,ib=mesh$ib)
+
+_A_r_g_u_m_e_n_t_s:
+
+       x: 3d geometry mesh
+
+    mesh: 3d geometry mesh
+
+   depth: recursion depth
+
+normalize: normalize qmesh3d coordinates after division if deform is
+          TRUE otherwise
+
+  deform: deform mesh after normalization
+
+      ib: vector of indices (i.e., which sets of vertices to combine
+          into quads); 4xn matrix or equivalent vector
+
+      vb: vector of vertices: 4xn matrix (rows x,y,z,h) or equivalent
+          vector, where h indicates scaling of each plotted quad
+
+     ...: other arguments (unused)
+
+_D_e_t_a_i_l_s:
+
+     Generic subdivision surface method. Currently there exists an
+     algorithm that can be applied on qmesh3d objects.
+
+_S_e_e _A_l_s_o:
+
+     'r3d' 'qmesh3d'
+
+_E_x_a_m_p_l_e_s:
+
+       open3d()
+       shade3d( subdivision3d( cube3d(), depth=3 ), color="red", alpha=0.5 )
+

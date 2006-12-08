@@ -1,6 +1,6 @@
 #
 # R3D rendering functions - rgl implementation
-# $Id: r3d.rgl.R 520 2006-09-12 18:53:15Z dmurdoch $
+# $Id: r3d.rgl.R 528 2006-09-26 17:07:33Z dmurdoch $
 # 
 
 # Node Management
@@ -143,7 +143,7 @@ surface3d   <- terrain3d
 
 # Interaction
 
-select3d    <- function() {.check3d(); rgl.select3d()}
+select3d    <- function(...) {.check3d(); rgl.select3d(...)}
 
 # 3D Generic Object Rendering Attributes
 

@@ -1,0 +1,85 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head><title>R: 3D visualization device system</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" type="text/css" href="../../R.css">
+</head><body>
+
+<table width="100%" summary="page for rgl-package {rgl}"><tr><td>rgl-package {rgl}</td><td align="right">R Documentation</td></tr></table>
+<h2>3D visualization device system</h2>
+
+
+<h3>Description</h3>
+
+<p>
+3D real-time rendering device-driver system
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+rgl.open()     # open new device
+rgl.close()    # close current device
+rgl.cur()      # returns active device ID
+rgl.set(which) # set device as active
+rgl.quit()     # shutdown rgl device system
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>which</code></td>
+<td>
+device ID</td></tr>
+</table>
+
+<h3>Details</h3>
+
+<p>
+RGL is a 3D real-time rendering device driver system for R.
+Multiple devices are managed at a time, where one has the current focus
+that receives instructions from the R command-line.
+The device design is oriented towards the R device metaphor. If you send
+scene management instructions, and there's no device open, it will be opened
+automatically.
+Opened devices automatically get the current device focus. The focus may be
+changed by using rgl.set().
+rgl.quit() shuts down the rgl subsystem and all open devices, 
+detaches the package including the shared library and additional system libraries.
+</p>
+
+
+<h3>See Also</h3>
+
+<p>
+<code><a href="scene.html">rgl.clear</a></code>, 
+<code><a href="scene.html">rgl.pop</a></code>,
+<code><a href="viewpoint.html">rgl.viewpoint</a></code>,
+<code><a href="light.html">rgl.light</a></code>,
+<code><a href="bg.html">rgl.bg</a></code>,
+<code><a href="bbox.html">rgl.bbox</a></code>,
+<code><a href="primitive.html">rgl.points</a></code>,
+<code><a href="primitive.html">rgl.lines</a></code>,
+<code><a href="primitive.html">rgl.triangles</a></code>,
+<code><a href="primitive.html">rgl.quads</a></code>,
+<code><a href="texts.html">rgl.texts</a></code>,
+<code><a href="surface.html">rgl.surface</a></code>,
+<code><a href="spheres.html">rgl.spheres</a></code>,
+<code><a href="sprites.html">rgl.sprites</a></code>,
+<code><a href="snapshot.html">rgl.snapshot</a></code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+example(surface3d)
+example(plot3d)
+</pre>
+
+
+
+<hr><div align="center">[Package <em>rgl</em> version 0.68.529 <a href="00Index.html">Index]</a></div>
+
+</body></html>

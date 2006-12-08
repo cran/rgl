@@ -1,0 +1,185 @@
+Entry: points3d
+Aliases: points3d lines3d segments3d triangles3d quads3d
+Keywords: dynamic
+Description: add primitive set shape
+URL: ../../../library/rgl/html/3dobjects.html
+
+Entry: aspect3d
+Aliases: aspect3d
+Keywords: dynamic
+Description: Set the aspect ratios of the current plot
+URL: ../../../library/rgl/html/aspect3d.html
+
+Entry: axes3d
+Aliases: axes3d axis3d mtext3d title3d box3d
+Keywords: dynamic
+Description: Draw boxes, axes and other text outside the data
+URL: ../../../library/rgl/html/axes3d.html
+
+Entry: rgl.bbox
+Aliases: rgl.bbox bbox3d
+Keywords: dynamic
+Description: Set up Bounding Box decoration
+URL: ../../../library/rgl/html/bbox.html
+
+Entry: bg
+Aliases: rgl.bg bg3d
+Keywords: dynamic
+Description: Set up Background
+URL: ../../../library/rgl/html/bg.html
+
+Entry: ellipse3d
+Aliases: ellipse3d ellipse3d.default ellipse3d.lm ellipse3d.glm ellipse3d.nls
+Keywords: dplot
+Description: Make an ellipsoid
+URL: ../../../library/rgl/html/ellipse3d.html
+
+Entry: grid3d
+Aliases: grid3d
+Keywords: dynamic
+Description: Add a grid to a 3D plot
+URL: ../../../library/rgl/html/grid3d.html
+
+Entry: light
+Aliases: rgl.light light3d
+Keywords: dynamic
+Description: add light source
+URL: ../../../library/rgl/html/light.html
+
+Entry: rgl.material
+Aliases: rgl.material material3d
+Keywords: dynamic
+Description: Generic Appearance setup
+URL: ../../../library/rgl/html/material.html
+
+Entry: matrices
+Aliases: matrices identityMatrix scaleMatrix translationMatrix rotationMatrix scale3d translate3d rotate3d transform3d asHomogeneous asEuclidean
+Keywords: dynamic
+Description: Work with homogeneous coordinates
+URL: ../../../library/rgl/html/matrices.html
+
+Entry: par3d
+Aliases: par3d open3d r3dDefaults
+Keywords: dynamic
+Description: Set or Query RGL Parameters
+URL: ../../../library/rgl/html/par3d.html
+
+Entry: persp3d
+Aliases: persp3d persp3d.default
+Keywords: dynamic
+Description: Surface plots
+URL: ../../../library/rgl/html/persp3d.html
+
+Entry: plot3d
+Aliases: plot3d plot3d.default plot3d.qmesh3d decorate3d
+Keywords: dynamic
+Description: 3D Scatterplot
+URL: ../../../library/rgl/html/plot3d.html
+
+Entry: rgl.postscript
+Aliases: rgl.postscript
+Keywords: dynamic
+Description: export screenshot
+URL: ../../../library/rgl/html/postscript.html
+
+Entry: rgl.primitive
+Aliases: rgl.primitive rgl.points rgl.lines rgl.linestrips rgl.triangles rgl.quads
+Keywords: dynamic
+Description: add primitive set shape
+URL: ../../../library/rgl/html/primitive.html
+
+Entry: qmesh3d
+Aliases: qmesh3d dot3d dot3d.qmesh3d wire3d wire3d.qmesh3d shade3d shade3d.qmesh3d cube3d oh3d
+Keywords: dynamic
+Description: 3D Quadrangle Mesh objects
+URL: ../../../library/rgl/html/qmesh3d.html
+
+Entry: r3d
+Aliases: r3d
+Keywords: dynamic
+Description: Generic 3D interface
+URL: ../../../library/rgl/html/r3d.html
+
+Entry: rgl-internal
+Aliases: rgl.bool rgl.numeric rgl.range rgl.vertex rgl.nvertex rgl.color rgl.mcolor rgl.clamp rgl.attr rgl.enum rgl.enum.gl2ps rgl.enum.nodetype rgl.enum.pixfmt rgl.enum.polymode rgl.enum.textype rgl.enum.fogtype rgl.enum.primtype rgl.enum.halign rgl.enum.texmagfilter rgl.enum.texminfilter rgl.select rgl.selectstate rgl.setselectstate edgemap edgeindex cube3d.ib cube3d.vb oh3d.ib oh3d.vb dev3d
+Keywords: internal
+Description: Internal rgl functions and data
+URL: ../../../library/rgl/html/rgl-internal.html
+
+Entry: rgl-package
+Aliases: rgl-package rgl rgl.open rgl.close rgl.cur rgl.set rgl.quit
+Keywords: dynamic
+Description: 3D visualization device system
+URL: ../../../library/rgl/html/rgl-package.html
+
+Entry: rgl.bringtotop
+Aliases: rgl.bringtotop
+Keywords: dynamic
+Description: Assign focus to an RGL window
+URL: ../../../library/rgl/html/rgl.bringtotop.html
+
+Entry: rgl.user2window
+Aliases: rgl.user2window rgl.window2user rgl.projection
+Keywords: dynamic
+Description: Convert between rgl user and window coordinates
+URL: ../../../library/rgl/html/rgl.user2window.html
+
+Entry: scene
+Aliases: rgl.clear rgl.pop clear3d pop3d rgl.ids
+Keywords: dynamic
+Description: scene management
+URL: ../../../library/rgl/html/scene.html
+
+Entry: select3d
+Aliases: select3d rgl.select3d
+Keywords: dynamic
+Description: Select a rectangle in an RGL scene
+URL: ../../../library/rgl/html/select3d.html
+
+Entry: rgl.snapshot
+Aliases: rgl.snapshot snapshot3d
+Keywords: dynamic
+Description: export screenshot
+URL: ../../../library/rgl/html/snapshot.html
+
+Entry: spheres
+Aliases: rgl.spheres spheres3d
+Keywords: dynamic
+Description: add sphere set shape
+URL: ../../../library/rgl/html/spheres.html
+
+Entry: sprites
+Aliases: sprites3d particles3d rgl.sprites
+Keywords: dynamic
+Description: add sprite set shape
+URL: ../../../library/rgl/html/sprites.html
+
+Entry: subdivision3d
+Aliases: subdivision3d subdivision3d.qmesh3d divide.qmesh3d normalize.qmesh3d deform.qmesh3d
+Keywords: dynamic
+Description: generic subdivision surface method
+URL: ../../../library/rgl/html/subdivision3d.html
+
+Entry: rgl.surface
+Aliases: rgl.surface
+Keywords: dynamic
+Description: add height-field surface shape
+URL: ../../../library/rgl/html/surface.html
+
+Entry: surface3d
+Aliases: surface3d terrain3d
+Keywords: dynamic
+Description: add height-field surface shape
+URL: ../../../library/rgl/html/surface3d.html
+
+Entry: texts
+Aliases: rgl.texts text3d texts3d
+Keywords: dynamic
+Description: add text
+URL: ../../../library/rgl/html/texts.html
+
+Entry: viewpoint
+Aliases: rgl.viewpoint view3d
+Keywords: dynamic
+Description: Set up viewpoint
+URL: ../../../library/rgl/html/viewpoint.html

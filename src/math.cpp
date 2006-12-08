@@ -1,9 +1,10 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: math.cpp 377 2005-08-04 03:15:09Z dmurdoch $
+// $Id: math.cpp 529 2006-10-08 16:39:26Z dmurdoch $
 
 #include "math.h"
+#include "R.h"
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -106,6 +107,11 @@ void Vec3::rotateY(float degree)
   z = -s*t.x + c*t.z;
 }
 
+bool Vec3::missing() const
+{
+  return ISNAN(x) || ISNAN(y) || ISNAN(z);
+}
+
 //////////////////////////////////////////////////////////////////////////////
 //
 // CLASS
@@ -186,6 +192,12 @@ Vec4 Matrix4x4::operator*(const Vec4& v) const {
 
   return r;
 }
+
+bool Vec4::missing() const
+{
+  return ISNAN(x) || ISNAN(y) || ISNAN(z) || ISNAN(w);
+}
+
 
 
 Matrix4x4 Matrix4x4::operator * (const Matrix4x4& op2) const {

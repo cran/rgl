@@ -1,0 +1,198 @@
+par3d                  package:rgl                  R Documentation
+
+_S_e_t _o_r _Q_u_e_r_y _R_G_L _P_a_r_a_m_e_t_e_r_s
+
+_D_e_s_c_r_i_p_t_i_o_n:
+
+     'par3d' can be used to set or query graphical parameters in rgl.
+     Parameters can be set by specifying them as arguments to 'par3d'
+     in 'tag = value' form, or by passing them as a list of tagged
+     values.
+
+_U_s_a_g_e:
+
+     par3d(..., no.readonly = FALSE)
+
+     open3d(..., params=get("r3dDefaults", envir=.GlobalEnv))
+
+_A_r_g_u_m_e_n_t_s:
+
+     ...: arguments in 'tag = value' form, or a list of tagged values. 
+          The tags must come from the graphical parameters described
+          below.
+
+no.readonly: logical; if 'TRUE' and there are no other arguments, only
+          those parameters which can be set by a subsequent 'par3d()'
+          call are returned.
+
+  params: a list of graphical parameters
+
+_D_e_t_a_i_l_s:
+
+     Parameters are queried by giving one or more character vectors to
+     'par3d'.
+
+     'par3d()' (no arguments) or 'par3d(no.readonly=TRUE)' is used to
+     get _all_ the graphical parameters (as a named list).  
+
+     _*R.O.*_ indicates _*read-only arguments*_: These may only be used
+     in queries, i.e., they do _not_ set anything.
+
+     'open3d' opens a new rgl device, and sets the parameters as
+     requested.  The 'r3dDefaults' list will be used as default values
+     for parameters.  As installed this sets the point of view to
+     'world coordinates' (i.e. x running from left to right, y from
+     front to back, z from bottom to top), the 'mouseMode' to '(zAxis,
+     zoom, fov)', and the field of view to 30 degrees. Users may create
+     their own variable of that name in the global environment and it
+     will override the installed one.  If there is a 'bg' element in
+     the list or the arguments, it should be a list of arguments to
+     pass to the 'bg3d' function to  set the background.  A 'material'
+     element should be a list of arguments to pass to 'material3d' to
+     set the material.
+
+_V_a_l_u_e:
+
+     When parameters are set, their former values are returned in an
+     invisible named list.  Such a list can be passed as an argument to
+     'par3d' to restore the parameter values. Use 'par3d(no.readonly =
+     TRUE)' for the full list of parameters that can be restored.
+
+     When just one parameter is queried, its value is returned
+     directly. When two or more parameters are queried, the result is a
+     list of values, with the list names giving the parameters.
+
+     Note the inconsistency: setting one parameter returns a list, but
+     querying one parameter returns an object.
+
+_P_a_r_a_m_e_t_e_r_s:
+
+     '_F_O_V' real.  The field of view, from 1 to 179 degrees.  This
+          controls the degree of parallax in the perspective view.
+          Isometric perspective (which would correspond to 'FOV=0') is
+          not currently possible, but one can approximate it by
+          specifying 'par3d(FOV=1)'.
+
+     '_i_g_n_o_r_e_E_x_t_e_n_t' logical.  Set to 'TRUE' so that subsequently
+          plotted objects will be ignored in calculating the bounding
+          box of the scene.
+
+     '_m_o_d_e_l_M_a_t_r_i_x' _*R.O.*_; a 4 by 4 matrix describing the position of
+          the user data.
+
+     '_m_o_u_s_e_M_o_d_e' character.  A vector of 3 strings describing what the
+          3 mouse buttons do. Partial matching is used.  Possible
+          values for 'mouseMode' are 
+
+          '"_n_o_n_e"' No action for this button.
+
+          '"_t_r_a_c_k_b_a_l_l"' Mouse acts as a virtual trackball, rotating the
+               scene.
+
+          '"_x_A_x_i_s"' Similar to '"trackball"', but restricted to X axis
+               rotation.
+
+          '"_y_A_x_i_s"' Y axis rotation.
+
+          '"_z_A_x_i_s"' Z axis rotation.
+
+          '"_p_o_l_a_r"' Mouse rotates the scene by moving in polar
+               coordinates.
+
+          '"_s_e_l_e_c_t_i_n_g"' Mouse is used for selection.  This is not
+               normally set by the user, but is used internally by the
+               'select3d' function.
+
+          '"_z_o_o_m"' Mouse is used to zoom the display.
+
+          '"_f_o_v"' Mouse changes the field of view of the display.
+
+
+     '_p_r_o_j_M_a_t_r_i_x' _*R.O.*_; a 4 by 4 matrix describing the current
+          projection of the scene.
+
+     '_s_c_a_l_e' real.  A vector of 3 values indicating the amount by which
+          to rescale each axis before display.  Set by 'aspect3d'.
+
+     '_s_k_i_p_R_e_d_r_a_w' whether to update the display.  Set to 'FALSE' to
+          suspend updating while making multiple changes to the scene. 
+          See 'demo(hist3d)' for an example.
+
+     '_u_s_e_r_M_a_t_r_i_x' a 4 by 4 matrix describing user actions to display
+          the scene.
+
+     '_v_i_e_w_p_o_r_t' _*R.O.*_; real.  A vector giving the dimensions of the
+          window in pixels.
+
+     '_z_o_o_m' real. A positive value indicating the current magnification
+          of the scene.
+
+     '_b_b_o_x' _*R.O.*_; real. A vector of six values indicating the
+          current values of the bounding box of the scene (xmin, xmax,
+          ymin, ymax, zmin, zmax)
+
+_n_o_t_e:
+
+     The '"xAxis"', '"yAxis"' and '"zAxis"' mouse modes rotate relative
+     to the coordinate system of the data, regardless of the current
+     orientation of the scene.
+
+_R_e_n_d_e_r_i_n_g:
+
+     The parameters returned by 'par3d' are sufficient to determine
+     where rgl would render a point on the screen.  Given a column
+     vector '(x,y,z)', it performs the equivalent of  the following
+     operations:
+
+        1.  It converts the point to homogeneous coordinates by
+           appending 'w=1', giving the vector 'v = (x,y,z,1)'.
+
+        2.  It obtains the model matrix 'M = par3d("modelMatrix")' and
+           multiplies the point by this giving 'u = M %*% v'.  Using
+           this location and information on the normals (which have
+           been similarly transformed), it performs lighting
+           calculations.  (The  'par3d("userMatrix")' is used in the
+           construction of the model matrix, along with other
+           transformations to center the object being displayed.)
+
+        3.  It obtains the projection matrix 'P = par3d("projMatrix")'
+           and multiplies the point by it giving 'P %*% u = (x2, y2,
+           z2, w2)'.
+
+        4.  It converts back to Euclidean coordinates by dividing the
+           first 3 coordinates by 'w2'.
+
+        5.  The new value 'z2/w2' represents the depth into the scene
+           of the point.  Depending on what has already been plotted,
+           this depth might be obscured, in which case nothing more is
+           plotted.
+
+        6.  If the point is not culled due to depth, the 'x2' and 'y2'
+           values are used to determine the point in the image.  The
+           'par3d("viewport")' values are used to translate from the
+           range '(-1, 1)' to pixel locations, and the point is
+           plotted.
+
+     See ?matrices for more information on homogeneous and Euclidean
+     coordinates.
+
+_R_e_f_e_r_e_n_c_e_s:
+
+     OpenGL Architecture Review Board (1997).  OpenGL Programming
+     Guide.  Addison-Wesley.
+
+_S_e_e _A_l_s_o:
+
+     'rgl.viewpoint' to set 'FOV' and 'zoom'.
+
+_E_x_a_m_p_l_e_s:
+
+         r3dDefaults
+         open3d()
+         shade3d(cube3d(color=rep(rainbow(6),rep(4,6))))
+         save <- par3d(userMatrix = rotationMatrix(90*pi/180, 1,0,0))
+         save
+         par3d("userMatrix")    
+         par3d(save)
+         par3d("userMatrix")
+

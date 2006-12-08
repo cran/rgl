@@ -1,0 +1,50 @@
+\HeaderA{rgl.primitive}{add primitive set shape}{rgl.primitive}
+\aliasA{rgl.lines}{rgl.primitive}{rgl.lines}
+\aliasA{rgl.linestrips}{rgl.primitive}{rgl.linestrips}
+\aliasA{rgl.points}{rgl.primitive}{rgl.points}
+\aliasA{rgl.quads}{rgl.primitive}{rgl.quads}
+\aliasA{rgl.triangles}{rgl.primitive}{rgl.triangles}
+\keyword{dynamic}{rgl.primitive}
+\begin{Description}\relax
+Adds a shape node to the current scene
+\end{Description}
+\begin{Usage}
+\begin{verbatim}
+rgl.points(x, y = NULL, z = NULL, ... )
+rgl.lines(x, y = NULL, z = NULL, ... )
+rgl.linestrips(x, y = NULL, z = NULL, ...)
+rgl.triangles(x, y = NULL, z = NULL, ... )
+rgl.quads(x, y = NULL, z = NULL, ... )
+\end{verbatim}
+\end{Usage}
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{x, y, z}] coordinates.  Any reasonable way of defining the
+coordinates is acceptable.  See the function \code{\LinkA{xyz.coords}{xyz.coords}}
+for details.
+\item[\code{ ... }] Material properties. See \code{\LinkA{rgl.material}{rgl.material}} for details.
+\end{ldescription}
+\end{Arguments}
+\begin{Details}\relax
+Adds a shape node to the scene. The appearance is defined by the material properties.
+See \code{\LinkA{rgl.material}{rgl.material}} for details.
+\end{Details}
+\begin{Value}
+Each primitive function returns the integer object ID of the shape that
+was added to the scene.  These can be passed to \code{\LinkA{rgl.pop}{rgl.pop}}
+to remove the object from the scene.
+\end{Value}
+\begin{SeeAlso}\relax
+\code{\LinkA{rgl.material}{rgl.material}},
+\code{\LinkA{rgl.spheres}{rgl.spheres}},
+\code{\LinkA{rgl.texts}{rgl.texts}},
+\code{\LinkA{rgl.surface}{rgl.surface}},
+\code{\LinkA{rgl.sprites}{rgl.sprites}}
+\end{SeeAlso}
+\begin{Examples}
+\begin{ExampleCode}
+rgl.open()
+rgl.points(rnorm(1000), rnorm(1000), rnorm(1000), color=heat.colors(1000), size=2)
+\end{ExampleCode}
+\end{Examples}
+

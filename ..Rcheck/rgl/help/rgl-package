@@ -1,0 +1,45 @@
+rgl-package               package:rgl               R Documentation
+
+_3_D _v_i_s_u_a_l_i_z_a_t_i_o_n _d_e_v_i_c_e _s_y_s_t_e_m
+
+_D_e_s_c_r_i_p_t_i_o_n:
+
+     3D real-time rendering device-driver system
+
+_U_s_a_g_e:
+
+     rgl.open()     # open new device
+     rgl.close()    # close current device
+     rgl.cur()      # returns active device ID
+     rgl.set(which) # set device as active
+     rgl.quit()     # shutdown rgl device system
+
+_A_r_g_u_m_e_n_t_s:
+
+   which: device ID
+
+_D_e_t_a_i_l_s:
+
+     RGL is a 3D real-time rendering device driver system for R.
+     Multiple devices are managed at a time, where one has the current
+     focus that receives instructions from the R command-line. The
+     device design is oriented towards the R device metaphor. If you
+     send scene management instructions, and there's no device open, it
+     will be opened automatically. Opened devices automatically get the
+     current device focus. The focus may be changed by using rgl.set().
+     rgl.quit() shuts down the rgl subsystem and all open devices, 
+     detaches the package including the shared library and additional
+     system libraries.
+
+_S_e_e _A_l_s_o:
+
+     'rgl.clear',  'rgl.pop', 'rgl.viewpoint', 'rgl.light', 'rgl.bg',
+     'rgl.bbox', 'rgl.points', 'rgl.lines', 'rgl.triangles',
+     'rgl.quads', 'rgl.texts', 'rgl.surface', 'rgl.spheres',
+     'rgl.sprites', 'rgl.snapshot'
+
+_E_x_a_m_p_l_e_s:
+
+     example(surface3d)
+     example(plot3d)
+

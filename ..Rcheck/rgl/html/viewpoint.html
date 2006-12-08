@@ -1,0 +1,98 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head><title>R: Set up viewpoint</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" type="text/css" href="../../R.css">
+</head><body>
+
+<table width="100%" summary="page for viewpoint {rgl}"><tr><td>viewpoint {rgl}</td><td align="right">R Documentation</td></tr></table>
+<h2>Set up viewpoint</h2>
+
+
+<h3>Description</h3>
+
+<p>
+Set the viewpoint orientation.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+view3d( theta = 0, phi = 15, ...)
+rgl.viewpoint( theta = 0, phi = 15, fov = 60, zoom = 1, scale = par3d("scale"), 
+               interactive = TRUE, userMatrix )
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>theta,phi</code></td>
+<td>
+polar coordinates</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+additional parameters to pass to <code>rgl.viewpoint</code></td></tr>
+<tr valign="top"><td><code>fov</code></td>
+<td>
+field-of-view angle</td></tr>
+<tr valign="top"><td><code>zoom</code></td>
+<td>
+zoom factor</td></tr>
+<tr valign="top"><td><code>scale</code></td>
+<td>
+real length 3 vector specifying the rescaling to apply to each axis</td></tr>
+<tr valign="top"><td><code>interactive</code></td>
+<td>
+logical, specifying if interactive navigation is allowed</td></tr>
+<tr valign="top"><td><code>userMatrix</code></td>
+<td>
+4x4 matrix specifying user point of view</td></tr>
+</table>
+
+<h3>Details</h3>
+
+<p>
+The viewpoint can be set in an orbit around the data model, using the polar coordinates <code>\theta</code>
+and <code>phi</code>.  Alternatively, it can be set in a completely general way using the 4x4 matrix
+<code>userMatrix</code>.  If <code>userMatrix</code> is specified, <code>theta</code> and <code>phi</code> are ignored.
+</p>
+<p>
+The pointing device of your graphics user-interface can also be used to 
+set the viewpoint interactively. With the pointing device the buttons are by default set as follows:
+</p>
+
+<ul>
+<dt>left</dt><dd>adjust viewpoint position</dd>
+<dt>middle</dt><dd>adjust field of view angle</dd>
+<dt>right or wheel</dt><dd>adjust zoom factor</dd>
+</ul>
+
+<h3>See Also</h3>
+
+<p>
+<code><a href="par3d.html">par3d</a></code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+
+# animated round trip tour for 10 seconds
+
+rgl.open()
+shade3d(oh3d(), color="red")
+
+start &lt;- proc.time()[3]
+while ((i &lt;- 36*(proc.time()[3]-start)) &lt; 360) {
+  rgl.viewpoint(i,i/4); 
+}
+
+</pre>
+
+
+
+<hr><div align="center">[Package <em>rgl</em> version 0.68.529 <a href="00Index.html">Index]</a></div>
+
+</body></html>

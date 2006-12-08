@@ -1,0 +1,118 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head><title>R: Add a grid to a 3D plot</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" type="text/css" href="../../R.css">
+</head><body>
+
+<table width="100%" summary="page for grid3d {rgl}"><tr><td>grid3d {rgl}</td><td align="right">R Documentation</td></tr></table>
+<h2>Add a grid to a 3D plot</h2>
+
+
+<h3>Description</h3>
+
+<p>
+This function adds a reference grid to an RGL plot.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+grid3d(side, at = NULL, col = "gray", lwd = 1, lty = 1, n = 5)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>side</code></td>
+<td>
+Where to put the grid; see the Details section. </td></tr>
+<tr valign="top"><td><code>at</code></td>
+<td>
+How to draw the grid; see the Details section. </td></tr>
+<tr valign="top"><td><code>col</code></td>
+<td>
+The color of the grid lines. </td></tr>
+<tr valign="top"><td><code>lwd</code></td>
+<td>
+The line width of the grid lines. </td></tr>
+<tr valign="top"><td><code>lty</code></td>
+<td>
+The line type of the grid lines. </td></tr>
+<tr valign="top"><td><code>n</code></td>
+<td>
+Suggested number of grid lines; see the Details section. </td></tr>
+</table>
+
+<h3>Details</h3>
+
+<p>
+This function is similar to <code><a href="../../graphics/html/grid.html">grid</a></code> in classic graphics,
+except that it draws a 3D grid in the plot.
+</p>
+<p>
+The grid is drawn in a plane perpendicular to the coordinate axes. The
+first letter of the <code>side</code> argument specifies the direction of
+the plane: <code>"x"</code>, <code>"y"</code> or <code>"z"</code> (or uppercase
+versions) to specify the coordinate which is constant on the plane.
+</p>
+<p>
+If <code>at = NULL</code> (the default), the grid is drawn at the limit of 
+the box around the data.  If the second letter of the <code>side</code> argument
+is <code>"-"</code> or is not present, it is the lower limit; if <code>"+"</code>
+then at the upper limit.  The grid lines are drawn at values
+chosen by <code><a href="../../base/html/pretty.html">pretty</a></code> with <code>n</code> suggested locations.
+The default locations should match those chosen by <code><a href="axes3d.html">axis3d</a></code>
+with <code>nticks = n</code>.
+</p>
+<p>
+If <code>at</code> is a numeric vector, the grid lines are drawn at those values.
+</p>
+<p>
+If <code>at</code> is a list, then the <code>"x"</code> component is used to
+specify the x location, the <code>"y"</code> component specifies the y location, and
+the <code>"z"</code> component specifies the z location.  Missing components
+are handled using the default as for <code>at = NULL</code>.
+</p>
+<p>
+Multiple grids may be drawn by specifying multiple values for <code>side</code>
+or for the component of <code>at</code> that specifies the grid location.
+</p>
+
+
+<h3>Value</h3>
+
+<p>
+A vector or matrix of object ids is returned invisibly.</p>
+
+<h3>Author(s)</h3>
+
+<p>
+Ben Bolker and Duncan Murdoch
+</p>
+
+
+<h3>See Also</h3>
+
+<p>
+<code><a href="axes3d.html">axis3d</a></code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+x &lt;- 1:10
+y &lt;- 1:10
+z &lt;- matrix(outer(x-5,y-5) + rnorm(100), 10, 10)
+open3d()
+persp3d(x, y, z, col="red", alpha=0.7, aspect=c(1,1,0.5))
+grid3d(c("x", "y+", "z"))
+</pre>
+
+
+
+<hr><div align="center">[Package <em>rgl</em> version 0.68.529 <a href="00Index.html">Index]</a></div>
+
+</body></html>

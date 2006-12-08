@@ -1,0 +1,69 @@
+surface3d                package:rgl                R Documentation
+
+_a_d_d _h_e_i_g_h_t-_f_i_e_l_d _s_u_r_f_a_c_e _s_h_a_p_e
+
+_D_e_s_c_r_i_p_t_i_o_n:
+
+     Adds a surface to the current scene. The surface is defined by  a
+     matrix defining the height of each grid point and two vectors
+     defining the grid.
+
+_U_s_a_g_e:
+
+     surface3d(x, y, z, ...)
+     terrain3d(x, y, z, ...)
+
+_A_r_g_u_m_e_n_t_s:
+
+      x : values corresponding to rows of 'z' 
+
+      y : values corresponding to the columns of 'z' 
+
+      z : matrix of heights 
+
+    ... : Material and texture properties. See 'rgl.material' for
+          details.
+
+_D_e_t_a_i_l_s:
+
+     Adds a surface mesh to the current scene. The surface is defined
+     by  the matrix of height values in 'z', with rows corresponding 
+     to the values in 'x' and columns corresponding to the values in 
+     'y'.  This is the same parametrization as used in 'persp'.
+
+     'surface3d' always draws the surface with the `front' upwards
+     (i.e. towards higher 'z' values).  This can be used to render the
+     top and bottom differently; see 'rgl.material' and the example
+     below.
+
+     For more flexibility in defining the surface, use 'rgl.surface'.
+
+     'surface3d' and 'terrain3d' are synonyms.
+
+_S_e_e _A_l_s_o:
+
+     'rgl.material', 'rgl.surface', 'persp'
+
+_E_x_a_m_p_l_e_s:
+
+     #
+     # volcano example taken from "persp"
+     #
+
+     data(volcano)
+
+     z <- 2 * volcano        # Exaggerate the relief
+
+     x <- 10 * (1:nrow(z))   # 10 meter spacing (S to N)
+     y <- 10 * (1:ncol(z))   # 10 meter spacing (E to W)
+
+     zlim <- range(y)
+     zlen <- zlim[2] - zlim[1] + 1
+
+     colorlut <- terrain.colors(zlen) # height color lookup table
+
+     col <- colorlut[ z-zlim[1]+1 ] # assign colors to heights for each point
+
+     open3d()
+     surface3d(x, y, z, color=col, back="lines")
+

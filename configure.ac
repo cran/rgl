@@ -4,7 +4,7 @@
 ## Process this file with autoconf to produce a configure script.
 ##
 ##
-## $Id: configure.ac 409 2005-08-26 20:42:20Z dadler $
+## $Id: configure.ac 532 2006-12-08 14:25:42Z dmurdoch $
 ##
 
 AC_PREREQ(2.50)
@@ -14,7 +14,7 @@ AC_PREREQ(2.50)
 AC_INIT()
 AC_CONFIG_AUX_DIR(src/build/autoconf)
 AC_ARG_ENABLE([carbon],
-[  --disable-carbonn          os x: use X11 instead of Carbon]
+[  --disable-carbon          os x: use X11 instead of Carbon]
 )
 
 if test `uname` = "Darwin" -a "x$enable_carbon" != "xno" ; then

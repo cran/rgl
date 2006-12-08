@@ -1,0 +1,57 @@
+rgl.postscript              package:rgl              R Documentation
+
+_e_x_p_o_r_t _s_c_r_e_e_n_s_h_o_t
+
+_D_e_s_c_r_i_p_t_i_o_n:
+
+     Saves the screenshot as PostScript file.
+
+_U_s_a_g_e:
+
+     rgl.postscript( filename, fmt="eps" )
+
+_A_r_g_u_m_e_n_t_s:
+
+filename: full path to filename.
+
+     fmt: export format, currently supported: ps, eps, tex, pdf, svg,
+          pgf 
+
+_D_e_t_a_i_l_s:
+
+     Animations can be created in a loop modifying the scene and saving
+      a screenshot to a file. (See example below)
+
+_A_u_t_h_o_r(_s):
+
+     Christophe Geuzaine / Albrecht Gebhardt
+
+_R_e_f_e_r_e_n_c_e_s:
+
+     GL2PS: an OpenGL to PostScript printing library by Christophe
+     Geuzaine
+
+_S_e_e _A_l_s_o:
+
+     'rgl.viewpoint', 'rgl.snapshot'
+
+_E_x_a_m_p_l_e_s:
+
+     ## Not run: 
+
+     #
+     # create a series of frames for an animation
+     #
+
+     rgl.open()
+     shade3d(oh3d(), color="red")
+     rgl.viewpoint(0,20)
+
+     for (i in 1:45) {
+       rgl.viewpoint(i,20)
+       filename <- paste("pic",formatC(i,digits=1,flag="0"),".eps",sep="") 
+       rgl.postscript(filename, fmt="eps")
+     }
+
+     ## End(Not run)
+
