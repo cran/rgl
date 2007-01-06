@@ -2,7 +2,7 @@
 ## R source file
 ## This file is part of rgl
 ##
-## $Id: material.R 467 2006-07-11 14:23:32Z dmurdoch $
+## $Id: material.R 539 2006-12-23 19:15:46Z dmurdoch $
 ##
 
 ##
@@ -79,16 +79,15 @@ rgl.material <- function (
   cdata <- as.character(c( texture ))
   ddata <- as.numeric(c( shininess, size, alpha ))
 
-  ret <- .C( "rgl_material",
+  ret <- .C( rgl_material,
     success = FALSE,
     idata,
     cdata,
-    ddata,
-    PACKAGE="rgl"
+    ddata
   )
 }
 
-rgl.getcolorcount <- function() .C( "rgl_getcolorcount", count=integer(1), PACKAGE="rgl" )$count
+rgl.getcolorcount <- function() .C( rgl_getcolorcount, count=integer(1) )$count
   
 rgl.getmaterial <- function(ncolors = rgl.getcolorcount()) {
 
@@ -99,12 +98,11 @@ rgl.getmaterial <- function(ncolors = rgl.getcolorcount()) {
   cdata <- character(0)
   ddata <- rep(0, 2+ncolors)
   
-  ret <- .C( "rgl_getmaterial",
+  ret <- .C( rgl_getmaterial,
     success = FALSE,
     idata = as.integer(idata),
     cdata = cdata,
-    ddata = as.numeric(ddata),
-    PACKAGE="rgl"
+    ddata = as.numeric(ddata)
   )
   
   if (!ret$success) stop('rgl.getmaterial')

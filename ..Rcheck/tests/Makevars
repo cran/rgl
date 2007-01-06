@@ -1,9 +1,0 @@
-makevars = -f Makevars
-srcdir = d:/svn/MyR/rgl/tests
-R_LIBS = d:/svn/MyR/rgl/..Rcheck;
-VPATH = $(srcdir)
-
-test-src-1 =\
- demos.R
-test-src-auto =
-USE_GCT = 0

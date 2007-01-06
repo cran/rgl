@@ -1,7 +1,7 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: device.cpp 511 2006-08-24 20:00:43Z dmurdoch $
+// $Id: device.cpp 543 2006-12-31 21:53:55Z dmurdoch $
 // ---------------------------------------------------------------------------
 #include "Device.hpp"
 #include "lib.hpp"
@@ -112,8 +112,8 @@ RGLView* Device::getRGLView(void)
   return rglview;
 }
 // ---------------------------------------------------------------------------
-bool Device::postscript(int format, const char* filename)
+bool Device::postscript(int format, const char* filename, bool drawText)
 {
-  return rglview->postscript( format, filename);
+  return rglview->postscript( format, filename, drawText);
 }
 

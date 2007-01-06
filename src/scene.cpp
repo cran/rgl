@@ -1,7 +1,7 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: scene.cpp 511 2006-08-24 20:00:43Z dmurdoch $
+// $Id: scene.cpp 543 2006-12-31 21:53:55Z dmurdoch $
 
 
 #include "scene.h"
@@ -568,4 +568,11 @@ void Scene::setIgnoreExtent(int in_ignoreExtent)
   ignoreExtent = (bool)in_ignoreExtent;
 }
 
-
+// ---------------------------------------------------------------------------
+void Scene::invalidateDisplaylists()
+{
+  std::vector<Shape*>::iterator iter;
+  for (iter = shapes.begin(); iter != shapes.end(); ++iter) {
+    (*iter)->invalidateDisplaylist();
+  }
+}

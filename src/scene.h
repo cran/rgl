@@ -4,7 +4,7 @@
 // C++ header file
 // This file is part of RGL
 //
-// $Id: scene.h 511 2006-08-24 20:00:43Z dmurdoch $
+// $Id: scene.h 543 2006-12-31 21:53:55Z dmurdoch $
 
 #include "types.h"
 #include <vector>
@@ -84,6 +84,10 @@ public:
   int getIgnoreExtent(void);
   void setIgnoreExtent(int in_ignoreExtent);
   
+  /**
+   * invalidate display lists so objects will be rendered again
+   **/
+  void invalidateDisplaylists();
 
 private:
 

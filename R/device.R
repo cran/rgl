@@ -2,7 +2,7 @@
 ## R source file
 ## This file is part of rgl
 ##
-## $Id: device.R 453 2006-06-26 01:14:15Z murdoch $
+## $Id: device.R 543 2006-12-31 21:53:55Z dmurdoch $
 ##
 
 ##
@@ -17,7 +17,7 @@
 
 rgl.open <- function() {
 
-  ret <- .C( "rgl_dev_open", success=FALSE, PACKAGE="rgl" )
+  ret <- .C( rgl_dev_open, success=FALSE )
 
   if (! ret$success)
     stop("rgl.open failed")
@@ -32,7 +32,7 @@ rgl.open <- function() {
 
 rgl.close <- function() {
 
-  ret <- .C( "rgl_dev_close", success=FALSE, PACKAGE="rgl" )
+  ret <- .C( rgl_dev_close, success=FALSE )
 
   if (! ret$success)
     stop("no device opened.")
@@ -47,10 +47,9 @@ rgl.close <- function() {
 
 rgl.cur <- function() {
 
-  ret <- .C( "rgl_dev_getcurrent", 
+  ret <- .C( rgl_dev_getcurrent, 
     success=FALSE, 
-    id=as.integer(0), 
-    PACKAGE="rgl"
+    id=as.integer(0)
   )
 
   if (! ret$success)
@@ -70,10 +69,9 @@ rgl.set <- function(which) {
 
   idata <- c( as.integer(which) )
 
-  ret <- .C( "rgl_dev_setcurrent", 
+  ret <- .C( rgl_dev_setcurrent, 
     success=FALSE, 
-    idata,
-    PACKAGE="rgl"
+    idata
   )
 
   if (! ret$success)
@@ -91,11 +89,10 @@ rgl.snapshot <- function( filename, fmt="png" )
 {
   idata <- as.integer(rgl.enum.pixfmt(fmt))
 
-  ret <- .C( "rgl_snapshot",
+  ret <- .C( rgl_snapshot,
     success=FALSE,
     idata,
-    as.character(filename),
-    PACKAGE="rgl"
+    as.character(filename)
   )
 
   if (! ret$success)
@@ -107,15 +104,14 @@ rgl.snapshot <- function( filename, fmt="png" )
 ##
 ##
 
-rgl.postscript <- function( filename, fmt="eps" )
+rgl.postscript <- function( filename, fmt="eps", drawText=TRUE )
 {
-  idata <- as.integer(rgl.enum.gl2ps(fmt))
+  idata <- as.integer(c(rgl.enum.gl2ps(fmt), as.logical(drawText)))
 
-  ret <- .C( "rgl_postscript",
+  ret <- .C( rgl_postscript,
     success=FALSE,
     idata,
-    as.character(filename),
-    PACKAGE="rgl"
+    as.character(filename)
   )
 
   if (! ret$success)
