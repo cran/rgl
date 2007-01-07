@@ -5,11 +5,12 @@
   Saves the screenshot as PostScript file.
 }
 \usage{
-rgl.postscript( filename, fmt="eps" )
+rgl.postscript( filename, fmt="eps", drawText=TRUE )
 }
 \arguments{
   \item{filename}{full path to filename.}
   \item{fmt}{export format, currently supported: ps, eps, tex, pdf, svg, pgf }
+  \item{drawText}{logical, whether to draw text}
 }
 \details{
 Animations can be created in a loop modifying the scene and saving 
@@ -20,6 +21,20 @@ GL2PS: an OpenGL to PostScript printing library by Christophe Geuzaine
 }
 \author{ Christophe Geuzaine / Albrecht Gebhardt }
 \examples{
+
+x <- y <- seq(-10,10,length=20)
+z <- outer(x,y,function(x,y) x^2 + y^2)
+persp3d(x,y,z, col='lightblue')
+
+title3d("Using LaTeX text", col='red', line=3)
+rgl.postscript("persp3da.ps","ps",drawText=FALSE)
+rgl.postscript("persp3da.pdf","pdf",drawText=FALSE)
+rgl.postscript("persp3da.tex","tex")
+rgl.pop()
+title3d("Using ps/pdf text", col='red', line=3)
+rgl.postscript("persp3db.ps","ps")
+rgl.postscript("persp3db.pdf","pdf")
+rgl.postscript("persp3db.tex","tex",drawText=FALSE)
 
 \dontrun{
 

@@ -57,7 +57,7 @@ void TextSet::draw(RenderContext* renderContext) {
       material.useColor(cnt);
       glRasterPos3f( vertexArray[cnt].x, vertexArray[cnt].y, vertexArray[cnt].z );
       String text = iter.getCurrent();
-      renderContext->font->draw( text.text, text.length, adj );
+      renderContext->font->draw( text.text, text.length, adj, renderContext->gl2psActive );
     }
   }
 

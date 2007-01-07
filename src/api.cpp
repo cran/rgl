@@ -1,7 +1,7 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: api.cpp 532 2006-12-08 14:25:42Z dmurdoch $
+// $Id: api.cpp 543 2006-12-31 21:53:55Z dmurdoch $
 
 #include "lib.hpp"
 
@@ -1029,9 +1029,10 @@ void rgl_postscript(int* successptr, int* idata, char** cdata)
   if (deviceManager && (device = deviceManager->getCurrentDevice())) {
 
     int   format   = idata[0];
+    bool  drawText = (bool)idata[1];
     char* filename = cdata[0];
 
-    success = as_success( device->postscript( format, filename ) );
+    success = as_success( device->postscript( format, filename, drawText ) );
   }
 
   *successptr = success;

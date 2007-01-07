@@ -4,7 +4,7 @@
 // C++ header file
 // This file is part of RGL
 //
-// $Id: gui.hpp 494 2006-08-01 17:25:31Z dmurdoch $
+// $Id: gui.hpp 547 2007-01-06 22:41:23Z dmurdoch $
 // ---------------------------------------------------------------------------
 #include <string.h>
 #include "types.h"
@@ -71,7 +71,7 @@ public:
 
   /// @doc notifyDestroy will be called on success
   virtual void destroy(void) = 0;
-  virtual void beginGL(void) = 0;
+  virtual bool beginGL(void) = 0;
   virtual void endGL(void) = 0;
   virtual void swap(void) = 0;
   virtual void captureMouse(View* captureView) = 0;

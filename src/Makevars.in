@@ -3,10 +3,36 @@
 # AUTO-GENERATED from Makevars.in (using configure/configure.win)
 # This file is part of the RGL project.
 #
-# $Id: Makevars.in 475 2006-07-24 15:43:35Z dmurdoch $
+# $Id: Makevars.in 535 2006-12-11 01:19:39Z dmurdoch $
 #-DGL_VERSION_1_2 
+
+ifdef MAKINGAGL
+PKG_CPPFLAGS=@AGLCPPFLAGS@ -Iext
+PKG_LIBS=@AGLLIBS@
+else
 PKG_CPPFLAGS=@CPPFLAGS@ -Iext
+PKG_LIBS=@LIBS@
+endif
+
 PKG_CFLAGS=@CFLAGS@
 PKG_CXXFLAGS=@CXXFLAGS@
-PKG_LIBS=@LIBS@ 
+BUILDAGL=@BUILDAGL@
 
+ifdef BUILDAGL
+
+ifndef MAKINGAGL
+
+AGLSHLIB=agl$(SHLIB)
+
+all: $(SHLIB) $(AGLSHLIB)
+
+$(AGLSHLIB): $(SHLIB)
+	-mkdir Temp
+	-mv *.o Temp
+	MAKINGAGL=TRUE \
+	R CMD SHLIB  -o $@ *.cpp *.c
+	mv Temp/* .
+	rm -rf Temp
+endif
+
+endif
