@@ -8,8 +8,10 @@
 // in_coords permutes the coordinates to allow surfaces over arbitrary planes
 // orientation is 1 to swap front and back
 
-Surface::Surface(Material& in_material, int in_nx, int in_nz, double* in_x, double* in_z, double* in_y, 
-	         int* in_coords, int in_orientation, int in_ignoreExtent)
+Surface::Surface(Material& in_material, int in_nx, int in_nz, double* in_x, double* in_z, double* in_y,
+                 double* in_normal_x, double* in_normal_z, double* in_normal_y,
+                 double* in_texture_s, double* in_texture_t,
+	         int* in_coords, int in_orientation, int* in_flags, int in_ignoreExtent)
 : Shape(in_material, in_ignoreExtent)
 {
   nx = in_nx;
@@ -38,19 +40,41 @@ Surface::Surface(Material& in_material, int in_nx, int in_nz, double* in_x, doub
   x = va[coords[0]-1];
   y = va[coords[1]-1];
   z = va[coords[2]-1];
-
+  
+  int xmat = in_flags[0];
+  int zmat = in_flags[1];
+  user_normals = in_flags[2];
+  user_textures = in_flags[3];
+  
+  if (user_normals)
+    normalArray.alloc(nvertex);
+    
   int iy  = 0;
   for(int iz=0;iz<nz;iz++) {
-    *z = (float) in_z[iz];
-    for(int ix=0;ix<nx;ix++,iy++) {
-      *x = (float) in_x[ix];
+    for(int ix=0;ix<nx;ix++,iy++) {    
+      *z = (float) in_z[zmat ? iy : iz];
+      *x = (float) in_x[xmat ? iy : ix];
       *y = (float) in_y[iy];
 
       vertexArray[iy] = v;
 
+      if ( user_normals ) {
+        *x = (float) in_normal_x[iy];
+        *y = (float) in_normal_y[iy];
+        *z = (float) in_normal_z[iy];
+        
+        v.normalize();
+        normalArray[iy] = v;
+      }
+      
       if ( (material.texture) && (! material.texture->is_envmap() ) ) {
-        texCoordArray[iy].s = ((float)ix)/((float)(nx-1));
-        texCoordArray[iy].t = 1.0f - ((float)iz)/((float)(nx-1));
+        if (!user_textures) {
+          texCoordArray[iy].s = ((float)ix)/((float)(nx-1));
+          texCoordArray[iy].t = 1.0f - ((float)iz)/((float)(nx-1));
+        } else {
+          texCoordArray[iy].s = in_texture_s[iy];
+          texCoordArray[iy].t = in_texture_t[iy];
+        }
       }
 
       boundingBox += v;
@@ -95,12 +119,15 @@ void Surface::draw(RenderContext* renderContext)
   material.beginUse(renderContext);
   vertexArray.beginUse();
 
-  bool use_texcoord = material.texture && !(material.texture->is_envmap() );
-  bool use_normal   = material.lit || ( (material.texture) && (material.texture->is_envmap() ) );
+  bool use_texcoord = user_textures || ( material.texture && !(material.texture->is_envmap() ) );
+  bool use_normal   = !user_normals && ( material.lit || ( (material.texture) && (material.texture->is_envmap() ) ) );
   bool missing;
   
   if (use_texcoord)
     texCoordArray.beginUse();
+    
+  if (user_normals)
+    normalArray.beginUse();
 
   for(int iz=0;iz<nz-1;iz++) {
 
@@ -132,6 +159,9 @@ void Surface::draw(RenderContext* renderContext)
     if (!missing) glEnd();
   }
 
+  if (user_normals)
+    normalArray.endUse();
+    
   if (use_texcoord)
     texCoordArray.endUse();
 
@@ -177,11 +207,14 @@ void Surface::renderZSort(RenderContext* renderContext)
   material.beginUse(renderContext);
   vertexArray.beginUse();
 
-  bool use_texcoord = material.texture && !(material.texture->is_envmap() );
-  bool use_normal   = material.lit || ( (material.texture) && (material.texture->is_envmap() ) );
+  bool use_texcoord = user_textures || ( material.texture && !(material.texture->is_envmap() ) ); 
+  bool use_normal   = !user_normals && ( material.lit || ( (material.texture) && (material.texture->is_envmap() ) ) );
 
   if (use_texcoord)
     texCoordArray.beginUse();
+    
+  if (user_normals)
+    normalArray.beginUse();
 
   for ( std::multimap<float,int>::iterator iter = distanceMap.begin(); iter != distanceMap.end() ; ++ iter ) {
     int s = iter->second;
@@ -207,6 +240,9 @@ void Surface::renderZSort(RenderContext* renderContext)
     }
   }  
 
+  if (user_normals)
+    normalArray.endUse();
+    
   if (use_texcoord)
     texCoordArray.endUse();
 

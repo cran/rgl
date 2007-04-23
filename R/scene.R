@@ -2,7 +2,7 @@
 ## R source file
 ## This file is part of rgl
 ##
-## $Id: scene.R 539 2006-12-23 19:15:46Z dmurdoch $
+## $Id: scene.R 575 2007-04-21 23:43:33Z dmurdoch $
 ##
 
 ##
@@ -18,16 +18,24 @@
 rgl.clear <- function( type = "shapes" )
 {
   type <- rgl.enum.nodetype(type)
+  
+  viewpoint <- 4 %in% type
+  material  <- 5 %in% type
 
+  type <- type[!(type %in% 4:5)]
+  
   idata <- as.integer(c(length(type), type))
-
+ 
   ret <- .C( rgl_clear, 
     success = as.integer(FALSE),
     idata
   )
   
-  if ( 4 %in% type ) # viewpoint
+  if ( viewpoint ) 
     rgl.viewpoint()
+    
+  if ( material ) 
+    rgl.material()
 
   if (! ret$success)
     stop("rgl_clear")
@@ -224,7 +232,7 @@ rgl.light <- function( theta = 0, phi = 0, viewpoint.rel = TRUE, ambient = "#FFF
 ##
 ##
 
-rgl.primitive <- function( type, x, y=NULL, z=NULL, ... )
+rgl.primitive <- function( type, x, y=NULL, z=NULL, normals=NULL, texcoords=NULL, ... )
 {
   rgl.material( ... )
 
@@ -243,17 +251,38 @@ rgl.primitive <- function( type, x, y=NULL, z=NULL, ... )
     if (nvertex %% perelement) 
       stop("illegal number of vertices")
     
-    idata   <- as.integer( c(type, nvertex ) )
-  
+    idata   <- as.integer( c(type, nvertex, !is.null(normals), !is.null(texcoords) ) )
+    
+    if (is.null(normals)) normals <- 0
+    else {
+    
+      normals <- xyz.coords(normals, recycle=TRUE)
+      x <- rep(normals$x, len=nvertex)
+      y <- rep(normals$y, len=nvertex)
+      z <- rep(normals$z, len=nvertex)
+      normals <- rgl.vertex(x,y,z)
+    }
+    
+    if (is.null(texcoords)) texcoords <- 0
+    else {
+    
+      texcoords <- xy.coords(texcoords, recycle=TRUE)
+      s <- rep(texcoords$x, len=nvertex)
+      t <- rep(texcoords$y, len=nvertex)
+      texcoords <- rgl.texcoords(s,t)
+    } 
+    
     ret <- .C( rgl_primitive,
       success = as.integer(FALSE),
       idata,
       as.numeric(vertex),
+      as.numeric(normals),
+      as.numeric(texcoords),
       NAOK = TRUE
-    );
-  
+    );      
+        
     if (! ret$success)
-      stop("rgl_points")
+      stop("rgl_primitive")
       
     invisible(ret$success)
   }
@@ -269,14 +298,14 @@ rgl.lines <- function (x, y=NULL, z=NULL, ... )
   rgl.primitive( "lines", x, y, z, ... )
 }
 
-rgl.triangles <- function (x, y=NULL, z=NULL, ... )
+rgl.triangles <- function (x, y=NULL, z=NULL, normals=NULL, texcoords=NULL, ... )
 {
-  rgl.primitive( "triangles", x, y, z, ... )
+  rgl.primitive( "triangles", x, y, z, normals, texcoords, ... )
 }
 
-rgl.quads <- function ( x, y=NULL, z=NULL, ... )
+rgl.quads <- function ( x, y=NULL, z=NULL, normals=NULL, texcoords=NULL, ... )
 {
-  rgl.primitive( "quadrangles", x, y, z, ... )
+  rgl.primitive( "quadrangles", x, y, z, normals, texcoords, ... )
 }
 
 rgl.linestrips<- function ( x, y=NULL, z=NULL, ... )
@@ -305,25 +334,55 @@ perm_parity <- function(p) {
   return(result %% 2)
 }
 
-rgl.surface <- function( x, z, y, coords=1:3, ... )
+rgl.surface <- function( x, z, y, coords=1:3,  ..., normal_x=NULL, normal_y=NULL, normal_z=NULL,
+                         texture_s=NULL, texture_t=NULL)
 {
   rgl.material(...)
-
-  nx <- length(x)
-  nz <- length(z)
+  
+  flags <- rep(FALSE, 4)
+  
+  if (is.matrix(x)) {
+    nx <- nrow(x)
+    flags[1] <- TRUE
+    if ( !identical( dim(x), dim(y) ) ) stop( "bad dimension for rows") 
+  } else nx <- length(x)
+  
+  if (is.matrix(z)) {
+    nz <- ncol(z)
+    flags[2] <- TRUE
+    if ( !identical( dim(z), dim(y) ) ) stop( "bad dimension for cols")     
+  } else nz <- length(z)
+  
   ny <- length(y)
 
   if ( nx*nz != ny)
-    stop("y length != x length * z length")
+    stop("y length != x rows * z cols")
 
   if ( nx < 2 )
-    stop("x length < 2")
+    stop("rows < 2")
   
   if ( nz < 2 )   
-    stop("y length < 2")
+    stop("cols < 2")
     
   if ( length(coords) != 3 || !identical(all.equal(sort(coords), 1:3), TRUE) )
     stop("coords must be a permutation of 1:3")
+  
+  nulls <- c(is.null(normal_x), is.null(normal_y), is.null(normal_z))
+  if (!all( nulls ) ) {
+    if (any( nulls )) stop("All normals must be supplied")
+    if ( !identical(dim(y), dim(normal_x)) 
+      || !identical(dim(y), dim(normal_y))
+      || !identical(dim(y), dim(normal_z)) ) stop("bad dimension for normals")
+    flags[3] <- TRUE
+  }
+  
+  nulls <- c(is.null(texture_s), is.null(texture_t))
+  if (!all( nulls ) ) {
+    if (any( nulls )) stop("Both texture coordinates must be supplied")
+    if ( !identical(dim(y), dim(texture_s))
+      || !identical(dim(y), dim(texture_t)) ) stop("bad dimensions for textures")
+    flags[4] <- TRUE
+  }
 
   idata <- as.integer( c( nx, nz ) )
 
@@ -335,8 +394,14 @@ rgl.surface <- function( x, z, y, coords=1:3, ... )
     as.numeric(x),
     as.numeric(z),
     as.numeric(y),
+    as.numeric(normal_x),
+    as.numeric(normal_z),
+    as.numeric(normal_y),
+    as.numeric(texture_s),
+    as.numeric(texture_t),
     as.integer(coords),
     as.integer(parity),
+    as.integer(flags),
     NAOK=TRUE
   );
 

@@ -1,10 +1,10 @@
 # RGL-Demo: animal abundance
 # Authors: Oleg Nenadic, Daniel Adler
-# $Id: abundance.r 491 2006-07-31 13:17:19Z dmurdoch $
+# $Id: abundance.r 564 2007-02-22 09:56:01Z dmurdoch $
 
 rgl.demo.abundance <- function()
 {
-  # Clear scene:
+  open3d()
   clear3d("all")               # remove all shapes, lights, bounding-box, and restore viewpoint
   
   # Setup environment:
@@ -44,6 +44,5 @@ rgl.demo.abundance <- function()
   )
 
 }
-rgl.open()
 rgl.demo.abundance()
 

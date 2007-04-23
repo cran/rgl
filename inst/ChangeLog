@@ -186,3 +186,20 @@ v0.70
   - fixed bug that could cause crash on shutdown
   - moved this file (ChangeLog) to inst directory, so it will be installed,
     and added code to display it to the rgl help topic.
+
+v0.71
+  - changes to configure script from Laszlo Kajan and Brian Ripley:  should 
+    now be much more portable
+  - removed deprecated OSX font setting calls
+  - texture properties are now returned by material3d()
+  - allowed normals and texture coordinates to be specified in triangles, quads and surfaces
+  - normals may be specified in qmesh objects, but (at present) subdivide removes them
+  - material3d() now preserves the values of unspecified parameters (as documented,
+    but not previously functioning)
+  - clear3d() can now reset material properties to the defaults, and
+    open3d() does this.
+  - minor fix for gcc 4.3 compatibility
+  - minor fix for R 2.5+ compatibility
+  - allowed more general surfaces to be plotted by rgl.surface, surface3d and 
+    persp3d, by specifying matrices for x and y coordinates
+  - added world map texture, used in example(persp3d)

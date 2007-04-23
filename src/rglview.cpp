@@ -1,7 +1,7 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: rglview.cpp 547 2007-01-06 22:41:23Z dmurdoch $
+// $Id: rglview.cpp 570 2007-04-02 23:42:28Z dmurdoch $
 
 #include "rglview.h"
 #include "opengl.hpp"
@@ -12,6 +12,7 @@
 #include "fps.h"
 #include "select.h"
 #include "gl2ps.h"
+#include <locale>
 
 //
 // CAMERA config

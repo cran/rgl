@@ -1,15 +1,21 @@
 #
 # R3D rendering functions - rgl implementation
-# $Id: r3d.rgl.R 528 2006-09-26 17:07:33Z dmurdoch $
+# $Id: r3d.rgl.R 575 2007-04-21 23:43:33Z dmurdoch $
 # 
 
 # Node Management
 
-clear3d     <- function(type = c("shapes", "bboxdeco")) {
+clear3d     <- function(type = c("shapes", "bboxdeco", "material"), 
+                        defaults=get("r3dDefaults", envir=.GlobalEnv)) {
     .check3d()
     rgl.clear( type )
-    if ( 4 %in% rgl.enum.nodetype(type) ) { # viewpoint
-	do.call("par3d", get("r3dDefaults", envir=.GlobalEnv)[c("FOV", "userMatrix")])
+    type <- rgl.enum.nodetype(type)
+    if ( 4 %in% type ) { # viewpoint
+	do.call("par3d", defaults[c("FOV", "userMatrix")])
+    }
+    if ( 5 %in% type ) { # material
+        if (length(defaults$material))
+    	    do.call("material3d", defaults$material)
     }
 }
 
@@ -18,10 +24,16 @@ pop3d       <- function(...) {.check3d(); rgl.pop(...)}
 # Environment
 
 .material3d <- c("color", "alpha", "lit", "ambient", "specular",
-    "emission", "shininess", "smooth", "front", "back", "size", "fog")
-    
-.material3d.writeOnly <- c("texture", "textype", "texmipmap",
+    "emission", "shininess", "smooth", "front", "back", "size", "fog",
+    "texture", "textype", "texmipmap",
     "texminfilter", "texmagfilter", "texenvmap")
+
+.material3d.writeOnly <- character(0)
+
+# This function expands a list of arguments by putting
+# all entries from Params (i.e. the current settings by default)
+# in place for any entries that are not listed.  
+# Unrecognized args are left in place.
 
 .fixMaterialArgs <- function(..., Params = material3d()) {
    f <- function(...) list(...)
@@ -57,6 +69,7 @@ material3d  <- function (...)
     }
     value <- rgl.getmaterial()[argnames]
     if (length(args)) {
+    	args <- do.call(".fixMaterialArgs", args)
         do.call("rgl.material", args)
         return(invisible(value))
     } else if (length(argnames) == 1) return(value[[1]])
@@ -135,9 +148,11 @@ sprites3d   <- function(x,y=NULL,z=NULL,radius=1,...) {
   do.call("rgl.sprites", c(list(x=x,y=y,z=z,radius=radius), .fixMaterialArgs(..., Params = save)))
 }
 
-terrain3d   <- function(x,y=NULL,z=NULL,...) {
+terrain3d   <- function(x,y=NULL,z=NULL,...,normal_x=NULL,normal_y=NULL,normal_z=NULL) {
   .check3d(); save <- material3d(); on.exit(material3d(save))
-  do.call("rgl.surface", c(list(x=x,y=z,z=y,coords=c(1,3,2)), .fixMaterialArgs(..., Params = save)))
+  do.call("rgl.surface", c(list(x=x,y=z,z=y,coords=c(1,3,2),
+                                normal_x=normal_x,normal_y=normal_z,normal_z=normal_y), 
+                           .fixMaterialArgs(..., Params = save)))
 }
 surface3d   <- terrain3d
 
@@ -182,15 +197,15 @@ r3dDefaults <- list(userMatrix = rotationMatrix(290*pi/180, 1, 0, 0),
 open3d <- function(..., params = get("r3dDefaults", envir=.GlobalEnv))
 {
     rgl.open()
-    params <- .fixMaterialArgs(..., Params = params)
+    
+    clear3d("material", defaults = params)
+    params$material <- NULL
+    
     if (!is.null(params$bg)) {
       do.call("bg3d", params$bg)
       params$bg <- NULL
     }
-    if (!is.null(params$material)) {
-      do.call("material3d", params$material)
-      params$material <- NULL
-    }
+ 
     do.call("par3d", params)   
     return(rgl.cur())
 }
