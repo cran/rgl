@@ -1,6 +1,6 @@
 # rgl demo: rgl-bivar.r
 # author: Daniel Adler
-# $Id: bivar.r 491 2006-07-31 13:17:19Z dmurdoch $
+# $Id: bivar.r 564 2007-02-22 09:56:01Z dmurdoch $
 
 rgl.demo.bivar <- function()
 {
@@ -25,6 +25,9 @@ rgl.demo.bivar <- function()
   # visualize:
   zscale<-20
   
+  # New window
+  open3d()
+  
   # clear scene:
   clear3d("all")
   
@@ -42,6 +45,5 @@ rgl.demo.bivar <- function()
   surface3d(xgrid,ygrid,bi.z*zscale,color="#CCCCFF",front="lines") 
 }
 
-rgl.open()
 rgl.demo.bivar()
 

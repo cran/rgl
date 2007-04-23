@@ -14,8 +14,9 @@ persp3d(x, \dots)
 }
 \arguments{
   \item{x, y}{locations of grid lines at which the values in \code{z} are
-    measured.  These must be in ascending order.  By default, equally
-    spaced values from 0 to 1 are used.  If \code{x} is a \code{list},
+    measured.  These may be given as vectors or matrices.
+    If vectors, they must be in ascending order.   Either one or both may matrices.
+    If \code{x} is a \code{list},
     its components \code{x$x} and \code{x$y} are used for \code{x}
     and \code{y}, respectively.}
   \item{z}{a matrix containing the values to be plotted.  
@@ -34,7 +35,12 @@ persp3d(x, \dots)
 }
 \details{
   This is similar to \code{\link{persp}} with user interaction.  See \code{\link{plot3d}}
-  for more details.
+  for more details
+  
+  If the \code{x} or \code{y} argument is a matrix, then it must be of the same
+  dimension as \code{z}, and the values in the matrix will be used for the corresponding
+  coordinates. This is used to plot shapes such as spheres or cylinders
+  where z is not a function of x and y.  See the fourth and fifth examples below.
 }
 \value{
   This function is called for the side effect of drawing the plot.  A vector 
@@ -81,5 +87,40 @@ bg3d("slategray")
 material3d(col="black")
 persp3d(x, y, z, col = "green3", aspect="iso",
       axes = FALSE, box = FALSE)
+
+# (4) A cylindrical plot
+
+z <- matrix(seq(0, 1, len=50), 50, 50)
+theta <- t(z)
+r <- 1 + exp( -pmin( (z - theta)^2, (z - theta - 1)^2, (z - theta + 1)^2 )/0.01 )
+x <- r*cos(theta*2*pi)
+y <- r*sin(theta*2*pi)
+
+open3d()
+persp3d(x, y, z, col="red")
+
+# (5) A globe
+
+lat <- matrix(seq(-90,90, len=50)*pi/180, 50, 50, byrow=TRUE)
+long <- matrix(seq(-180, 180, len=50)*pi/180, 50, 50)
+
+r <- 6378.1 # radius of Earth in km
+x <- -r*cos(lat)*cos(-long)
+y <- r*sin(lat)
+z <- r*cos(lat)*sin(-long)
+
+open3d()
+persp3d(x, y, z, col="white", 
+       texture=system.file("textures/worldsmall.png",package="rgl"), 
+       specular="black", axes=FALSE, box=FALSE, xlab="", ylab="", zlab="",
+       normal_x=x, normal_y=y, normal_z=z)
+
+\dontrun{
+# This looks much better, but is slow because the texture is very big
+persp3d(x, y, z, col="white", 
+       texture=system.file("textures/world.png",package="rgl"), 
+       specular="black", axes=FALSE, box=FALSE, xlab="", ylab="", zlab="",
+       normal_x=x, normal_y=y, normal_z=z)
+}
 }
 \keyword{ dynamic }

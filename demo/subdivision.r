@@ -1,11 +1,12 @@
 # RGL-demo: subdivision surfaces
 # author: Daniel Adler
-# $Id: subdivision.r 491 2006-07-31 13:17:19Z dmurdoch $
+# $Id: subdivision.r 568 2007-03-11 18:15:27Z dmurdoch $
 
 rgl.demo.subdivision <- function()
 {
   # setup environment
-  rgl.clear("all")
+  clear3d("all")
+  view3d()
   bg3d(color="gray")
   light3d()
 
@@ -30,6 +31,6 @@ rgl.demo.subdivision <- function()
 
 }
 
-rgl.open()
+open3d()
 rgl.demo.subdivision()
 

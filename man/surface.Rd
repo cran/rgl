@@ -7,22 +7,32 @@
   defining the grid.
 }
 \usage{
-rgl.surface(x, z, y, coords=1:3, ...)
+rgl.surface(x, z, y, coords=1:3, ..., 
+            normal_x=NULL, normal_y=NULL, normal_z=NULL,
+            texture_s=NULL, texture_t=NULL)
 }
 \arguments{
   \item{ x }{
-    values corresponding to rows of \code{y}
+    values corresponding to rows of \code{y}, or matrix of x coordinates
   }
   \item{ y }{
     matrix of height values
   }
   \item{ z }{
-    values corresponding to columns of \code{y}
+    values corresponding to columns of \code{y}, or matrix of z coordinates
   }
   \item{ coords }{
     See details
   }
-  \item{ ... }{Material and texture properties. See \code{\link{rgl.material}} for details.}    
+  \item{ ... }{Material and texture properties. See \code{\link{rgl.material}} for details.} 
+  \item{normal_x, normal_y, normal_z}{
+      matrices of the same dimension as \code{y} giving the coordinates of normals at 
+      each grid point}
+  \item{texture_s, texture_t}{
+      matrices of the same dimension as \code{z} giving the coordinates within the current texture
+      of each grid point}
+
+
 }
 \details{
   Adds a surface mesh to the current scene. The surface is defined by 
@@ -38,10 +48,23 @@ rgl.surface(x, z, y, coords=1:3, ...)
   and the third entry to the \code{z} parameter.  In this way 
   surfaces may be defined over any coordinate plane.
   
+  If the normals are not supplied, they will be calculated automatically based
+  on neighbouring points.
+  
+  Texture coordinates run from 0 to 1 over each dimension of the texture bitmap.
+  If texture coordinates are not supplied, they will be calculated to 
+  render the texture exactly once over the grid.  Values greater than 1 can be
+  used to repeat the texture over the surface.
+  
   \code{rgl.surface} always draws the surface with the `front' upwards
   (i.e. towards higher \code{y} values).  This can be used to render
   the top and bottom differently; see \code{\link{rgl.material}} and
   the example below.
+  
+  If the \code{x} or \code{z} argument is a matrix, then it must be of the same
+  dimension as \code{y}, and the values in the matrix will be used for the corresponding
+  coordinates. This is used to plot shapes such as cylinders
+  where y is not a function of x and z.
   
   \code{NA} values in the height matrix are not drawn.
 }
