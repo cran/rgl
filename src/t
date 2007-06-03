@@ -1,0 +1,823 @@
+gl2ps.c:158: warning: no semicolon at end of struct or union
+gl2ps.c:158: error: syntax error before "char"
+gl2ps.c:159: warning: type defaults to `int' in declaration of `GL2PSlist'
+gl2ps.c:159: warning: data definition has no type or storage class
+gl2ps.c:165: error: syntax error before "GL2PSlist"
+gl2ps.c:165: warning: no semicolon at end of struct or union
+gl2ps.c:167: error: syntax error before '}' token
+gl2ps.c:227: error: syntax error before "GL2PSlist"
+gl2ps.c:227: warning: no semicolon at end of struct or union
+gl2ps.c:230: error: syntax error before '}' token
+gl2ps.c:230: warning: type defaults to `int' in declaration of `GL2PSpdfgroup'
+gl2ps.c:230: warning: data definition has no type or storage class
+gl2ps.c:242: error: syntax error before "GL2PSlist"
+gl2ps.c:242: warning: no semicolon at end of struct or union
+gl2ps.c:257: error: syntax error before '*' token
+gl2ps.c:257: warning: type defaults to `int' in declaration of `pdfprimlist'
+gl2ps.c:257: warning: type defaults to `int' in declaration of `pdfgrouplist'
+gl2ps.c:257: warning: data definition has no type or storage class
+gl2ps.c:270: error: syntax error before '}' token
+gl2ps.c:270: warning: type defaults to `int' in declaration of `GL2PScontext'
+gl2ps.c:270: warning: data definition has no type or storage class
+gl2ps.c:286: error: syntax error before '*' token
+gl2ps.c:286: warning: type defaults to `int' in declaration of `gl2ps'
+gl2ps.c:286: warning: data definition has no type or storage class
+gl2ps.c: In function `gl2psMsg':
+gl2ps.c:302: error: request for member `options' in something not a structure or union
+gl2ps.c: In function `gl2psWriteBigEndian':
+gl2ps.c:351: error: request for member `stream' in something not a structure or union
+gl2ps.c: In function `gl2psPrintf':
+gl2ps.c:459: error: request for member `stream' in something not a structure or union
+gl2ps.c: At top level:
+gl2ps.c:527: error: syntax error before '*' token
+gl2ps.c: In function `gl2psListRealloc':
+gl2ps.c:529: error: `list' undeclared (first use in this function)
+gl2ps.c:529: error: (Each undeclared identifier is reported only once
+gl2ps.c:529: error: for each function it appears in.)
+gl2ps.c:533: error: `n' undeclared (first use in this function)
+gl2ps.c: At top level:
+gl2ps.c:547: error: syntax error before '*' token
+gl2ps.c:548: warning: return type defaults to `int'
+gl2ps.c: In function `gl2psListCreate':
+gl2ps.c:549: error: `list' undeclared (first use in this function)
+gl2ps.c:553: error: syntax error before ')' token
+gl2ps.c: At top level:
+gl2ps.c:564: error: syntax error before '*' token
+gl2ps.c: In function `gl2psListReset':
+gl2ps.c:566: error: `list' undeclared (first use in this function)
+gl2ps.c: At top level:
+gl2ps.c:571: error: syntax error before '*' token
+gl2ps.c: In function `gl2psListDelete':
+gl2ps.c:573: error: `list' undeclared (first use in this function)
+gl2ps.c: At top level:
+gl2ps.c:578: error: syntax error before '*' token
+gl2ps.c: In function `gl2psListAdd':
+gl2ps.c:580: error: `list' undeclared (first use in this function)
+gl2ps.c:586: error: `data' undeclared (first use in this function)
+gl2ps.c: At top level:
+gl2ps.c:590: error: syntax error before '*' token
+gl2ps.c: In function `gl2psListNbr':
+gl2ps.c:592: error: `list' undeclared (first use in this function)
+gl2ps.c: At top level:
+gl2ps.c:597: error: syntax error before '*' token
+gl2ps.c: In function `gl2psListPointer':
+gl2ps.c:599: error: `list' undeclared (first use in this function)
+gl2ps.c:603: error: `index' undeclared (first use in this function)
+gl2ps.c: At top level:
+gl2ps.c:610: error: syntax error before '*' token
+gl2ps.c:611: error: syntax error before ')' token
+gl2ps.c:621: error: syntax error before '*' token
+gl2ps.c:621: error: syntax error before ')' token
+gl2ps.c:631: error: syntax error before '*' token
+gl2ps.c:631: error: syntax error before ')' token
+gl2ps.c: In function `gl2psSetLastColor':
+gl2ps.c:739: error: request for member `lastrgba' in something not a structure or union
+gl2ps.c: In function `gl2psAddText':
+gl2ps.c:880: error: request for member `options' in something not a structure or union
+gl2ps.c:910: error: request for member `auxprimitives' in something not a structure or union
+gl2ps.c: In function `gl2psAdaptVertexForBlending':
+gl2ps.c:962: error: request for member `options' in something not a structure or union
+gl2ps.c:962: error: request for member `blending' in something not a structure or union
+gl2ps.c:967: error: request for member `blendfunc' in something not a structure or union
+gl2ps.c: At top level:
+gl2ps.c:1430: error: syntax error before '*' token
+gl2ps.c: In function `gl2psFindRoot':
+gl2ps.c:1437: error: `primitives' undeclared (first use in this function)
+gl2ps.c:1442: error: `root' undeclared (first use in this function)
+gl2ps.c:1444: error: request for member `options' in something not a structure or union
+gl2ps.c:1446: error: request for member `maxbestroot' in something not a structure or union
+gl2ps.c:1447: error: request for member `maxbestroot' in something not a structure or union
+gl2ps.c: At top level:
+gl2ps.c:1501: error: syntax error before "GL2PSlist"
+gl2ps.c: In function `gl2psAddPrimitiveInList':
+gl2ps.c:1505: error: `prim' undeclared (first use in this function)
+gl2ps.c:1506: error: `list' undeclared (first use in this function)
+gl2ps.c: In function `gl2psFreeBspTree':
+gl2ps.c:1520: error: dereferencing pointer to incomplete type
+gl2ps.c:1520: error: dereferencing pointer to incomplete type
+gl2ps.c:1521: error: dereferencing pointer to incomplete type
+gl2ps.c:1522: warning: implicit declaration of function `gl2psListAction'
+gl2ps.c:1522: error: dereferencing pointer to incomplete type
+gl2ps.c:1523: error: dereferencing pointer to incomplete type
+gl2ps.c:1525: error: dereferencing pointer to incomplete type
+gl2ps.c:1525: error: dereferencing pointer to incomplete type
+gl2ps.c: At top level:
+gl2ps.c:1545: error: syntax error before "GL2PSlist"
+gl2ps.c: In function `gl2psBuildBspTree':
+gl2ps.c:1548: error: `frontlist' undeclared (first use in this function)
+gl2ps.c:1548: error: `backlist' undeclared (first use in this function)
+gl2ps.c:1548: warning: left-hand operand of comma expression has no effect
+gl2ps.c:1552: error: `primitives' undeclared (first use in this function)
+gl2ps.c:1554: error: `tree' undeclared (first use in this function)
+gl2ps.c:1587: warning: implicit declaration of function `gl2psListSort'
+gl2ps.c:1592: error: invalid application of `sizeof' to incomplete type `gl2ps.c' 
+gl2ps.c:1601: error: invalid application of `sizeof' to incomplete type `gl2ps.c' 
+gl2ps.c:1548: warning: statement with no effect
+gl2ps.c: In function `gl2psTraverseBspTree':
+gl2ps.c:1621: error: dereferencing pointer to incomplete type
+gl2ps.c:1624: error: dereferencing pointer to incomplete type
+gl2ps.c:1626: warning: implicit declaration of function `gl2psListActionInverse'
+gl2ps.c:1626: error: dereferencing pointer to incomplete type
+gl2ps.c:1629: error: dereferencing pointer to incomplete type
+gl2ps.c:1631: error: dereferencing pointer to incomplete type
+gl2ps.c:1634: error: dereferencing pointer to incomplete type
+gl2ps.c:1636: error: dereferencing pointer to incomplete type
+gl2ps.c:1639: error: dereferencing pointer to incomplete type
+gl2ps.c:1641: error: dereferencing pointer to incomplete type
+gl2ps.c:1644: error: dereferencing pointer to incomplete type
+gl2ps.c:1645: error: dereferencing pointer to incomplete type
+gl2ps.c: In function `gl2psRescaleAndOffset':
+gl2ps.c:1656: error: request for member `primitives' in something not a structure or union
+gl2ps.c:1660: error: request for member `primitives' in something not a structure or union
+gl2ps.c:1666: error: request for member `primitives' in something not a structure or union
+gl2ps.c:1667: error: request for member `primitives' in something not a structure or union
+gl2ps.c:1682: error: request for member `primitives' in something not a structure or union
+gl2ps.c:1683: error: request for member `primitives' in something not a structure or union
+gl2ps.c:1687: error: request for member `options' in something not a structure or union
+gl2ps.c:1689: error: request for member `sort' in something not a structure or union
+gl2ps.c:1699: error: request for member `offset' in something not a structure or union
+gl2ps.c:1700: error: request for member `offset' in something not a structure or union
+gl2ps.c: In function `gl2psAddInBspImageTree':
+gl2ps.c:2021: error: request for member `zerosurfacearea' in something not a structure or union
+gl2ps.c:2022: error: request for member `primitivetoadd' in something not a structure or union
+gl2ps.c:2047: error: request for member `zerosurfacearea' in something not a structure or union
+gl2ps.c:2049: error: request for member `zerosurfacearea' in something not a structure or union
+gl2ps.c:2053: error: request for member `zerosurfacearea' in something not a structure or union
+gl2ps.c:2055: error: request for member `zerosurfacearea' in something not a structure or union
+gl2ps.c: In function `gl2psAddInImageTree':
+gl2ps.c:2068: error: request for member `primitivetoadd' in something not a structure or union
+gl2ps.c:2072: error: request for member `imagetree' in something not a structure or union
+gl2ps.c: At top level:
+gl2ps.c:2082: error: syntax error before "GL2PSlist"
+gl2ps.c: In function `gl2psAddBoundaryInList':
+gl2ps.c:2089: error: `prim' undeclared (first use in this function)
+gl2ps.c:2144: error: `list' undeclared (first use in this function)
+gl2ps.c: In function `gl2psBuildPolygonBoundary':
+gl2ps.c:2156: error: dereferencing pointer to incomplete type
+gl2ps.c:2157: error: dereferencing pointer to incomplete type
+gl2ps.c:2158: error: dereferencing pointer to incomplete type
+gl2ps.c:2159: error: dereferencing pointer to incomplete type
+gl2ps.c:2161: error: dereferencing pointer to incomplete type
+gl2ps.c: In function `gl2psAddPolyPrimitive':
+gl2ps.c:2192: error: request for member `primitives' in something not a structure or union
+gl2ps.c: In function `gl2psGetVertex':
+gl2ps.c:2203: error: request for member `colormode' in something not a structure or union
+gl2ps.c:2203: error: request for member `colorsize' in something not a structure or union
+gl2ps.c:2205: error: request for member `colormap' in something not a structure or union
+gl2ps.c:2206: error: request for member `colormap' in something not a structure or union
+gl2ps.c:2207: error: request for member `colormap' in something not a structure or union
+gl2ps.c:2208: error: request for member `colormap' in something not a structure or union
+gl2ps.c: In function `gl2psParseFeedbackBuffer':
+gl2ps.c:2232: error: request for member `feedback' in something not a structure or union
+gl2ps.c:2233: error: request for member `boundary' in something not a structure or union
+gl2ps.c:2237: error: request for member `boundary' in something not a structure or union
+gl2ps.c:2307: error: request for member `blending' in something not a structure or union
+gl2ps.c:2308: error: request for member `blending' in something not a structure or union
+gl2ps.c:2320: error: request for member `blendfunc' in something not a structure or union
+gl2ps.c:2325: error: request for member `blendfunc' in something not a structure or union
+gl2ps.c:2355: error: request for member `imagemap_head' in something not a structure or union
+gl2ps.c:2356: error: request for member `imagemap_head' in something not a structure or union
+gl2ps.c:2358: error: request for member `imagemap_tail' in something not a structure or union
+gl2ps.c:2359: error: request for member `imagemap_tail' in something not a structure or union
+gl2ps.c:2399: error: request for member `primitives' in something not a structure or union
+gl2ps.c:2403: error: request for member `auxprimitives' in something not a structure or union
+gl2ps.c:2404: error: request for member `primitives' in something not a structure or union
+gl2ps.c:2405: error: request for member `auxprimitives' in something not a structure or union
+gl2ps.c:2421: error: request for member `auxprimitives' in something not a structure or union
+gl2ps.c: In function `gl2psPrintPostScriptHeader':
+gl2ps.c:2669: error: request for member `format' in something not a structure or union
+gl2ps.c:2683: error: request for member `title' in something not a structure or union
+gl2ps.c:2685: error: request for member `producer' in something not a structure or union
+gl2ps.c:2687: error: request for member `format' in something not a structure or union
+gl2ps.c:2690: error: request for member `options' in something not a structure or union
+gl2ps.c:2691: error: request for member `options' in something not a structure or union
+gl2ps.c:2691: error: request for member `viewport' in something not a structure or union
+gl2ps.c:2692: error: request for member `viewport' in something not a structure or union
+gl2ps.c:2693: error: request for member `options' in something not a structure or union
+gl2ps.c:2693: error: request for member `viewport' in something not a structure or union
+gl2ps.c:2694: error: request for member `viewport' in something not a structure or union
+gl2ps.c:2699: error: request for member `options' in something not a structure or union
+gl2ps.c:2699: error: request for member `viewport' in something not a structure or union
+gl2ps.c:2700: error: request for member `viewport' in something not a structure or union
+gl2ps.c:2701: error: request for member `options' in something not a structure or union
+gl2ps.c:2701: error: request for member `viewport' in something not a structure or union
+gl2ps.c:2702: error: request for member `viewport' in something not a structure or union
+gl2ps.c:2703: error: request for member `options' in something not a structure or union
+gl2ps.c:2703: error: request for member `viewport' in something not a structure or union
+gl2ps.c:2704: error: request for member `viewport' in something not a structure or union
+gl2ps.c:2705: error: request for member `options' in something not a structure or union
+gl2ps.c:2705: error: request for member `viewport' in something not a structure or union
+gl2ps.c:2706: error: request for member `viewport' in something not a structure or union
+gl2ps.c:2728: error: request for member `options' in something not a structure or union
+gl2ps.c:2729: error: request for member `threshold' in something not a structure or union
+gl2ps.c:2729: error: request for member `threshold' in something not a structure or union
+gl2ps.c:2729: error: request for member `threshold' in something not a structure or union
+gl2ps.c:2876: error: request for member `options' in something not a structure or union
+gl2ps.c:2878: error: request for member `viewport' in something not a structure or union
+gl2ps.c:2886: error: request for member `options' in something not a structure or union
+gl2ps.c:2890: error: request for member `bgcolor' in something not a structure or union
+gl2ps.c:2890: error: request for member `bgcolor' in something not a structure or union
+gl2ps.c:2890: error: request for member `bgcolor' in something not a structure or union
+gl2ps.c:2891: error: request for member `viewport' in something not a structure or union
+gl2ps.c:2891: error: request for member `viewport' in something not a structure or union
+gl2ps.c:2891: error: request for member `viewport' in something not a structure or union
+gl2ps.c:2892: error: request for member `viewport' in something not a structure or union
+gl2ps.c:2892: error: request for member `viewport' in something not a structure or union
+gl2ps.c:2892: error: request for member `viewport' in something not a structure or union
+gl2ps.c:2893: error: request for member `viewport' in something not a structure or union
+gl2ps.c:2893: error: request for member `viewport' in something not a structure or union
+gl2ps.c: In function `gl2psPrintPostScriptColor':
+gl2ps.c:2899: error: request for member `lastrgba' in something not a structure or union
+gl2ps.c: In function `gl2psResetPostScriptColor':
+gl2ps.c:2907: error: request for member `lastrgba' in something not a structure or union
+gl2ps.c:2907: error: request for member `lastrgba' in something not a structure or union
+gl2ps.c:2907: error: request for member `lastrgba' in something not a structure or union
+gl2ps.c: In function `gl2psEndPostScriptLine':
+gl2ps.c:2913: error: request for member `lastvertex' in something not a structure or union
+gl2ps.c:2914: error: request for member `lastvertex' in something not a structure or union
+gl2ps.c:2914: error: request for member `lastvertex' in something not a structure or union
+gl2ps.c:2916: error: request for member `lastvertex' in something not a structure or union
+gl2ps.c:2918: error: request for member `lastvertex' in something not a structure or union
+gl2ps.c: In function `gl2psPrintPostScriptDash':
+gl2ps.c:2960: error: request for member `lastpattern' in something not a structure or union
+gl2ps.c:2960: error: request for member `lastfactor' in something not a structure or union
+gl2ps.c:2963: error: request for member `lastpattern' in something not a structure or union
+gl2ps.c:2964: error: request for member `lastfactor' in something not a structure or union
+gl2ps.c: In function `gl2psPrintPostScriptPrimitive':
+gl2ps.c:2990: error: request for member `options' in something not a structure or union
+gl2ps.c:3006: error: request for member `lastvertex' in something not a structure or union
+gl2ps.c:3007: error: request for member `lastrgba' in something not a structure or union
+gl2ps.c:3008: error: request for member `lastlinewidth' in something not a structure or union
+gl2ps.c:3009: error: request for member `lastpattern' in something not a structure or union
+gl2ps.c:3010: error: request for member `lastfactor' in something not a structure or union
+gl2ps.c:3023: error: request for member `lastlinewidth' in something not a structure or union
+gl2ps.c:3024: error: request for member `lastlinewidth' in something not a structure or union
+gl2ps.c:3025: error: request for member `lastlinewidth' in something not a structure or union
+gl2ps.c:3031: error: request for member `lastvertex' in something not a structure or union
+gl2ps.c: In function `gl2psPrintPostScriptBeginViewport':
+gl2ps.c:3143: error: request for member `header' in something not a structure or union
+gl2ps.c:3145: error: request for member `header' in something not a structure or union
+gl2ps.c:3151: error: request for member `options' in something not a structure or union
+gl2ps.c:3152: error: request for member `colormode' in something not a structure or union
+gl2ps.c:3152: error: request for member `colorsize' in something not a structure or union
+gl2ps.c:3157: error: request for member `colormap' in something not a structure or union
+gl2ps.c:3158: error: request for member `colormap' in something not a structure or union
+gl2ps.c:3159: error: request for member `colormap' in something not a structure or union
+gl2ps.c: In function `gl2psPrintTeXHeader':
+gl2ps.c:3226: error: request for member `filename' in something not a structure or union
+gl2ps.c:3226: error: request for member `filename' in something not a structure or union
+gl2ps.c:3227: error: request for member `filename' in something not a structure or union
+gl2ps.c:3228: error: request for member `filename' in something not a structure or union
+gl2ps.c:3229: error: request for member `filename' in something not a structure or union
+gl2ps.c:3234: error: request for member `filename' in something not a structure or union
+gl2ps.c:3242: error: request for member `stream' in something not a structure or union
+gl2ps.c:3247: error: request for member `title' in something not a structure or union
+gl2ps.c:3249: error: request for member `producer' in something not a structure or union
+gl2ps.c:3251: error: request for member `stream' in something not a structure or union
+gl2ps.c:3257: error: request for member `options' in something not a structure or union
+gl2ps.c:3258: error: request for member `viewport' in something not a structure or union
+gl2ps.c:3258: error: request for member `viewport' in something not a structure or union
+gl2ps.c: In function `gl2psPrintTeXPrimitive':
+gl2ps.c:3269: error: request for member `stream' in something not a structure or union
+gl2ps.c:3271: error: request for member `stream' in something not a structure or union
+gl2ps.c:3275: error: request for member `stream' in something not a structure or union
+gl2ps.c:3278: error: request for member `stream' in something not a structure or union
+gl2ps.c:3281: error: request for member `stream' in something not a structure or union
+gl2ps.c:3284: error: request for member `stream' in something not a structure or union
+gl2ps.c:3287: error: request for member `stream' in something not a structure or union
+gl2ps.c:3290: error: request for member `stream' in something not a structure or union
+gl2ps.c:3293: error: request for member `stream' in something not a structure or union
+gl2ps.c:3296: error: request for member `stream' in something not a structure or union
+gl2ps.c:3300: error: request for member `stream' in something not a structure or union
+gl2ps.c:3304: error: request for member `stream' in something not a structure or union
+gl2ps.c:3305: error: request for member `stream' in something not a structure or union
+gl2ps.c:3309: error: request for member `stream' in something not a structure or union
+gl2ps.c:3310: error: request for member `stream' in something not a structure or union
+gl2ps.c:3316: error: request for member `stream' in something not a structure or union
+gl2ps.c: In function `gl2psPrintTeXFooter':
+gl2ps.c:3325: error: request for member `stream' in something not a structure or union
+gl2ps.c:3326: error: request for member `options' in something not a structure or union
+gl2ps.c: In function `gl2psPrintTeXBeginViewport':
+gl2ps.c:3333: error: request for member `header' in something not a structure or union
+gl2ps.c:3335: error: request for member `header' in something not a structure or union
+gl2ps.c: In function `gl2psPutPDFText':
+gl2ps.c:3422: error: request for member `streamlength' in something not a structure or union
+gl2ps.c: In function `gl2psPutPDFImage':
+gl2ps.c:3433: error: request for member `streamlength' in something not a structure or union
+gl2ps.c: In function `gl2psPDFstacksInit':
+gl2ps.c:3443: error: request for member `objects_stack' in something not a structure or union
+gl2ps.c:3444: error: request for member `extgs_stack' in something not a structure or union
+gl2ps.c:3445: error: request for member `font_stack' in something not a structure or union
+gl2ps.c:3446: error: request for member `im_stack' in something not a structure or union
+gl2ps.c:3447: error: request for member `trgroupobjects_stack' in something not a structure or union
+gl2ps.c:3448: error: request for member `shader_stack' in something not a structure or union
+gl2ps.c:3449: error: request for member `mshader_stack' in something not a structure or union
+gl2ps.c: At top level:
+gl2ps.c:3452: error: syntax error before '*' token
+gl2ps.c: In function `gl2psPDFgroupObjectInit':
+gl2ps.c:3454: error: `gro' undeclared (first use in this function)
+gl2ps.c: In function `gl2psPDFgroupListInit':
+gl2ps.c:3469: error: syntax error before "gro"
+gl2ps.c:3478: error: request for member `pdfprimlist' in something not a structure or union
+gl2ps.c:3481: error: request for member `pdfgrouplist' in something not a structure or union
+gl2ps.c:3484: error: request for member `pdfprimlist' in something not a structure or union
+gl2ps.c:3485: error: request for member `pdfprimlist' in something not a structure or union
+gl2ps.c:3488: error: `gro' undeclared (first use in this function)
+gl2ps.c:3490: error: request for member `im_stack' in something not a structure or union
+gl2ps.c:3492: error: request for member `pdfgrouplist' in something not a structure or union
+gl2ps.c:3497: error: request for member `font_stack' in something not a structure or union
+gl2ps.c:3499: error: request for member `pdfgrouplist' in something not a structure or union
+gl2ps.c:3508: error: request for member `pdfgrouplist' in something not a structure or union
+gl2ps.c:3526: error: request for member `pdfgrouplist' in something not a structure or union
+gl2ps.c:3550: error: request for member `pdfgrouplist' in something not a structure or union
+gl2ps.c: At top level:
+gl2ps.c:3561: error: syntax error before '*' token
+gl2ps.c: In function `gl2psSortOutTrianglePDFgroup':
+gl2ps.c:3566: error: `gro' undeclared (first use in this function)
+gl2ps.c:3580: error: request for member `extgs_stack' in something not a structure or union
+gl2ps.c:3581: error: request for member `objects_stack' in something not a structure or union
+gl2ps.c:3584: error: request for member `extgs_stack' in something not a structure or union
+gl2ps.c:3585: error: request for member `objects_stack' in something not a structure or union
+gl2ps.c:3586: error: request for member `trgroupobjects_stack' in something not a structure or union
+gl2ps.c:3587: error: request for member `objects_stack' in something not a structure or union
+gl2ps.c:3588: error: request for member `mshader_stack' in something not a structure or union
+gl2ps.c:3589: error: request for member `objects_stack' in something not a structure or union
+gl2ps.c:3592: error: request for member `shader_stack' in something not a structure or union
+gl2ps.c:3593: error: request for member `objects_stack' in something not a structure or union
+gl2ps.c:3596: error: request for member `extgs_stack' in something not a structure or union
+gl2ps.c:3597: error: request for member `objects_stack' in something not a structure or union
+gl2ps.c:3598: error: request for member `shader_stack' in something not a structure or union
+gl2ps.c:3599: error: request for member `objects_stack' in something not a structure or union
+gl2ps.c:3602: error: request for member `extgs_stack' in something not a structure or union
+gl2ps.c:3603: error: request for member `objects_stack' in something not a structure or union
+gl2ps.c:3604: error: request for member `shader_stack' in something not a structure or union
+gl2ps.c:3605: error: request for member `objects_stack' in something not a structure or union
+gl2ps.c:3606: error: request for member `trgroupobjects_stack' in something not a structure or union
+gl2ps.c:3607: error: request for member `objects_stack' in something not a structure or union
+gl2ps.c:3608: error: request for member `mshader_stack' in something not a structure or union
+gl2ps.c:3609: error: request for member `objects_stack' in something not a structure or union
+gl2ps.c: In function `gl2psPDFgroupListWriteMainStream':
+gl2ps.c:3619: error: `gro' undeclared (first use in this function)
+gl2ps.c:3622: error: request for member `pdfgrouplist' in something not a structure or union
+gl2ps.c:3625: error: request for member `pdfgrouplist' in something not a structure or union
+gl2ps.c:3626: error: syntax error before ')' token
+gl2ps.c:3636: error: request for member `streamlength' in something not a structure or union
+gl2ps.c:3637: error: request for member `streamlength' in something not a structure or union
+gl2ps.c:3638: error: request for member `streamlength' in something not a structure or union
+gl2ps.c:3641: error: request for member `streamlength' in something not a structure or union
+gl2ps.c:3646: error: request for member `streamlength' in something not a structure or union
+gl2ps.c:3647: error: request for member `streamlength' in something not a structure or union
+gl2ps.c:3653: error: request for member `streamlength' in something not a structure or union
+gl2ps.c:3654: error: request for member `streamlength' in something not a structure or union
+gl2ps.c:3655: error: request for member `streamlength' in something not a structure or union
+gl2ps.c:3657: error: request for member `streamlength' in something not a structure or union
+gl2ps.c:3668: error: request for member `streamlength' in something not a structure or union
+gl2ps.c:3671: error: request for member `streamlength' in something not a structure or union
+gl2ps.c:3678: error: request for member `streamlength' in something not a structure or union
+gl2ps.c:3684: error: request for member `streamlength' in something not a structure or union
+gl2ps.c:3687: error: request for member `streamlength' in something not a structure or union
+gl2ps.c:3695: error: request for member `streamlength' in something not a structure or union
+gl2ps.c:3699: error: request for member `streamlength' in something not a structure or union
+gl2ps.c:3712: error: request for member `streamlength' in something not a structure or union
+gl2ps.c:3715: error: request for member `streamlength' in something not a structure or union
+gl2ps.c:3719: error: request for member `streamlength' in something not a structure or union
+gl2ps.c:3728: error: request for member `streamlength' in something not a structure or union
+gl2ps.c:3734: error: request for member `streamlength' in something not a structure or union
+gl2ps.c:3738: error: request for member `streamlength' in something not a structure or union
+gl2ps.c:3742: error: request for member `streamlength' in something not a structure or union
+gl2ps.c:3751: error: request for member `streamlength' in something not a structure or union
+gl2ps.c:3756: error: request for member `streamlength' in something not a structure or union
+gl2ps.c:3762: error: request for member `streamlength' in something not a structure or union
+gl2ps.c:3772: error: request for member `streamlength' in something not a structure or union
+gl2ps.c:3790: error: request for member `streamlength' in something not a structure or union
+gl2ps.c: In function `gl2psPDFgroupListWriteGStateResources':
+gl2ps.c:3805: error: `gro' undeclared (first use in this function)
+gl2ps.c:3809: error: request for member `stream' in something not a structure or union
+gl2ps.c:3813: error: request for member `pdfgrouplist' in something not a structure or union
+gl2ps.c:3814: error: syntax error before ')' token
+gl2ps.c:3816: error: request for member `stream' in something not a structure or union
+gl2ps.c:3818: error: request for member `stream' in something not a structure or union
+gl2ps.c: In function `gl2psPDFgroupListWriteShaderResources':
+gl2ps.c:3826: error: `gro' undeclared (first use in this function)
+gl2ps.c:3830: error: request for member `stream' in something not a structure or union
+gl2ps.c:3833: error: request for member `pdfgrouplist' in something not a structure or union
+gl2ps.c:3834: error: syntax error before ')' token
+gl2ps.c:3836: error: request for member `stream' in something not a structure or union
+gl2ps.c:3838: error: request for member `stream' in something not a structure or union
+gl2ps.c:3840: error: request for member `stream' in something not a structure or union
+gl2ps.c: In function `gl2psPDFgroupListWriteXObjectResources':
+gl2ps.c:3850: error: `gro' undeclared (first use in this function)
+gl2ps.c:3853: error: request for member `stream' in something not a structure or union
+gl2ps.c:3857: error: request for member `pdfgrouplist' in something not a structure or union
+gl2ps.c:3858: error: syntax error before ')' token
+gl2ps.c:3864: error: request for member `objects_stack' in something not a structure or union
+gl2ps.c:3866: error: request for member `objects_stack' in something not a structure or union
+gl2ps.c:3867: error: request for member `stream' in something not a structure or union
+gl2ps.c:3870: error: request for member `stream' in something not a structure or union
+gl2ps.c:3876: error: request for member `stream' in something not a structure or union
+gl2ps.c: In function `gl2psPDFgroupListWriteFontResources':
+gl2ps.c:3885: error: `gro' undeclared (first use in this function)
+gl2ps.c:3888: error: request for member `stream' in something not a structure or union
+gl2ps.c:3890: error: request for member `pdfgrouplist' in something not a structure or union
+gl2ps.c:3891: error: syntax error before ')' token
+gl2ps.c:3894: error: request for member `objects_stack' in something not a structure or union
+gl2ps.c:3895: error: request for member `stream' in something not a structure or union
+gl2ps.c:3897: error: request for member `stream' in something not a structure or union
+gl2ps.c: In function `gl2psPDFgroupListDelete':
+gl2ps.c:3905: error: `gro' undeclared (first use in this function)
+gl2ps.c:3907: error: request for member `pdfgrouplist' in something not a structure or union
+gl2ps.c:3910: error: request for member `pdfgrouplist' in something not a structure or union
+gl2ps.c:3911: error: syntax error before ')' token
+gl2ps.c:3915: error: request for member `pdfgrouplist' in something not a structure or union
+gl2ps.c:3916: error: request for member `pdfgrouplist' in something not a structure or union
+gl2ps.c: In function `gl2psPrintPDFInfo':
+gl2ps.c:3930: error: request for member `stream' in something not a structure or union
+gl2ps.c:3936: error: request for member `title' in something not a structure or union
+gl2ps.c:3938: error: request for member `producer' in something not a structure or union
+gl2ps.c:3941: error: request for member `stream' in something not a structure or union
+gl2ps.c:3947: error: request for member `stream' in something not a structure or union
+gl2ps.c: In function `gl2psPrintPDFCatalog':
+gl2ps.c:3964: error: request for member `stream' in something not a structure or union
+gl2ps.c: In function `gl2psPrintPDFPages':
+gl2ps.c:3975: error: request for member `stream' in something not a structure or union
+gl2ps.c: In function `gl2psOpenPDFDataStream':
+gl2ps.c:3991: error: request for member `stream' in something not a structure or union
+gl2ps.c:3996: error: request for member `stream' in something not a structure or union
+gl2ps.c: In function `gl2psOpenPDFDataStreamWritePreface':
+gl2ps.c:4010: error: request for member `options' in something not a structure or union
+gl2ps.c:4011: error: request for member `bgcolor' in something not a structure or union
+gl2ps.c:4013: error: request for member `viewport' in something not a structure or union
+gl2ps.c:4013: error: request for member `viewport' in something not a structure or union
+gl2ps.c:4014: error: request for member `viewport' in something not a structure or union
+gl2ps.c:4014: error: request for member `viewport' in something not a structure or union
+gl2ps.c: In function `gl2psPrintPDFHeader':
+gl2ps.c:4025: error: request for member `pdfprimlist' in something not a structure or union
+gl2ps.c:4028: error: request for member `xreflist' in something not a structure or union
+gl2ps.c:4028: error: request for member `objects_stack' in something not a structure or union
+gl2ps.c:4035: error: request for member `xreflist' in something not a structure or union
+gl2ps.c:4036: error: request for member `stream' in something not a structure or union
+gl2ps.c:4037: error: request for member `xreflist' in something not a structure or union
+gl2ps.c:4040: error: request for member `xreflist' in something not a structure or union
+gl2ps.c:4043: error: request for member `xreflist' in something not a structure or union
+gl2ps.c:4046: error: request for member `xreflist' in something not a structure or union
+gl2ps.c:4049: error: request for member `xreflist' in something not a structure or union
+gl2ps.c:4050: error: request for member `streamlength' in something not a structure or union
+gl2ps.c: In function `gl2psPrintPDFPrimitive':
+gl2ps.c:4059: error: request for member `options' in something not a structure or union
+gl2ps.c:4063: error: request for member `pdfprimlist' in something not a structure or union
+gl2ps.c: In function `gl2psClosePDFDataStream':
+gl2ps.c:4085: error: request for member `stream' in something not a structure or union
+gl2ps.c: In function `gl2psPrintPDFDataStreamLength':
+gl2ps.c:4095: error: request for member `stream' in something not a structure or union
+gl2ps.c: In function `gl2psPrintPDFOpenPage':
+gl2ps.c:4109: error: request for member `stream' in something not a structure or union
+gl2ps.c:4115: error: request for member `viewport' in something not a structure or union
+gl2ps.c:4115: error: request for member `viewport' in something not a structure or union
+gl2ps.c:4116: error: request for member `viewport' in something not a structure or union
+gl2ps.c:4116: error: request for member `viewport' in something not a structure or union
+gl2ps.c:4118: error: request for member `options' in something not a structure or union
+gl2ps.c:4119: error: request for member `stream' in something not a structure or union
+gl2ps.c:4121: error: request for member `stream' in something not a structure or union
+gl2ps.c: In function `gl2psPDFgroupListWriteVariableResources':
+gl2ps.c:4149: error: request for member `stream' in something not a structure or union
+gl2ps.c: In function `gl2psPrintPDFGSObject':
+gl2ps.c:4160: error: request for member `stream' in something not a structure or union
+gl2ps.c: In function `gl2psPrintPDFShader':
+gl2ps.c:4358: error: request for member `stream' in something not a structure or union
+gl2ps.c:4401: error: request for member `stream' in something not a structure or union
+gl2ps.c:4412: error: request for member `stream' in something not a structure or union
+gl2ps.c: In function `gl2psPrintPDFShaderMask':
+gl2ps.c:4425: error: request for member `stream' in something not a structure or union
+gl2ps.c:4434: error: request for member `viewport' in something not a structure or union
+gl2ps.c:4434: error: request for member `viewport' in something not a structure or union
+gl2ps.c:4435: error: request for member `viewport' in something not a structure or union
+gl2ps.c:4435: error: request for member `viewport' in something not a structure or union
+gl2ps.c:4441: error: request for member `stream' in something not a structure or union
+gl2ps.c:4446: error: request for member `stream' in something not a structure or union
+gl2ps.c:4449: error: request for member `stream' in something not a structure or union
+gl2ps.c: In function `gl2psPrintPDFShaderExtGS':
+gl2ps.c:4464: error: request for member `stream' in something not a structure or union
+gl2ps.c:4469: error: request for member `stream' in something not a structure or union
+gl2ps.c:4473: error: request for member `stream' in something not a structure or union
+gl2ps.c: In function `gl2psPrintPDFShaderSimpleExtGS':
+gl2ps.c:4485: error: request for member `stream' in something not a structure or union
+gl2ps.c: In function `gl2psPrintPDFPixmap':
+gl2ps.c:4545: error: request for member `stream' in something not a structure or union
+gl2ps.c:4558: error: request for member `stream' in something not a structure or union
+gl2ps.c:4587: error: request for member `stream' in something not a structure or union
+gl2ps.c:4595: error: request for member `stream' in something not a structure or union
+gl2ps.c: In function `gl2psPrintPDFText':
+gl2ps.c:4606: error: request for member `stream' in something not a structure or union
+gl2ps.c: In function `gl2psPDFgroupListWriteObjects':
+gl2ps.c:4626: error: `gro' undeclared (first use in this function)
+gl2ps.c:4631: error: request for member `pdfgrouplist' in something not a structure or union
+gl2ps.c:4634: error: request for member `pdfgrouplist' in something not a structure or union
+gl2ps.c:4635: error: syntax error before ')' token
+gl2ps.c:4652: error: request for member `xreflist' in something not a structure or union
+gl2ps.c:4656: error: request for member `xreflist' in something not a structure or union
+gl2ps.c:4660: error: request for member `xreflist' in something not a structure or union
+gl2ps.c:4662: error: request for member `xreflist' in something not a structure or union
+gl2ps.c:4664: error: request for member `xreflist' in something not a structure or union
+gl2ps.c:4670: error: request for member `xreflist' in something not a structure or union
+gl2ps.c:4673: error: request for member `xreflist' in something not a structure or union
+gl2ps.c:4678: error: request for member `xreflist' in something not a structure or union
+gl2ps.c:4685: error: request for member `stream' in something not a structure or union
+gl2ps.c: In function `gl2psPrintPDFFooter':
+gl2ps.c:4705: error: request for member `xreflist' in something not a structure or union
+gl2ps.c:4705: error: request for member `streamlength' in something not a structure or union
+gl2ps.c:4707: error: request for member `xreflist' in something not a structure or union
+gl2ps.c:4709: error: request for member `streamlength' in something not a structure or union
+gl2ps.c:4710: error: request for member `xreflist' in something not a structure or union
+gl2ps.c:4711: error: request for member `streamlength' in something not a structure or union
+gl2ps.c:4715: error: request for member `xreflist' in something not a structure or union
+gl2ps.c:4715: error: request for member `xreflist' in something not a structure or union
+gl2ps.c:4716: error: request for member `objects_stack' in something not a structure or union
+gl2ps.c:4717: error: request for member `xreflist' in something not a structure or union
+gl2ps.c:4720: error: request for member `xreflist' in something not a structure or union
+gl2ps.c:4722: error: request for member `xreflist' in something not a structure or union
+gl2ps.c:4722: error: request for member `objects_stack' in something not a structure or union
+gl2ps.c:4723: error: request for member `xreflist' in something not a structure or union
+gl2ps.c:4727: error: request for member `stream' in something not a structure or union
+gl2ps.c:4730: error: request for member `objects_stack' in something not a structure or union
+gl2ps.c:4732: error: request for member `objects_stack' in something not a structure or union
+gl2ps.c:4733: error: request for member `stream' in something not a structure or union
+gl2ps.c:4733: error: request for member `xreflist' in something not a structure or union
+gl2ps.c:4735: error: request for member `stream' in something not a structure or union
+gl2ps.c:4744: error: request for member `objects_stack' in something not a structure or union
+gl2ps.c:4744: error: request for member `xreflist' in something not a structure or union
+gl2ps.c:4744: error: request for member `objects_stack' in something not a structure or union
+gl2ps.c:4747: error: request for member `xreflist' in something not a structure or union
+gl2ps.c:4748: error: request for member `pdfprimlist' in something not a structure or union
+gl2ps.c: In function `gl2psPrintPDFBeginViewport':
+gl2ps.c:4771: error: request for member `header' in something not a structure or union
+gl2ps.c:4773: error: request for member `header' in something not a structure or union
+gl2ps.c:4778: error: request for member `options' in something not a structure or union
+gl2ps.c:4779: error: request for member `colormode' in something not a structure or union
+gl2ps.c:4779: error: request for member `colorsize' in something not a structure or union
+gl2ps.c:4784: error: request for member `colormap' in something not a structure or union
+gl2ps.c:4785: error: request for member `colormap' in something not a structure or union
+gl2ps.c:4786: error: request for member `colormap' in something not a structure or union
+gl2ps.c:4802: error: request for member `streamlength' in something not a structure or union
+gl2ps.c: In function `gl2psPrintPDFEndViewport':
+gl2ps.c:4810: error: request for member `streamlength' in something not a structure or union
+gl2ps.c: In function `gl2psSVGGetCoordsAndColors':
+gl2ps.c:4844: error: request for member `viewport' in something not a structure or union
+gl2ps.c: In function `gl2psPrintSVGHeader':
+gl2ps.c:4870: error: request for member `options' in something not a structure or union
+gl2ps.c:4871: error: request for member `viewport' in something not a structure or union
+gl2ps.c:4872: error: request for member `viewport' in something not a structure or union
+gl2ps.c:4873: error: request for member `viewport' in something not a structure or union
+gl2ps.c:4874: error: request for member `viewport' in something not a structure or union
+gl2ps.c:4877: error: request for member `viewport' in something not a structure or union
+gl2ps.c:4878: error: request for member `viewport' in something not a structure or union
+gl2ps.c:4879: error: request for member `viewport' in something not a structure or union
+gl2ps.c:4880: error: request for member `viewport' in something not a structure or union
+gl2ps.c:4891: error: request for member `title' in something not a structure or union
+gl2ps.c:4897: error: request for member `producer' in something not a structure or union
+gl2ps.c:4902: error: request for member `options' in something not a structure or union
+gl2ps.c:4903: error: request for member `bgcolor' in something not a structure or union
+gl2ps.c:4905: error: request for member `viewport' in something not a structure or union
+gl2ps.c:4905: error: request for member `viewport' in something not a structure or union
+gl2ps.c:4906: error: request for member `viewport' in something not a structure or union
+gl2ps.c:4906: error: request for member `viewport' in something not a structure or union
+gl2ps.c:4907: error: request for member `viewport' in something not a structure or union
+gl2ps.c:4907: error: request for member `viewport' in something not a structure or union
+gl2ps.c:4908: error: request for member `viewport' in something not a structure or union
+gl2ps.c:4908: error: request for member `viewport' in something not a structure or union
+gl2ps.c: In function `gl2psPrintSVGSmoothTriangle':
+gl2ps.c:4925: error: request for member `threshold' in something not a structure or union
+gl2ps.c: In function `gl2psEndSVGLine':
+gl2ps.c:4999: error: request for member `lastvertex' in something not a structure or union
+gl2ps.c:5000: error: request for member `lastvertex' in something not a structure or union
+gl2ps.c:5001: error: request for member `viewport' in something not a structure or union
+gl2ps.c:5001: error: request for member `lastvertex' in something not a structure or union
+gl2ps.c:5003: error: request for member `lastvertex' in something not a structure or union
+gl2ps.c:5005: error: request for member `lastvertex' in something not a structure or union
+gl2ps.c: In function `gl2psPrintSVGPrimitive':
+gl2ps.c:5051: error: request for member `options' in something not a structure or union
+gl2ps.c:5069: error: request for member `lastvertex' in something not a structure or union
+gl2ps.c:5070: error: request for member `lastrgba' in something not a structure or union
+gl2ps.c:5071: error: request for member `lastlinewidth' in something not a structure or union
+gl2ps.c:5072: error: request for member `lastpattern' in something not a structure or union
+gl2ps.c:5073: error: request for member `lastfactor' in something not a structure or union
+gl2ps.c:5084: error: request for member `lastvertex' in something not a structure or union
+gl2ps.c:5086: error: request for member `lastlinewidth' in something not a structure or union
+gl2ps.c:5087: error: request for member `lastpattern' in something not a structure or union
+gl2ps.c:5088: error: request for member `lastfactor' in something not a structure or union
+gl2ps.c: In function `gl2psPrintSVGBeginViewport':
+gl2ps.c:5147: error: request for member `header' in something not a structure or union
+gl2ps.c:5149: error: request for member `header' in something not a structure or union
+gl2ps.c:5152: error: request for member `options' in something not a structure or union
+gl2ps.c:5153: error: request for member `colormode' in something not a structure or union
+gl2ps.c:5153: error: request for member `colorsize' in something not a structure or union
+gl2ps.c:5158: error: request for member `colormap' in something not a structure or union
+gl2ps.c:5159: error: request for member `colormap' in something not a structure or union
+gl2ps.c:5160: error: request for member `colormap' in something not a structure or union
+gl2ps.c:5165: error: request for member `viewport' in something not a structure or union
+gl2ps.c:5166: error: request for member `viewport' in something not a structure or union
+gl2ps.c:5167: error: request for member `viewport' in something not a structure or union
+gl2ps.c:5168: error: request for member `viewport' in something not a structure or union
+gl2ps.c:5173: error: request for member `viewport' in something not a structure or union
+gl2ps.c:5174: error: request for member `viewport' in something not a structure or union
+gl2ps.c:5175: error: request for member `viewport' in something not a structure or union
+gl2ps.c:5176: error: request for member `viewport' in something not a structure or union
+gl2ps.c: In function `gl2psPrintPGFColor':
+gl2ps.c:5217: error: request for member `lastrgba' in something not a structure or union
+gl2ps.c:5219: error: request for member `stream' in something not a structure or union
+gl2ps.c: In function `gl2psPrintPGFHeader':
+gl2ps.c:5229: error: request for member `stream' in something not a structure or union
+gl2ps.c:5234: error: request for member `title' in something not a structure or union
+gl2ps.c:5236: error: request for member `producer' in something not a structure or union
+gl2ps.c:5238: error: request for member `stream' in something not a structure or union
+gl2ps.c:5239: error: request for member `options' in something not a structure or union
+gl2ps.c:5240: error: request for member `bgcolor' in something not a structure or union
+gl2ps.c:5241: error: request for member `stream' in something not a structure or union
+gl2ps.c:5245: error: request for member `viewport' in something not a structure or union
+gl2ps.c:5245: error: request for member `viewport' in something not a structure or union
+gl2ps.c:5246: error: request for member `viewport' in something not a structure or union
+gl2ps.c:5246: error: request for member `viewport' in something not a structure or union
+gl2ps.c: In function `gl2psPrintPGFDash':
+gl2ps.c:5254: error: request for member `lastpattern' in something not a structure or union
+gl2ps.c:5254: error: request for member `lastfactor' in something not a structure or union
+gl2ps.c:5257: error: request for member `lastpattern' in something not a structure or union
+gl2ps.c:5258: error: request for member `lastfactor' in something not a structure or union
+gl2ps.c:5262: error: request for member `stream' in something not a structure or union
+gl2ps.c:5266: error: request for member `stream' in something not a structure or union
+gl2ps.c:5267: error: request for member `stream' in something not a structure or union
+gl2ps.c:5268: error: request for member `stream' in something not a structure or union
+gl2ps.c: In function `gl2psPrintPGFPrimitive':
+gl2ps.c:5298: error: request for member `stream' in something not a structure or union
+gl2ps.c:5307: error: request for member `lastlinewidth' in something not a structure or union
+gl2ps.c:5308: error: request for member `lastlinewidth' in something not a structure or union
+gl2ps.c:5309: error: request for member `stream' in something not a structure or union
+gl2ps.c:5309: error: request for member `lastlinewidth' in something not a structure or union
+gl2ps.c:5312: error: request for member `stream' in something not a structure or union
+gl2ps.c:5320: error: request for member `lastlinewidth' in something not a structure or union
+gl2ps.c:5321: error: request for member `lastlinewidth' in something not a structure or union
+gl2ps.c:5322: error: request for member `stream' in something not a structure or union
+gl2ps.c:5325: error: request for member `stream' in something not a structure or union
+gl2ps.c:5336: error: request for member `stream' in something not a structure or union
+gl2ps.c:5340: error: request for member `stream' in something not a structure or union
+gl2ps.c:5342: error: request for member `stream' in something not a structure or union
+gl2ps.c:5346: error: request for member `stream' in something not a structure or union
+gl2ps.c:5350: error: request for member `stream' in something not a structure or union
+gl2ps.c:5356: error: request for member `stream' in something not a structure or union
+gl2ps.c: In function `gl2psPrintPGFFooter':
+gl2ps.c:5365: error: request for member `stream' in something not a structure or union
+gl2ps.c: In function `gl2psPrintPGFBeginViewport':
+gl2ps.c:5376: error: request for member `header' in something not a structure or union
+gl2ps.c:5378: error: request for member `header' in something not a structure or union
+gl2ps.c:5381: error: request for member `stream' in something not a structure or union
+gl2ps.c:5382: error: request for member `options' in something not a structure or union
+gl2ps.c:5383: error: request for member `colormode' in something not a structure or union
+gl2ps.c:5383: error: request for member `colorsize' in something not a structure or union
+gl2ps.c:5388: error: request for member `colormap' in something not a structure or union
+gl2ps.c:5389: error: request for member `colormap' in something not a structure or union
+gl2ps.c:5390: error: request for member `colormap' in something not a structure or union
+gl2ps.c:5394: error: request for member `stream' in something not a structure or union
+gl2ps.c:5401: error: request for member `stream' in something not a structure or union
+gl2ps.c: In function `gl2psPrintPGFEndViewport':
+gl2ps.c:5412: error: request for member `stream' in something not a structure or union
+gl2ps.c: In function `gl2psComputeTightBoundingBox':
+gl2ps.c:5459: error: request for member `viewport' in something not a structure or union
+gl2ps.c:5460: error: request for member `viewport' in something not a structure or union
+gl2ps.c:5461: error: request for member `viewport' in something not a structure or union
+gl2ps.c:5462: error: request for member `viewport' in something not a structure or union
+gl2ps.c:5463: error: request for member `viewport' in something not a structure or union
+gl2ps.c:5464: error: request for member `viewport' in something not a structure or union
+gl2ps.c:5465: error: request for member `viewport' in something not a structure or union
+gl2ps.c:5466: error: request for member `viewport' in something not a structure or union
+gl2ps.c: In function `gl2psPrintPrimitives':
+gl2ps.c:5488: error: request for member `header' in something not a structure or union
+gl2ps.c:5489: error: request for member `primitives' in something not a structure or union
+gl2ps.c:5490: error: request for member `options' in something not a structure or union
+gl2ps.c:5491: error: request for member `viewport' in something not a structure or union
+gl2ps.c:5491: error: request for member `viewport' in something not a structure or union
+gl2ps.c:5492: error: request for member `viewport' in something not a structure or union
+gl2ps.c:5492: error: request for member `viewport' in something not a structure or union
+gl2ps.c:5493: error: request for member `primitives' in something not a structure or union
+gl2ps.c:5495: error: request for member `format' in something not a structure or union
+gl2ps.c:5496: error: request for member `header' in something not a structure or union
+gl2ps.c:5499: error: request for member `primitives' in something not a structure or union
+gl2ps.c:5504: error: request for member `sort' in something not a structure or union
+gl2ps.c:5506: error: request for member `primitives' in something not a structure or union
+gl2ps.c:5506: error: request for member `format' in something not a structure or union
+gl2ps.c:5507: error: request for member `primitives' in something not a structure or union
+gl2ps.c:5509: error: request for member `primitives' in something not a structure or union
+gl2ps.c:5512: error: request for member `primitives' in something not a structure or union
+gl2ps.c:5513: error: request for member `options' in something not a structure or union
+gl2ps.c:5514: error: request for member `primitives' in something not a structure or union
+gl2ps.c:5515: error: request for member `imagetree' in something not a structure or union
+gl2ps.c:5517: error: request for member `primitives' in something not a structure or union
+gl2ps.c:5517: error: request for member `format' in something not a structure or union
+gl2ps.c:5518: error: request for member `primitives' in something not a structure or union
+gl2ps.c:5520: error: request for member `primitives' in something not a structure or union
+gl2ps.c:5523: error: invalid application of `sizeof' to incomplete type `gl2ps.c' 
+gl2ps.c:5524: error: request for member `primitives' in something not a structure or union
+gl2ps.c:5525: error: request for member `boundary' in something not a structure or union
+gl2ps.c:5526: error: request for member `options' in something not a structure or union
+gl2ps.c:5529: error: request for member `imagetree' in something not a structure or union
+gl2ps.c:5532: error: request for member `format' in something not a structure or union
+gl2ps.c:5536: error: request for member `primitives' in something not a structure or union
+gl2ps.c:5539: error: request for member `format' in something not a structure or union
+gl2ps.c: In function `gl2psBeginPage':
+gl2ps.c:5565: error: syntax error before ')' token
+gl2ps.c:5568: error: request for member `format' in something not a structure or union
+gl2ps.c:5581: error: request for member `sort' in something not a structure or union
+gl2ps.c:5591: error: request for member `stream' in something not a structure or union
+gl2ps.c:5600: error: request for member `header' in something not a structure or union
+gl2ps.c:5601: error: request for member `maxbestroot' in something not a structure or union
+gl2ps.c:5602: error: request for member `options' in something not a structure or union
+gl2ps.c:5603: error: request for member `compress' in something not a structure or union
+gl2ps.c:5604: error: request for member `imagemap_head' in something not a structure or union
+gl2ps.c:5605: error: request for member `imagemap_tail' in something not a structure or union
+gl2ps.c:5607: error: request for member `options' in something not a structure or union
+gl2ps.c:5608: error: request for member `viewport' in something not a structure or union
+gl2ps.c:5612: error: request for member `viewport' in something not a structure or union
+gl2ps.c:5616: error: request for member `viewport' in something not a structure or union
+gl2ps.c:5616: error: request for member `viewport' in something not a structure or union
+gl2ps.c:5618: error: request for member `viewport' in something not a structure or union
+gl2ps.c:5618: error: request for member `viewport' in something not a structure or union
+gl2ps.c:5619: error: request for member `viewport' in something not a structure or union
+gl2ps.c:5619: error: request for member `viewport' in something not a structure or union
+gl2ps.c:5625: error: request for member `threshold' in something not a structure or union
+gl2ps.c:5626: error: request for member `threshold' in something not a structure or union
+gl2ps.c:5627: error: request for member `threshold' in something not a structure or union
+gl2ps.c:5628: error: request for member `colormode' in something not a structure or union
+gl2ps.c:5629: error: request for member `buffersize' in something not a structure or union
+gl2ps.c:5631: error: request for member `lastvertex' in something not a structure or union
+gl2ps.c:5634: error: request for member `lastvertex' in something not a structure or union
+gl2ps.c:5635: error: request for member `lastrgba' in something not a structure or union
+gl2ps.c:5637: error: request for member `lastlinewidth' in something not a structure or union
+gl2ps.c:5638: error: request for member `lastpattern' in something not a structure or union
+gl2ps.c:5639: error: request for member `lastfactor' in something not a structure or union
+gl2ps.c:5640: error: request for member `imagetree' in something not a structure or union
+gl2ps.c:5641: error: request for member `primitivetoadd' in something not a structure or union
+gl2ps.c:5642: error: request for member `zerosurfacearea' in something not a structure or union
+gl2ps.c:5643: error: request for member `pdfprimlist' in something not a structure or union
+gl2ps.c:5644: error: request for member `pdfgrouplist' in something not a structure or union
+gl2ps.c:5645: error: request for member `xreflist' in something not a structure or union
+gl2ps.c:5649: error: request for member `blending' in something not a structure or union
+gl2ps.c:5649: error: request for member `format' in something not a structure or union
+gl2ps.c:5650: error: request for member `blendfunc' in something not a structure or union
+gl2ps.c:5651: error: request for member `blendfunc' in something not a structure or union
+gl2ps.c:5653: error: request for member `colormode' in something not a structure or union
+gl2ps.c:5654: error: request for member `colorsize' in something not a structure or union
+gl2ps.c:5655: error: request for member `colormap' in something not a structure or union
+gl2ps.c:5656: error: request for member `bgcolor' in something not a structure or union
+gl2ps.c:5658: error: request for member `colormode' in something not a structure or union
+gl2ps.c:5665: error: request for member `colorsize' in something not a structure or union
+gl2ps.c:5666: error: request for member `colormap' in something not a structure or union
+gl2ps.c:5666: error: request for member `colorsize' in something not a structure or union
+gl2ps.c:5667: error: request for member `colormap' in something not a structure or union
+gl2ps.c:5667: error: request for member `colorsize' in something not a structure or union
+gl2ps.c:5669: error: request for member `bgcolor' in something not a structure or union
+gl2ps.c:5669: error: request for member `colormap' in something not a structure or union
+gl2ps.c:5670: error: request for member `bgcolor' in something not a structure or union
+gl2ps.c:5670: error: request for member `colormap' in something not a structure or union
+gl2ps.c:5671: error: request for member `bgcolor' in something not a structure or union
+gl2ps.c:5671: error: request for member `colormap' in something not a structure or union
+gl2ps.c:5672: error: request for member `bgcolor' in something not a structure or union
+gl2ps.c:5682: error: request for member `title' in something not a structure or union
+gl2ps.c:5683: error: request for member `title' in something not a structure or union
+gl2ps.c:5686: error: request for member `title' in something not a structure or union
+gl2ps.c:5687: error: request for member `title' in something not a structure or union
+gl2ps.c:5691: error: request for member `producer' in something not a structure or union
+gl2ps.c:5692: error: request for member `producer' in something not a structure or union
+gl2ps.c:5695: error: request for member `producer' in something not a structure or union
+gl2ps.c:5696: error: request for member `producer' in something not a structure or union
+gl2ps.c:5700: error: request for member `filename' in something not a structure or union
+gl2ps.c:5701: error: request for member `filename' in something not a structure or union
+gl2ps.c:5704: error: request for member `filename' in something not a structure or union
+gl2ps.c:5705: error: request for member `filename' in something not a structure or union
+gl2ps.c:5708: error: request for member `primitives' in something not a structure or union
+gl2ps.c:5709: error: request for member `auxprimitives' in something not a structure or union
+gl2ps.c:5710: error: request for member `feedback' in something not a structure or union
+gl2ps.c:5710: error: request for member `buffersize' in something not a structure or union
+gl2ps.c:5711: error: request for member `buffersize' in something not a structure or union
+gl2ps.c:5711: error: request for member `feedback' in something not a structure or union
+gl2ps.c: In function `gl2psEndPage':
+gl2ps.c:5726: error: request for member `format' in something not a structure or union
+gl2ps.c:5728: error: request for member `stream' in something not a structure or union
+gl2ps.c:5730: error: request for member `primitives' in something not a structure or union
+gl2ps.c:5731: error: request for member `auxprimitives' in something not a structure or union
+gl2ps.c:5732: error: request for member `imagemap_head' in something not a structure or union
+gl2ps.c:5733: error: request for member `colormap' in something not a structure or union
+gl2ps.c:5734: error: request for member `title' in something not a structure or union
+gl2ps.c:5735: error: request for member `producer' in something not a structure or union
+gl2ps.c:5736: error: request for member `filename' in something not a structure or union
+gl2ps.c:5737: error: request for member `feedback' in something not a structure or union
+gl2ps.c: In function `gl2psBeginViewport':
+gl2ps.c:5748: error: request for member `format' in something not a structure or union
+gl2ps.c: In function `gl2psEndViewport':
+gl2ps.c:5759: error: request for member `format' in something not a structure or union
+gl2ps.c: In function `gl2psDrawPixels':
+gl2ps.c:5794: error: request for member `options' in something not a structure or union
+gl2ps.c:5829: error: request for member `options' in something not a structure or union
+gl2ps.c:5829: error: request for member `blending' in something not a structure or union
+gl2ps.c:5855: error: request for member `auxprimitives' in something not a structure or union
+gl2ps.c: In function `gl2psEnable':
+gl2ps.c:5895: error: request for member `offset' in something not a structure or union
+gl2ps.c:5896: error: request for member `offset' in something not a structure or union
+gl2ps.c: In function `gl2psSetOptions':
+gl2ps.c:5983: error: request for member `options' in something not a structure or union
