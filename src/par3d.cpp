@@ -1,7 +1,7 @@
 /* Avoid conflict with Rinternals.h */
 // #undef DEBUG
 
-#include <R.h>
+#include "R.h"
 
 #include "api.h"
 
@@ -10,9 +10,10 @@
 #define _  
 #define streql(s, t)	(!strcmp((s), (t)))
 
-extern "C" {
 #include <Rdefines.h>
 #include <Rinternals.h>
+
+extern "C" {
 EXPORT_SYMBOL SEXP par3d(SEXP args);
 }
 /* par3d implementation based on R's par implementation
@@ -90,8 +91,8 @@ static void BoundsCheck(double x, double a, double b, const char *s)
 
 /* These modes must match the definitions of mmTRACKBALL etc in rglview.h ! */ 
 
-char* mouseModes[] = {"none", "trackball", "xAxis", "yAxis", "zAxis", "polar", "selecting", "zoom", "fov"};
-#define mmLAST 9
+char* mouseModes[] = {"none", "trackball", "xAxis", "yAxis", "zAxis", "polar", "selecting", "zoom", "fov", "user"};
+#define mmLAST 10
 
 static void Specify(const char *what, SEXP value)
 {

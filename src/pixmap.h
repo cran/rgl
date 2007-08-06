@@ -4,9 +4,9 @@
 // C++ header file
 // This file is part of RGL
 //
-// $Id: pixmap.h 376 2005-08-03 23:58:47Z dadler $
+// $Id: pixmap.h 586 2007-08-03 19:47:16Z dmurdoch $
 
-#include <stdio.h>
+#include <cstdio>
 #include "opengl.hpp"
 
 class PixmapFormat;

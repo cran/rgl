@@ -4,9 +4,9 @@
 // C++ header file
 // This file is part of RGL
 //
-// $Id: gui.hpp 547 2007-01-06 22:41:23Z dmurdoch $
+// $Id: gui.hpp 586 2007-08-03 19:47:16Z dmurdoch $
 // ---------------------------------------------------------------------------
-#include <string.h>
+#include <cstring>
 #include "types.h"
 #include "glgui.hpp"
 #include "Disposable.hpp"

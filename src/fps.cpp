@@ -1,13 +1,13 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: fps.cpp 545 2007-01-01 15:31:31Z dmurdoch $
+// $Id: fps.cpp 586 2007-08-03 19:47:16Z dmurdoch $
 
 #include "fps.h"
 
 #include "glgui.hpp"
 
-#include <stdio.h>
+#include <cstdio>
 
 void FPS::init(double time)
 {

@@ -1,9 +1,8 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: gui.cpp 413 2005-10-02 10:32:47Z dmurdoch $
+// $Id: gui.cpp 587 2007-08-05 15:20:18Z dadler $
 // ---------------------------------------------------------------------------
-#include <string.h>
 #include "gui.hpp"
 #include "lib.hpp"
 // ---------------------------------------------------------------------------
@@ -147,10 +146,10 @@ void Window::setWindowImpl(WindowImpl* impl)
     child->setWindowImpl(impl);
 }
 // ---------------------------------------------------------------------------
-void Window::setTitle(const char* title)
+void Window::setTitle(const char* in_title)
 {
   if (windowImpl)
-    windowImpl->setTitle(title);
+    windowImpl->setTitle(in_title);
 }
 // ---------------------------------------------------------------------------
 void Window::update(void)
@@ -194,10 +193,10 @@ void Window::hide(void)
     child->hide();
 }
 // ---------------------------------------------------------------------------
-void Window::resize(int width, int height)
+void Window::resize(int in_width, int in_height)
 {
   if (child)
-    child->resize(width,height);
+    child->resize(in_width,in_height);
 }
 // ---------------------------------------------------------------------------
 void Window::paint(void)

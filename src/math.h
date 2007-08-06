@@ -4,10 +4,10 @@
 // C++ header file
 // This file is part of RGL
 //
-// $Id: math.h 563 2007-02-22 00:45:16Z dmurdoch $
+// $Id: math.h 586 2007-08-03 19:47:16Z dmurdoch $
 
-#include <math.h>
-#include <float.h>
+#include <cmath>
+#include <cfloat>
 
 #include "types.h"
 
