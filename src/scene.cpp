@@ -1,7 +1,7 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: scene.cpp 569 2007-03-20 13:06:58Z dmurdoch $
+// $Id: scene.cpp 587 2007-08-05 15:20:18Z dadler $
 
 
 #include "scene.h"
@@ -463,7 +463,7 @@ void Scene::render(RenderContext* renderContext)
         const AABox& aabox = shape->getBoundingBox();
 
         float distance = renderContext->getDistance( aabox.getCenter() );
-        distanceMap.insert( std::pair<float,int>(-distance, index) );
+        distanceMap.insert( std::pair<const float,int>(-distance, index) );
         index++;
 
       }

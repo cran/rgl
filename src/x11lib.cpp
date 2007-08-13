@@ -3,7 +3,7 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: x11lib.cpp 455 2006-06-26 01:17:13Z murdoch $
+// $Id: x11lib.cpp 587 2007-08-05 15:20:18Z dadler $
 
 #include "lib.hpp"
 
@@ -29,7 +29,7 @@ gui::GUIFactory* getGUIFactory()
 // ===[ R INTEGRATION ]=======================================================
 //
 
-#include <R.h>
+#include "R.h"
 #include <R_ext/eventloop.h>
 
 static InputHandler* R_handler = NULL;
@@ -93,8 +93,6 @@ void quit()
 //
 // printMessage
 //
-
-#include <R.h>
 
 void printMessage( const char* string ) {
   REprintf("RGL: %s\n", string);

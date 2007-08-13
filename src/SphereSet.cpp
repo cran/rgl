@@ -65,7 +65,7 @@ void SphereSet::renderZSort(RenderContext* renderContext)
   std::multimap<float,int> distanceMap;
   for (int index = 0 ; index < center.size() ; ++index ) {
     float distance = renderContext->getDistance( center.get(index) );
-    distanceMap.insert( std::pair<float,int>(-distance,index) );
+    distanceMap.insert( std::pair<const float,int>(-distance,index) );
   }
 
   material.beginUse(renderContext);

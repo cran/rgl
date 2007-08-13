@@ -1,7 +1,7 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: devicemanager.cpp 376 2005-08-03 23:58:47Z dadler $
+// $Id: devicemanager.cpp 591 2007-08-12 01:18:08Z dmurdoch $
 
 #include "DeviceManager.hpp"
 #include "types.h"
@@ -16,7 +16,13 @@ DeviceManager::DeviceManager()
 
 DeviceManager::~DeviceManager()
 {
-  std::vector<Device*> disposeList( devices.begin(), devices.end() );
+  std::vector<Device*> disposeList;
+  {
+    for( Container::const_iterator i = devices.begin(), end = devices.end() ;  i!=end ; ++i ) {
+      disposeList.push_back(*i);
+    }
+  }
+  // disploseList. devices.begin(), devices.end() );
   for (std::vector<Device*>::iterator i = disposeList.begin(); i != disposeList.end() ; ++ i ) {
     // remove manager from listeners    
     (*i)->removeDisposeListener(this);

@@ -210,3 +210,9 @@ v0.72
 v0.73
   - partial changes to avoid crash on MacOSX with Xvfb
   - change to rgl_init for R 2.6.0 compatibility
+  
+v0.74
+  - clean up #includes
+  - clean up some calls for SunStudio 12 compiler
+  - add rgl.setMouseCallbacks to allow user actions
+  

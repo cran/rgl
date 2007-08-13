@@ -3,7 +3,7 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: win32gui.cpp 585 2007-07-17 14:01:23Z dmurdoch $
+// $Id: win32gui.cpp 591 2007-08-12 01:18:08Z dmurdoch $
 
 #include "win32gui.hpp"
 
@@ -11,6 +11,7 @@
 #include "glgui.hpp"
 
 #include <winuser.h>
+#include <cassert>
 // ---------------------------------------------------------------------------
 namespace gui {
 
