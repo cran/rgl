@@ -2,7 +2,7 @@
 ## R source file
 ## This file is part of rgl
 ##
-## $Id: device.R 543 2006-12-31 21:53:55Z dmurdoch $
+## $Id: device.R 603 2007-09-30 20:36:40Z dmurdoch $
 ##
 
 ##
@@ -85,8 +85,10 @@ rgl.set <- function(which) {
 ##
 ##
 
-rgl.snapshot <- function( filename, fmt="png" )
+rgl.snapshot <- function( filename, fmt="png", top=TRUE )
 {
+  if (top) rgl.bringtotop()
+  
   idata <- as.integer(rgl.enum.pixfmt(fmt))
 
   ret <- .C( rgl_snapshot,
