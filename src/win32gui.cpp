@@ -3,7 +3,7 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: win32gui.cpp 592 2007-08-13 19:52:09Z dmurdoch $
+// $Id: win32gui.cpp 618 2007-12-02 13:54:02Z dmurdoch $
 
 #include "win32gui.hpp"
 
@@ -11,7 +11,7 @@
 #include "glgui.hpp"
 
 #include <winuser.h>
-#include <cassert>
+#include "assert.hpp"
 // ---------------------------------------------------------------------------
 namespace gui {
 
@@ -53,8 +53,8 @@ class Win32WindowImpl : public WindowImpl
 public:
   Win32WindowImpl(Window* in_window);
   void setTitle(const char* title);
-  void setLocation(int x, int y);
-  void setSize(int width, int height);
+  void setWindowRect(int left, int top, int right, int bottom);
+  void getWindowRect(int *left, int *top, int *right, int *bottom);
   void show();
   void hide();
   int  isTopmost(HWND handle);
@@ -111,14 +111,42 @@ void Win32WindowImpl::setTitle(const char* title)
   SetWindowText(windowHandle, title);
 }
 
-void Win32WindowImpl::setLocation(int x, int y)
+void Win32WindowImpl::setWindowRect(int left, int top, int right, int bottom)
 {
-  // FIXME
+  if (windowHandle) {
+    RECT rect;
+    
+    rect.left = left;
+    rect.top = top;
+    rect.right = right;
+    rect.bottom = bottom;
+    
+    // Specification gives the desired client coordinates; expand to include the frame
+    AdjustWindowRectEx(&rect, GetWindowLong(windowHandle, GWL_STYLE), FALSE,
+                              GetWindowLong(windowHandle, GWL_EXSTYLE)); 
+    MoveWindow(windowHandle, rect.left, rect.top, rect.right-rect.left, rect.bottom-rect.top, TRUE);
+  }
 }
 
-void Win32WindowImpl::setSize(int width, int height)
+void Win32WindowImpl::getWindowRect(int *left, int *top, int *right, int *bottom)
 {
-  // FIXME
+  if (windowHandle) {
+    RECT rect;
+    GetClientRect(windowHandle, &rect);
+    ClientToScreen(windowHandle, (LPPOINT)&rect.left);
+    ClientToScreen(windowHandle, (LPPOINT)&rect.right);
+    // Rect is now in screen coordinates; convert to parent client area coordinates 
+    // for MDI
+    HWND parent = GetParent(windowHandle);
+    if (parent) {
+      ScreenToClient(parent, (LPPOINT)&rect.left);
+      ScreenToClient(parent, (LPPOINT)&rect.right);
+    }
+    *left = rect.left;
+    *top = rect.top;
+    *right = rect.right;
+    *bottom = rect.bottom;
+  }
 }
 
 void Win32WindowImpl::show()
