@@ -1,7 +1,7 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: device.cpp 543 2006-12-31 21:53:55Z dmurdoch $
+// $Id: device.cpp 616 2007-11-29 15:18:21Z dmurdoch $
 // ---------------------------------------------------------------------------
 #include "Device.hpp"
 #include "lib.hpp"
@@ -55,6 +55,17 @@ void Device::bringToTop(int stay)
 {
   window->bringToTop(stay);
 }
+
+void Device::setWindowRect(int left, int top, int right, int bottom)
+{
+  window->setWindowRect(left, top, right, bottom);
+}
+
+void Device::getWindowRect(int *left, int *top, int *right, int *bottom)
+{
+  window->getWindowRect(left, top, right, bottom);
+}
+
 // ---------------------------------------------------------------------------
 int Device::getIgnoreExtent(void)
 {

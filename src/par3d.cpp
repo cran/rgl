@@ -91,7 +91,7 @@ static void BoundsCheck(double x, double a, double b, const char *s)
 
 /* These modes must match the definitions of mmTRACKBALL etc in rglview.h ! */ 
 
-char* mouseModes[] = {"none", "trackball", "xAxis", "yAxis", "zAxis", "polar", "selecting", "zoom", "fov", "user"};
+const char* mouseModes[] = {"none", "trackball", "xAxis", "yAxis", "zAxis", "polar", "selecting", "zoom", "fov", "user"};
 #define mmLAST 10
 
 static void Specify(const char *what, SEXP value)
@@ -170,7 +170,13 @@ static void Specify(const char *what, SEXP value)
 	rgl_setPosition(REAL(x));
 	success = 1;
     }
-    
+    else if (streql(what, "windowRect")) {
+        lengthCheck(what, value, 4);
+        x = coerceVector(value, INTSXP);
+        
+        rgl_setWindowRect(&success, INTEGER(x));
+        success = 1;
+    }    
      else warning(_("parameter \"%s\" cannot be set"), what);
  
     if (!success) par_error(what);
@@ -248,6 +254,11 @@ static SEXP Query(const char *what)
     else if (streql(what, ".position")) {
       value = allocVector(REALSXP, 2);
       rgl_getPosition(REAL(value));
+      success = 1;
+    }
+    else if (streql(what, "windowRect")) {
+      value = allocVector(INTSXP, 4);
+      rgl_getWindowRect(&success, INTEGER(value));
       success = 1;
     }
     else

@@ -4,7 +4,7 @@
 // C++ header file
 // This file is part of RGL
 //
-// $Id: Device.hpp 543 2006-12-31 21:53:55Z dmurdoch $
+// $Id: Device.hpp 616 2007-11-29 15:18:21Z dmurdoch $
 
 #include "Disposable.hpp"
 #include "types.h"
@@ -51,6 +51,10 @@ public: // -- all methods are blocking until action completed
   void setIgnoreExtent(int in_ignoreExtent);  
   int getSkipRedraw(void);
   void setSkipRedraw(int in_skipRedraw);
+  
+  void setWindowRect(int left, int top, int right, int bottom);
+  void getWindowRect(int *left, int *top, int *right, int *bottom);
+  
 
 // event handlers
 protected:
