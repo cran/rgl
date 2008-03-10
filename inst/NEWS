@@ -221,9 +221,14 @@ v0.75
   - rounding error could cause par3d(userMatrix) to generate NaNs and fail
   - workaround for Xvfb on MacOSX problems
   
- v 0.76
+v0.76
   - put our own assert() macro in place to avoid crashing R.
   - rename ChangeLog file to NEWS, as per discussion on R-devel
   - add "windowRect" to par3d parameters to allow window size to be
     controlled from R.
+    
+ v0.77
+  - par3d("windowRect") returned garbage if there was no window open.
+  - persp3d() and plot3d() sometimes miscalculated ranges involving NAs.
+  - select3d() and rgl.select() produced a very inefficient test function.
     

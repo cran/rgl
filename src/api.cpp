@@ -1,7 +1,7 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: api.cpp 616 2007-11-29 15:18:21Z dmurdoch $
+// $Id: api.cpp 634 2008-02-21 10:45:59Z dmurdoch $
 
 #include "lib.hpp"
 
@@ -1013,6 +1013,7 @@ void rgl_getWindowRect(int* successptr, int* rect)
      device->getWindowRect(rect, rect+1, rect+2, rect+3);
      success = RGL_SUCCESS;
   }
+  *successptr = success;
 }
 
 void rgl_setWindowRect(int* successptr, int* rect)
@@ -1025,6 +1026,7 @@ void rgl_setWindowRect(int* successptr, int* rect)
     device->setWindowRect(rect[0], rect[1], rect[2], rect[3]);
     success = RGL_SUCCESS;
   }
+  *successptr = success;
 }
 
 void rgl_postscript(int* successptr, int* idata, char** cdata)
