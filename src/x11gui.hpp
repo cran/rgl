@@ -4,7 +4,7 @@
 // C++ header file
 // This file is part of RGL
 //
-// $Id: x11gui.hpp 376 2005-08-03 23:58:47Z dadler $
+// $Id: x11gui.hpp 666 2008-04-17 13:44:58Z dmurdoch $
 // ---------------------------------------------------------------------------
 #include <X11/Xlib.h>
 #include <GL/glx.h>
@@ -46,7 +46,7 @@ public:
   int errorBase, eventBase;
   
   // Font specific
-  ::Font xfont;
+  XFontStruct* xfont;
   
   void throw_error(const char* string);
 private:

@@ -4,7 +4,7 @@
 // C++ header file
 // This file is part of RGL
 //
-// $Id: math.h 586 2007-08-03 19:47:16Z dmurdoch $
+// $Id: math.h 666 2008-04-17 13:44:58Z dmurdoch $
 
 #include <cmath>
 #include <cfloat>
@@ -172,9 +172,9 @@ struct RectSize
   int height;
 };
 
-struct Rect
+struct Rect2
 {
-  Rect(int in_x, int in_y, int in_w, int in_h)
+  Rect2(int in_x, int in_y, int in_w, int in_h)
   : x(in_x)
   , y(in_y)
   , width(in_w)

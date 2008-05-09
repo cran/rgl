@@ -4,7 +4,7 @@
 ## Process this file with autoconf to produce a configure script.
 ##
 ##
-## $Id: configure.ac 573 2007-04-19 12:41:26Z dmurdoch $
+## $Id: configure.ac 667 2008-04-17 14:36:57Z dmurdoch $
 ##
 
 AC_PREREQ(2.50)
@@ -117,7 +117,8 @@ fi
     # Apple's OpenGL is different from the X11 one - it must be loaded *before* X11
     if test -e /System/Library/Frameworks/OpenGL.framework ; then
       CPPFLAGS="-I/System/Library/Frameworks/OpenGL.framework/Headers ${CPPFLAGS} -DNO_GL_PREFIX"
-      LIBS="-framework OpenGL ${LIBS}"
+    # OSX 10.5 messes up X11; this works around it
+      LIBS="-framework OpenGL -dylib_file /System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libGL.dylib:/System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libGL.dylib ${LIBS}"
     fi
     # X11 must come *after* the OpenGL stuff
     CPPFLAGS="${CPPFLAGS} -I/usr/X11R6/include"
@@ -163,6 +164,24 @@ AC_CHECK_LIB($lGLU, gluProject)
 this=`eval echo '${'$as_ac_Lib'}'`
 if test "x$this" != xyes; then
   AC_ERROR([missing required library ${lGLU}])
+fi
+
+## --- FTGL ------------------------------------------------------------------
+
+AC_ARG_ENABLE([ftgl],
+[  --disable-ftgl             compile without FTGL font support]
+)
+if test "x$enable_ftgl" != "xno"; then
+  AC_CHECK_PROG([HAVE_FREETYPE_CONFIG],[freetype-config],[yes],[no])
+  if test "x$HAVE_FREETYPE_CONFIG" = "xyes"; then
+    CPPFLAGS="${CPPFLAGS} -DHAVE_FREETYPE -Iext/ftgl `freetype-config --cflags`"
+    LIBS="${LIBS} `freetype-config --libs`"
+    AGLCPPFLAGS="${AGLCPPFLAGS} -DHAVE_FREETYPE -Iext/ftgl `freetype-config --cflags`"
+    AGLLIBS="${AGLLIBS} `freetype-config --libs`"
+    AC_MSG_NOTICE([using Freetype and FTGL])
+  fi
+else
+  AC_MSG_NOTICE([compiling without FTGL support])
 fi
 
 ## --- Output ----------------------------------------------------------------

@@ -1,12 +1,26 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: gui.cpp 616 2007-11-29 15:18:21Z dmurdoch $
+// $Id: gui.cpp 666 2008-04-17 13:44:58Z dmurdoch $
 // ---------------------------------------------------------------------------
 #include "gui.hpp"
 #include "lib.hpp"
 // ---------------------------------------------------------------------------
 namespace gui {
+// ---------------------------------------------------------------------------
+// WindowImpl common code
+// ---------------------------------------------------------------------------
+void WindowImpl::getFonts(FontArray& outfonts, int nfonts, char** family, int* style, 
+                          double* cex, bool useFreeType)
+{
+  GLFont* font;
+  outfonts.resize(nfonts);
+  for (int i = 0; i < nfonts; i++) {
+    font = getFont(*(family++), *(style++), *(cex++), useFreeType);
+    outfonts[i] = font;
+  }  
+}
+
 // ---------------------------------------------------------------------------
 // View Implementation
 // ---------------------------------------------------------------------------
@@ -263,6 +277,12 @@ void Window::wheelRotate(int dir)
 void Window::on_close()
 {
   windowImpl->destroy();
+}
+// ---------------------------------------------------------------------------
+void Window::getFonts(FontArray& outfonts, int nfonts, char** family, int* style, 
+                      double* cex, bool useFreeType)
+{
+  windowImpl->getFonts(outfonts, nfonts, family, style, cex, useFreeType);
 }
 // ---------------------------------------------------------------------------
 } // namespace gui
