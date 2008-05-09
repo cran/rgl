@@ -1,6 +1,6 @@
 #
 # R3D rendering functions - rgl implementation
-# $Id: r3d.rgl.R 575 2007-04-21 23:43:33Z dmurdoch $
+# $Id: r3d.rgl.R 666 2008-04-17 13:44:58Z dmurdoch $
 # 
 
 # Node Management
@@ -134,7 +134,7 @@ text3d      <- function(x,y=NULL,z=NULL,texts,adj=0.5,justify,...) {
   .check3d(); save <- material3d(); on.exit(material3d(save))
   new <- .fixMaterialArgs(..., Params = save)
   if (!missing(justify)) new <- c(list(justify=justify), new)
-  do.call("rgl.texts", c(list(x=x,y=y,z=z,text=texts,adj),new))
+  do.call("rgl.texts", c(list(x=x,y=y,z=z,text=texts,adj=adj),new))
 }
 texts3d	    <- text3d
 
@@ -192,6 +192,7 @@ r3dDefaults <- list(userMatrix = rotationMatrix(290*pi/180, 1, 0, 0),
 		  mouseMode = c("trackball", "zoom", "fov"),
 		  FOV = 30,
 		  bg = list(color="white"),
+		  family = "sans",
 		  material = list(color="black", fog=FALSE))
 
 open3d <- function(..., params = get("r3dDefaults", envir=.GlobalEnv))

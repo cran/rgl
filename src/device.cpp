@@ -1,7 +1,7 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: device.cpp 616 2007-11-29 15:18:21Z dmurdoch $
+// $Id: device.cpp 666 2008-04-17 13:44:58Z dmurdoch $
 // ---------------------------------------------------------------------------
 #include "Device.hpp"
 #include "lib.hpp"
@@ -127,4 +127,9 @@ bool Device::postscript(int format, const char* filename, bool drawText)
 {
   return rglview->postscript( format, filename, drawText);
 }
-
+// ---------------------------------------------------------------------------
+void Device::getFonts(FontArray& outfonts, int nfonts, char** family, int* style, double* cex, 
+                      bool useFreeType)
+{
+  window->getFonts(outfonts, nfonts, family, style, cex, useFreeType);
+}
