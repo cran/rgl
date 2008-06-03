@@ -4,7 +4,7 @@
 // C++ header file
 // This file is part of RGL
 //
-// $Id: DeviceManager.hpp 384 2005-08-04 22:32:13Z dadler $
+// $Id: DeviceManager.hpp 678 2008-06-03 13:26:54Z dmurdoch $
 
 #include "Device.hpp"
 
@@ -22,7 +22,7 @@ public:
   bool    openDevice(void);
   Device* getCurrentDevice(void);
   Device* getAnyDevice(void);
-  bool    setCurrent(int id);
+  bool    setCurrent(int id, bool silent = false);
   int     getCurrent();
 protected:
   /**

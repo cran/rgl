@@ -1,7 +1,7 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: devicemanager.cpp 611 2007-11-10 17:22:02Z dmurdoch $
+// $Id: devicemanager.cpp 678 2008-06-03 13:26:54Z dmurdoch $
 
 #include "DeviceManager.hpp"
 #include "types.h"
@@ -64,7 +64,7 @@ Device* DeviceManager::getAnyDevice()
   return pDevice;
 }
 
-bool DeviceManager::setCurrent(int id)
+bool DeviceManager::setCurrent(int id, bool silent)
 {
   char buffer[64];
   
@@ -74,13 +74,15 @@ bool DeviceManager::setCurrent(int id)
       break; 
   }
   if ( i != devices.end() ) {
-    if ( current != devices.end() ) {
+    if ( !silent && current != devices.end() ) {
       sprintf(buffer, "RGL device %d", (*current)->getID() );    
       (*current)->setName(buffer);
     }
     current = i;
-    sprintf(buffer, "RGL device %d [Focus]", (*current)->getID() );    
-    (*current)->setName(buffer);
+    if ( !silent ) {
+      sprintf(buffer, "RGL device %d [Focus]", (*current)->getID() );    
+      (*current)->setName(buffer);
+    }
     return true;
   } else
     return false;

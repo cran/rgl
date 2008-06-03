@@ -1,7 +1,7 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: device.cpp 666 2008-04-17 13:44:58Z dmurdoch $
+// $Id: device.cpp 672 2008-05-13 12:52:09Z dmurdoch $
 // ---------------------------------------------------------------------------
 #include "Device.hpp"
 #include "lib.hpp"
@@ -108,7 +108,11 @@ int Device::add(SceneNode* node)
 bool Device::pop(TypeID stackTypeID, int id)
 {
   bool success;
-  success = scene->pop(stackTypeID, id);
+  if (rglview->windowImpl->beginGL()) { // Need to set context for display lists.
+    success = scene->pop(stackTypeID, id);
+    rglview->windowImpl->endGL();
+  } else 
+    success = false;
   rglview->update();
   return success;
 }
