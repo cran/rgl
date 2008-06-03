@@ -2,7 +2,7 @@
 ## R source file
 ## This file is part of rgl
 ##
-## $Id: device.R 603 2007-09-30 20:36:40Z dmurdoch $
+## $Id: device.R 678 2008-06-03 13:26:54Z dmurdoch $
 ##
 
 ##
@@ -65,9 +65,9 @@ rgl.cur <- function() {
 ##
 ##
 
-rgl.set <- function(which) {
+rgl.set <- function(which, silent = FALSE) {
 
-  idata <- c( as.integer(which) )
+  idata <- c( as.integer(which), as.integer(silent) )
 
   ret <- .C( rgl_dev_setcurrent, 
     success=FALSE, 
