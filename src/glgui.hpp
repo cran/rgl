@@ -4,7 +4,7 @@
 // C++ header
 // This file is part of rgl
 //
-// $Id: glgui.hpp 666 2008-04-17 13:44:58Z dmurdoch $
+// $Id: glgui.hpp 680 2008-07-17 14:24:00Z dmurdoch $
 
 #include "opengl.hpp"
 #include <vector>
@@ -87,7 +87,7 @@ public:
 };
 
 #ifdef HAVE_FREETYPE
-#include "FTFont.h"
+#include "FTGL/ftgl.h"
 #endif
 
 //

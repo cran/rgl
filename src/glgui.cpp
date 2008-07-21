@@ -1,7 +1,7 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: glgui.cpp 666 2008-04-17 13:44:58Z dmurdoch $
+// $Id: glgui.cpp 680 2008-07-17 14:24:00Z dmurdoch $
 
 #include "types.h"
 #include "glgui.hpp"
@@ -103,11 +103,7 @@ void GLBitmapFont::draw(const wchar_t* text, int length,
 
 #ifdef HAVE_FREETYPE
 
-#include "FTGLOutlineFont.h"
-#include "FTGLPolygonFont.h"
-#include "FTGLBitmapFont.h"
-#include "FTGLTextureFont.h"
-#include "FTGLPixmapFont.h"
+#include "FTGL/ftgl.h"
 #include "R.h"
 
 GLFTFont::GLFTFont(const char* in_family, int in_style, double in_cex, const char* in_fontname) 

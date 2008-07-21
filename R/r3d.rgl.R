@@ -1,6 +1,6 @@
 #
 # R3D rendering functions - rgl implementation
-# $Id: r3d.rgl.R 666 2008-04-17 13:44:58Z dmurdoch $
+# $Id: r3d.rgl.R 681 2008-07-18 13:32:51Z dmurdoch $
 # 
 
 # Node Management
