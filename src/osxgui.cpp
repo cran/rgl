@@ -172,9 +172,14 @@ GLFont* OSXWindowImpl::getFont(const char* family, int style, double cex,
     if (isString(Rfontname) && length(Rfontname) >= style) {
       const char* fontname = CHAR(STRING_ELT(Rfontname, style-1)); 
       GLFTFont* font=new GLFTFont(family, style, cex, fontname);
-      fonts.push_back(font);
-      UNPROTECT(1);
-      return font;
+      if (font->font) {
+        fonts.push_back(font);
+        UNPROTECT(1);
+        return font;
+      } else {
+        warning(font->errmsg);
+        delete font;
+      }
     }
     UNPROTECT(1);
 #endif

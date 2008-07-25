@@ -3,7 +3,7 @@
 # AUTO-GENERATED from Makevars.in (using configure/configure.win)
 # This file is part of the RGL project.
 #
-# $Id: Makevars.in 592 2007-08-13 19:52:09Z dmurdoch $
+# $Id: Makevars.in 691 2008-07-24 18:50:33Z dmurdoch $
 #-DGL_VERSION_1_2 
 
 PKG_CPPFLAGS=@CPPFLAGS@ -Iext
@@ -26,7 +26,10 @@ all: $(SHLIB) @BUILD_AGL_TRUE@ $(AGLSHLIB)
 
 $(AGLSHLIB): $(SHLIB)
 	-mkdir Temp
-	-mv *.o Temp
+	-mv x11*.o osx*.o Temp
+	mkdir -p AGL
+	-mv AGL/* .
 	MAKINGAGL=TRUE $(R_HOME)/bin/R CMD SHLIB  -o $@ *.cpp *.c
+	mv x11*.o osx*.o AGL
 	mv Temp/* .
 	rm -rf Temp

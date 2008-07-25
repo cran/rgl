@@ -1,7 +1,7 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: glgui.cpp 680 2008-07-17 14:24:00Z dmurdoch $
+// $Id: glgui.cpp 689 2008-07-23 18:32:20Z dmurdoch $
 
 #include "types.h"
 #include "glgui.hpp"
@@ -111,19 +111,28 @@ GLFTFont::GLFTFont(const char* in_family, int in_style, double in_cex, const cha
 {
   font=new FTGLPixmapFont(fontname);
   if (font->Error()) { 
-    error("Cannot create font, error code: %i.", 
-	  font->Error());
-  }
-  unsigned int size = 16*cex + 0.5;
-  if (size<1) { size=1; }
-  if (!font->FaceSize(size)) {
-    error("Cannot create font of size %f.", size);
+    errmsg = "Cannot create Freetype font";
+    delete font;
+    font = NULL;
+  } else {
+    unsigned int size = 16*cex + 0.5;
+    if (size<1) { size=1; }
+    if (!font->FaceSize(size)) {
+      errmsg = "Cannot create Freetype font of requested size";
+      delete font;
+      font = NULL;
+    }
   }
 /*  font->CharMap(ft_encoding_unicode);
   if (font->Error()) {
     error("Cannot set unicode encoding."); 
   }*/
 
+}
+
+GLFTFont::~GLFTFont()
+{
+  if (font) delete font;
 }
 
 double GLFTFont::width(const char* text) {
