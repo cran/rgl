@@ -2,7 +2,7 @@
 ## R source file
 ## This file is part of rgl
 ##
-## $Id: zzz.R 589 2007-08-06 19:49:42Z dmurdoch $
+## $Id: zzz.R 690 2008-07-23 20:05:10Z dmurdoch $
 ##
 
 ##
@@ -76,6 +76,18 @@
 	 rgl_par3d="par3d", "rgl_quit")
 	 
   useDynLib(dll, entries)
+ 
+  if ( .Platform$OS.type == "windows" ) {
+    rglFonts(serif = rglFont(c("times.ttf", "timesbd.ttf", "timesi.ttf", "timesbi.ttf")),
+             sans = rglFont(c("arial.ttf", "arialbd.ttf", "ariali.ttf", "arialbi.ttf")),
+             mono = rglFont(c("cour.ttf", "courbd.ttf", "couri.ttf", "courbi.ttf")),
+             symbol = rglFont(rep("symbol.ttf", 4)))
+  } else {
+    rglFonts(serif = rep(system.file("fonts/FreeSerif.ttf", package="rgl"), 4),
+             sans  = rep(system.file("fonts/FreeSans.ttf", package="rgl"), 4),
+             mono  = rep(system.file("fonts/FreeMono.ttf", package="rgl"), 4),
+             symbol = rep(system.file("fonts/FreeSerif.ttf", package="rgl"), 4))
+  }
 	 
   ret <- rgl.init(initValue)
   

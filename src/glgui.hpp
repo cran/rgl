@@ -4,7 +4,7 @@
 // C++ header
 // This file is part of rgl
 //
-// $Id: glgui.hpp 680 2008-07-17 14:24:00Z dmurdoch $
+// $Id: glgui.hpp 689 2008-07-23 18:32:20Z dmurdoch $
 
 #include "opengl.hpp"
 #include <vector>
@@ -109,6 +109,7 @@ public:
   double height();
   
   FTFont *font;
+  const char *errmsg;
 #endif
 };
 

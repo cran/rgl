@@ -3,7 +3,7 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: win32gui.cpp 666 2008-04-17 13:44:58Z dmurdoch $
+// $Id: win32gui.cpp 689 2008-07-23 18:32:20Z dmurdoch $
 
 #include "win32gui.hpp"
 
@@ -418,9 +418,14 @@ GLFont* Win32WindowImpl::getFont(const char* family, int style, double cex,
       assert(len + strlen(fontname) <= MAX_PATH);
       strcat(fontname_absolute, fontname);  
       GLFTFont* font=new GLFTFont(family, style, cex, fontname_absolute);
-      fonts.push_back(font);
-      UNPROTECT(1);
-      return font;
+      if (font->font) {
+        fonts.push_back(font);
+        UNPROTECT(1);
+        return font;
+      } else {
+        warning(font->errmsg);
+        delete font;
+      }
     }
     UNPROTECT(1);
 #endif

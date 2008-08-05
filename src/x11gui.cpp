@@ -4,7 +4,7 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: x11gui.cpp 666 2008-04-17 13:44:58Z dmurdoch $
+// $Id: x11gui.cpp 689 2008-07-23 18:32:20Z dmurdoch $
 
 // Uncomment for verbose output on stderr:
 // #define RGL_X11_DEBUG
@@ -329,9 +329,14 @@ GLFont* X11WindowImpl::getFont(const char* family, int style, double cex,
     if (isString(Rfontname) && length(Rfontname) >= style) {
       const char* fontname = CHAR(STRING_ELT(Rfontname, style-1)); 
       GLFTFont* font=new GLFTFont(family, style, cex, fontname);
-      fonts.push_back(font);
-      UNPROTECT(1);
-      return font;
+      if (font->font) {
+        fonts.push_back(font);
+        UNPROTECT(1);
+        return font;
+      } else {
+        warning(font->errmsg);
+        delete font;
+      }
     }
     UNPROTECT(1);
 #endif
