@@ -4,7 +4,7 @@
 // C++ header file
 // This file is part of RGL
 //
-// $Id: rglview.h 666 2008-04-17 13:44:58Z dmurdoch $
+// $Id: rglview.h 715 2008-12-10 11:54:24Z murdoch $
 
 
 #include "gui.hpp"
@@ -29,6 +29,7 @@ public:
   RGLView(Scene* scene);
   ~RGLView();
   bool snapshot(PixmapFileFormatID formatID, const char* filename);
+  bool pixels(int* ll, int* size, int component, float* result);
   bool postscript(int format, const char* filename, bool drawText);
 // event handler:
   void show(void);

@@ -1,7 +1,7 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: api.cpp 678 2008-06-03 13:26:54Z dmurdoch $
+// $Id: api.cpp 715 2008-12-10 11:54:24Z murdoch $
 
 #include "lib.hpp"
 
@@ -572,13 +572,16 @@ void rgl_material(int *successptr, int* idata, char** cdata, double* ddata)
   mat.specular.set3iv( &idata[14] );
   mat.emission.set3iv( &idata[17] );
   bool envmap = (idata[20]) ? true : false;
-  int* colors   = &idata[21];
+  mat.point_antialias = (idata[21]) ? true : false;
+  mat.line_antialias = (idata[22]) ? true : false;
+  int* colors   = &idata[23];
 
   char*  pixmapfn = cdata[0];
 
   mat.shininess   = (float) ddata[0];
-  mat.size        = (float) ddata[1];
-  double* alpha   = &ddata[2];
+  mat.size      = (float) ddata[1];
+  mat.lwd         = (float) ddata[2];
+  double* alpha   = &ddata[3];
 
   if ( strlen(pixmapfn) > 0 ) {
     mat.texture = new Texture(pixmapfn, textype, mipmap, (unsigned int) minfilter, (unsigned int) magfilter, envmap);
@@ -638,8 +641,10 @@ void rgl_getmaterial(int *successptr, int* idata, char** cdata, double* ddata)
   idata[17] = (int) mat.emission.getRedub();
   idata[18] = (int) mat.emission.getGreenub();
   idata[19] = (int) mat.emission.getBlueub();
+  idata[21] = mat.point_antialias ? 1 : 0;
+  idata[22] = mat.line_antialias ? 1 : 0;
 
-  for (i=0, j=21; (i < mat.colors.getLength()) && (i < (unsigned int)idata[0]); i++) {
+  for (i=0, j=23; (i < mat.colors.getLength()) && (i < (unsigned int)idata[0]); i++) {
     idata[j++] = (int) mat.colors.getColor(i).getRedub();
     idata[j++] = (int) mat.colors.getColor(i).getGreenub();
     idata[j++] = (int) mat.colors.getColor(i).getBlueub();
@@ -648,9 +653,10 @@ void rgl_getmaterial(int *successptr, int* idata, char** cdata, double* ddata)
 
   ddata[0] = (double) mat.shininess;
   ddata[1] = (double) mat.size;
+  ddata[2] = (double) mat.lwd;
   
   if (mat.colors.hasAlpha()) {
-    for (i=0, j=2; (i < mat.colors.getLength()) && (i < (unsigned int)idata[10]); i++) 
+    for (i=0, j=3; (i < mat.colors.getLength()) && (i < (unsigned int)idata[10]); i++) 
       ddata[j++] = (double) mat.colors.getColor(i).getAlphaf();
     idata[10] = i;
   } else 
@@ -740,6 +746,20 @@ void rgl_snapshot(int* successptr, int* idata, char** cdata)
   *successptr = success;
 }
 
+void rgl_pixels(int* successptr, int* ll, int* size, int* component, float* result)
+{
+  int success = RGL_FAIL;
+  
+  Device* device;
+  
+  if (deviceManager && (device = deviceManager->getCurrentDevice())) {
+    
+    success = as_success( device->pixels( ll, size, *component, result) );
+    
+  }
+  
+  *successptr = success;
+}
 
 void rgl_user2window(int* successptr, int* idata, double* point, double* pixel, double* model, double* proj, int* view)
 {

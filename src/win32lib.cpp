@@ -2,8 +2,9 @@
 #ifdef RGL_W32
 // ---------------------------------------------------------------------------
 // W32 Library Implementation
-// $Id: win32lib.cpp 611 2007-11-10 17:22:02Z dmurdoch $
+// $Id: win32lib.cpp 714 2008-11-06 15:17:04Z murdoch $
 // ---------------------------------------------------------------------------
+#include "R.h"
 #include "lib.hpp"
 #include "win32gui.hpp"
 #include <windows.h>
@@ -23,7 +24,7 @@ gui::GUIFactory* getGUIFactory()
 // printMessage
 // ---------------------------------------------------------------------------
 void printMessage( const char* string ) {
-  ::MessageBox(NULL, string, "RGL library", MB_OK|MB_ICONINFORMATION);
+  warning("RGL: %s\n", string);
 }
 // ---------------------------------------------------------------------------
 // getTime

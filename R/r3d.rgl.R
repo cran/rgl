@@ -1,6 +1,6 @@
 #
 # R3D rendering functions - rgl implementation
-# $Id: r3d.rgl.R 681 2008-07-18 13:32:51Z dmurdoch $
+# $Id: r3d.rgl.R 705 2008-09-18 14:35:27Z murdoch $
 # 
 
 # Node Management
@@ -24,7 +24,8 @@ pop3d       <- function(...) {.check3d(); rgl.pop(...)}
 # Environment
 
 .material3d <- c("color", "alpha", "lit", "ambient", "specular",
-    "emission", "shininess", "smooth", "front", "back", "size", "fog",
+    "emission", "shininess", "smooth", "front", "back", "size", 
+    "lwd", "fog", "point_antialias", "line_antialias",
     "texture", "textype", "texmipmap",
     "texminfilter", "texmagfilter", "texenvmap")
 
@@ -199,6 +200,14 @@ open3d <- function(..., params = get("r3dDefaults", envir=.GlobalEnv))
 {
     rgl.open()
     
+    args <- list(...)
+    if (!is.null(args$material)) {
+    	params$material <- do.call(.fixMaterialArgs, c(args$material, Params=list(params$material)))
+    	args$material <- NULL
+    }
+    
+    params[names(args)] <- args
+        
     clear3d("material", defaults = params)
     params$material <- NULL
     

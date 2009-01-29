@@ -4,7 +4,7 @@
 // C++ header file
 // This file is part of RGL
 //
-// $Id: scene.h 543 2006-12-31 21:53:55Z dmurdoch $
+// $Id: scene.h 694 2008-08-07 15:20:02Z dmurdoch $
 
 #include "types.h"
 #include <vector>
@@ -140,6 +140,8 @@ private:
 
   std::vector<Shape*> unsortedShapes;
   std::vector<Shape*> zsortShapes;
+  
+  void renderZsort(RenderContext* renderContext, bool fast);
   
   void deleteAll(std::vector<SceneNode*> list);
 

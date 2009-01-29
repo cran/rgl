@@ -1,7 +1,7 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: math.cpp 529 2006-10-08 16:39:26Z dmurdoch $
+// $Id: math.cpp 713 2008-11-06 14:16:44Z murdoch $
 
 #include "math.h"
 #include "R.h"
@@ -72,6 +72,15 @@ void Vec3::operator += (Vec3 op2)
   x += op2.x;
   y += op2.y;
   z += op2.z;
+}
+
+Vec3 Vec3::scale(const Vec3& op2) const
+{
+  Vec3 t(*this);
+  t.x *= op2.x;
+  t.y *= op2.y;
+  t.z *= op2.z;
+  return t;
 }
 
 Vec3 Vertex::operator + (Vec3 op2) const

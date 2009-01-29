@@ -2,7 +2,7 @@
 ## R source file
 ## This file is part of rgl
 ##
-## $Id: scene.R 666 2008-04-17 13:44:58Z dmurdoch $
+## $Id: scene.R 712 2008-10-29 17:32:38Z murdoch $
 ##
 
 ##
@@ -148,17 +148,17 @@ rgl.bbox <- function(
   if (is.null(xat)) {
     xticks = 0; xlab = NULL;
   } else if (is.null(xlab)) {
-    xlab = as.character(xat)
+    xlab = format(xat)
   } else xlab=rep(xlab,length.out=length(xat))
   if (is.null(yat)) {
     yticks = 0; ylab = NULL;
   } else if (is.null(ylab)) {
-    ylab = as.character(yat)
+    ylab = format(yat)
   } else ylab=rep(ylab,length.out=length(yat))
   if (is.null(zat)) {
     zticks = 0; zlab = NULL;
   } else if (is.null(zlab)) {
-    zlab = as.character(zat)
+    zlab = format(zat)
   }  else zlab=rep(zlab,length.out=length(zat))
 
   xticks <- length(xat)
