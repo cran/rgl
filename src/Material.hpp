@@ -29,13 +29,14 @@ public:
   void endUse(RenderContext* renderContext);
   void useColor(int index);
   void colorPerVertex(bool enable, int numVertices=0);
-  bool isBlended() const { return alphablend; }
+  bool isTransparent() const { return alphablend; }
 
   Color        ambient;
   Color        specular;
   Color        emission;
   float        shininess;
-  float        size;          // point size, line width
+  float        size;          // point size
+  float        lwd;           // line width
   ColorArray   colors;        // color or if lit, represents diffuse color
   Ref<Texture> texture;
   PolygonMode  front;
@@ -45,6 +46,8 @@ public:
   bool         lit;
   bool         fog;
   bool         useColorArray;
+  bool         point_antialias;
+  bool         line_antialias;
 };
 
 

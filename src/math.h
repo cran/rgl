@@ -4,7 +4,7 @@
 // C++ header file
 // This file is part of RGL
 //
-// $Id: math.h 666 2008-04-17 13:44:58Z dmurdoch $
+// $Id: math.h 713 2008-11-06 14:16:44Z murdoch $
 
 #include <cmath>
 #include <cfloat>
@@ -100,6 +100,7 @@ struct Vec3
   Vec3 operator * (float value);
   Vec3 operator+(Vec3 op2) const;
   Vec3 operator-(Vec3 op2) const;
+  Vec3 scale(const Vec3& op2) const;
   void   operator+=(Vec3 op2);
   void   rotateX(float degree);
   void   rotateY(float degree);

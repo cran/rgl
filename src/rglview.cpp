@@ -1,7 +1,10 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: rglview.cpp 666 2008-04-17 13:44:58Z dmurdoch $
+// $Id: rglview.cpp 715 2008-12-10 11:54:24Z murdoch $
+
+
+#include "R.h"		// for error()
 
 #include "rglview.h"
 #include "opengl.hpp"
@@ -470,29 +473,57 @@ bool RGLView::snapshot(PixmapFileFormatID formatID, const char* filename)
 {
   bool success = false;
 
-  if ( (formatID < PIXMAP_FILEFORMAT_LAST) && (pixmapFormat[formatID]) 
-      && windowImpl->beginGL() ) {
+  if ( (formatID < PIXMAP_FILEFORMAT_LAST) && (pixmapFormat[formatID])) { 
+    if ( windowImpl->beginGL() ) {
 
-    // alloc pixmap memory
+      // alloc pixmap memory
 
-    Pixmap snapshot;
+      Pixmap snapshot;
+   
+      snapshot.init(RGB24, width, height, 8);
+
+      // read front buffer
+
+      glPushAttrib(GL_PIXEL_MODE_BIT);
+
+      glReadBuffer(GL_FRONT);
+      glPixelStorei(GL_PACK_ALIGNMENT, 1);
+      glReadPixels(0,0,width,height,GL_RGB, GL_UNSIGNED_BYTE, (GLvoid*) snapshot.data);
+
+      glPopAttrib();
+
+      success = snapshot.save( pixmapFormat[formatID], filename );
+
+      windowImpl->endGL();
+    }
+  } else error("pixmap save format not supported in this build");
+
+  return success;
+}
+
+bool RGLView::pixels( int* ll, int* size, int component, float* result )
+{
+  bool success = false;
+  GLenum format[] = {GL_RED, GL_GREEN, GL_BLUE, GL_ALPHA, 
+                      GL_DEPTH_COMPONENT, GL_LUMINANCE};   
+  glEnable(GL_DEPTH_TEST);
+  glDepthMask(GL_TRUE);
   
-    snapshot.init(RGB24, width, height, 8);
+  if ( windowImpl->beginGL() ) {
 
     // read front buffer
 
     glPushAttrib(GL_PIXEL_MODE_BIT);
-
+ 
     glReadBuffer(GL_FRONT);
     glPixelStorei(GL_PACK_ALIGNMENT, 1);
-    glReadPixels(0,0,width,height,GL_RGB, GL_UNSIGNED_BYTE, (GLvoid*) snapshot.data);
+    glReadPixels(ll[0],ll[1],size[0],size[1],format[component], GL_FLOAT, (GLvoid*) result);
 
     glPopAttrib();
 
-    success = snapshot.save( pixmapFormat[formatID], filename );
+    success = true;
 
     windowImpl->endGL();
-
   }
 
   return success;

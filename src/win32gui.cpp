@@ -3,7 +3,7 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: win32gui.cpp 689 2008-07-23 18:32:20Z dmurdoch $
+// $Id: win32gui.cpp 699 2008-08-11 07:13:42Z dmurdoch $
 
 #include "win32gui.hpp"
 
@@ -445,6 +445,11 @@ GLBitmapFont* Win32WindowImpl::initGLBitmapFont(u8 firstGlyph, u8 lastGlyph)
     font->firstGlyph = firstGlyph;
     font->listBase   = listBase - firstGlyph;
     GetCharWidth32( dcHandle, font->firstGlyph, lastGlyph,  (LPINT) font->widths );
+    {  
+      TEXTMETRIC tm;
+      GetTextMetrics( dcHandle, &tm);
+      font->ascent = tm.tmAscent;
+    }    
     wglUseFontBitmaps(dcHandle, font->firstGlyph, font->nglyph, listBase);
     endGL();
   }

@@ -4,7 +4,7 @@
 // C++ header file
 // This file is part of RGL
 //
-// $Id: Device.hpp 666 2008-04-17 13:44:58Z dmurdoch $
+// $Id: Device.hpp 715 2008-12-10 11:54:24Z murdoch $
 
 #include "Disposable.hpp"
 #include "types.h"
@@ -33,6 +33,7 @@ public: // -- all methods are blocking until action completed
   bool open(void); // -- if failed, instance is invalid and should be deleted
   void close(void); // -- when done, instance is invalid and should be deleted
   bool snapshot(int format, const char* filename);
+  bool pixels(int* ll, int* size, int component, float* result);
   bool postscript(int format, const char* filename, bool drawText);
 
   bool clear(TypeID stackTypeID);

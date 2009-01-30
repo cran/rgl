@@ -42,39 +42,45 @@ TextSet::TextSet(Material& in_material, int in_ntexts, char** in_texts, double *
     boundingBox += vertexArray[i];
   }
   fonts = in_fonts;
+#ifdef HAVE_FREETYPE  
+  blended = true;
+#endif
 }
 
 TextSet::~TextSet()
 {
 }
 
-void TextSet::render(RenderContext* renderContext) {
+void TextSet::render(RenderContext* renderContext) 
+{
   draw(renderContext);
 }
 
-void TextSet::draw(RenderContext* renderContext) {
+void TextSet::drawBegin(RenderContext* renderContext) 
+{
+  material.beginUse(renderContext);
+}
 
-  int cnt;
+void TextSet::drawElement(RenderContext* renderContext, int index) 
+{
   GLFont* font;
 
-  material.beginUse(renderContext);
-
-  StringArrayIterator iter(&textArray);
-  for( cnt = 0, iter.first(); !iter.isDone(); iter.next(), cnt++ ) {
-    if (!vertexArray[cnt].missing()) {
-      GLboolean valid;
-      material.useColor(cnt);
-      glRasterPos3f( vertexArray[cnt].x, vertexArray[cnt].y, vertexArray[cnt].z );
-      glGetBooleanv(GL_CURRENT_RASTER_POSITION_VALID, &valid);
-      if (valid) {
-        font = fonts[cnt % fonts.size()];
-        if (font) {
-          String text = iter.getCurrent();
-          font->draw( text.text, text.length, adjx, adjy, *renderContext );
-        }
+  if (!vertexArray[index].missing()) {
+    GLboolean valid;
+    material.useColor(index);
+    glRasterPos3f( vertexArray[index].x, vertexArray[index].y, vertexArray[index].z );
+    glGetBooleanv(GL_CURRENT_RASTER_POSITION_VALID, &valid);
+    if (valid) {
+      font = fonts[index % fonts.size()];
+      if (font) {
+        String text = textArray[index];
+        font->draw( text.text, text.length, adjx, adjy, *renderContext );
       }
     }
   }
-  material.endUse(renderContext);
 }
 
+void TextSet::drawEnd(RenderContext* renderContext)
+{
+  material.endUse(renderContext);
+}

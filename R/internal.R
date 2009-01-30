@@ -2,7 +2,7 @@
 ## R source file
 ## This file is part of rgl
 ##
-## $Id: internal.R 555 2007-02-19 02:24:00Z dmurdoch $
+## $Id: internal.R 695 2008-08-07 19:52:59Z dmurdoch $
 ##
 
 ##
@@ -59,7 +59,7 @@ rgl.clamp <- function(value, low, high)
 rgl.bool <- function ( x )
 {
   if (length(x) > 1)
-    stop( deparse(substitute(x)), " must be a single color character string")
+    stop( deparse(substitute(x)), " must be a single boolean value")
 }
 
 

@@ -2,7 +2,7 @@
 ## R source file
 ## This file is part of rgl
 ##
-## $Id: material.R 555 2007-02-19 02:24:00Z dmurdoch $
+## $Id: material.R 705 2008-09-18 14:35:27Z murdoch $
 ##
 
 ##
@@ -26,8 +26,11 @@ rgl.material <- function (
   texenvmap    = FALSE,
   front        = "fill", 
   back         = "fill",
-  size         = 1.0, 
+  size         = 3.0,
+  lwd          = 1.0, 
   fog          = TRUE,
+  point_antialias = FALSE,
+  line_antialias = FALSE,
   ...
 ) {
   # solid or diffuse component
@@ -45,8 +48,11 @@ rgl.material <- function (
   rgl.bool(lit)
   rgl.bool(fog)
   rgl.bool(smooth)
+  rgl.bool(point_antialias)
+  rgl.bool(line_antialias)
   rgl.clamp(shininess,0,128)
   rgl.numeric(size)
+  rgl.numeric(lwd)
   
   # side-dependant rendering
 
@@ -75,10 +81,12 @@ rgl.material <- function (
 
   # pack data
 
-  idata <- as.integer( c( ncolor, lit, smooth, front, back, fog, textype, texmipmap, texminfilter, texmagfilter, 
-                          nalpha, ambient, specular, emission, texenvmap, color ) )
+  idata <- as.integer( c( ncolor, lit, smooth, front, back, fog, 
+                          textype, texmipmap, texminfilter, texmagfilter, 
+                          nalpha, ambient, specular, emission, texenvmap, 
+                          point_antialias, line_antialias, color ) )
   cdata <- as.character(c( texture ))
-  ddata <- as.numeric(c( shininess, size, alpha ))
+  ddata <- as.numeric(c( shininess, size, lwd, alpha ))
 
   ret <- .C( rgl_material,
     success = FALSE,
@@ -92,7 +100,7 @@ rgl.getcolorcount <- function() .C( rgl_getcolorcount, count=integer(1) )$count
   
 rgl.getmaterial <- function(ncolors = rgl.getcolorcount()) {
 
-  idata <- rep(0, 21+3*ncolors)
+  idata <- rep(0, 22+3*ncolors)
   idata[1] <- ncolors
   idata[11] <- ncolors
   
@@ -117,8 +125,8 @@ rgl.getmaterial <- function(ncolors = rgl.getcolorcount()) {
   ddata <- ret$ddata
   cdata <- ret$cdata
   
-  list(color = rgb(idata[19 + 3*(1:idata[1])], idata[20 + 3*(1:idata[1])], idata[21 + 3*(1:idata[1])], maxColorValue = 255),
-       alpha = ddata[seq(from=3, length=idata[11])],
+  list(color = rgb(idata[20 + 3*(1:idata[1])], idata[21 + 3*(1:idata[1])], idata[22 + 3*(1:idata[1])], maxColorValue = 255),
+       alpha = ddata[seq(from=4, length=idata[11])],
        lit = idata[2] > 0,
        ambient = rgb(idata[12], idata[13], idata[14], maxColorValue = 255),
        specular = rgb(idata[15], idata[16], idata[17], maxColorValue = 255),
@@ -134,6 +142,9 @@ rgl.getmaterial <- function(ncolors = rgl.getcolorcount()) {
        front = polymodes[idata[4]],
        back = polymodes[idata[5]],
        size = ddata[2],
-       fog = idata[6] > 0)
+       lwd  = ddata[3],
+       fog = idata[6] > 0,
+       point_antialias = idata[22] == 1,
+       line_antialias = idata[23] == 1)
                    
 }
