@@ -4,7 +4,7 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: x11gui.cpp 689 2008-07-23 18:32:20Z dmurdoch $
+// $Id: x11gui.cpp 727 2009-02-08 23:59:05Z murdoch $
 
 // Uncomment for verbose output on stderr:
 // #define RGL_X11_DEBUG
@@ -118,6 +118,7 @@ void X11WindowImpl::show()
   XEvent ev;
   XIfEvent(factory->xdisplay, &ev, IsMapNotify, (XPointer) xwindow );
   factory->processEvents();
+  factory->flushX();
   update();
 }
 // ---------------------------------------------------------------------------
@@ -130,6 +131,7 @@ void X11WindowImpl::hide()
 void X11WindowImpl::bringToTop(int stay)
 {
   XRaiseWindow(factory->xdisplay, xwindow);
+  factory->processEvents();
   factory->flushX();
 }
 // ---------------------------------------------------------------------------
@@ -138,13 +140,16 @@ void X11WindowImpl::on_paint()
   if (window) {
     if (window->skipRedraw) return;
     window->paint();
+    SAVEGLERROR;
   }  
   swap();
+  SAVEGLERROR;
 }
 // ---------------------------------------------------------------------------
 void X11WindowImpl::update()
 {
   on_paint();
+  SAVEGLERROR;
 }
 // ---------------------------------------------------------------------------
 void X11WindowImpl::destroy()
@@ -512,7 +517,8 @@ void X11GUIFactory::disconnect()
 // ---------------------------------------------------------------------------
 void X11GUIFactory::flushX()
 {
-  XFlush(xdisplay);
+  XSync(xdisplay, False);
+  glXWaitX();
 }
 // ---------------------------------------------------------------------------
 void X11GUIFactory::processEvents()

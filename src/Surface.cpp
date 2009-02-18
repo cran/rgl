@@ -191,6 +191,7 @@ Vertex Surface::getElementCenter(int index)
 
 void Surface::drawBegin(RenderContext* renderContext)
 {
+  Shape::drawBegin(renderContext);
   material.beginUse(renderContext);
   vertexArray.beginUse();
 
@@ -239,5 +240,7 @@ void Surface::drawEnd(RenderContext* renderContext)
   vertexArray.endUse();
 
   material.endUse(renderContext);
+  Shape::drawEnd(renderContext);
+
 }
 

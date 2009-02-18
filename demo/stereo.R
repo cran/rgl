@@ -111,18 +111,19 @@ anaglyph <- function(left, right, leftColor = c(1,0,0), rightColor = c(0,1,1)) {
   force(right)
 
   rgl.set(left)
-  left <- rgl.pixels()
-  left <- (left[,,1]+left[,,2]+left[,,3])/3
+  vp <- par3d("viewport")
+  leftPixels <- rgl.pixels(viewport=vp)
+  leftPixels <- (leftPixels[,,1]+leftPixels[,,2]+leftPixels[,,3])/3
   rgl.set(right)
-  right <- rgl.pixels()
-  right <- (right[,,1]+right[,,2]+right[,,3])/3
-  red <- left*leftColor[1] + right*rightColor[1]
-  green <- left*leftColor[2] + right*rightColor[2]
-  blue <- left*leftColor[3] + right*rightColor[3]
+  rightPixels <- rgl.pixels(viewport=vp)
+  rightPixels <- (rightPixels[,,1]+rightPixels[,,2]+rightPixels[,,3])/3
+  red <- leftPixels*leftColor[1] + rightPixels*rightColor[1]
+  green <- leftPixels*leftColor[2] + rightPixels*rightColor[2]
+  blue <- leftPixels*leftColor[3] + rightPixels*rightColor[3]
   col <- rgb(red, green, blue)
   colf <- factor(col)
   z <- as.numeric(colf)
-  dim(z) <- dim(left)
+  dim(z) <- dim(leftPixels)
   image(z,col=levels(colf),breaks=min(z):(max(z)+1) - 0.5, axes=FALSE)
 }
 
@@ -131,7 +132,9 @@ source(system.file("demo/mouseCallbacks.R", package="rgl"), echo=FALSE )
 # This version assumes the eyes diverge for the stereo view.  
 # Reverse the two arguments for the cross-eyed view.
 
-dev.new(width=9, height=7)
+if (R.version$major >= 2 && R.version$minor >= 8.0) 
+  dev.new(width=9, height=7)
+
 randomDot(rgl.cur()-1, rgl.cur())
 
 # A red-cyan anaglyph (for 3D glasses).  Use optional args to anaglyph for other glasses.

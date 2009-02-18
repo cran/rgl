@@ -1,7 +1,7 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: scene.cpp 713 2008-11-06 14:16:44Z murdoch $
+// $Id: scene.cpp 729 2009-02-09 11:53:48Z murdoch $
 
 
 #include "scene.h"
@@ -75,18 +75,24 @@ bool Scene::clear(TypeID typeID)
   switch(typeID) {
     case SHAPE:
       deleteShapes();
+      SAVEGLERROR;
       zsortShapes.clear();
+      SAVEGLERROR;
       unsortedShapes.clear();
+      SAVEGLERROR;
       data_bbox.invalidate();
+      SAVEGLERROR;
       success = true;
       break;
     case LIGHT:
       deleteLights();
+      SAVEGLERROR;
       nlights = 0;
       success = true;
       break;
     case BBOXDECO:
       delete bboxDeco;
+      SAVEGLERROR;
       bboxDeco = NULL;
       success = true;
       break;
@@ -361,6 +367,8 @@ void Scene::render(RenderContext* renderContext)
 
   GLbitfield clearFlags = 0;
 
+  SAVEGLERROR;
+
   // Depth Buffer
 
   glClearDepth(1.0);
@@ -404,6 +412,7 @@ void Scene::render(RenderContext* renderContext)
     total_bsphere = Sphere( Vertex(0,0,0), 1 );
   }
 
+  SAVEGLERROR;
 
   //
   // SETUP VIEWPORT TRANSFORMATION
@@ -432,6 +441,7 @@ void Scene::render(RenderContext* renderContext)
 
   background->render(renderContext);
 
+  SAVEGLERROR;
   
   //
   // RENDER MODEL
@@ -470,6 +480,8 @@ void Scene::render(RenderContext* renderContext)
 
     // DISABLE BLENDING
     glDisable(GL_BLEND);
+    
+    SAVEGLERROR;
 
     {
       std::vector<Shape*>::iterator iter;
@@ -477,6 +489,7 @@ void Scene::render(RenderContext* renderContext)
       for (iter = unsortedShapes.begin() ; iter != unsortedShapes.end() ; ++iter ) {
         Shape* shape = *iter;
         shape->render(renderContext);
+        SAVEGLERROR;
       }
     }
 
@@ -492,11 +505,17 @@ void Scene::render(RenderContext* renderContext)
     // DISABLE Z-BUFFER FOR WRITING
     glDepthMask(GL_FALSE);
     
+    SAVEGLERROR;
+    
     // SETUP BLENDING
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
 
+    SAVEGLERROR;
+    
     // ENABLE BLENDING
     glEnable(GL_BLEND);
+
+    SAVEGLERROR;
 
     //
     // GET THE TRANSFORMATION
@@ -517,6 +536,8 @@ void Scene::render(RenderContext* renderContext)
 #endif    
     /* Reset flag(s) now that scene has been rendered */
     renderContext->viewpoint->scaleChanged = false;
+    
+    SAVEGLERROR;
   }
 }
 
@@ -552,6 +573,8 @@ void Scene::setupLightModel(RenderContext* rctx)
       light->setup(rctx);
   }
 
+  SAVEGLERROR;
+
   //
   // viewpoint lights
   //
@@ -567,6 +590,8 @@ void Scene::setupLightModel(RenderContext* rctx)
       light->setup(rctx);
 
   }
+
+  SAVEGLERROR;
 
   //
   // disable unused lights

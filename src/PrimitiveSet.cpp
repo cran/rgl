@@ -1,4 +1,5 @@
 #include "PrimitiveSet.hpp"
+#include "R.h"
 
 // ===[ PRIMITIVE SET ]=======================================================
 
@@ -37,8 +38,11 @@ Shape(in_material, in_ignoreExtent, SHAPE)
 
 void PrimitiveSet::drawBegin(RenderContext* renderContext)
 {
+  Shape::drawBegin(renderContext);
   material.beginUse(renderContext);
+  SAVEGLERROR;
   vertexArray.beginUse();
+  SAVEGLERROR;
 }
 
 // ---------------------------------------------------------------------------
@@ -86,7 +90,10 @@ void PrimitiveSet::drawElement(RenderContext* renderContext, int index)
 void PrimitiveSet::drawEnd(RenderContext* renderContext)
 {
   vertexArray.endUse();
+  SAVEGLERROR;
   material.endUse(renderContext);
+  SAVEGLERROR;
+  Shape::drawEnd(renderContext);
 }
 
 // ---------------------------------------------------------------------------
@@ -94,10 +101,13 @@ void PrimitiveSet::drawEnd(RenderContext* renderContext)
 void PrimitiveSet::draw(RenderContext* renderContext)
 {
   drawBegin(renderContext);
+  SAVEGLERROR;
 
   drawAll(renderContext);
-
+  SAVEGLERROR;
+  
   drawEnd(renderContext);
+  SAVEGLERROR;
 }
 
 // ---------------------------------------------------------------------------
