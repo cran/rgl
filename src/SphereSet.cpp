@@ -33,6 +33,7 @@ SphereSet::~SphereSet()
 
 void SphereSet::drawBegin(RenderContext* renderContext)
 {
+  Shape::drawBegin(renderContext);
   material.beginUse(renderContext);
 }
 
@@ -53,6 +54,7 @@ void SphereSet::drawElement(RenderContext* renderContext, int index)
 void SphereSet::drawEnd(RenderContext* renderContext)
 {
   material.endUse(renderContext);
+  Shape::drawEnd(renderContext);  
 }
 
 void SphereSet::render(RenderContext* renderContext) {

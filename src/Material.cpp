@@ -34,20 +34,29 @@ Material::Material(Color bg, Color fg)
 
 void Material::setup()
 {
+  glVersion = atof((const char*)glGetString(GL_VERSION));
 }
 
 void Material::beginUse(RenderContext* renderContext)
 {
   int ncolor = colors.getLength();
+  
+  SAVEGLERROR;
 
   glPushAttrib( GL_DEPTH_BUFFER_BIT | GL_ENABLE_BIT | GL_POLYGON_BIT );
+  
+  SAVEGLERROR;
 
   if (!alphablend) 
     glDepthMask(GL_TRUE);
 
+  SAVEGLERROR;
+
   if (point_antialias) glEnable(GL_POINT_SMOOTH);
   if (line_antialias)  glEnable(GL_LINE_SMOOTH);
   
+  SAVEGLERROR;
+
   glDisable(GL_CULL_FACE);
 
   for (int i=0;i<2;i++) {
@@ -55,6 +64,8 @@ void Material::beginUse(RenderContext* renderContext)
     PolygonMode mode = (i==0) ? front : back;
     
     GLenum face = (i==0) ? GL_FRONT : GL_BACK;
+
+    SAVEGLERROR;
 
     switch (mode) {
       case FILL_FACE:
@@ -73,15 +84,24 @@ void Material::beginUse(RenderContext* renderContext)
     }
   }
 
+  SAVEGLERROR;
+
   glShadeModel( (smooth) ? GL_SMOOTH : GL_FLAT );
+
+  SAVEGLERROR;
 
   if (lit) {
     glEnable(GL_LIGHTING);
  
+    SAVEGLERROR;
+
 #ifdef GL_VERSION_1_2
-    glLightModeli(GL_LIGHT_MODEL_COLOR_CONTROL, (texture) ? GL_SEPARATE_SPECULAR_COLOR : GL_SINGLE_COLOR );
+    if (glVersion >= 1.2)
+      glLightModeli(GL_LIGHT_MODEL_COLOR_CONTROL, (texture) ? GL_SEPARATE_SPECULAR_COLOR : GL_SINGLE_COLOR ); 
 #endif
 
+    SAVEGLERROR;
+    
     glColorMaterial(GL_FRONT_AND_BACK, GL_DIFFUSE);
     glEnable(GL_COLOR_MATERIAL);
     glMaterialfv(GL_FRONT_AND_BACK,GL_AMBIENT, ambient.data);
@@ -90,11 +110,15 @@ void Material::beginUse(RenderContext* renderContext)
     glMaterialfv(GL_FRONT_AND_BACK,GL_EMISSION, emission.data);
   }
 
+  SAVEGLERROR;
+
   if ( (useColorArray) && ( ncolor > 1 ) ) {
     glEnableClientState(GL_COLOR_ARRAY);
     colors.useArray();
   } else
     colors.useColor(0);
+
+  SAVEGLERROR;
 
   glPointSize( size );
   glLineWidth( lwd );
@@ -102,9 +126,12 @@ void Material::beginUse(RenderContext* renderContext)
   if (texture)
     texture->beginUse(renderContext);
 
+  SAVEGLERROR;
+
   if (!fog)
     glDisable(GL_FOG);
-    
+  
+  SAVEGLERROR;    
 }
 
 void Material::useColor(int index)
@@ -119,12 +146,21 @@ void Material::endUse(RenderContext* renderContext)
 
   if ( (useColorArray) && ( ncolor > 1 ) ) {
     glDisableClientState(GL_COLOR_ARRAY);
+    SAVEGLERROR;
   }
 
-  if (texture)
+  if (texture) {
     texture->endUse(renderContext);
-
+    SAVEGLERROR;
+  }
+  #if USE_GLGETERROR
+  saveGLerror(__FILE__, __LINE__);
+  #endif
   glPopAttrib();
+  #if USE_GLGETERROR
+  if (SaveErrnum == GL_NO_ERROR) glGetError(); /* work around bug in some glX implementations */
+  #endif
+  SAVEGLERROR;
 }
 
 void Material::colorPerVertex(bool enable, int numVertices)

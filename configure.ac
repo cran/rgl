@@ -4,7 +4,7 @@
 ## Process this file with autoconf to produce a configure script.
 ##
 ##
-## $Id: configure.ac 692 2008-07-25 12:41:32Z dmurdoch $
+## $Id: configure.ac 721 2009-02-02 13:31:24Z murdoch $
 ##
 
 AC_PREREQ(2.50)
@@ -32,6 +32,13 @@ AC_ARG_ENABLE([carbon],
 
 if test `uname` = "Darwin" ; then
   darwin="yes"
+  ## we want the *build* cputype and not the host one.
+  cmd=`echo $CC $CFLAGS | grep -E 'x86_64|ppc64'`
+  if test -n "$cmd"; then
+    have_64bit="yes"
+  else
+    have_64bit="no"
+  fi 
 else
   darwin="no"
 fi
@@ -91,7 +98,7 @@ fi
 
 ## --- Darwin ----------------------------------------------------------------
 
-if test `uname` = "Darwin" -a "x$enable_carbon" != "xno" ; then
+if test x$darwin == "xyes" -a "x$enable_carbon" != "xno" -a x$have_64bit == "xno" ; then
   AGLCPPFLAGS="${CPPFLAGS} -DRGL_USE_CARBON -I/System/Library/Frameworks/AGL.framework/Headers"
   AGLLIBS="${LIBS} -framework AGL"
   BUILD_AGL_TRUE=""
