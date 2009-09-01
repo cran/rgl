@@ -1,7 +1,7 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: rglview.cpp 728 2009-02-09 11:52:52Z murdoch $
+// $Id: rglview.cpp 753 2009-03-15 17:41:20Z murdoch $
 
 
 
@@ -9,7 +9,7 @@
 #include "opengl.hpp"
 #include <cstdio>
 #include "lib.hpp"
-#include "math.h"
+#include "rglmath.h"
 #include "pixmap.h"
 #include "fps.h"
 #include "select.h"

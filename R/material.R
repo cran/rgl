@@ -2,7 +2,7 @@
 ## R source file
 ## This file is part of rgl
 ##
-## $Id: material.R 705 2008-09-18 14:35:27Z murdoch $
+## $Id: material.R 761 2009-05-12 16:47:25Z murdoch $
 ##
 
 ##
@@ -36,6 +36,8 @@ rgl.material <- function (
   # solid or diffuse component
 
   color     <- rgl.mcolor(color)
+  if (length(color) < 1)
+    stop("there must be at least one color")
 
   # light properties
 
@@ -100,7 +102,7 @@ rgl.getcolorcount <- function() .C( rgl_getcolorcount, count=integer(1) )$count
   
 rgl.getmaterial <- function(ncolors = rgl.getcolorcount()) {
 
-  idata <- rep(0, 22+3*ncolors)
+  idata <- rep(0, 23+3*ncolors)
   idata[1] <- ncolors
   idata[11] <- ncolors
   
@@ -125,7 +127,7 @@ rgl.getmaterial <- function(ncolors = rgl.getcolorcount()) {
   ddata <- ret$ddata
   cdata <- ret$cdata
   
-  list(color = rgb(idata[20 + 3*(1:idata[1])], idata[21 + 3*(1:idata[1])], idata[22 + 3*(1:idata[1])], maxColorValue = 255),
+  list(color = rgb(idata[21 + 3*(1:idata[1])], idata[22 + 3*(1:idata[1])], idata[23 + 3*(1:idata[1])], maxColorValue = 255),
        alpha = ddata[seq(from=4, length=idata[11])],
        lit = idata[2] > 0,
        ambient = rgb(idata[12], idata[13], idata[14], maxColorValue = 255),

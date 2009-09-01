@@ -1,8 +1,9 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: pixmap.cpp 376 2005-08-03 23:58:47Z dadler $
+// $Id: pixmap.cpp 753 2009-03-15 17:41:20Z murdoch $
 
+using namespace std;
 #include "pixmap.h"
 
 #include "lib.hpp"

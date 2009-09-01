@@ -1,11 +1,11 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: scene.cpp 729 2009-02-09 11:53:48Z murdoch $
+// $Id: scene.cpp 753 2009-03-15 17:41:20Z murdoch $
 
 
 #include "scene.h"
-#include "math.h"
+#include "rglmath.h"
 #include "render.h"
 #include "geom.hpp"
 #include <map>

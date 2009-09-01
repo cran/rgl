@@ -2,7 +2,7 @@
 ## R source file
 ## This file is part of rgl
 ##
-## $Id: scene.R 712 2008-10-29 17:32:38Z murdoch $
+## $Id: scene.R 762 2009-06-22 13:34:33Z murdoch $
 ##
 
 ##
@@ -91,7 +91,7 @@ rgl.viewpoint <- function( theta = 0.0, phi = 15.0, fov = 60.0, zoom = 1.0, scal
 {
   zoom <- rgl.clamp(zoom,0,Inf)
   phi  <- rgl.clamp(phi,-90,90)
-  fov  <- rgl.clamp(fov,1,179)
+  fov  <- rgl.clamp(fov,0,179)
 
   polar <- missing(userMatrix)
   if (polar) userMatrix <- diag(4)
@@ -323,12 +323,11 @@ rgl.linestrips<- function ( x, y=NULL, z=NULL, ... )
 # calculates the parity of a permutation of integers
 
 perm_parity <- function(p) {  
-  x <- seq(along=p)
+  x <- seq_along(p)
   result <- 0
-  for (i in seq(along=p)) {
+  for (i in x) {
     if (x[i] != p[i]) {
       x[x==p[i]] <- x[i]
-      # x[i] <- p[i]     # not needed
       result <- result+1
     }
   }

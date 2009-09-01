@@ -4,7 +4,7 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: x11gui.cpp 727 2009-02-08 23:59:05Z murdoch $
+// $Id: x11gui.cpp 766 2009-07-08 13:29:57Z murdoch $
 
 // Uncomment for verbose output on stderr:
 // #define RGL_X11_DEBUG
@@ -159,6 +159,11 @@ void X11WindowImpl::destroy()
     on_shutdown();
     XDestroyWindow(factory->xdisplay, xwindow);
     factory->flushX();
+    factory->notifyDelete(xwindow); /* Why didn't this happen in the lines above, from the DestroyNotify event? */
+    xwindow = 0;
+    if (window)
+        window->notifyDestroy();
+    delete this;
   }
 }
 // ---------------------------------------------------------------------------
