@@ -1,7 +1,7 @@
 #ifndef GEOM_HPP
 #define GEOM_HPP
 
-#include "math.h"
+#include "rglmath.h"
 
 //
 // CLASS
@@ -51,8 +51,10 @@ public:
 
 class Frustum {
 public:
+  Frustum() : ortho(false) {};
   void enclose(float sphere_radius, float fovangle, int win_width, int win_height);
   float left, right, bottom, top, znear, zfar, distance;
+  bool ortho;
 };
 
 

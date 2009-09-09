@@ -11,8 +11,8 @@ v0.62
   - support R color strings
   - use system.file( <subpath>, package="rgl" ) in examples to retrieve texture files
   - rewrote R code : 
-    - clear enum types
-    - vertex vector datatype (internal representation matrix)
+    * clear enum types
+    * vertex vector datatype (internal representation matrix)
 
 v0.63
   - api: added rgl_init, rgl_quit: explicit client initialization
@@ -310,4 +310,20 @@ v0.84
     back compatibility. 
   - Bug fix to stop crashes when material is set before the first window is
     opened.
+    
+v0.85
+  - Added some namespace declarations to the C++, and renamed math.h, for
+    compatibility with Sun compilers (contributed by Brian Ripley).  
+  - Fixed visibility of some shade3d, wire3d and points3d methods.
+  - Added addNormals generic, to add normals for smooth surface rendering.
+  - Added cylinder3d function, to make cylindrical or "tube" plots.
+  - Fixed material3d("color") bug introduced in 0.82.
+  
+v0.87
+  - Allowed FOV to be set to 0, for an orthogonal projection.
+  - Fixed crash when zero-length color vector was used.
+  - Fixed crash in X11 after closing a window
+  - Changed seq(along=...) to seq_along(...).
+  - Fixed typo in cylinder3d.
+  - Cleaned up bad links in Rd files.
   
