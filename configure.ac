@@ -4,7 +4,7 @@
 ## Process this file with autoconf to produce a configure script.
 ##
 ##
-## $Id: configure.ac 721 2009-02-02 13:31:24Z murdoch $
+## $Id: configure.ac 779 2010-01-12 18:32:35Z murdoch $
 ##
 
 AC_PREREQ(2.50)
@@ -157,7 +157,8 @@ fi
 
 AC_ARG_WITH(gl-libs,
 [  --with-gl-libs=DIR      specify location of OpenGL libs],
-[LIBS="${LIBS} -L${withval}"]
+[LDFLAGS="${LDFLAGS} -L${withval}"
+L_LIB="-L${withval}"]
 )
 
 AC_ARG_WITH(gl-libname,
@@ -178,6 +179,10 @@ AC_CHECK_LIB($lGLU, gluProject)
 this=`eval echo '${'$as_ac_Lib'}'`
 if test "x$this" != xyes; then
   AC_ERROR([missing required library ${lGLU}])
+fi
+
+if test x$L_LIB != x; then
+  LIBS="${L_LIB} ${LIBS}"
 fi
 
 ## --- FTGL ------------------------------------------------------------------
