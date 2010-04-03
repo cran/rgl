@@ -2,7 +2,7 @@
 ## R source file
 ## This file is part of rgl
 ##
-## $Id: scene.R 762 2009-06-22 13:34:33Z murdoch $
+## $Id: scene.R 783 2010-02-12 12:45:04Z murdoch $
 ##
 
 ##
@@ -462,6 +462,12 @@ rgl.texts <- function(x, y=NULL, z=NULL, text, adj = 0.5, justify, family=par3d(
   
   vertex  <- rgl.vertex(x,y,z)
   nvertex <- rgl.nvertex(vertex)
+  if (!length(text)) {
+    if (nvertex)
+      warning("No text to plot")
+    return(invisible(integer(0)))
+  }
+    
   text    <- rep(text, length.out=nvertex)
   
   idata <- as.integer(nvertex)
