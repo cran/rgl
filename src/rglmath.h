@@ -4,7 +4,7 @@
 // C++ header file
 // This file is part of RGL
 //
-// $Id: rglmath.h 753 2009-03-15 17:41:20Z murdoch $
+// $Id: rglmath.h 784 2010-04-03 15:42:27Z murdoch $
 
 
 using namespace std;
@@ -149,12 +149,12 @@ public:
   Matrix4x4();
   Matrix4x4(const Matrix4x4& src);
   Matrix4x4(const double*);
-  Vec3 operator*(Vec3 op2) const;
+  Vec3 operator*(const Vec3 op2) const;
   Vec4 operator*(const Vec4& op2) const;
   Matrix4x4 operator*(const Matrix4x4& op2) const;
   Vec4 getRow(int row);
   void setIdentity(void);
-  void setRotate(int axis, float degree);
+  void setRotate(const int axis, const float degree);
   void getData(double* dest);
 private:
   inline float  val(int row, int column) const { return data[4*column+row]; }
