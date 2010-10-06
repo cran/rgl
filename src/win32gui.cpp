@@ -3,7 +3,7 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: win32gui.cpp 728 2009-02-09 11:52:52Z murdoch $
+// $Id: win32gui.cpp 790 2010-10-05 20:06:18Z murdoch $
 
 #include "win32gui.hpp"
 
@@ -15,6 +15,8 @@
 #include "assert.hpp"
 #include "R.h"
 #include <Rinternals.h>
+
+#include <ctype.h>
 
 // ---------------------------------------------------------------------------
 namespace gui {
