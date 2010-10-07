@@ -4,7 +4,7 @@
 ## Process this file with autoconf to produce a configure script.
 ##
 ##
-## $Id: configure.ac 779 2010-01-12 18:32:35Z murdoch $
+## $Id: configure.ac 786 2010-04-07 13:55:45Z murdoch $
 ##
 
 AC_PREREQ(2.50)
@@ -33,7 +33,7 @@ AC_ARG_ENABLE([carbon],
 if test `uname` = "Darwin" ; then
   darwin="yes"
   ## we want the *build* cputype and not the host one.
-  cmd=`echo $CC $CFLAGS | grep -E 'x86_64|ppc64'`
+  cmd=`echo $CC $CFLAGS | grep -E 'x86_64|ppc64|-m64'`
   if test -n "$cmd"; then
     have_64bit="yes"
   else
