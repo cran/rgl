@@ -1,7 +1,7 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: rglview.cpp 753 2009-03-15 17:41:20Z murdoch $
+// $Id: rglview.cpp 794 2010-10-07 16:58:13Z murdoch $
 
 
 
@@ -14,7 +14,11 @@
 #include "fps.h"
 #include "select.h"
 #include "gl2ps.h"
+#ifdef __sun
+#include <locale.h>
+#else
 #include <locale>
+#endif
 #include "R.h"		// for error()
 
 //

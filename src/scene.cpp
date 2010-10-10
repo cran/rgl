@@ -1,7 +1,7 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: scene.cpp 753 2009-03-15 17:41:20Z murdoch $
+// $Id: scene.cpp 794 2010-10-07 16:58:13Z murdoch $
 
 
 #include "scene.h"
@@ -10,6 +10,7 @@
 #include "geom.hpp"
 #include <map>
 #include <algorithm>
+#include <functional>
 #include "R.h"
 
 //////////////////////////////////////////////////////////////////////////////
