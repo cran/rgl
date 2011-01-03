@@ -1,7 +1,7 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: scene.cpp 794 2010-10-07 16:58:13Z murdoch $
+// $Id: scene.cpp 798 2010-11-27 20:17:34Z murdoch $
 
 
 #include "scene.h"
@@ -375,6 +375,7 @@ void Scene::render(RenderContext* renderContext)
   glClearDepth(1.0);
   glDepthFunc(GL_LESS);
   glDepthMask(GL_TRUE);
+  // mask and func will be reset by material
 
   // if ( unsortedShapes.size() )
     clearFlags  |= GL_DEPTH_BUFFER_BIT;
