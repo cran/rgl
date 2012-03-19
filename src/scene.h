@@ -4,7 +4,7 @@
 // C++ header file
 // This file is part of RGL
 //
-// $Id: scene.h 694 2008-08-07 15:20:02Z dmurdoch $
+// $Id: scene.h 849 2012-03-13 13:08:35Z murdoch $
 
 #include "types.h"
 #include <vector>
@@ -23,6 +23,8 @@
 #include "TextSet.hpp"
 #include "SpriteSet.hpp"
 #include "SphereSet.hpp"
+#include "PlaneSet.hpp"
+#include "ABCLineSet.hpp"
 #include "Surface.hpp"
 #include "Viewpoint.hpp"
 #include "Background.hpp"
@@ -55,6 +57,26 @@ public:
    */
   int get_id_count(TypeID type);
   void get_ids(TypeID type, int* ids, char** types);
+  
+  /**
+   * get information about particular shapes
+   **/
+  Shape* get_shape(int id);
+  
+  /**
+   * get information about particular lights
+   **/
+  Light* get_light(int id);
+  
+  /**
+   * get the background
+   */
+  Background* get_background() const { return background; }
+  
+  /**
+   * get the bbox
+   */
+  BBoxDeco* get_bboxdeco() const { return bboxDeco; }
 
   // ---[ grouping component ]-----------------------------------------------
   
@@ -102,6 +124,10 @@ private:
    **/
   void calcDataBBox();
   /**
+   * compute bounding-box for a changeable scene
+   **/
+  void calcDataBBox(RenderContext* renderContext);
+  /**
    * add shapes
    **/
   void addShape(Shape* shape);
@@ -141,7 +167,7 @@ private:
   std::vector<Shape*> unsortedShapes;
   std::vector<Shape*> zsortShapes;
   
-  void renderZsort(RenderContext* renderContext, bool fast);
+  void renderZsort(RenderContext* renderContext);
   
   void deleteAll(std::vector<SceneNode*> list);
 
@@ -156,6 +182,7 @@ private:
   AABox data_bbox;
   
   bool ignoreExtent;
+  bool bboxChanges;
 };
 
 

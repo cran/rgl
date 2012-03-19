@@ -4,7 +4,7 @@
 ## Process this file with autoconf to produce a configure script.
 ##
 ##
-## $Id: configure.ac 786 2010-04-07 13:55:45Z murdoch $
+## $Id: configure.ac 836 2011-12-30 21:50:11Z murdoch $
 ##
 
 AC_PREREQ(2.50)
@@ -26,8 +26,8 @@ fi
 AC_PROG_CPP
 AC_PROG_CC
 
-AC_ARG_ENABLE([carbon],
-[  --disable-carbon           os x: use X11 instead of Carbon]
+AC_ARG_ENABLE([cocoa],
+[  --disable-cocoa            use X11 instead of Mac OS X native Cocoa UI]
 )
 
 if test `uname` = "Darwin" ; then
@@ -80,6 +80,7 @@ if test "x$enable_libpng" != "xno"; then
     if test "${ac_cv_header_png_h}"; then
       if test "${ac_cv_lib_png_png_read_update_info}"; then
 	CPPFLAGS="${CPPFLAGS} -DHAVE_PNG_H"
+	LIBS="${LIBS} -lpng"
 	AC_MSG_NOTICE([libpng header and lib found])
 	if test "x$enable_libpng_dynamic" != "xno"; then
 	  AC_MSG_NOTICE([using libpng dynamic linkage])
@@ -98,9 +99,9 @@ fi
 
 ## --- Darwin ----------------------------------------------------------------
 
-if test x$darwin == "xyes" -a "x$enable_carbon" != "xno" -a x$have_64bit == "xno" ; then
-  AGLCPPFLAGS="${CPPFLAGS} -DRGL_USE_CARBON -I/System/Library/Frameworks/AGL.framework/Headers"
-  AGLLIBS="${LIBS} -framework AGL"
+if test x$darwin == "xyes" -a "x$enable_cocoa" != "xno" ; then
+  AGLCPPFLAGS="${CPPFLAGS} -DRGL_USE_COCOA"
+  AGLLIBS="${LIBS} -framework Cocoa"
   BUILD_AGL_TRUE=""
 else
   BUILD_AGL_TRUE="#"

@@ -5,7 +5,7 @@
 # using addition operations and homogenous coordinates 
 # by Daniel Adler 
 #
-# $Id: subdivision.mesh3d.R 787 2010-04-09 12:00:07Z murdoch $
+# $Id: subdivision.mesh3d.R 842 2012-03-02 02:21:09Z murdoch $
 # 
 
 edgemap <- function( size ) {
@@ -30,6 +30,8 @@ divide.mesh3d <- function (mesh,vb=mesh$vb, ib=mesh$ib, it=mesh$it ) {
   em    <- edgemap( nv )
   
   if (!is.null(mesh$normals)) {
+    if (NROW(mesh$normals) == 4)
+      mesh$normals <- t(asEuclidean(t(mesh$normals)))
     newnormals <- matrix(data=0,nrow=3,ncol=nvmax)
     newnormals[,1:nv] <- mesh$normals
   } else newnormals <- NULL

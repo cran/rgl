@@ -10,7 +10,7 @@
 
 SphereSet::SphereSet(Material& in_material, int in_ncenter, double* in_center, int in_nradius, double* in_radius,
                      int in_ignoreExtent)
- : Shape(in_material, in_ignoreExtent), 
+ : Shape(in_material, in_ignoreExtent, SHAPE, true), 
    center(in_ncenter, in_center), 
    radius(in_nradius, in_radius)
 {
@@ -29,6 +29,21 @@ SphereSet::SphereSet(Material& in_material, int in_ncenter, double* in_center, i
 
 SphereSet::~SphereSet()
 {
+}
+
+AABox& SphereSet::getBoundingBox(RenderContext* renderContext)
+{
+  Vertex scale = renderContext->viewpoint->scale;
+  scale.x = 1.0/scale.x;
+  scale.y = 1.0/scale.y;
+  scale.z = 1.0/scale.z;
+  
+  boundingBox.invalidate();
+  for(int i=0;i<getElementCount();i++) {
+    boundingBox += center.get(i) + scale*radius.getRecycled(i);
+    boundingBox += center.get(i) - scale*radius.getRecycled(i);
+  }
+  return boundingBox;
 }
 
 void SphereSet::drawBegin(RenderContext* renderContext)
@@ -57,8 +72,35 @@ void SphereSet::drawEnd(RenderContext* renderContext)
   Shape::drawEnd(renderContext);  
 }
 
-void SphereSet::render(RenderContext* renderContext) {
+void SphereSet::render(RenderContext* renderContext) 
+{
   if (renderContext->viewpoint->scaleChanged) 
     doUpdate = true;
   Shape::render(renderContext);
 }
+
+int SphereSet::getAttributeCount(AABox& bbox, AttribID attrib) 
+{
+  switch (attrib) {
+    case VERTICES: return center.size();
+  }
+  return Shape::getAttributeCount(bbox, attrib);
+}
+
+void SphereSet::getAttribute(AABox& bbox, AttribID attrib, int first, int count, double* result)
+{
+  int n = getAttributeCount(bbox, attrib);
+  if (first + count < n) n = first + count;
+  if (first < n) {
+    if (attrib == VERTICES) {
+      while (first < n) {
+        *result++ = center.get(first).x;
+        *result++ = center.get(first).y;
+        *result++ = center.get(first).z;
+        first++;
+      }
+    } else
+      Shape::getAttribute(bbox, attrib, first, count, result);
+  }
+}
+

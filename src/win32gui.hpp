@@ -1,7 +1,7 @@
 #ifndef RGL_W32_GUI_HPP
 #define RGL_W32_GUI_HPP
 // ---------------------------------------------------------------------------
-// $Id: win32gui.hpp 376 2005-08-03 23:58:47Z dadler $
+// $Id: win32gui.hpp 840 2012-01-06 16:07:37Z murdoch $
 // ---------------------------------------------------------------------------
 #include "gui.hpp"
 // ---------------------------------------------------------------------------
@@ -15,6 +15,9 @@ public:
   Win32GUIFactory();
   virtual ~Win32GUIFactory();
   WindowImpl* createWindowImpl(Window* window);
+#ifndef WGL_WGLEXT_PROTOTYPES
+  PFNWGLCHOOSEPIXELFORMATARBPROC wglChoosePixelFormatARB;
+#endif
 };
 // ---------------------------------------------------------------------------
 } // namespace gui

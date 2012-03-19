@@ -3,13 +3,13 @@
 // ---------------------------------------------------------------------------
 // Using OpenGL and GLU
 //
-// $Id: opengl.hpp 475 2006-07-24 15:43:35Z dmurdoch $
+// $Id: opengl.hpp 840 2012-01-06 16:07:37Z murdoch $
 // ---------------------------------------------------------------------------
 #include "config.hpp"
 // ---------------------------------------------------------------------------
 #ifdef RGL_OSX
-#include <AGL/gl.h>
-#include <AGL/glu.h>
+#include <OpenGL/gl.h>
+#include <OpenGL/glu.h>
 #endif
 // ---------------------------------------------------------------------------
 #ifdef RGL_W32
@@ -17,6 +17,7 @@
 #include <GL/gl.h>
 #include <GL/glu.h>
 #include <GLsdk/GL/glext.h>
+#include <GLsdk/GL/wglext.h>
 #endif
 // ---------------------------------------------------------------------------
 #ifdef RGL_X11

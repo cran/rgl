@@ -51,10 +51,13 @@ EXPORT_SYMBOL void rgl_clear    (int* successptr, int* idata);
 EXPORT_SYMBOL void rgl_pop      (int* successptr, int* idata);
 EXPORT_SYMBOL void rgl_id_count (int* type, int* count);
 EXPORT_SYMBOL void rgl_ids       (int* type, int* ids, char** types);
+EXPORT_SYMBOL void rgl_attrib_count (int* id, int* attrib, int* count);
+EXPORT_SYMBOL void rgl_attrib   (int* id, int* attrib, int* first, int* count, double* result);
+EXPORT_SYMBOL void rgl_text_attrib   (int* id, int* attrib, int* first, int* count, char** result);
 
 EXPORT_SYMBOL void rgl_material (int* successptr, int* idata, char** cdata, double* ddata);
 EXPORT_SYMBOL void rgl_getcolorcount(int* count);
-EXPORT_SYMBOL void rgl_getmaterial (int* successptr, int* idata, char** cdata, double* ddata);
+EXPORT_SYMBOL void rgl_getmaterial (int* successptr, int *id, int* idata, char** cdata, double* ddata);
 
 EXPORT_SYMBOL void rgl_light    (int* successptr, int* idata, double* ddata );
 
@@ -67,6 +70,9 @@ EXPORT_SYMBOL void rgl_primitive(int* successptr, int* idata, double* vertex, do
 EXPORT_SYMBOL void rgl_texts    (int* successptr, int* idata, double* adj, char** text, double* vertex,
                                  int* nfonts, char** family, int* style, double* cex, int* useFreeType);
 EXPORT_SYMBOL void rgl_spheres  (int* successptr, int* idata, double* vertex, double* radius);
+EXPORT_SYMBOL void rgl_planes   (int* successptr, int* idata, double* normals, double* offsets);
+EXPORT_SYMBOL void rgl_abclines (int* successptr, int* idata, double* bases, double* directions);
+
 EXPORT_SYMBOL void rgl_surface  (int* successptr, int* idata, double* x, double* z, double* y, 
 	                         double* normal_x, double* normal_z, double* normal_y,
 	                         double* texture_s, double* texture_t,
@@ -114,6 +120,7 @@ bool    setCex(double cex);
 int     getUseFreeType();
 bool    setUseFreeType(bool useFreeType);
 char*	getFontname();
+int	getAntialias();
 
 #ifdef __cplusplus
 }

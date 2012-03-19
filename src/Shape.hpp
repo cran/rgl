@@ -16,21 +16,15 @@
 class Shape : public SceneNode
 {
 public:
-  Shape(Material& in_material,bool in_ignoreExtent,TypeID in_typeID=SHAPE);
+  Shape(Material& in_material,bool in_ignoreExtent, TypeID in_typeID=SHAPE, bool in_bboxChanges=false);
   ~Shape();
   
   /**
    * render shape.
    * Default Implementation: uses z-buffer and a display list 
-   * that stores everything from a call to draw().
+   * that stores everything from a call to draw().  
    **/
   virtual void render(RenderContext* renderContext);
-
-  /**
-   * render shape using z value in renderContext
-   * Implementation: does call render()
-   **/
-  virtual void renderZSort(RenderContext* renderContext);
 
   /**
    * request update of node due to content change. 
@@ -47,11 +41,22 @@ public:
    * obtain bounding box
    **/
   const AABox& getBoundingBox() const { return boundingBox; }
+  
+  /**
+   * does this shape change dimensions according to the way it is rendered?
+   * if so, the above is just a guess...
+   **/
+  const bool getBBoxChanges() const { return bboxChanges; }
 
+  /**
+   * this shows how the shape would be sized in the given context
+   **/
+  virtual AABox& getBoundingBox(RenderContext* renderContext) { return boundingBox; }
+  
   /**
    * obtain material
    **/
-  const Material& getMaterial() const { return material; }
+  Material* getMaterial()  { return &material; }
   
   const bool getIgnoreExtent() const { return ignoreExtent; }
 
@@ -67,6 +72,10 @@ public:
    **/
    
   virtual int getElementCount(void) = 0; 
+
+  /* overrides */
+  int getAttributeCount(AABox& bbox, AttribID attrib);
+  void getAttribute(AABox& bbox, AttribID attrib, int first, int count, double* result);
   
   /**
    * location of individual items
@@ -75,7 +84,14 @@ public:
   virtual Vertex getElementCenter(int index) { return boundingBox.getCenter(); }
 
   /**
-   * begin sending items 
+   * Starting to render the shape.  After this, the renderContext won't change until
+   * the next call.  This will only be called once per rendering.
+   **/
+  virtual void renderBegin(RenderContext* renderContext) { };
+
+  /**
+   * begin sending items.  This may be called multiple times, e.g. if the
+   * items are being intermixed with items from other shapes
    **/
   virtual void drawBegin(RenderContext* renderContext);
 
@@ -98,6 +114,11 @@ protected:
    * bounding volume of overall geometry
    **/
   AABox    boundingBox;
+  
+  /**
+   * bounding volume changes depending on the scene?
+   **/
+  bool     bboxChanges;
   
   /*
    * whether this object should be ignored in scene bounding box calculations

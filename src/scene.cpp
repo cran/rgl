@@ -1,7 +1,7 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: scene.cpp 798 2010-11-27 20:17:34Z murdoch $
+// $Id: scene.cpp 848 2012-03-09 18:55:12Z murdoch $
 
 
 #include "scene.h"
@@ -21,6 +21,8 @@
 
 static int gl_light_ids[8] = { GL_LIGHT0, GL_LIGHT1, GL_LIGHT2, GL_LIGHT3, GL_LIGHT4, GL_LIGHT5, GL_LIGHT6, GL_LIGHT7 };
 
+ObjID SceneNode::nextID = BBOXID + 1;
+
 Scene::Scene()
 {
   background = NULL;
@@ -28,6 +30,7 @@ Scene::Scene()
   nlights    = 0;
   bboxDeco   = NULL;
   ignoreExtent = false;
+  bboxChanges = false;
  
   add( new Background );
   add( new Viewpoint );
@@ -58,6 +61,7 @@ void Scene::deleteShapes()
     delete *iter;
   }
   shapes.clear();
+  bboxChanges = false;
 }
 
 void Scene::deleteLights()
@@ -105,6 +109,7 @@ void Scene::addShape(Shape* shape) {
   if (!shape->getIgnoreExtent()) {
     const AABox& bbox = shape->getBoundingBox();
     data_bbox += bbox;
+    bboxChanges |= shape->getBBoxChanges();
   }
 
   shapes.push_back(shape);
@@ -267,6 +272,10 @@ int Scene::get_id_count(TypeID type)
   switch(type) {
   case SHAPE:  return shapes.size();
   case LIGHT:  return lights.size();
+  case BBOXDECO: return bboxDeco ? 1 : 0;
+  case VIEWPOINT: return viewpoint ? 1 : 0;
+  case BACKGROUND: return background ? 1 : 0;
+
   default:     return 0;
   }
 }
@@ -293,65 +302,89 @@ void Scene::get_ids(TypeID type, int* ids, char** types)
       types++;
     }
     return;
+  case BBOXDECO:
+    if (bboxDeco) {
+      *ids = bboxDeco->getObjID();
+      *types = R_alloc(strlen("bboxdeco")+1, 1);
+      strcpy(*types, "bboxdeco");
+    }
+    return;
+  case VIEWPOINT:
+    if (viewpoint) {
+      *ids = viewpoint->getObjID();
+      *types = R_alloc(strlen("viewpoint")+1, 1);
+      strcpy(*types, "viewpoint");
+    }
+    return;
+  case BACKGROUND:
+    if (background) {
+      *ids = background->getObjID();
+      *types = R_alloc(strlen("background")+1, 1);
+      strcpy(*types, "background");
+    }
+    return;
+    
   default:	return;
   }
 }  
 
-void Scene::renderZsort(RenderContext* renderContext, bool fast)
+Shape* Scene::get_shape(int id)
 {
-  if (fast) { // Fast rendering
-    std::vector<Shape*>::iterator iter;
-    std::multimap<float, int> distanceMap;
-    int index = 0;
+  std::vector<Shape*>::iterator ishape;
 
-    for (iter = zsortShapes.begin() ; iter != zsortShapes.end() ; ++iter ) {
-      Shape* shape = *iter;
-    
-      const AABox& aabox = shape->getBoundingBox();
+  if (shapes.empty()) 
+    return NULL;
+  
+  ishape = std::find_if(shapes.begin(), shapes.end(), 
+                        std::bind2nd(std::ptr_fun(&sameID), id));
+  if (ishape == shapes.end()) return NULL;
+  else return *ishape;
+}
 
-      float distance = renderContext->getDistance( aabox.getCenter() );
-      distanceMap.insert( std::pair<const float,int>(-distance, index) );
+Light* Scene::get_light(int id)
+{
+  std::vector<Light*>::iterator ilight;
+
+  if (lights.empty()) 
+    return NULL;
+  
+  ilight = std::find_if(lights.begin(), lights.end(), 
+                        std::bind2nd(std::ptr_fun(&sameID), id));
+  if (ilight == lights.end()) return NULL;
+  else return *ilight;
+}
+
+void Scene::renderZsort(RenderContext* renderContext)
+{  
+  std::vector<Shape*>::iterator iter;
+  std::multimap<float, ShapeItem*> distanceMap;
+  int index = 0;
+
+  for (iter = zsortShapes.begin() ; iter != zsortShapes.end() ; ++iter ) {
+    Shape* shape = *iter;
+    shape->renderBegin(renderContext);
+    for (int j = 0; j < shape->getElementCount(); j++) {
+	ShapeItem* item = new ShapeItem(shape, j);
+	float distance = renderContext->getDistance( shape->getElementCenter(j) );
+      distanceMap.insert( std::pair<const float,ShapeItem*>(-distance, item) );
       index++;
     }
+  }
 
-    {
-      std::multimap<float,int>::iterator iter;
-      for (iter = distanceMap.begin() ; iter != distanceMap.end() ; ++ iter ) {
-        int index = iter->second;
-        Shape* shape = zsortShapes[index];
-        shape->renderZSort(renderContext);
+  {
+    Shape* prev = NULL;
+    std::multimap<float,ShapeItem*>::iterator iter;
+    for (iter = distanceMap.begin() ; iter != distanceMap.end() ; ++ iter ) {
+      ShapeItem* item = iter->second;
+      Shape* shape = item->shape;
+      if (shape != prev) {
+        if (prev) prev->drawEnd(renderContext);
+        shape->drawBegin(renderContext);
+        prev = shape;
       }
+      shape->drawElement(renderContext, item->itemnum);
     }
-  } else {  // Slow, more accurate rendering
-    std::vector<Shape*>::iterator iter;
-    std::multimap<float, ShapeItem*> distanceMap;
-    int index = 0;
-
-    for (iter = zsortShapes.begin() ; iter != zsortShapes.end() ; ++iter ) {
-      Shape* shape = *iter;
-	for (int j = 0; j < shape->getElementCount(); j++) {
-	  ShapeItem* item = new ShapeItem(shape, j);
-	  float distance = renderContext->getDistance( shape->getElementCenter(j) );
-        distanceMap.insert( std::pair<const float,ShapeItem*>(-distance, item) );
-        index++;
-	}
-    }
-
-    {
-      Shape* prev = NULL;
-      std::multimap<float,ShapeItem*>::iterator iter;
-      for (iter = distanceMap.begin() ; iter != distanceMap.end() ; ++ iter ) {
-        ShapeItem* item = iter->second;
-        Shape* shape = item->shape;
-        if (shape != prev) {
-          if (prev) prev->drawEnd(renderContext);
-          shape->drawBegin(renderContext);
-          prev = shape;
-        }
-        shape->drawElement(renderContext, item->itemnum);
-      }
-      if (prev) prev->drawEnd(renderContext);
-    }
+    if (prev) prev->drawEnd(renderContext);
   }
 }
 
@@ -400,6 +433,9 @@ void Scene::render(RenderContext* renderContext)
   setupLightModel(renderContext);
 
 
+  if (bboxChanges) 
+    calcDataBBox(renderContext);
+  
   Sphere total_bsphere;
 
   if (data_bbox.isValid()) {
@@ -464,13 +500,6 @@ void Scene::render(RenderContext* renderContext)
     glGetIntegerv(GL_VIEWPORT, renderContext->viewport);    
     
     //
-    // RENDER BBOX DECO
-    //
-
-    if (bboxDeco) 
-      bboxDeco->render(renderContext);  // This changes the modelview/projection/viewport
-
-    //
     // RENDER SOLID SHAPES
     //
 
@@ -483,6 +512,13 @@ void Scene::render(RenderContext* renderContext)
     // DISABLE BLENDING
     glDisable(GL_BLEND);
     
+    //
+    // RENDER BBOX DECO
+    //
+
+    if (bboxDeco) 
+      bboxDeco->render(renderContext);  // This changes the modelview/projection/viewport
+
     SAVEGLERROR;
 
     {
@@ -532,9 +568,7 @@ void Scene::render(RenderContext* renderContext)
     renderContext->Zrow = P.getRow(2);
     renderContext->Wrow = P.getRow(3);
     
-    bool fast = false;
-    
-    renderZsort(renderContext, fast);
+    renderZsort(renderContext);
 #endif    
     /* Reset flag(s) now that scene has been rendered */
     renderContext->viewpoint->scaleChanged = false;
@@ -610,10 +644,30 @@ void Scene::calcDataBBox()
 
   std::vector<Shape*>::const_iterator iter;
 
+  bboxChanges = false;
   for(iter = shapes.begin(); iter != shapes.end(); ++iter) {
     Shape* shape = *iter;
 
-    if (!shape->getIgnoreExtent()) data_bbox += shape->getBoundingBox();
+    if (!shape->getIgnoreExtent()) {
+      data_bbox += shape->getBoundingBox();
+      bboxChanges |= shape->getBBoxChanges();
+    }
+  }
+}
+
+void Scene::calcDataBBox(RenderContext *renderContext)
+{
+  data_bbox.invalidate();
+  std::vector<Shape*>::const_iterator iter;
+  
+  for(int i = 0; i < 10; ++i) {
+  
+    for(iter = shapes.begin(); iter != shapes.end(); ++iter) {
+      Shape* shape = *iter;
+
+      if (!shape->getIgnoreExtent()) 
+        data_bbox += shape->getBoundingBox(renderContext);
+    }
   }
 }
 

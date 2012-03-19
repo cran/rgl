@@ -25,6 +25,7 @@ public:
   void beginUse();
   void endUse();
   Vertex& operator[](int index);
+  void setVertex(int index, double* v);
 
   Vertex getNormal(int v1, int v2, int v3);
 
@@ -60,12 +61,14 @@ public:
   TexCoordArray();
   ~TexCoordArray();
 
-  void alloc(int nvertex);
+  void alloc(int in_nvertex);
   void beginUse();
   void endUse();
   TexCoord& operator[](int index);
+  int size() { return nvertex; };
 
 private:
+  int nvertex;
   float* arrayptr;
 };
 

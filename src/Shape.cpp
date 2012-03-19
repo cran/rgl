@@ -8,8 +8,8 @@
 //   Shape
 //
 
-Shape::Shape(Material& in_material, bool in_ignoreExtent, TypeID in_typeID)
-: SceneNode(in_typeID), ignoreExtent(in_ignoreExtent), material(in_material), 
+Shape::Shape(Material& in_material, bool in_ignoreExtent, TypeID in_typeID, bool in_bboxChanges)
+: SceneNode(in_typeID), bboxChanges(in_bboxChanges), ignoreExtent(in_ignoreExtent), material(in_material), 
   displayList(0), drawLevel(0), doUpdate(true), transparent(in_material.isTransparent()),
   blended(in_material.isTransparent())
   
@@ -42,6 +42,8 @@ void Shape::draw(RenderContext* renderContext)
 
 void Shape::render(RenderContext* renderContext)
 {
+  renderBegin(renderContext);
+  
   if (displayList == 0)
     displayList = glGenLists(1);
     
@@ -59,30 +61,6 @@ void Shape::render(RenderContext* renderContext)
     glCallList(displayList);
     SAVEGLERROR;
   }  
-}
-
-
-void Shape::renderZSort(RenderContext* renderContext)
-{
-  std::multimap<float,int> distanceMap;
-
-  for(int index=0;index<getElementCount();index++) {
-    float distance = renderContext->getDistance( getElementCenter(index) );
-    distanceMap.insert( std::pair<const float,int>( -distance , index ) );
-  }
-  std::multimap<float,int>::iterator iter;
-
-  drawBegin(renderContext);
-  SAVEGLERROR;
-  
-  for (iter = distanceMap.begin() ; iter != distanceMap.end() ; ++iter ) {
-    int index = iter->second;
-    drawElement(renderContext, index);
-  } 
-  SAVEGLERROR;
-  
-  drawEnd(renderContext);
-  SAVEGLERROR;
 }
 
 void Shape::invalidateDisplaylist()
@@ -106,4 +84,30 @@ void Shape::drawEnd(RenderContext* renderContext)
     error("Internal error: Shape::drawEnd without drawBegin");
   }
   drawLevel--;
+}
+
+int Shape::getAttributeCount(AABox& bbox, AttribID attrib)
+{
+  if (attrib == COLORS)
+    return material.colors.getLength();
+  
+  return 0;
+}
+
+void Shape::getAttribute(AABox& bbox, AttribID attrib, int first, int count, double* result)
+{
+  int n = getAttributeCount(bbox, attrib);
+  if (first + count < n) n = first + count;
+  if (first < n) {
+    if (attrib == COLORS) {
+      while (first < n) {
+        Color color = material.colors.getColor(first);
+        *result++ = color.data[0];
+        *result++ = color.data[1];
+        *result++ = color.data[2];
+        *result++ = color.data[3];
+        first++;
+      }
+    }
+  }
 }

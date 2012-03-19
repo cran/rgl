@@ -4,6 +4,8 @@
 #include "scene.h"
 #include <cstdio>
 #include <cmath>
+#include "R.h"
+#include "R_ext/Applic.h"
 
 #if 0
 // This is debugging code to track down font problems.
@@ -149,6 +151,8 @@ AxisInfo::AxisInfo(int in_nticks, double* in_ticks, char** in_texts, int in_len,
     
     if (unit > 0)
       mode = AXIS_UNIT;
+    else if (unit < 0)
+      mode = AXIS_PRETTY;
     else if (len > 0)
       mode = AXIS_LENGTH;
     else
@@ -222,7 +226,71 @@ void AxisInfo::draw(RenderContext* renderContext, Vertex4& v, Vertex4& dir, Matr
 
 }
 
+int AxisInfo::getNticks(float low, float high) {
+  switch (mode) {
 
+    case AXIS_CUSTOM: return nticks;
+
+    case AXIS_LENGTH: return len;
+
+    case AXIS_UNIT:   return (high - low)/unit;
+
+    case AXIS_PRETTY: {
+      double lo=low, up=high, shrink_sml=0.75, high_u_fact[2];
+      int ndiv=len, min_n=3, eps_correction=0;
+      int count=0;
+
+      high_u_fact[0] = 1.5;
+      high_u_fact[1] = 2.75;
+      unit = R_pretty0(&lo, &up, &ndiv, min_n, shrink_sml, high_u_fact, 
+			     eps_correction, 0);
+      
+      for (int i=(int)lo; i<=up; i++) {
+	float value = i*unit;
+	if (value >= low && value <= high) 
+	  count++;
+      }
+      return count;
+    }
+  }
+  return 0;
+}
+
+float AxisInfo::getTick(float low, float high, int index) {
+  switch (mode) {
+
+    case AXIS_CUSTOM: return ticks[index];
+
+    case AXIS_LENGTH: {
+      float delta = (len>1) ? (high-low)/(len-1) : 0;
+      return low + delta*(float)index;
+    }
+    case AXIS_UNIT: {
+      float value =  ( (float) ( (int) ( ( low+(unit-1) ) / (unit) ) ) ) * (unit);
+      return value + index*unit;
+    }
+    case AXIS_PRETTY: {
+      double lo=low, up=high, shrink_sml=0.75, high_u_fact[2];
+      int ndiv=len, min_n=3, eps_correction=0;
+      int count=0;
+
+      high_u_fact[0] = 1.5;
+      high_u_fact[1] = 2.75;
+      unit = R_pretty0(&lo, &up, &ndiv, min_n, shrink_sml, high_u_fact, 
+			     eps_correction, 0);
+      
+      for (int i=(int)lo; i<=up; i++) {
+	float value = i*unit;
+	if (value >= low && value <= high) {
+	  if (count == index) return value;
+	  count++;
+	}
+      }
+    }
+  }
+  return NA_REAL;
+}
+    
 struct Side {
   int vidx[4];
   Vertex4 normal;
@@ -292,9 +360,9 @@ AxisInfo BBoxDeco::defaultAxis(0,NULL,NULL,0,5);
 Material BBoxDeco::defaultMaterial( Color(0.6f,0.6f,0.6f,0.5f), Color(1.0f,1.0f,1.0f) );
 
 BBoxDeco::BBoxDeco(Material& in_material, AxisInfo& in_xaxis, AxisInfo& in_yaxis, AxisInfo& in_zaxis, float in_marklen_value, bool in_marklen_fract,
-                   float in_expand)
+                   float in_expand, bool in_front)
 : SceneNode(BBOXDECO), material(in_material), xaxis(in_xaxis), yaxis(in_yaxis), zaxis(in_zaxis), marklen_value(in_marklen_value), marklen_fract(in_marklen_fract),
-  expand(in_expand)
+  expand(in_expand), draw_front(in_front)
 {
   material.colors.recycle(2);
 }
@@ -306,16 +374,16 @@ Vertex BBoxDeco::getMarkLength(const AABox& boundingBox) const
 
 AABox BBoxDeco::getBoundingBox(const AABox& in_bbox) const
 {
-  AABox bbox(in_bbox);
+  AABox bbox2(in_bbox);
 
-  Vertex marklen = getMarkLength(bbox);
+  Vertex marklen = getMarkLength(bbox2);
 
   Vertex v = marklen * 2;
 
-  bbox += bbox.vmin - v;
-  bbox += bbox.vmax + v;
+  bbox2 += bbox2.vmin - v;
+  bbox2 += bbox2.vmax + v;
 
-  return bbox;
+  return bbox2;
 }
 
 void BBoxDeco::render(RenderContext* renderContext)
@@ -387,20 +455,22 @@ void BBoxDeco::render(RenderContext* renderContext)
 
       const bool front = (cos_a >= 0.0f) ? true : false;
 
-      if (!front) {
+      if (draw_front || !front) {
 
-        // draw back face
+        // draw face
 
         glNormal3f(side[i].normal.x, side[i].normal.y, side[i].normal.z);
 
         for(j=0;j<4;j++) {
 
-          // modify adjacent matrix
+	  if (!front) {
+            // modify adjacent matrix
 
-          int from = side[i].vidx[j];
-          int to   = side[i].vidx[(j+1)%4];
+            int from = side[i].vidx[j];
+            int to   = side[i].vidx[(j+1)%4];
 
-          adjacent[from][to] = 1;
+            adjacent[from][to] = 1;
+          }          
           
           // feed vertex
 
@@ -561,6 +631,33 @@ void BBoxDeco::render(RenderContext* renderContext)
               }
             }
             break;
+          case AXIS_PRETTY:
+            {
+              /* These are the defaults from the R pretty() function, except min_n is 3 */
+              double lo=low, up=high, shrink_sml=0.75, high_u_fact[2];
+              int ndiv=axis->len, min_n=3, eps_correction=0;
+              
+              high_u_fact[0] = 1.5;
+              high_u_fact[1] = 2.75;
+              axis->unit = R_pretty0(&lo, &up, &ndiv, min_n, shrink_sml, high_u_fact, 
+                                     eps_correction, 0);
+              
+              for (int i=(int)lo; i<=up; i++) {
+                float value = i*axis->unit;
+		if (value >= low && value <= high) {
+                  *valueptr = value;
+
+                  char text[32];
+                  sprintf(text, "%.4g", value);
+
+                  String s (strlen(text),text);
+
+                  axis->draw(renderContext, v, edge->dir, modelview, marklen, s );
+		}
+              }
+            }
+            break;
+            
         }
       }
     }
@@ -571,4 +668,111 @@ void BBoxDeco::render(RenderContext* renderContext)
 
   }
 
+}
+
+int BBoxDeco::getAttributeCount(AABox& bbox, AttribID attrib) 
+{
+  switch (attrib) {    
+    case TEXTS: {
+      int count = ((xaxis.mode == AXIS_CUSTOM) ? xaxis.nticks : 0)
+           + ((yaxis.mode == AXIS_CUSTOM) ? yaxis.nticks : 0)
+           + ((zaxis.mode == AXIS_CUSTOM) ? zaxis.nticks : 0);
+      if (count == 0) return 0; 
+    }
+    case VERTICES:
+      return xaxis.getNticks(bbox.vmin.x, bbox.vmax.x)
+           + yaxis.getNticks(bbox.vmin.y, bbox.vmax.y)
+           + zaxis.getNticks(bbox.vmin.z, bbox.vmax.z);
+  }
+  return SceneNode::getAttributeCount(bbox, attrib);
+}
+
+void BBoxDeco::getAttribute(AABox& bbox, AttribID attrib, int first, int count, double* result)
+{
+  int n = getAttributeCount(bbox, attrib);
+
+  if (first + count < n) n = first + count;
+  if (first < n) {
+    switch(attrib) {
+    case VERTICES:  
+    
+      float low, high;
+      int i, thisn;
+      i = 0;
+     
+      low = bbox.vmin.x;
+      high = bbox.vmax.x;
+      thisn = xaxis.getNticks(low, high);
+      for (int j=0; j<thisn; j++) {
+        if (first <= i && i < n) {
+          *result++ = xaxis.getTick(low, high, j);
+          *result++ = NA_REAL;
+          *result++ = NA_REAL;
+        }
+        i++;  
+      }
+      
+      low = bbox.vmin.y;
+      high = bbox.vmax.y;
+      thisn = yaxis.getNticks(low, high);
+      for (int j=0; j<thisn; j++) {
+        if (first <= i && i < n) {
+          *result++ = NA_REAL;
+          *result++ = yaxis.getTick(low, high, j);
+          *result++ = NA_REAL;
+        }
+        i++;  
+      }
+      
+      low = bbox.vmin.z;
+      high = bbox.vmax.z;
+      thisn = zaxis.getNticks(low, high);
+      for (int j=0; j<thisn; j++) {
+        if (first <= i && i < n) {
+          *result++ = NA_REAL;
+          *result++ = NA_REAL;
+          *result++ = zaxis.getTick(low, high, j);
+        }
+        i++;  
+      }
+      return;
+    }
+    SceneNode::getAttribute(bbox, attrib, first, count, result);
+  }
+}
+
+String BBoxDeco::getTextAttribute(AABox& bbox, AttribID attrib, int index)
+{
+  int n = getAttributeCount(bbox, attrib);
+  
+  if (index < n) {
+    int count;
+    switch(attrib) {
+    case TEXTS: 
+      count = xaxis.getNticks(bbox.vmin.x, bbox.vmax.x);
+      if (index < count) {
+        if (xaxis.mode == AXIS_CUSTOM)
+          return xaxis.textArray[index];
+        else
+          return String(0, NULL);
+      }  
+      index -= count;
+      count = yaxis.getNticks(bbox.vmin.y, bbox.vmax.y);
+      if (index < count) {
+        if (yaxis.mode == AXIS_CUSTOM)
+          return yaxis.textArray[index];
+        else
+          return String(0, NULL);
+      }  
+      index -= count;
+      count = zaxis.getNticks(bbox.vmin.z, bbox.vmax.z);
+      if (index < count) {
+        if (zaxis.mode == AXIS_CUSTOM)
+          return zaxis.textArray[index];
+        else
+          return String(0, NULL);
+      }
+    }
+  }
+  return String(0, NULL);
 }

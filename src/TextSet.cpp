@@ -87,3 +87,50 @@ void TextSet::drawEnd(RenderContext* renderContext)
   material.endUse(renderContext);
   Shape::drawEnd(renderContext);
 }
+
+int TextSet::getAttributeCount(AABox& bbox, AttribID attrib) 
+{
+  switch (attrib) {    
+    case CEX: return fonts.size();
+    case TEXTS:
+    case VERTICES: return textArray.size();
+    case ADJ: return 1;
+  }
+  return Shape::getAttributeCount(bbox, attrib);
+}
+
+void TextSet::getAttribute(AABox& bbox, AttribID attrib, int first, int count, double* result)
+{
+  int n = getAttributeCount(bbox, attrib);
+  if (first + count < n) n = first + count;
+  if (first < n) {
+    switch(attrib) {
+    case VERTICES:
+      while (first < n) {
+        *result++ = vertexArray[first].x;
+        *result++ = vertexArray[first].y;
+        *result++ = vertexArray[first].z;
+        first++;
+      }
+      return;
+    case CEX:
+      while (first < n) 
+        *result++ = fonts[first++]->cex;
+      return;
+    case ADJ:
+      *result++ = adjx;
+      *result++ = adjy;
+      return;
+    }
+    Shape::getAttribute(bbox, attrib, first, count, result);
+  }
+}
+
+String TextSet::getTextAttribute(AABox& bbox, AttribID attrib, int index)
+{
+  int n = getAttributeCount(bbox, attrib);
+  if (index < n && attrib == TEXTS) 
+    return textArray[index];
+  else
+    return Shape::getTextAttribute(bbox, attrib, index);
+}

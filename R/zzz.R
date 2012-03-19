@@ -2,7 +2,7 @@
 ## R source file
 ## This file is part of rgl
 ##
-## $Id: zzz.R 762 2009-06-22 13:34:33Z murdoch $
+## $Id: zzz.R 849 2012-03-13 13:08:35Z murdoch $
 ##
 
 ##
@@ -27,10 +27,6 @@
   if ( .Platform$OS.type == "unix" ) {
     unixos <- system("uname",intern=TRUE)
     if ( unixos == "Darwin" ) {
-    
-      # Sys.putenv was renamed to Sys.setenv in R 2.5.0
-      if ( as.numeric(R.version$minor) < 5 )
-          Sys.setenv <- Sys.putenv
           
       # For MacOS X we have to remove /usr/X11R6/lib from the DYLD_LIBRARY_PATH
       # because it would override Apple's OpenGL framework
@@ -69,7 +65,9 @@
 	 "rgl_postscript", "rgl_material", "rgl_getmaterial",
 	 "rgl_getcolorcount", "rgl_dev_bringtotop", "rgl_clear",
 	 "rgl_pop", "rgl_id_count", "rgl_ids", "rgl_viewpoint",
-	 "rgl_bg", "rgl_bbox", "rgl_light", "rgl_pixels", "rgl_primitive",
+	 "rgl_attrib_count", "rgl_attrib", "rgl_text_attrib",
+	 "rgl_bg", "rgl_bbox", "rgl_light", "rgl_pixels", "rgl_planes", 
+	 "rgl_abclines", "rgl_primitive",
 	 "rgl_setMouseCallbacks", "rgl_surface", "rgl_spheres",
 	 "rgl_texts", "rgl_sprites", "rgl_user2window",
 	 "rgl_window2user", "rgl_selectstate", "rgl_setselectstate",
