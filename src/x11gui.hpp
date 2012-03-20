@@ -4,7 +4,7 @@
 // C++ header file
 // This file is part of RGL
 //
-// $Id: x11gui.hpp 666 2008-04-17 13:44:58Z dmurdoch $
+// $Id: x11gui.hpp 841 2012-01-06 19:11:34Z murdoch $
 // ---------------------------------------------------------------------------
 #include <X11/Xlib.h>
 #include <GL/glx.h>
@@ -38,7 +38,6 @@ public:
   // display specific:
   
   Display* xdisplay;
-  XVisualInfo* xvisualinfo;
   
   ::Atom atoms[GUI_X11_ATOM_LAST];
   

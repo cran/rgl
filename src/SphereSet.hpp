@@ -23,12 +23,21 @@ public:
   void render(RenderContext* renderContext);
   
   int getElementCount(void){ return center.size(); }
+  int getAttributeCount(AABox& bbox, AttribID attrib);
+  void getAttribute(AABox& bbox, AttribID attrib, int first, int count, double* result);
   
   /**
    * location of individual items
    **/
   
   Vertex getElementCenter(int index) { return center.get(index); }
+  
+  /**
+   * Spheres appear as spheres, so their bbox depends on scaling
+   **/
+   
+  virtual AABox& getBoundingBox(RenderContext* renderContext);
+
 
   /**
    * begin sending items 

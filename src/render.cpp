@@ -44,6 +44,11 @@ void VertexArray::copy(int nvertex, double* vertices)
   }
 }
 
+void VertexArray::setVertex(int index, double* v) {
+  arrayptr[index*3+0] = (float) v[0];
+  arrayptr[index*3+1] = (float) v[1];
+  arrayptr[index*3+2] = (float) v[2];
+}
 
 void VertexArray::beginUse() {
   glEnableClientState(GL_VERTEX_ARRAY);
@@ -95,6 +100,7 @@ void NormalArray::endUse() {
 TexCoordArray::TexCoordArray()
 {
   arrayptr = NULL;
+  nvertex = 0;
 }
 
 TexCoordArray::~TexCoordArray()
@@ -103,13 +109,15 @@ TexCoordArray::~TexCoordArray()
     delete[] arrayptr;
 }
 
-void TexCoordArray::alloc(int nvertex)
+void TexCoordArray::alloc(int in_nvertex)
 {
   if (arrayptr) {
     delete[] arrayptr;
     arrayptr = NULL;
   }
-  arrayptr = new float[2*nvertex];
+  nvertex = in_nvertex;
+  if (nvertex)
+    arrayptr = new float[2*nvertex];
 }
 
 TexCoord& TexCoordArray::operator [] (int index) {

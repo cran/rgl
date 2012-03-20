@@ -1,7 +1,7 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: api.cpp 798 2010-11-27 20:17:34Z murdoch $
+// $Id: api.cpp 852 2012-03-14 11:59:02Z murdoch $
 
 #include "lib.hpp"
 
@@ -226,7 +226,11 @@ void rgl_id_count(int* type, int* count)
     RGLView* rglview = device->getRGLView();
     Scene* scene = rglview->getScene();
     
-    *count = scene->get_id_count((TypeID) *type);
+    *count = 0;
+    while (*type) {
+      *count += scene->get_id_count((TypeID) *type);
+      type++;
+    }
     CHECKGLERROR;
   } else {
     *count = 0;
@@ -245,10 +249,113 @@ void rgl_ids(int* type, int* ids, char** types)
     RGLView* rglview = device->getRGLView();
     Scene* scene = rglview->getScene();
     
-    scene->get_ids((TypeID) *type, ids, types);
+    while (*type) {
+      int n = scene->get_id_count((TypeID) *type);
+      scene->get_ids((TypeID) *type, ids, types);
+      ids += n;
+      types += n;
+      type++;
+    }
     CHECKGLERROR;
   }
 } 
+//
+// FUNCTION
+//   rgl_attrib_count
+//
+
+void rgl_attrib_count(int* id, int* attrib, int* count)
+{
+  Device* device;
+  if (deviceManager && (device = deviceManager->getCurrentDevice())) {
+    RGLView* rglview = device->getRGLView();
+    Scene* scene = rglview->getScene();
+    AABox bbox = scene->getBoundingBox();
+    Light* light;
+    Shape* shape;
+    Background *background;
+    BBoxDeco* bboxdeco;
+    
+    if ( (shape = scene->get_shape(*id)) )
+      *count = shape->getAttributeCount(bbox, *attrib);
+    else if ( (light = scene->get_light(*id)) ) 
+      *count = light->getAttributeCount(bbox, *attrib);
+    else if ( (background = scene->get_background()) && *id == background->getObjID())
+      *count = background->getAttributeCount(bbox, *attrib);
+    else if ( (bboxdeco = scene->get_bboxdeco()) && *id == bboxdeco->getObjID())
+      *count = bboxdeco->getAttributeCount(bbox, *attrib);
+    else
+      *count = 0;
+  }
+} 
+
+//
+// FUNCTION
+//   rgl_attrib
+//
+
+void rgl_attrib(int* id, int* attrib, int* first, int* count, double* result)
+{
+  Device* device;
+  if (deviceManager && (device = deviceManager->getCurrentDevice())) {
+    RGLView* rglview = device->getRGLView();
+    Scene* scene = rglview->getScene();
+    AABox bbox = scene->getBoundingBox();
+    Light* light;
+    Shape* shape;
+    Background* background;
+    BBoxDeco* bboxdeco;
+    
+    if ( (shape = scene->get_shape(*id)) )
+      shape->getAttribute(bbox, *attrib, *first, *count, result);
+    else if ( (light = scene->get_light(*id)) )
+      light->getAttribute(bbox, *attrib, *first, *count, result);
+    else if ( (background = scene->get_background()) && *id == background->getObjID())
+      background->getAttribute(bbox, *attrib, *first, *count, result);
+    else if ( (bboxdeco = scene->get_bboxdeco()) && *id == bboxdeco->getObjID())
+      bboxdeco->getAttribute(bbox, *attrib, *first, *count, result);
+  }
+} 
+
+//
+// FUNCTION
+//   rgl_text_attrib
+//
+
+void rgl_text_attrib(int* id, int* attrib, int* first, int* count, char** result)
+{
+  Device* device;
+  if (deviceManager && (device = deviceManager->getCurrentDevice())) {
+    RGLView* rglview = device->getRGLView();
+    Scene* scene = rglview->getScene();
+    AABox bbox = scene->getBoundingBox();
+    SceneNode* node = scene->get_shape(*id);
+    
+    if (!node)
+      node = scene->get_light(*id);
+    if (!node) {
+      node = scene->get_background();
+      if (*id != node->getObjID())
+        node = NULL;
+    }
+    if (!node) {
+      node = scene->get_bboxdeco();
+      if (*id != node->getObjID())
+        node = NULL;
+    }    
+    if (node)
+      for (int i=0; i < *count; i++) {
+      	String s = node->getTextAttribute(bbox, *attrib, i + *first);
+      	if (s.length) {
+      	  *result = R_alloc(s.length + 1, 1);
+	  strncpy(*result, s.text, s.length);
+	  (*result)[s.length] = '\0';
+	}
+	result++;
+      }
+  }
+} 
+
 //
 // FUNCTION
 //   rgl_bg   ( successPtr, idata )
@@ -560,6 +667,42 @@ void rgl_spheres(int* successptr, int* idata, double* vertex, double* radius)
   *successptr = success;
 }
 
+void rgl_planes(int* successptr, int* idata, double* normals, double* offsets)
+{
+  int success = RGL_FAIL;
+
+  Device* device;
+
+  if (deviceManager && (device = deviceManager->getAnyDevice())) {
+
+    int nnormal = idata[0];
+    int noffset = idata[1];
+
+    success = as_success( device->add( new PlaneSet(currentMaterial, nnormal, normals, noffset, offsets) ) );
+  }
+  CHECKGLERROR;
+
+  *successptr = success;
+}
+
+void rgl_abclines(int* successptr, int* idata, double* bases, double* directions)
+{
+  int success = RGL_FAIL;
+
+  Device* device;
+
+  if (deviceManager && (device = deviceManager->getAnyDevice())) {
+
+    int nbases = idata[0];
+    int ndirs  = idata[1];
+
+    success = as_success( device->add( new ABCLineSet(currentMaterial, nbases, bases, ndirs, directions) ) );
+  }
+  CHECKGLERROR;
+
+  *successptr = success;
+}
+
 void rgl_sprites(int* successptr, int* idata, double* vertex, double* radius)
 {
   int success = RGL_FAIL;
@@ -612,18 +755,21 @@ void rgl_material(int *successptr, int* idata, char** cdata, double* ddata)
   mat.lwd         = (float) ddata[2];
   double* alpha   = &ddata[3];
 
+  mat.alphablend  = false;
+  
   if ( strlen(pixmapfn) > 0 ) {
     mat.texture = new Texture(pixmapfn, textype, mipmap, (unsigned int) minfilter, (unsigned int) magfilter, envmap);
     if ( !mat.texture->isValid() ) {
       mat.texture->unref();
       // delete mat.texture;
       mat.texture = NULL;
-    }
+    } else
+      mat.alphablend = mat.alphablend || mat.texture->hasAlpha();
   } else
     mat.texture = NULL;
 
   mat.colors.set( ncolor, colors, nalpha, alpha);
-  mat.alphablend  = mat.colors.hasAlpha();
+  mat.alphablend  = mat.alphablend || mat.colors.hasAlpha();
 
   mat.setup(); 
   CHECKGLERROR;
@@ -637,18 +783,34 @@ void rgl_getcolorcount(int* count)
   CHECKGLERROR;
 }
 
-void rgl_getmaterial(int *successptr, int* idata, char** cdata, double* ddata)
+void rgl_getmaterial(int *successptr, int *id, int* idata, char** cdata, double* ddata)
 {
-  Material& mat = currentMaterial;
+  Material* mat = &currentMaterial;
   unsigned int i,j;
   
-  idata[1] = mat.lit ? 1 : 0;
-  idata[2] = mat.smooth ? 1 : 0;
-  idata[3] = (int) mat.front;
-  idata[4] = (int) mat.back;
-  idata[5] = mat.fog ? 1 : 0;
-  if (mat.texture) {
-    mat.texture->getParameters( (Texture::Type*) (idata + 6),
+  if (*id > 0) {
+    Device* device;
+    *successptr = RGL_FAIL;
+    if (deviceManager && (device = deviceManager->getCurrentDevice())) {
+      RGLView* rglview = device->getRGLView();
+      Scene* scene = rglview->getScene();
+    
+      Shape* shape = scene->get_shape(*id);
+      if (shape) 
+        mat = shape->getMaterial(); /* success! successptr will be set below */
+      else
+        return;
+    } else
+      return;
+  }
+  
+  idata[1] = mat->lit ? 1 : 0;
+  idata[2] = mat->smooth ? 1 : 0;
+  idata[3] = (int) mat->front;
+  idata[4] = (int) mat->back;
+  idata[5] = mat->fog ? 1 : 0;
+  if (mat->texture) {
+    mat->texture->getParameters( (Texture::Type*) (idata + 6),
                                (bool*) (idata + 7),
                                (unsigned int*) (idata + 8),
                                (unsigned int*) (idata + 9),
@@ -663,34 +825,34 @@ void rgl_getmaterial(int *successptr, int* idata, char** cdata, double* ddata)
     idata[20] = 0; /* mat.texture.envmap ? 1 : 0; */
     cdata[0][0] = '\0';
   }
-  idata[11] = (int) mat.ambient.getRedub();
-  idata[12] = (int) mat.ambient.getGreenub();
-  idata[13] = (int) mat.ambient.getBlueub();
-  idata[14] = (int) mat.specular.getRedub();
-  idata[15] = (int) mat.specular.getGreenub();
-  idata[16] = (int) mat.specular.getBlueub();  
-  idata[17] = (int) mat.emission.getRedub();
-  idata[18] = (int) mat.emission.getGreenub();
-  idata[19] = (int) mat.emission.getBlueub();
-  idata[21] = mat.point_antialias ? 1 : 0;
-  idata[22] = mat.line_antialias ? 1 : 0;
-  idata[23] = mat.depth_mask ? 1 : 0;
-  idata[24] = mat.depth_test;
+  idata[11] = (int) mat->ambient.getRedub();
+  idata[12] = (int) mat->ambient.getGreenub();
+  idata[13] = (int) mat->ambient.getBlueub();
+  idata[14] = (int) mat->specular.getRedub();
+  idata[15] = (int) mat->specular.getGreenub();
+  idata[16] = (int) mat->specular.getBlueub();  
+  idata[17] = (int) mat->emission.getRedub();
+  idata[18] = (int) mat->emission.getGreenub();
+  idata[19] = (int) mat->emission.getBlueub();
+  idata[21] = mat->point_antialias ? 1 : 0;
+  idata[22] = mat->line_antialias ? 1 : 0;
+  idata[23] = mat->depth_mask ? 1 : 0;
+  idata[24] = mat->depth_test;
 
-  for (i=0, j=25; (i < mat.colors.getLength()) && (i < (unsigned int)idata[0]); i++) {
-    idata[j++] = (int) mat.colors.getColor(i).getRedub();
-    idata[j++] = (int) mat.colors.getColor(i).getGreenub();
-    idata[j++] = (int) mat.colors.getColor(i).getBlueub();
+  for (i=0, j=25; (i < mat->colors.getLength()) && (i < (unsigned int)idata[0]); i++) {
+    idata[j++] = (int) mat->colors.getColor(i).getRedub();
+    idata[j++] = (int) mat->colors.getColor(i).getGreenub();
+    idata[j++] = (int) mat->colors.getColor(i).getBlueub();
   }
   idata[0] = i;
 
-  ddata[0] = (double) mat.shininess;
-  ddata[1] = (double) mat.size;
-  ddata[2] = (double) mat.lwd;
+  ddata[0] = (double) mat->shininess;
+  ddata[1] = (double) mat->size;
+  ddata[2] = (double) mat->lwd;
   
-  if (mat.colors.hasAlpha()) {
-    for (i=0, j=3; (i < mat.colors.getLength()) && (i < (unsigned int)idata[10]); i++) 
-      ddata[j++] = (double) mat.colors.getColor(i).getAlphaf();
+  if (mat->colors.hasAlpha()) {
+    for (i=0, j=3; (i < mat->colors.getLength()) && (i < (unsigned int)idata[10]); i++) 
+      ddata[j++] = (double) mat->colors.getColor(i).getAlphaf();
     idata[10] = i;
   } else 
     idata[10] = 0;
@@ -746,6 +908,7 @@ void rgl_bbox(int* successptr,
     int   ylen       =        idata[4];
     int   zlen       =        idata[5];
     int   marklen_rel =       idata[6];
+    int   front      =        idata[7];
 
     float xunit      = (float) ddata[0];
     float yunit      = (float) ddata[1];
@@ -758,7 +921,7 @@ void rgl_bbox(int* successptr,
     AxisInfo yaxis(yticks, yat, ytext, ylen, yunit);
     AxisInfo zaxis(zticks, zat, ztext, zlen, zunit);
 
-    success = as_success( device->add( new BBoxDeco(currentMaterial, xaxis, yaxis, zaxis, marklen, (bool) marklen_rel, expand ) ) );
+    success = as_success( device->add( new BBoxDeco(currentMaterial, xaxis, yaxis, zaxis, marklen, (bool) marklen_rel, expand, (bool)front ) ) );
   }
   CHECKGLERROR;
 
@@ -1273,4 +1436,21 @@ char* getFontname()
   } 
   CHECKGLERROR;
   return result;
+}
+
+int getAntialias()
+{
+  Device* device;
+  
+  if (deviceManager && (device = deviceManager->getCurrentDevice())) {
+    WindowImpl* windowImpl = device->getRGLView()->windowImpl;
+    if (windowImpl->beginGL()) {
+      int result;      
+      glGetIntegerv(GL_SAMPLES, &result);
+      windowImpl->endGL();
+      CHECKGLERROR;
+      return result;
+    }
+  }
+  return -1;
 }

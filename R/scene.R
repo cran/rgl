@@ -2,7 +2,7 @@
 ## R source file
 ## This file is part of rgl
 ##
-## $Id: scene.R 783 2010-02-12 12:45:04Z murdoch $
+## $Id: scene.R 849 2012-03-13 13:08:35Z murdoch $
 ##
 
 ##
@@ -22,7 +22,7 @@ rgl.clear <- function( type = "shapes" )
   viewpoint <- 4 %in% type
   material  <- 5 %in% type
 
-  type <- type[!(type %in% 4:5)]
+  type <- type[!(type %in% 4:6)]
   
   idata <- as.integer(c(length(type), type))
  
@@ -67,7 +67,7 @@ rgl.pop <- function( type = "shapes", id = 0)
 
 rgl.ids <- function( type = "shapes" )
 {
-  type <- rgl.enum.nodetype(type)
+  type <- c(rgl.enum.nodetype(type), 0)
   
   count <- .C( rgl_id_count, as.integer(type), count = integer(1))$count
   
@@ -75,6 +75,57 @@ rgl.ids <- function( type = "shapes" )
                                 type=rep("",count) )[2:3] )
 }
 
+rgl.attrib.count <- function( id, attrib )
+{
+  stopifnot(length(attrib) == 1)
+  if (is.character(attrib))
+    attrib <- rgl.enum.attribtype(attrib)
+  
+  result <- integer(length(id))
+  for (i in seq_along(id))
+    result[i] <- .C( rgl_attrib_count, as.integer(id[i]), as.integer(attrib), 
+                     count = integer(1))$count
+  names(result) <- names(id)
+  result
+}
+
+rgl.attrib <- function( id, attrib, first=1, 
+                        last=rgl.attrib.count(id, attrib) )
+{
+  stopifnot(length(attrib) == 1 && length(id) == 1 && length(first) == 1)
+  if (is.character(attrib))
+    attrib <- rgl.enum.attribtype(attrib)
+  ncol <- c(vertices=3, normals=3, colors=4, texcoords=2, dim=2, 
+            texts=1, cex=1, adj=2)[attrib]
+  count <- max(last - first + 1, 0)
+  if (attrib == 6) {
+    if (count)
+      result <- .C (rgl_text_attrib, as.integer(id), as.integer(attrib), 
+                    as.integer(first-1), as.integer(count), 
+                result = character(count*ncol))$result
+    else
+      result <- character(0)
+  } else {
+    if (count)
+      result <- .C (rgl_attrib, as.integer(id), as.integer(attrib), 
+                  as.integer(first-1), as.integer(count), 
+                  result = numeric(count*ncol))$result
+    else
+      result <- numeric(0)
+  }
+  result <- matrix(result, ncol=ncol, byrow=TRUE)
+  colnames(result) <- list(c("x", "y", "z"), # vertices
+                           c("x", "y", "z"), # normals
+                           c("r", "g", "b", "a"), # colors
+                           c("s", "t"),	     # texcoords
+                           c("r", "c"),      # dim
+                           c("text"),	     # texts
+                           c("cex"), 	     # cex
+                           c("x", "y")	     # adj
+                           )[[attrib]]
+  result
+}
+  
 ##
 ## ===[ SECTION: environment ]================================================
 ##
@@ -141,7 +192,8 @@ rgl.bbox <- function(
   xat=NULL, xlab=NULL, xunit=0, xlen=5,
   yat=NULL, ylab=NULL, yunit=0, ylen=5,
   zat=NULL, zlab=NULL, zunit=0, zlen=5,
-  marklen=15.0, marklen.rel=TRUE, expand=1, ...) {
+  marklen=15.0, marklen.rel=TRUE, expand=1, draw_front=FALSE,
+  ...) {
 
   rgl.material( ... )
 
@@ -160,10 +212,14 @@ rgl.bbox <- function(
   } else if (is.null(zlab)) {
     zlab = format(zat)
   }  else zlab=rep(zlab,length.out=length(zat))
-
+  
   xticks <- length(xat)
   yticks <- length(yat)
   zticks <- length(zat)
+
+  if (identical(xunit, "pretty")) xunit = -1;
+  if (identical(yunit, "pretty")) yunit = -1;
+  if (identical(zunit, "pretty")) zunit = -1;
 
   length(xticks)      <- 1
   length(yticks)      <- 1
@@ -172,13 +228,14 @@ rgl.bbox <- function(
   length(ylen)        <- 1
   length(zlen)        <- 1
   length(marklen.rel) <- 1
+  length(draw_front)  <- 1
   length(xunit)       <- 1
   length(yunit)       <- 1
   length(zunit)       <- 1
   length(marklen)     <- 1
   length(expand)      <- 1
 
-  idata <- as.integer(c(xticks,yticks,zticks, xlen, ylen, zlen, marklen.rel))
+  idata <- as.integer(c(xticks,yticks,zticks, xlen, ylen, zlen, marklen.rel, draw_front))
   ddata <- as.numeric(c(xunit, yunit, zunit, marklen, expand))
 
   ret <- .C( rgl_bbox,
@@ -423,6 +480,7 @@ rgl.spheres <- function( x, y=NULL, z=NULL, radius=1.0,...)
   nvertex <- rgl.nvertex(vertex)
   radius  <- rgl.attr(radius, nvertex)
   nradius <- length(radius)
+  if (!nradius) stop("no radius specified")
   
   idata <- as.integer( c( nvertex, nradius ) )
    
@@ -440,6 +498,66 @@ rgl.spheres <- function( x, y=NULL, z=NULL, radius=1.0,...)
   invisible(ret$success)
 
 }
+
+##
+## add planes
+##
+
+rgl.planes <- function( a, b=NULL, c=NULL, d=0,...)
+{
+  rgl.material(...)
+
+  normals  <- rgl.vertex(a, b, c)
+  nnormals <- rgl.nvertex(normals)
+  noffsets <- length(d)
+  
+  idata <- as.integer( c( nnormals, noffsets ) )
+   
+  ret <- .C( rgl_planes,
+    success = as.integer(FALSE),
+    idata,
+    as.numeric(normals),    
+    as.numeric(d),
+    NAOK=TRUE
+  )
+
+  if (! ret$success)
+    print("rgl_planes failed")
+    
+  invisible(ret$success)
+
+}
+
+##
+## add abclines
+##
+
+rgl.abclines <- function(x, y=NULL, z=NULL, a, b=NULL, c=NULL, ...)
+{
+  rgl.material(...)
+
+  bases  <- rgl.vertex(x, y, z)
+  nbases <- rgl.nvertex(bases)
+  directions <- rgl.vertex(a, b, c)
+  ndirs <-  rgl.nvertex(directions)
+  
+  idata <- as.integer( c( nbases, ndirs ) )
+   
+  ret <- .C( rgl_abclines,
+    success = as.integer(FALSE),
+    idata,
+    as.numeric(bases),    
+    as.numeric(directions),
+    NAOK=TRUE
+  )
+
+  if (! ret$success)
+    print("rgl_abclines failed")
+    
+  invisible(ret$success)
+
+}
+
 
 ##
 ## add texts
@@ -512,6 +630,7 @@ rgl.sprites <- function( x, y=NULL, z=NULL, radius=1.0, ... )
   ncenter <- rgl.nvertex(center)
   radius  <- rgl.attr(radius, ncenter)
   nradius <- length(radius)
+  if (!nradius) stop("no radius specified")
   
   idata   <- as.integer( c(ncenter,nradius) )
    
@@ -655,7 +774,7 @@ rgl.select3d <- function(button = c("left", "middle", "right")) {
   }
   proj <- rgl.projection();
   function(x,y=NULL,z=NULL) {
-    pixel <- rgl.user2window(x,y,z,proj=proj)
+    pixel <- rgl.user2window(x,y,z,projection=proj)
     x <- pixel[,1]
     y <- pixel[,2]
     z <- pixel[,3]

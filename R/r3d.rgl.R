@@ -1,6 +1,6 @@
 #
 # R3D rendering functions - rgl implementation
-# $Id: r3d.rgl.R 705 2008-09-18 14:35:27Z murdoch $
+# $Id: r3d.rgl.R 844 2012-03-06 20:30:31Z murdoch $
 # 
 
 # Node Management
@@ -27,7 +27,8 @@ pop3d       <- function(...) {.check3d(); rgl.pop(...)}
     "emission", "shininess", "smooth", "front", "back", "size", 
     "lwd", "fog", "point_antialias", "line_antialias",
     "texture", "textype", "texmipmap",
-    "texminfilter", "texmagfilter", "texenvmap")
+    "texminfilter", "texmagfilter", "texenvmap",
+    "depth_mask", "depth_test")
 
 .material3d.writeOnly <- character(0)
 
@@ -94,13 +95,18 @@ view3d      <- function(theta=0,phi=15,...) {
   rgl.viewpoint(theta=theta,phi=phi,...)
 }
 
-bbox3d	    <- function(xat = pretty(ranges$x, nticks), 
-                        yat = pretty(ranges$y, nticks), 
-                        zat = pretty(ranges$z, nticks), 
-		        expand = 1.03, nticks = 5, ...) {  
+bbox3d	    <- function(xat = NULL, 
+                        yat = NULL, 
+                        zat = NULL, 
+                        xunit = "pretty",
+                        yunit = "pretty",
+                        zunit = "pretty",
+		        expand = 1.03, nticks = 5, draw_front = FALSE, ...) {  
   .check3d(); save <- material3d(); on.exit(material3d(save))
   ranges <- .getRanges(expand = expand)
-  do.call("rgl.bbox", c(list(xat=xat, yat=yat, zat=zat, expand=expand), 
+  do.call("rgl.bbox", c(list(xat=xat, yat=yat, zat=zat, 
+                             xunit=xunit, yunit=yunit, zunit=zunit, expand=expand,
+                             nticks=nticks, draw_front=draw_front), 
                         .fixMaterialArgs(..., Params = save)))
 }
 
@@ -142,6 +148,16 @@ texts3d	    <- text3d
 spheres3d   <- function(x,y=NULL,z=NULL,radius=1,...) {
   .check3d(); save <- material3d(); on.exit(material3d(save))
   do.call("rgl.spheres", c(list(x=x,y=y,z=z,radius=radius), .fixMaterialArgs(..., Params = save)))
+}
+
+planes3d   <- function(a,b=NULL,c=NULL,d=0,...) {
+  .check3d(); save <- material3d(); on.exit(material3d(save))
+  do.call("rgl.planes", c(list(a=a,b=b,c=c,d=d), .fixMaterialArgs(..., Params = save)))
+}
+
+abclines3d   <- function(x,y=NULL,z=NULL,a,b=NULL,c=NULL,...) {
+  .check3d(); save <- material3d(); on.exit(material3d(save))
+  do.call("rgl.abclines", c(list(x=x,y=y,z=z,a=a,b=b,c=c), .fixMaterialArgs(..., Params = save)))
 }
 
 sprites3d   <- function(x,y=NULL,z=NULL,radius=1,...) {
@@ -198,9 +214,16 @@ r3dDefaults <- list(userMatrix = rotationMatrix(290*pi/180, 1, 0, 0),
 
 open3d <- function(..., params = get("r3dDefaults", envir=.GlobalEnv))
 {
+    args <- list(...)
+    if (!is.null(args$antialias) 
+        || !is.null(args$antialias <- r3dDefaults$antialias)) {
+    	saveopt <- options(rgl.antialias = args$antialias)
+    	on.exit(options(saveopt))
+    	args$antialias <- NULL
+    }
+    
     rgl.open()
     
-    args <- list(...)
     if (!is.null(args$material)) {
     	params$material <- do.call(.fixMaterialArgs, c(args$material, Params=list(params$material)))
     	args$material <- NULL
