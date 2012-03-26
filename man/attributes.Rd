@@ -1,6 +1,7 @@
 \name{attributes}
 \alias{rgl.attrib.count}
 \alias{rgl.attrib}
+\alias{rgl.save.texture}
 \title{
 Get information about shapes
 }
@@ -11,6 +12,7 @@ Retrieves information about the shapes in a scene.
 rgl.attrib.count(id, attrib)
 rgl.attrib(id, attrib, first = 1, 
            last = rgl.attrib.count(id, attrib))
+rgl.save.texture(id, filename)
 }
 \arguments{
   \item{id}{
@@ -19,11 +21,14 @@ A shape identifier, as returned by \code{\link{rgl.ids}}.
   \item{attrib}{
 An attribute of a shape.  Currently supported: one of 
 \code{c("vertices", "normals", "colors", "texcoords", "dim", "texts",
-        "cex", "adj")}, or unique prefixes
+        "cex", "adj", "radii")}, or unique prefixes
 to one of those.  
 }
   \item{first, last}{
 Specify these to retrieve only those rows of the result.
+}
+  \item{filename}{
+The filename to which to save the texture.
 }
 }
 \details{
@@ -48,11 +53,14 @@ are mostly real-valued, with the following sizes:
 \item{dim}{2 values, r, c}
 \item{cex}{1 value}
 \item{adj}{2 values, x, y}
+\item{radii}{1 value}
 }
 The \code{"texts"} attribute is character-valued.
 
 These are returned as matrices with the row count equal to the count for the attribute,
 and the columns as listed above.
+
+\code{rgl.save.texture} returns a value to indicate success.
 }
 \author{
 Duncan Murdoch
