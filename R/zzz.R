@@ -2,7 +2,7 @@
 ## R source file
 ## This file is part of rgl
 ##
-## $Id: zzz.R 849 2012-03-13 13:08:35Z murdoch $
+## $Id: zzz.R 863 2012-03-27 23:29:51Z murdoch $
 ##
 
 ##
@@ -66,7 +66,6 @@
 	 "rgl_getcolorcount", "rgl_dev_bringtotop", "rgl_clear",
 	 "rgl_pop", "rgl_id_count", "rgl_ids", "rgl_viewpoint",
 	 "rgl_attrib_count", "rgl_attrib", "rgl_text_attrib",
-	 "rgl_save_texture",
 	 "rgl_bg", "rgl_bbox", "rgl_light", "rgl_pixels", "rgl_planes", 
 	 "rgl_abclines", "rgl_primitive",
 	 "rgl_setMouseCallbacks", "rgl_surface", "rgl_spheres",

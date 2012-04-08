@@ -2,7 +2,7 @@
 ## R source file
 ## This file is part of rgl
 ##
-## $Id: scene.R 859 2012-03-24 16:50:28Z murdoch $
+## $Id: scene.R 868 2012-03-30 18:28:35Z murdoch $
 ##
 
 ##
@@ -96,7 +96,7 @@ rgl.attrib <- function( id, attrib, first=1,
   if (is.character(attrib))
     attrib <- rgl.enum.attribtype(attrib)
   ncol <- c(vertices=3, normals=3, colors=4, texcoords=2, dim=2, 
-            texts=1, cex=1, adj=2, radii=1)[attrib]
+            texts=1, cex=1, adj=2, radii=1, centers=3)[attrib]
   count <- max(last - first + 1, 0)
   if (attrib == 6) {
     if (count)
@@ -122,22 +122,12 @@ rgl.attrib <- function( id, attrib, first=1,
                            c("text"),	     # texts
                            c("cex"), 	     # cex
                            c("x", "y"),	     # adj
-                           "r"		     # radii
+                           "r",		     # radii
+                           c("x", "y", "z")  # centers
                            )[[attrib]]
   result
 }
 
-rgl.save.texture <- function(id, filename) 
-{
-  stopifnot(length(id) == 1, length(filename) == 1)
-  texfile <- rgl.getmaterial(id=id)$texture
-  result <- if (file.exists(texfile))
-    file.copy(texfile, filename)
-  else
-    .C(rgl_save_texture, result=0L, as.integer(id), as.character(filename))$result
-  invisible(result)
-}
-  
 ##
 ## ===[ SECTION: environment ]================================================
 ##
