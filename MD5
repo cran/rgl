@@ -1,6 +1,6 @@
 e7212ab19c1f98160e3517134f97e73d *ANNOUNCEMENT
 e73499cb89e0d6e97b8ba271c46739fd *COPYING
-2197f081b4c459d1268bd8d74eff6715 *DESCRIPTION
+57e397f93682d48349bf0db03a83a776 *DESCRIPTION
 fad9d1a03496176bb3fbc86acb427f90 *NAMESPACE
 0bc90cf2d1f5fe6b662770fa8bdfdb3a *R/addNormals.mesh3d.R
 5ec3ee49b23de08b96432c19af0f40b0 *R/animate.R
@@ -49,7 +49,7 @@ e151f89d37172afa14164c3680e7629b *demo/regression.r
 1b02e5bcb786c15d6dc1e80d0121b31b *demo/shapes3d.R
 53ae5ed98fe23d8cde787edeac6ca1ba *demo/stereo.R
 70324e9f3c6750f14dc5fdfe99003625 *demo/subdivision.r
-7eee37a81b9940e9ab3b24ac1af8180e *inst/NEWS
+30f7f70fd90cbbf322f07e8ccf37cea4 *inst/NEWS
 feff7010f9f522214002265608f637ac *inst/WebGL/CanvasMatrix.js
 75ba8cb954e6b957041680e258bdc434 *inst/WebGL/template.html
 5bac46c36b13eac1302260ee06b16c0f *inst/demodata/population.dat
@@ -308,7 +308,7 @@ da3c339aa9e11f2a33b04c9c93ce7f08 *src/scene.cpp
 e6e425f75f2588edf5c8f9d68c042ae5 *src/scene.h
 829e57429d513b5524a2867a413a4f91 *src/select.cpp
 026dccf7c179313e619f6b5dc8abe2f4 *src/select.h
-8d4f7b67201da1157e293242e5ee46f8 *src/types.h
+42011adc7312a489224bcce8bc70ad06 *src/types.h
 fa8771e963e952c803f12b4a02c107d5 *src/win32gui.cpp
 d8d2bb2e01ecb4c4b601ad35d848c85d *src/win32gui.hpp
 7b3e8e79e5ce7d7d5d688b048f63124d *src/win32lib.cpp
