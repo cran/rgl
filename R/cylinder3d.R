@@ -19,7 +19,7 @@ cylinder3d <- function(center, radius=1, twist=0, e1=NULL, e2=NULL, e3=NULL,
                        sides=8, closed=0, debug=FALSE, keepVars=FALSE) {
   center <- as.matrix(as.data.frame(xyz.coords(center)[c("x", "y", "z")]))
   n <- nrow(center)  
-  if (closed) {
+  if (closed > 0) {
     ind0 <- c(n-1-closed, n-closed, 1:n)
     ind1 <- c(n-closed, 1:n, 1+closed)
     ind2 <- c(1:n, 1+closed, 2+closed)
@@ -49,11 +49,53 @@ cylinder3d <- function(center, radius=1, twist=0, e1=NULL, e2=NULL, e3=NULL,
     e1 <- e1[rep(1:nrow(e1), len=n),] 
   } else 
     e1 <- (center[ind2,] - center[ind0,])[1:n,]
+  
+  # Fix up degenerate cases by repeating existing ones, or using arbitrary ones
+  zeros <- rowSums(e1^2) == 0
+  if (all(zeros)) {
+    e1[,1] <- 1
+    zeros <- FALSE
+  } else if (any(zeros)) {
+    e1[1,] <- e1[which(!zeros)[1],]
+    zeros[1] <- FALSE
+    if (any(zeros)) {
+      zeros <- which(zeros)
+      for (i in zeros)
+        e1[i,] <- e1[i-1,]
+    }
+  }
   if (!is.null(e2)) {
     e2 <- as.matrix(as.data.frame(xyz.coords(e2)[c("x", "y", "z")]))
     e2 <- e2[rep(1:nrow(e2), len=n),] 
   } else
     e2 <- (e1[ind2,] - e1[ind0,])[1:n,]
+    
+  # Fix up degenerate e2's similarly, then force different than e1
+  zeros <- rowSums(e2^2) == 0
+  if (all(zeros)) {
+    e2[,2] <- 1
+    zeros <- FALSE
+  } else if (any(zeros)) {
+    e2[1,] <- e2[which(!zeros)[1],]
+    zeros[1] <- FALSE
+    if (any(zeros)) {
+      zeros <- which(zeros)
+      for (i in zeros)
+        e2[i,] <- e2[i-1,]
+    }
+  }
+  parallel <- sapply(1:n, function(i) all(xprod(e1[i,], e2[i,])  == 0))
+  if (any(parallel)) {
+    # rotate in the xy plane
+    e2[parallel,] <- cbind(-e2[parallel,2], e2[parallel,1], e2[parallel,3])
+    parallel <- sapply(1:n, function(i) all(xprod(e1[i,], e2[i,])  == 0))
+    if (any(parallel)) {
+      # if any are still parallel, they must be the z axis
+      e2[parallel,1] <- 1
+      e2[parallel,3] <- 0
+    }
+  }
+  
   if (!is.null(e3)) {
     e3 <- as.matrix(as.data.frame(xyz.coords(e3)[c("x", "y", "z")]))
     e3 <- e3[rep(1:nrow(e3), len=n),] 
@@ -61,6 +103,7 @@ cylinder3d <- function(center, radius=1, twist=0, e1=NULL, e2=NULL, e3=NULL,
     e3 <- matrix(NA_real_, n, 3)
     for (i in 1:n) e3[i,] <- xprod(e1[i,], e2[i,])
   }
+
   for (i in 1:n) {
     A <- GramSchmidt(e1[i,], e2[i,], e3[i,], order=order(missings))
     e1[i,] <- A[1,]
@@ -84,7 +127,7 @@ cylinder3d <- function(center, radius=1, twist=0, e1=NULL, e2=NULL, e3=NULL,
     }
   }
   
-  if (closed) n <- n-closed+1
+  if (closed > 0) n <- n-closed+1
   theta <- seq(0, 2*pi, len=sides+1)[-1]
   vertices <- matrix(0, 3, sides*n)
   indices <- matrix(0, 4, sides*(n-1)) 
@@ -107,8 +150,20 @@ cylinder3d <- function(center, radius=1, twist=0, e1=NULL, e2=NULL, e3=NULL,
   p[,2] <- p[,2] + center[n,"y"]
   p[,3] <- p[,3] + center[n,"z"]
   vertices[,(n-1)*sides+1:sides] <- t(p)
+  # Add end cap at start
+  if (closed < 0) {
+    vertices <- cbind(vertices, center[1,])
+    triangles <- rbind(ncol(vertices), 1:sides, c(2:sides, 1))
+  }
+  # Add end cap at end
+  if (closed < -1) {
+    vertices <- cbind(vertices, center[n,])
+    triangles <- cbind(triangles, rbind(ncol(vertices), c(2:sides, 1) + (n-1)*sides, 
+                                    1:sides + (n-1)*sides))
+  }
+  
   result <- qmesh3d(vertices, indices, homogeneous=FALSE)
-  if (closed) { # Look for repeated vertices, and edit the links
+  if (closed > 0) { # Look for repeated vertices, and edit the links
     nv <- ncol(result$vb)
     for (i in 1:sides) {
       dupe <- which(apply(result$vb[,(nv-sides+1):nv,drop=FALSE], 2, 
@@ -118,7 +173,9 @@ cylinder3d <- function(center, radius=1, twist=0, e1=NULL, e2=NULL, e3=NULL,
         result$ib[f] <- i
       }
     }
-  }
+  } else if (closed < 0)
+    result$it <- triangles
+    
   if (keepVars)
     attr(result, "vars") <- environment()
   result

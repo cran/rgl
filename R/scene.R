@@ -2,7 +2,7 @@
 ## R source file
 ## This file is part of rgl
 ##
-## $Id: scene.R 868 2012-03-30 18:28:35Z murdoch $
+## $Id: scene.R 891 2012-06-24 17:58:27Z murdoch $
 ##
 
 ##
@@ -96,9 +96,10 @@ rgl.attrib <- function( id, attrib, first=1,
   if (is.character(attrib))
     attrib <- rgl.enum.attribtype(attrib)
   ncol <- c(vertices=3, normals=3, colors=4, texcoords=2, dim=2, 
-            texts=1, cex=1, adj=2, radii=1, centers=3)[attrib]
+            texts=1, cex=1, adj=2, radii=1, centers=3, ids=1,
+            usermatrix=4, types=1)[attrib]
   count <- max(last - first + 1, 0)
-  if (attrib == 6) {
+  if (attrib %in% c(6, 13)) { # texts and types
     if (count)
       result <- .C (rgl_text_attrib, as.integer(id), as.integer(attrib), 
                     as.integer(first-1), as.integer(count), 
@@ -123,7 +124,10 @@ rgl.attrib <- function( id, attrib, first=1,
                            c("cex"), 	     # cex
                            c("x", "y"),	     # adj
                            "r",		     # radii
-                           c("x", "y", "z")  # centers
+                           c("x", "y", "z"), # centers
+                           "id",	     # ids
+                           c("x", "y", "z", "w"), # usermatrix
+                           "type"	     # types
                            )[[attrib]]
   result
 }
@@ -624,7 +628,8 @@ rgl.texts <- function(x, y=NULL, z=NULL, text, adj = 0.5, justify, family=par3d(
 ## add sprites
 ##
 
-rgl.sprites <- function( x, y=NULL, z=NULL, radius=1.0, ... )
+rgl.sprites <- function( x, y=NULL, z=NULL, radius=1.0, shapes=NULL, 
+                         userMatrix=diag(4), ... )
 {
   rgl.material(...)
 
@@ -633,14 +638,17 @@ rgl.sprites <- function( x, y=NULL, z=NULL, radius=1.0, ... )
   radius  <- rgl.attr(radius, ncenter)
   nradius <- length(radius)
   if (!nradius) stop("no radius specified")
+  if (length(shapes) && length(userMatrix) != 16) stop("invalid userMatrix")
   
-  idata   <- as.integer( c(ncenter,nradius) )
-   
+  idata   <- as.integer( c(ncenter,nradius,length(shapes)) )
+  
   ret <- .C( rgl_sprites,
     success = as.integer(FALSE),
     idata,
     as.numeric(center),
     as.numeric(radius),
+    as.integer(shapes),
+    as.numeric(userMatrix),
     NAOK=TRUE
   )
 
