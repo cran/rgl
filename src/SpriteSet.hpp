@@ -2,6 +2,7 @@
 #define SPRITE_SET_HPP
 
 #include "Shape.hpp"
+#include <vector>
 
 //
 // SPRITESET
@@ -13,7 +14,8 @@ private:
   ARRAY<float>  size;
 
 public:
-  SpriteSet(Material& in_material, int nvertex, double* vertex, int nsize, double* size, int in_ignoreExtent);
+  SpriteSet(Material& material, int nvertex, double* vertex, int nsize, double* size, 
+            int ignoreExtent, int count = 0, Shape** shapelist = NULL, double* userMatrix = NULL);
   ~SpriteSet();
 
   /**
@@ -26,6 +28,7 @@ public:
   virtual int getElementCount(void);
   int getAttributeCount(AABox& bbox, AttribID attrib);
   void getAttribute(AABox& bbox, AttribID attrib, int first, int count, double* result);
+  String getTextAttribute(AABox& bbox, AttribID attrib, int index);
   
   /**
    * location of individual items
@@ -48,9 +51,16 @@ public:
    **/
   virtual void drawEnd(RenderContext* renderContext);
   
+  /**
+   * extract individual shape
+   */
+  virtual Shape* get_shape(int id);
+  
 private:
-  Matrix4x4 m;
+  GLdouble userMatrix[16]; /* Transformation for 3D sprites */
+  Matrix4x4 m;             /* Modelview matrix cache */
   bool doTex;
+  std::vector<Shape*> shapes;
 
 };
 

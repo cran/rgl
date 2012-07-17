@@ -4,7 +4,7 @@
 // C++ header file
 // This file is part of RGL
 //
-// $Id: scene.h 849 2012-03-13 13:08:35Z murdoch $
+// $Id: scene.h 891 2012-06-24 17:58:27Z murdoch $
 
 #include "types.h"
 #include <vector>
@@ -50,7 +50,7 @@ public:
   /**
    * remove specified node of given type, or last-added if id==0
    **/
-  bool pop(TypeID stackTypeID, int id);
+  bool pop(TypeID stackTypeID, int id, bool destroy = true);
   
   /**
    * get information about stacks
@@ -59,9 +59,15 @@ public:
   void get_ids(TypeID type, int* ids, char** types);
   
   /**
+   * get a SceneNode of any type
+   */
+   
+  SceneNode* get_scenenode(int id, bool recursive = false);
+  
+  /**
    * get information about particular shapes
    **/
-  Shape* get_shape(int id);
+  Shape* get_shape(int id, bool recursive = false);
   
   /**
    * get information about particular lights

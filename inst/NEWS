@@ -405,3 +405,16 @@ v0.92.879
   
  v0.92.880
   - Rearranged declarations for compatibility with gcc 4.7.
+  
+ v0.92.881
+  - Fixed degenerate (e.g. straight line) cases in cylinder3d
+  
+ v0.92.883
+  - Added 3d "sprites" -- shapes that maintain their initial orientation.
+  
+ v0.92.887  
+  - Added "caps" to the end of cylinder3d() objects.
+  
+ v0.92.891
+  - Added support for 3d sprites to writeWebGL.
+  

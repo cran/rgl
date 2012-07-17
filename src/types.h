@@ -6,7 +6,7 @@
 // C++ header file
 // This file is part of RGL
 //
-// $Id: types.h 494 2006-08-01 17:25:31Z dmurdoch $
+// $Id: types.h 880 2012-05-08 11:54:12Z murdoch $
 
 
 #include <cstring>

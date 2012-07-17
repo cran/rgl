@@ -1,7 +1,7 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: scene.cpp 848 2012-03-09 18:55:12Z murdoch $
+// $Id: scene.cpp 891 2012-06-24 17:58:27Z murdoch $
 
 
 #include "scene.h"
@@ -175,9 +175,7 @@ bool Scene::add(SceneNode* node)
   return success;
 }
 
-bool sameID(SceneNode* node, int id) { return node->getObjID() == id; }
-
-bool Scene::pop(TypeID type, int id)
+bool Scene::pop(TypeID type, int id, bool destroy)
 {
   bool success = false;
   std::vector<Shape*>::iterator ishape;
@@ -237,7 +235,8 @@ bool Scene::pop(TypeID type, int id)
       else
         unsortedShapes.erase(std::find_if(unsortedShapes.begin(), unsortedShapes.end(),
                                        std::bind2nd(std::ptr_fun(&sameID), id)));
-      delete shape;
+      if (destroy)
+        delete shape;
       calcDataBBox();
       success = true;
     }  
@@ -246,7 +245,8 @@ bool Scene::pop(TypeID type, int id)
     {
       Light* light = *ilight;
       lights.erase(ilight);
-      delete light;
+      if (destroy)
+        delete light;
       nlights--;
       success = true;
     }
@@ -254,7 +254,8 @@ bool Scene::pop(TypeID type, int id)
   case BBOXDECO:
     {
       if (bboxDeco) {
-        delete bboxDeco;
+        if (destroy)
+          delete bboxDeco;
         bboxDeco = NULL;
         success = true;
       }
@@ -328,17 +329,27 @@ void Scene::get_ids(TypeID type, int* ids, char** types)
   }
 }  
 
-Shape* Scene::get_shape(int id)
+SceneNode* Scene::get_scenenode(int id, bool recursive) 
 {
-  std::vector<Shape*>::iterator ishape;
-
-  if (shapes.empty()) 
-    return NULL;
+  Light* light;
+  Shape* shape;
+  Background *background;
+  BBoxDeco* bboxdeco;
   
-  ishape = std::find_if(shapes.begin(), shapes.end(), 
-                        std::bind2nd(std::ptr_fun(&sameID), id));
-  if (ishape == shapes.end()) return NULL;
-  else return *ishape;
+  if ( (shape = get_shape(id, recursive)) )
+    return shape;
+  else if ( (light = get_light(id)) ) 
+    return light;
+  else if ( (background = get_background()) && id == background->getObjID())
+    return background;
+  else if ( (bboxdeco = get_bboxdeco()) && id == bboxdeco->getObjID())
+    return bboxdeco;
+  else return NULL;
+}
+
+Shape* Scene::get_shape(int id, bool recursive)
+{
+  return get_shape_from_list(shapes, id, recursive);
 }
 
 Light* Scene::get_light(int id)
@@ -689,4 +700,9 @@ void Scene::invalidateDisplaylists()
   for (iter = shapes.begin(); iter != shapes.end(); ++iter) {
     (*iter)->invalidateDisplaylist();
   }
+}
+
+bool sameID(SceneNode* node, int id)
+{ 
+  return node->getObjID() == id; 
 }
