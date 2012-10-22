@@ -2,7 +2,7 @@
 ## R source file
 ## This file is part of rgl
 ##
-## $Id: scene.R 891 2012-06-24 17:58:27Z murdoch $
+## $Id: scene.R 893 2012-09-04 13:25:38Z murdoch $
 ##
 
 ##
@@ -284,7 +284,9 @@ rgl.light <- function( theta = 0, phi = 0, viewpoint.rel = TRUE, ambient = "#FFF
   )
 
   if (! ret$success)
-    stop("too many lights. maximum is 8 sources per scene.");
+    stop("too many lights. maximum is 8 sources per scene.")
+    
+  invisible(ret$success)
 }
 
 ##

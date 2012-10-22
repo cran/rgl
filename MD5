@@ -1,6 +1,6 @@
 e7212ab19c1f98160e3517134f97e73d *ANNOUNCEMENT
 e73499cb89e0d6e97b8ba271c46739fd *COPYING
-626aa11353aaa0076575304a1bf2f378 *DESCRIPTION
+252957fef14a9e249382f3cee641f84a *DESCRIPTION
 fad9d1a03496176bb3fbc86acb427f90 *NAMESPACE
 0bc90cf2d1f5fe6b662770fa8bdfdb3a *R/addNormals.mesh3d.R
 5ec3ee49b23de08b96432c19af0f40b0 *R/animate.R
@@ -24,7 +24,7 @@ e7329453008644d2c2a8a474cc029c99 *R/oh3d.R
 af9a986f1752f610b392a47202f8cb59 *R/plugin.R
 de8bbccdd66765f046f7e331f5a205cf *R/r3d.rgl.R
 63896d797aeddfe599f9358d058a3305 *R/rgl.bringtotop.R
-331a8c2adab2e0cbe011a24eb902290e *R/scene.R
+34140e4df8358a50a5333362faaa9674 *R/scene.R
 9ebe73a8d97c1fa1423d646f41a4f57a *R/shapelist3d.R
 b8fcaff709d438c64fe31c712b04a30a *R/solids3d.R
 cd2c25a71a00743e10700942991fd823 *R/subdivision.mesh3d.R
@@ -34,7 +34,7 @@ e8970dd0599057a6687edefa1749fb91 *R/zzz.R
 20f788753f012ab52f6ea88465c3e455 *cleanup
 bd6e6b29d352ce3cf31cf2dc685c2b52 *configure
 6719306fc3dc63735de6ecdff8950973 *configure.ac
-e801dab35255b22a1c22eedab2bddcf5 *configure.win
+1c81f015b4bcac65d8615f935a33252a *configure.win
 d86af288dff684f0ec416d0b74a9f1a0 *demo/00Index
 ae4a727a90b8e66e141906769a78404d *demo/abundance.r
 3e3a22e0505c12b6af3c02ab0c31e40f *demo/bivar.r
@@ -49,7 +49,7 @@ e151f89d37172afa14164c3680e7629b *demo/regression.r
 1b02e5bcb786c15d6dc1e80d0121b31b *demo/shapes3d.R
 53ae5ed98fe23d8cde787edeac6ca1ba *demo/stereo.R
 70324e9f3c6750f14dc5fdfe99003625 *demo/subdivision.r
-97dd7c67a76f1a1653d76fb65e6881ea *inst/NEWS
+09c1b55f8417b526aa5504672413ed96 *inst/NEWS
 feff7010f9f522214002265608f637ac *inst/WebGL/CanvasMatrix.js
 75ba8cb954e6b957041680e258bdc434 *inst/WebGL/template.html
 5bac46c36b13eac1302260ee06b16c0f *inst/demodata/population.dat
