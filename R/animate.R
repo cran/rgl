@@ -127,8 +127,8 @@ par3dinterp <- function(times=NULL, userMatrix, scale, zoom, FOV, method=c("spli
 
 spin3d <- function(axis = c(0, 0, 1), rpm = 5) {
     M <- par3d("userMatrix")
-    function(time) 
-    	list(userMatrix = rotate3d(M, time*rpm*pi/30, axis[1], axis[2], axis[3]))
+    function(time, base = M) 
+    	list(userMatrix = rotate3d(base, time*rpm*pi/30, axis[1], axis[2], axis[3]))
 }
     
 play3d <- function(f, duration = Inf, dev = rgl.cur(), ..., startTime = 0) {
@@ -138,10 +138,11 @@ play3d <- function(f, duration = Inf, dev = rgl.cur(), ..., startTime = 0) {
     force(duration)
     force(dev)
     start <- proc.time()[3] - startTime
+    rgl.setselectstate("none")
     repeat {
        if(rgl.cur() != dev) rgl.set(dev)
        time <- proc.time()[3] - start
-       if (time > duration) return(invisible(NULL))
+       if (time > duration || rgl.selectstate()$state == msABORT) return(invisible(NULL))
        par3d(f(time, ...))
     }
 }

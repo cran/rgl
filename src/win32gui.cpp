@@ -3,7 +3,7 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: win32gui.cpp 860 2012-03-26 18:42:02Z murdoch $
+// $Id: win32gui.cpp 917 2013-01-23 23:54:52Z murdoch $
 
 #include "win32gui.hpp"
 
@@ -73,6 +73,8 @@ static int translate_key(int wParam)
         return GUI_KeyRight;
       case VK_INSERT:
         return GUI_KeyInsert;
+      case VK_ESCAPE:
+      	return GUI_KeyESC;
       default:
         return 0;
     }

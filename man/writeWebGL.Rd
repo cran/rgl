@@ -64,6 +64,9 @@ development progresses:
 \item Missing values are not handled properly.
 \item It only handles a single light source, and the geometry of specular reflections is simpler than in \R.
 \item Polygons will only be rendered as filled; there is no support in WebGL for wireframe or point rendering.
+\item WebGL browsers generally do not support more than 65535 vertices per
+object.  \code{writeWebGL} will print a warning if this limit is exceeded, but it is up to the user
+to break his scene into smaller objects.  (And 65535 vertices may not be small enough!)
 }
 }
 \value{
@@ -103,6 +106,11 @@ The output includes a binary copy of the CanvasMatrix Javascript library.  Its s
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 }
+}
+\seealso{
+\code{\link{scene3d}} saves a copy of a scene to an R variable;
+\code{\link{writePLY}}, \code{\link{writeOBJ}} and \code{\link{writeSTL}}
+write the scene to a file in various other formats.
 }
 \examples{
 \donttest{

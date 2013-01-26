@@ -4,7 +4,7 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: x11gui.cpp 841 2012-01-06 19:11:34Z murdoch $
+// $Id: x11gui.cpp 917 2013-01-23 23:54:52Z murdoch $
 
 // Uncomment for verbose output on stderr:
 // #define RGL_X11_DEBUG
@@ -414,6 +414,8 @@ int X11WindowImpl::translate_key(KeySym keysym)
     {
       case XK_Return:
         return GUI_KeyReturn;
+      case XK_Escape:
+        return GUI_KeyESC;
       default:
         return 0;
     }
@@ -627,7 +629,16 @@ WindowImpl* X11GUIFactory::createWindowImpl(Window* window)
     &attrib
   );
   XSync(xdisplay, False);
-  
+
+  /* set WM_CLASS on window */
+  XClassHint *classHint = XAllocClassHint();
+  if (classHint) {
+      classHint->res_name = "rgl";
+      classHint->res_class = "R_x11";
+      XSetClassHint(xdisplay, xwindow, classHint);
+      XFree(classHint);
+  }
+
   XSetErrorHandler(old_handler);
   
   if (error_code) ConvertError(xdisplay);  /* will not return */

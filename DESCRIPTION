@@ -1,5 +1,5 @@
 Package: rgl
-Version: 0.92.894
+Version: 0.93.921
 Title: 3D visualization device system (OpenGL)
 Author: Daniel Adler <dadler@uni-goettingen.de>, Duncan Murdoch
         <murdoch@stats.uwo.ca>
@@ -12,6 +12,6 @@ URL: http://rgl.neoscientists.org
 SystemRequirements: OpenGL, GLU Library, zlib (optional), libpng
         (>=1.2.9, optional), FreeType (optional)
 BugReports: https://r-forge.r-project.org/projects/rgl/
-Packaged: 2012-10-22 11:19:55 UTC; murdoch
+Packaged: 2013-01-26 12:41:48 UTC; murdoch
 Repository: CRAN
-Date/Publication: 2012-10-22 12:19:46
+Date/Publication: 2013-01-26 15:12:26

@@ -4,7 +4,7 @@
 // C++ header file
 // This file is part of RGL
 //
-// $Id: rglview.h 715 2008-12-10 11:54:24Z murdoch $
+// $Id: rglview.h 917 2013-01-23 23:54:52Z murdoch $
 
 
 #include "gui.hpp"
@@ -17,7 +17,7 @@ using namespace gui;
 
 enum MouseModeID {mmTRACKBALL = 1, mmXAXIS, mmYAXIS, mmZAXIS, mmPOLAR, 
                   mmSELECTING, mmZOOM, mmFOV, mmUSER};
-enum MouseSelectionID {msNONE=1, msCHANGING, msDONE};
+enum MouseSelectionID {msNONE=1, msCHANGING, msDONE, msABORT};
 
 typedef void (*userControlPtr)(void *userData, int mouseX, int mouseY);
 typedef void (*userControlEndPtr)(void *userData);
