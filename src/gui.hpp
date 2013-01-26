@@ -4,7 +4,7 @@
 // C++ header file
 // This file is part of RGL
 //
-// $Id: gui.hpp 666 2008-04-17 13:44:58Z dmurdoch $
+// $Id: gui.hpp 917 2013-01-23 23:54:52Z murdoch $
 // ---------------------------------------------------------------------------
 #include <cstring>
 #include "types.h"
@@ -42,7 +42,8 @@ enum {
   GUI_KeyDown,
   GUI_KeyLeft,
   GUI_KeyRight,
-  GUI_KeyInsert
+  GUI_KeyInsert,
+  GUI_KeyESC
 };
 // ---------------------------------------------------------------------------
 //

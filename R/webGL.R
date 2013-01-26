@@ -37,7 +37,27 @@ inRows <- function(values, perrow, leadin = '	', digits=7) {
   lines[length(lines)] <- gsub(", PADDING", "", lines[length(lines)])
   paste(lines, collapse=",\n")
 }
+
+convertBBox <- function(id) {
+  verts <- rgl.attrib(id, "vertices")
+  text <- rgl.attrib(id, "text")
+  if (!length(text))
+    text <- rep("", NROW(verts))
   
+  if(any(missing <- text == "")) 
+    text[missing] <- apply(verts[missing,], 1, function(row) format(row[!is.na(row)]))
+    
+  res <- integer(0)
+  if (any(inds <- is.na(verts[,2]) & is.na(verts[,3]))) 
+    res <- c(res, axis3d("x", at=verts[inds, 1], labels=text[inds]))
+  if (any(inds <- is.na(verts[,1]) & is.na(verts[,3]))) 
+    res <- c(res, axis3d("y", at=verts[inds, 2], labels=text[inds]))
+  if (any(inds <- is.na(verts[,1]) & is.na(verts[,2]))) 
+    res <- c(res, axis3d("z", at=verts[inds, 3], labels=text[inds]))
+  res <- c(res, box3d())
+  res
+}
+
 writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"), 
                        template = system.file(file.path("WebGL", "template.html"), package = "rgl"),
                        prefix = "",
@@ -527,6 +547,8 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
    
     nv <- rgl.attrib.count(id, "vertices")
     values <- rgl.attrib(id, "vertices")
+    if (nv > 65535)
+    	warning("Object ", id, " has ", nv, " vertices.  Some browsers support only 65535.")
     
     nc <- rgl.attrib.count(id, "colors")
     colors <- rgl.attrib(id, "colors")
@@ -561,8 +583,14 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
       for (j in seq_len(nx-1)-1) {
         v1 <- j + nx*(seq_len(nz) - 1)
         v2 <- v1 + 1
-        f <- cbind(f, rbind(c(v1, v2[nz]), 
-                            c(v2, v1[1]+1)))
+        f <- cbind(f, rbind(v1[-nz],
+                            v1[-1],
+                            v2[-1],
+                            v1[-nz],
+                            v2[-1],
+                            v2[-nz]))
+                            
+                            
         if (nn == 0) {
           for (i in seq_along(v1)[-1]) {
             i0 <- v1[i-1]+1
@@ -584,7 +612,6 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
           }
         }
       }
-      f <- f[,-NCOL(f)]
       frowsize <- 6
       if (nn == 0) {
         normals <- t(apply(normals, 1, function(x) x/sqrt(sum(x^2))))
@@ -877,9 +904,9 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
         nfaces <- rgl.attrib.count(id, "centers")
         frowsize <- if (sprites_3d) 1 else
           switch(type,
-            surface =,
             quads =,
             text =,
+            surface =,
             sprites = 6,
             triangles = 3)
         
@@ -1014,8 +1041,8 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
           planes =,
           text =,
           quads =,
+          surface =,
           triangles = "TRIANGLES",
-          surface = "TRIANGLE_STRIP",
           stop("unsupported mode") )
       
         switch(type,
@@ -1026,7 +1053,7 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
             dim <- rgl.attrib(id, "dim")
             nx <- dim[1]
             nz <- dim[2]
-            count <- (nx - 1)*(nz + 1)*2 - 2
+            count <- (nx - 1)*(nz - 1)*6
           })
     
         if (flags["is_lines"]) {
@@ -1291,26 +1318,6 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
 	You must enable Javascript to view this page properly.</p>',
     prefix, snapshotimg)
 
-  convertBBox <- function(id) {
-    verts <- rgl.attrib(id, "vertices")
-    text <- rgl.attrib(id, "text")
-    if (!length(text))
-      text <- rep("", NROW(verts))
-    
-    if(any(missing <- text == "")) 
-      text[missing] <- apply(verts[missing,], 1, function(row) format(row[!is.na(row)]))
-      
-    res <- integer(0)
-    if (any(inds <- is.na(verts[,2]) & is.na(verts[,3]))) 
-      res <- c(res, axis3d("x", at=verts[inds, 1], labels=text[inds]))
-    if (any(inds <- is.na(verts[,1]) & is.na(verts[,3]))) 
-      res <- c(res, axis3d("y", at=verts[inds, 2], labels=text[inds]))
-    if (any(inds <- is.na(verts[,1]) & is.na(verts[,2]))) 
-      res <- c(res, axis3d("z", at=verts[inds, 3], labels=text[inds]))
-    res <- c(res, box3d())
-    res
-  }
-  
   getFlags <- function(id, type) {
     mat <- rgl.getmaterial(id=id)
     is_lit <- mat$lit && type %in% c("triangles", "quads", "surface", "planes", 
