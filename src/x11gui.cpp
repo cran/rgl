@@ -4,7 +4,7 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: x11gui.cpp 917 2013-01-23 23:54:52Z murdoch $
+// $Id: x11gui.cpp 923 2013-01-27 10:41:11Z murdoch $
 
 // Uncomment for verbose output on stderr:
 // #define RGL_X11_DEBUG
@@ -466,7 +466,7 @@ X11GUIFactory::X11GUIFactory(const char* displayname)
  
   // Obtain display atoms
   static char* atom_names[GUI_X11_ATOM_LAST] = {
-    "WM_DELETE_WINDOW"
+    const_cast<char*>("WM_DELETE_WINDOW")
   };
   Status s = XInternAtoms(xdisplay, atom_names, sizeof(atom_names)/sizeof(char*), True, atoms);
 
@@ -633,8 +633,8 @@ WindowImpl* X11GUIFactory::createWindowImpl(Window* window)
   /* set WM_CLASS on window */
   XClassHint *classHint = XAllocClassHint();
   if (classHint) {
-      classHint->res_name = "rgl";
-      classHint->res_class = "R_x11";
+      classHint->res_name = const_cast<char*>("rgl");
+      classHint->res_class = const_cast<char*>("R_x11");
       XSetClassHint(xdisplay, xwindow, classHint);
       XFree(classHint);
   }
