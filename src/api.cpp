@@ -1,7 +1,7 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: api.cpp 891 2012-06-24 17:58:27Z murdoch $
+// $Id: api.cpp 921 2013-01-26 17:15:06Z murdoch $
 
 #include "lib.hpp"
 
@@ -42,7 +42,7 @@ extern DeviceManager* deviceManager;
 //   rgl_quit
 //
 // DESCRIPTION
-//   Gets called by .Last.lib ( R function )
+//   Gets called by .onUnload ( R function )
 //
 
 

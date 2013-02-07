@@ -3,7 +3,7 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: win32gui.cpp 917 2013-01-23 23:54:52Z murdoch $
+// $Id: win32gui.cpp 923 2013-01-27 10:41:11Z murdoch $
 
 #include "win32gui.hpp"
 
@@ -684,7 +684,7 @@ Win32GUIFactory::Win32GUIFactory()
   } else
     gDefWindowProc   = &DefWindowProc;
   if ( !Win32WindowImpl::registerClass() )
-    lib::printMessage("error: window class registration failed");
+    error("window class registration failed");
 
 #if defined(WGL_ARB_pixel_format) && !defined(WGL_WGLEXT_PROTOTYPES)
   HANDLE saveHandle = gHandle;
@@ -761,7 +761,9 @@ WindowImpl* Win32GUIFactory::createWindowImpl(Window* in_window)
     , reinterpret_cast<LPVOID>(impl)
     );
   }
-  assert(success);
+  if (!success)
+    error("window creation failed");
+
   return impl;
 }
 // ---------------------------------------------------------------------------

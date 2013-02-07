@@ -2,9 +2,11 @@
 ## This file is part of RGL
 ##
 ## Process this file with autoconf to produce a configure script.
+## NB:  the files in src/build/autoconf may need updating for a new
+##      version of autoconf
 ##
 ##
-## $Id: configure.ac 836 2011-12-30 21:50:11Z murdoch $
+## $Id: configure.ac 927 2013-02-06 19:18:44Z murdoch $
 ##
 
 AC_PREREQ(2.50)
@@ -192,6 +194,10 @@ AC_ARG_ENABLE([ftgl],
 [  --disable-ftgl             compile without FTGL font support]
 )
 if test "x$enable_ftgl" != "xno"; then
+  if test "x$darwin" = "xyes"; then
+    AC_MSG_NOTICE([Darwin, so ensuring /usr/X11/bin is at the head of the PATH...])
+    PATH=/usr/X11/bin:${PATH}
+  fi
   AC_CHECK_PROG([HAVE_FREETYPE_CONFIG],[freetype-config],[yes],[no])
   if test "x$HAVE_FREETYPE_CONFIG" = "xyes"; then
     CPPFLAGS="${CPPFLAGS} -DHAVE_FREETYPE -Iext/ftgl `freetype-config --cflags`"
