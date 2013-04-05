@@ -1,7 +1,7 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: api.cpp 921 2013-01-26 17:15:06Z murdoch $
+// $Id$
 
 #include "lib.hpp"
 
@@ -369,6 +369,7 @@ void rgl_light ( int* successptr, int* idata, double* ddata )
   if (deviceManager && (device = deviceManager->getAnyDevice())) {
 
     bool  viewpoint_rel = as_bool( idata[0] );
+    bool  finite_pos = as_bool( idata[10] );
 
     Color ambient;
     Color diffuse;
@@ -380,8 +381,9 @@ void rgl_light ( int* successptr, int* idata, double* ddata )
 
     float theta         = (float) ddata[0];
     float phi           = (float) ddata[1];
+    Vertex finposition   = Vertex( ddata[2], ddata[3], ddata[4] );
 
-    success = as_success( device->add( new Light( PolarCoord(theta, phi), (bool) viewpoint_rel, ambient, diffuse, specular ) ) );
+    success = as_success( device->add( new Light( PolarCoord(theta, phi), finposition, (bool) viewpoint_rel, (bool) finite_pos, ambient, diffuse, specular ) ) );
 
   }
   CHECKGLERROR;
@@ -761,7 +763,6 @@ void rgl_material(int *successptr, int* idata, char** cdata, double* ddata)
   mat.colors.set( ncolor, colors, nalpha, alpha);
   mat.alphablend  = mat.alphablend || mat.colors.hasAlpha();
 
-  mat.setup(); 
   CHECKGLERROR;
 
   *successptr = RGL_SUCCESS;
