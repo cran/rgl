@@ -1,6 +1,6 @@
 #
 # R3D rendering functions - rgl implementation
-# $Id: r3d.rgl.R 886 2012-05-28 18:43:33Z murdoch $
+# $Id: r3d.rgl.R 930 2013-02-27 15:11:35Z murdoch $
 # 
 
 # Node Management
@@ -85,9 +85,12 @@ bg3d        <- function(...) {
   do.call("rgl.bg", .fixMaterialArgs(..., Params = new))
 }
 
-light3d     <- function(theta=0,phi=15,...) {
+light3d     <- function(theta=0,phi=15,x=NULL, ...) {
   .check3d()
-  rgl.light(theta=theta,phi=phi,...)
+  if (is.null(x))
+    rgl.light(theta=theta,phi=phi,x=x, ...)
+  else
+    rgl.light(x=x, ...)
 }
 
 view3d      <- function(theta=0,phi=15,...) {

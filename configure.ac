@@ -6,7 +6,7 @@
 ##      version of autoconf
 ##
 ##
-## $Id: configure.ac 927 2013-02-06 19:18:44Z murdoch $
+## $Id: configure.ac 928 2013-02-07 16:43:55Z murdoch $
 ##
 
 AC_PREREQ(2.50)

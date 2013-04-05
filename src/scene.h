@@ -4,7 +4,7 @@
 // C++ header file
 // This file is part of RGL
 //
-// $Id: scene.h 891 2012-06-24 17:58:27Z murdoch $
+// $Id: scene.h 930 2013-02-27 15:11:35Z murdoch $
 
 #include "types.h"
 #include <vector>
@@ -124,7 +124,7 @@ private:
   /**
    * sub-pass: setup global lighting model
    **/
-  void setupLightModel(RenderContext* renderContext);
+  void setupLightModel(RenderContext* renderContext, const Sphere& viewSphere);
   /**
    * compute bounding-box
    **/
