@@ -1,6 +1,6 @@
 e7212ab19c1f98160e3517134f97e73d *ANNOUNCEMENT
 e73499cb89e0d6e97b8ba271c46739fd *COPYING
-57f1057b7c1e031a8021d11d98effe88 *DESCRIPTION
+bd656f5550f7c175c5c7dc23bd922714 *DESCRIPTION
 c3bc001cadfe6da2922f7bde449e92fa *NAMESPACE
 0bc90cf2d1f5fe6b662770fa8bdfdb3a *R/addNormals.mesh3d.R
 24205f22f8c6a012605bbba11b609686 *R/animate.R
@@ -9,7 +9,7 @@ df94371ac2c376befb4ddb0a6759af0f *R/axes.R
 f959c14c0a4cff75c4bd6a8590235c6b *R/callbacks.R
 d614a914d367d10d4718ad28e0c493fc *R/cylinder3d.R
 ec30cbdbf529297d47388ad3ac4ceb08 *R/device.R
-af9e34750c441b47ea90ba29b6769582 *R/ellipse3d.R
+5e855bf30c385ae3c1b662a862d3bb5a *R/ellipse3d.R
 543d421e8e5fdf0128e0f77d262ee0d3 *R/enum.R
 50ec73e5b7c3ef0296cf34708c272a9d *R/fonts.R
 5fc873c21fb3f9818e08352349e6c993 *R/getscene.R
@@ -51,10 +51,10 @@ e0359e5a9fea398708925a890a856138 *demo/lollipop3d.R
 c176e81cceb3b96d51330119fe4a69bc *demo/mouseCallbacks.R
 e151f89d37172afa14164c3680e7629b *demo/regression.r
 82b233c31f47cb4e09662d9054f48fc4 *demo/rgl.r
-1b02e5bcb786c15d6dc1e80d0121b31b *demo/shapes3d.R
+154cec7452c730564d63034357b897a0 *demo/shapes3d.R
 53ae5ed98fe23d8cde787edeac6ca1ba *demo/stereo.R
 70324e9f3c6750f14dc5fdfe99003625 *demo/subdivision.r
-7533fd98f9b06d85b44e1a9bada11adf *inst/NEWS
+136e684384cae6873751d371843d7330 *inst/NEWS
 feff7010f9f522214002265608f637ac *inst/WebGL/CanvasMatrix.js
 75ba8cb954e6b957041680e258bdc434 *inst/WebGL/template.html
 5bac46c36b13eac1302260ee06b16c0f *inst/demodata/population.dat
@@ -161,13 +161,13 @@ e79be357aef69ef885aafc3853b48f04 *src/String.cpp
 a5f332ce95580a2767f458b6fe626a73 *src/String.hpp
 fe5856841a885a7b8ba9a3689717dab9 *src/Surface.cpp
 eba9fd4707e8a5e9f5c3af846956e273 *src/Surface.hpp
-d49b255bbe23bef60dcc6504852548ab *src/TextSet.cpp
+f02c285b83f997788c17c1791f57b3f7 *src/TextSet.cpp
 454c8154194c93a23be3d6e273f87648 *src/TextSet.hpp
 f1f5b5d961be356cebccd0840b551e99 *src/Texture.cpp
 0d57412f83c3a9916be3e2a5d14538be *src/Texture.hpp
 de62ec66cec67ef962a057f40dac589b *src/Viewpoint.cpp
 7d6f75506c5affa7163da23b9f3bd848 *src/Viewpoint.hpp
-ef598e249c8f184cf8572e3ef5c2859c *src/api.cpp
+8c18bf0ff904c102a6c7f64f3807000e *src/api.cpp
 03f1f8cd1d2ae3f9840f7a4bf3320e07 *src/api.h
 69fe236cdf8914012d5b85998b8114c0 *src/assert.cpp
 59bef1d4d9abbd9491169bf837582fcb *src/assert.hpp
@@ -311,7 +311,7 @@ f0635cf5ef443d28d2dd39f8f968ebb9 *src/rglmath.cpp
 60e28216cc1b392cc47f90dc02838a33 *src/rglmath.h
 9274c342ec1d363b60b6a5da1956053a *src/rglview.cpp
 c2818832d9db6b425fdca1ae1cc7be38 *src/rglview.h
-71ef0e0e5494ab4667e78a7c764ae3e1 *src/scene.cpp
+ac3b5a9aab05d5723b26fce3dc23ffbb *src/scene.cpp
 156897b6eb35f3a43c34f75da9527625 *src/scene.h
 829e57429d513b5524a2867a413a4f91 *src/select.cpp
 026dccf7c179313e619f6b5dc8abe2f4 *src/select.h
