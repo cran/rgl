@@ -4,7 +4,7 @@
 // C++ header file
 // This file is part of RGL
 //
-// $Id: Device.hpp 715 2008-12-10 11:54:24Z murdoch $
+// $Id: Device.hpp 941 2013-05-13 22:48:05Z murdoch $
 
 #include "Disposable.hpp"
 #include "types.h"
@@ -42,7 +42,7 @@ public: // -- all methods are blocking until action completed
 
   // accessor method for Scene, modeled after getBoundingBox()
   // from scene.h
-  const Scene* getScene() const { return scene; }
+  Scene* getScene() const { return scene; }
 
   void bringToTop(int stay);
 

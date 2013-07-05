@@ -4,7 +4,7 @@
 // C++ header file
 // This file is part of RGL
 //
-// $Id: scene.h 930 2013-02-27 15:11:35Z murdoch $
+// $Id: scene.h 941 2013-05-13 22:48:05Z murdoch $
 
 #include "types.h"
 #include <vector>
@@ -87,10 +87,10 @@ public:
   // ---[ grouping component ]-----------------------------------------------
   
   /**
-   * obtain scene's axis-aligned bounding box
+   * obtain scene's axis-aligned bounding box. 
    **/
-  const AABox& getBoundingBox() const { return data_bbox; }
-
+  const AABox& getBoundingBox();
+  
   // ---[ Renderable interface ]---------------------------------------------
   
   /**
@@ -129,10 +129,6 @@ private:
    * compute bounding-box
    **/
   void calcDataBBox();
-  /**
-   * compute bounding-box for a changeable scene
-   **/
-  void calcDataBBox(RenderContext* renderContext);
   /**
    * add shapes
    **/
