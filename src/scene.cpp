@@ -1,7 +1,7 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: scene.cpp 930 2013-02-27 15:11:35Z murdoch $
+// $Id: scene.cpp 941 2013-05-13 22:48:05Z murdoch $
 
 
 #include "scene.h"
@@ -365,6 +365,13 @@ Light* Scene::get_light(int id)
   else return *ilight;
 }
 
+const AABox& Scene::getBoundingBox()
+{ 
+  if (bboxChanges) 
+      calcDataBBox();
+  return data_bbox; 
+}
+
 void Scene::renderZsort(RenderContext* renderContext)
 {  
   std::vector<Shape*>::iterator iter;
@@ -439,7 +446,7 @@ void Scene::render(RenderContext* renderContext)
   
 
   if (bboxChanges) 
-    calcDataBBox(renderContext);
+    calcDataBBox();
   
   Sphere total_bsphere;
 
@@ -661,24 +668,8 @@ void Scene::calcDataBBox()
     Shape* shape = *iter;
 
     if (!shape->getIgnoreExtent()) {
-      data_bbox += shape->getBoundingBox();
+      data_bbox += shape->getBoundingBox(this);
       bboxChanges |= shape->getBBoxChanges();
-    }
-  }
-}
-
-void Scene::calcDataBBox(RenderContext *renderContext)
-{
-  data_bbox.invalidate();
-  std::vector<Shape*>::const_iterator iter;
-  
-  for(int i = 0; i < 10; ++i) {
-  
-    for(iter = shapes.begin(); iter != shapes.end(); ++iter) {
-      Shape* shape = *iter;
-
-      if (!shape->getIgnoreExtent()) 
-        data_bbox += shape->getBoundingBox(renderContext);
     }
   }
 }
