@@ -4,7 +4,7 @@
 // C++ header file
 // This file is part of RGL
 //
-// $Id: gui.hpp 917 2013-01-23 23:54:52Z murdoch $
+// $Id: gui.hpp 947 2013-07-18 00:36:47Z murdoch $
 // ---------------------------------------------------------------------------
 #include <cstring>
 #include "types.h"
@@ -105,7 +105,7 @@ public:
 // implementation specific
 //
 namespace lib {
-gui::GUIFactory* getGUIFactory();
+gui::GUIFactory* getGUIFactory(bool useNULLDevice);
 }
 // ---------------------------------------------------------------------------
 namespace gui {
@@ -167,7 +167,7 @@ class Window : public View, public Disposable
 {
 public:
 
-  Window(View* child=NULL, GUIFactory* factory=lib::getGUIFactory() );
+  Window(View* child=NULL, GUIFactory* factory=lib::getGUIFactory(0) );
   ~Window();
 
 // overloaded view methods:
