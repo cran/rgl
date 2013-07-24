@@ -4,7 +4,7 @@
 // C++ header file
 // This file is part of RGL
 //
-// $Id: DeviceManager.hpp 678 2008-06-03 13:26:54Z dmurdoch $
+// $Id: DeviceManager.hpp 947 2013-07-18 00:36:47Z murdoch $
 
 #include "Device.hpp"
 
@@ -17,13 +17,16 @@
 class DeviceManager : protected IDisposeListener {
 
 public:
-  DeviceManager();
+  DeviceManager();	
   virtual ~DeviceManager();
-  bool    openDevice(void);
+  bool    openDevice(bool useNULL = false);
   Device* getCurrentDevice(void);
   Device* getAnyDevice(void);
+  Device* getDevice(int id);
   bool    setCurrent(int id, bool silent = false);
   int     getCurrent();
+  int     getDeviceCount();
+  void   getDeviceIds(int *buffer, int bufsize);
 protected:
   /**
    * Dispose Listener implementation

@@ -1,7 +1,7 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: rglview.cpp 939 2013-05-05 12:22:08Z murdoch $
+// $Id: rglview.cpp 947 2013-07-18 00:36:47Z murdoch $
 
 
 
@@ -45,8 +45,15 @@ RGLView::RGLView(Scene* in_scene)
     updateCallback[i] = NULL;
     endCallback[i] = NULL;
     cleanupCallback[i] = NULL;
-    for (int j=0; j<3; j++)
+    for (int j=0; j<3; j++) 
       userData[3*i + j] = NULL;
+  }
+  for (int i=0; i<4; i++) {
+    viewport[i] = i < 2 ? 0 : 1024;
+    for (int j=0;j<4;j++) {
+      modelMatrix[4*i + j] = i == j;
+      projMatrix[4*i + j] = i == j;
+    }
   }
 }
 

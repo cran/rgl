@@ -2,10 +2,11 @@
 #ifdef RGL_W32
 // ---------------------------------------------------------------------------
 // W32 Library Implementation
-// $Id: win32lib.cpp 728 2009-02-09 11:52:52Z murdoch $
+// $Id: win32lib.cpp 947 2013-07-18 00:36:47Z murdoch $
 // ---------------------------------------------------------------------------
 #include "lib.hpp"
 #include "win32gui.hpp"
+#include "NULLgui.hpp"
 #include <windows.h>
 #include "assert.hpp"
 #include "R.h"
@@ -16,10 +17,21 @@ namespace lib {
 // GUI Factory
 // ---------------------------------------------------------------------------
 gui::Win32GUIFactory* gpWin32GUIFactory = NULL;
+gui::NULLGUIFactory* gpNULLGUIFactory = NULL;
 // ---------------------------------------------------------------------------
-gui::GUIFactory* getGUIFactory()
+gui::GUIFactory* getGUIFactory(bool useNULLDevice)
 {
-  return (gui::GUIFactory*) gpWin32GUIFactory;
+  if (useNULLDevice)
+    return (gui::GUIFactory*) gpNULLGUIFactory;
+  else if (gpWin32GUIFactory)
+    return (gui::GUIFactory*) gpWin32GUIFactory;
+  else
+    error("wgl device not initialized");
+}
+// ---------------------------------------------------------------------------
+const char * GUIFactoryName(bool useNULLDevice)
+{
+  return useNULLDevice ? "null" : "wgl";
 }
 // ---------------------------------------------------------------------------
 // printMessage
@@ -36,10 +48,11 @@ double getTime() {
 // ---------------------------------------------------------------------------
 // init
 // ---------------------------------------------------------------------------
-bool init()
+bool init(bool useNULLDevice)
 {
-  assert(gpWin32GUIFactory == NULL);
-  gpWin32GUIFactory = new gui::Win32GUIFactory();  
+  if (!useNULLDevice)
+    gpWin32GUIFactory = new gui::Win32GUIFactory();  
+  gpNULLGUIFactory = new gui::NULLGUIFactory();
   return true;
 }
 // ---------------------------------------------------------------------------
@@ -47,9 +60,11 @@ bool init()
 // ---------------------------------------------------------------------------
 void quit()
 {
-  assert(gpWin32GUIFactory != NULL);
+  assert(gpWin32GUIFactory != NULL && gpNULLGUIFactory != NULL);
   delete gpWin32GUIFactory;
+  delete gpNULLGUIFactory;
   gpWin32GUIFactory = NULL;
+  gpNULLGUIFactory = NULL;
 }
 // ---------------------------------------------------------------------------
 } // namespace lib

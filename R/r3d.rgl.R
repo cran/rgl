@@ -1,6 +1,6 @@
 #
 # R3D rendering functions - rgl implementation
-# $Id: r3d.rgl.R 930 2013-02-27 15:11:35Z murdoch $
+# $Id: r3d.rgl.R 947 2013-07-18 00:36:47Z murdoch $
 # 
 
 # Node Management
@@ -226,7 +226,8 @@ r3dDefaults <- list(userMatrix = rotationMatrix(290*pi/180, 1, 0, 0),
 		  family = "sans",
 		  material = list(color="black", fog=FALSE))
 
-open3d <- function(..., params = get("r3dDefaults", envir=.GlobalEnv))
+open3d <- function(..., params = get("r3dDefaults", envir=.GlobalEnv), 
+                   useNULL = rgl.useNULL()	)
 {
     args <- list(...)
     if (!is.null(args$antialias) 
@@ -236,7 +237,7 @@ open3d <- function(..., params = get("r3dDefaults", envir=.GlobalEnv))
     	args$antialias <- NULL
     }
     
-    rgl.open()
+    rgl.open(useNULL)
     
     if (!is.null(args$material)) {
     	params$material <- do.call(.fixMaterialArgs, c(args$material, Params=list(params$material)))

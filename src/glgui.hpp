@@ -4,7 +4,7 @@
 // C++ header
 // This file is part of rgl
 //
-// $Id: glgui.hpp 689 2008-07-23 18:32:20Z dmurdoch $
+// $Id: glgui.hpp 947 2013-07-18 00:36:47Z murdoch $
 
 #include "opengl.hpp"
 #include <vector>
@@ -111,6 +111,25 @@ public:
   FTFont *font;
   const char *errmsg;
 #endif
+};
+
+//
+// CLASS
+//   NULLFont
+//
+
+class NULLFont : public GLFont
+{
+public:
+  NULLFont(const char* in_family, int in_style, double in_cex): 
+    GLFont(in_family, in_style, in_cex, "NULL", false) {};
+
+  void draw(const char* text, int length, double adjx, double adjy, const RenderContext& rc) {};
+  void draw(const wchar_t* text, int length, double adjx, double adjy, const RenderContext& rc) {}; 
+  double width(const char* text) {return 0.0;};
+  double width(const wchar_t* text) {return 0.0;};
+  double height() {return 0.0;};
+  
 };
 
 /**
