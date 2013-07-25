@@ -1,6 +1,6 @@
 e7212ab19c1f98160e3517134f97e73d *ANNOUNCEMENT
 e73499cb89e0d6e97b8ba271c46739fd *COPYING
-fc83a33b204c6dfb66e2a2571cfd40e1 *DESCRIPTION
+52d4ebd7e22200d8ff7cf349a089dacf *DESCRIPTION
 0d3d813ced6b95b5f178c35e7c3c8f6a *NAMESPACE
 924eeb2faa0ef90099ad9176b1cc5013 *R/addNormals.mesh3d.R
 24205f22f8c6a012605bbba11b609686 *R/animate.R
@@ -57,7 +57,7 @@ e151f89d37172afa14164c3680e7629b *demo/regression.r
 154cec7452c730564d63034357b897a0 *demo/shapes3d.R
 13ef215dbb591bc9d82ad4831b04361a *demo/stereo.R
 70324e9f3c6750f14dc5fdfe99003625 *demo/subdivision.r
-934faeac272d3ce57cd88757922ebea3 *inst/NEWS
+91852d6596c85fb8c0dd3bf414749045 *inst/NEWS
 feff7010f9f522214002265608f637ac *inst/WebGL/CanvasMatrix.js
 268ceb2143fc28fba1d3d595a0f9ad6f *inst/WebGL/template.html
 5bac46c36b13eac1302260ee06b16c0f *inst/demodata/population.dat
@@ -116,7 +116,7 @@ f2137d8f6f45830534d08be4a297838e *man/select3d.Rd
 627f7ecd2399b6e94b0183824d6027b6 *man/shapelist3d.Rd
 3f6720223d8252b3c21273fdb4c4eb23 *man/snapshot.Rd
 247861351f7eb638415a48b7918dd57a *man/spheres.Rd
-180d395f185175b7df2b34102427a43f *man/spin3d.Rd
+197a5b247c0854de5fb37c504e40d59e *man/spin3d.Rd
 a4a96640f1ed726123ff4c8875d4ee40 *man/sprites.Rd
 5fefb3bf30774119241f8ea65aa6fdbc *man/subdivision3d.Rd
 5b5b9017c12bc5321400068d275494ba *man/surface.Rd
@@ -138,7 +138,7 @@ d2dbb8fba547438175c4e2fdfb193310 *src/ABCLineSet.hpp
 8db39b3551c5db91d0f5ee301e817241 *src/Color.cpp
 77283f877c0be653c1b57acd81a47925 *src/Color.hpp
 28f3e143fffe58b836047b7f1e18200f *src/Device.hpp
-50bed19175b91fb5fd0f3366d9e89f68 *src/DeviceManager.hpp
+0759083ecfefbc0b3d2954c185453b9c *src/DeviceManager.hpp
 82b4b67e417d4bf328ed6bac10d53171 *src/Disposable.cpp
 7d15779aa815d20fdc635f34621c8508 *src/Disposable.hpp
 a748c53cb62314b99f7bde1f6f1081cc *src/Light.cpp
@@ -188,7 +188,7 @@ b65469e74491b977b8babd8f98f3c1e5 *src/build/autoconf/config.sub
 e49ea2fadbbbaa61d2feaff21d5744c7 *src/callbacks.cpp
 71197f997e3ef5dd889f0ea812297caf *src/config.hpp
 e1fb09e42841ae514b316b719425bf37 *src/device.cpp
-d78194108f35b43943329f74cae61b97 *src/devicemanager.cpp
+57c5ceae811addd219491974bb5cff91 *src/devicemanager.cpp
 c83c1ea7f7c9b201cdcf087fa83d10ff *src/ext/GLsdk/GL/gl.h
 b3a541f71a25364db3f2128ecceb23cb *src/ext/GLsdk/GL/glext.h
 1d9b87c0753867872bde78597c327011 *src/ext/GLsdk/GL/glprocs.c
@@ -302,7 +302,7 @@ fd1d98cf856a779405207c47eabdaab2 *src/glgui.cpp
 b9c91a07de693067239a72dc715ab0ac *src/glgui.hpp
 1f6512452fd07932974b0089ba0c66d9 *src/gui.cpp
 54f00d07a195d199d587f57e5cfd380e *src/gui.hpp
-43b6fb34bf30d0e04874cb9415fc51e2 *src/init.cpp
+05f7e73adbab797435fdcd85dfcab4c5 *src/init.cpp
 87e8d49cadb55a7322b4e5b35b0b122e *src/init.hpp
 0063e226bec03c1f3b32c4f757e556ad *src/lib.hpp
 326bc4dd707d36afedf0f89a6ddee60e *src/opengl.hpp
@@ -320,7 +320,7 @@ d538cd1e284d791e8caaa3d4aaf237da *src/pixmap.h
 02fef216c9922b247aa90afbad36c0f3 *src/render.h
 f0635cf5ef443d28d2dd39f8f968ebb9 *src/rglmath.cpp
 60e28216cc1b392cc47f90dc02838a33 *src/rglmath.h
-28aa1f028f9ccca53f2da60fecec8b91 *src/rglview.cpp
+b12dcfe89a69695c84639f2f6c427b05 *src/rglview.cpp
 c2818832d9db6b425fdca1ae1cc7be38 *src/rglview.h
 ea1ce1968ab2bc8b18ae1433bfa2d4d3 *src/scene.cpp
 c503f5c6213decad7ded4373880b88f6 *src/scene.h
@@ -333,4 +333,4 @@ ceb67bda71588f3a427849bb264998f3 *src/win32lib.cpp
 63f2980a95a85396e7fdf36a3c44dafa *src/x11gui.cpp
 36fcc61e477eac0eed430b7c982b8fde *src/x11gui.hpp
 e64b30ac42d5cde6b219fc6601160072 *src/x11lib.cpp
-4d3cc9dd09b0b3d093e8a59f2995084a *tests/demos.R
+69466e6e7e415d0fec5ed0f3a95934f6 *tests/demos.R
