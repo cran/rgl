@@ -1,7 +1,7 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: devicemanager.cpp 947 2013-07-18 00:36:47Z murdoch $
+// $Id: devicemanager.cpp 952 2013-07-24 22:38:45Z murdoch $
 
 #include "DeviceManager.hpp"
 #include "types.h"
@@ -10,8 +10,8 @@
 #include "assert.hpp"
 #include "lib.hpp"
 
-DeviceManager::DeviceManager() 
- : newID(1), devices(), current( devices.end() )
+DeviceManager::DeviceManager(bool in_useNULLDevice) 
+ : newID(1), devices(), current( devices.end() ), useNULLDevice(in_useNULLDevice)
 { }
 
 DeviceManager::~DeviceManager()
@@ -58,7 +58,7 @@ Device* DeviceManager::getAnyDevice()
 {
   Device* pDevice = getCurrentDevice();
   if (pDevice == NULL) {
-    openDevice();
+    openDevice(useNULLDevice);
     pDevice = getCurrentDevice();
   }
   return pDevice;

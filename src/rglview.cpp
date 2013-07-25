@@ -1,7 +1,7 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: rglview.cpp 947 2013-07-18 00:36:47Z murdoch $
+// $Id: rglview.cpp 952 2013-07-24 22:38:45Z murdoch $
 
 
 
@@ -524,11 +524,11 @@ bool RGLView::pixels( int* ll, int* size, int component, float* result )
   bool success = false;
   GLenum format[] = {GL_RED, GL_GREEN, GL_BLUE, GL_ALPHA, 
                       GL_DEPTH_COMPONENT, GL_LUMINANCE};   
-  glEnable(GL_DEPTH_TEST);
-  glDepthMask(GL_TRUE);
-  
   if ( windowImpl->beginGL() ) {
 
+    glEnable(GL_DEPTH_TEST);
+    glDepthMask(GL_TRUE);
+  
     // read front buffer
 
     glPushAttrib(GL_PIXEL_MODE_BIT);
