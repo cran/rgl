@@ -4,7 +4,7 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: x11gui.cpp 923 2013-01-27 10:41:11Z murdoch $
+// $Id: x11gui.cpp 960 2013-08-28 14:34:44Z murdoch $
 
 // Uncomment for verbose output on stderr:
 // #define RGL_X11_DEBUG
@@ -361,7 +361,14 @@ GLFont* X11WindowImpl::getFont(const char* family, int style, double cex,
     UNPROTECT(1);
 #endif
   }
-  return fonts[0];  
+  if (strcmp(family, fonts[0]->family)) warning("font family \"%s\" not found, using \"%s\"", 
+                                         family, fonts[0]->family);
+  else if (style != fonts[0]->style) warning("\"%s\" family only supports font %d", 
+                                        fonts[0]->family, fonts[0]->style);
+  else if (cex != fonts[0]->cex) warning("\"%s\" family only supports cex = %g",
+  					fonts[0]->family, fonts[0]->cex);
+  else if (useFreeType) warning("FreeType font not available");
+  return fonts[0];
 }
 
 GLBitmapFont* X11WindowImpl::initGLFont()
