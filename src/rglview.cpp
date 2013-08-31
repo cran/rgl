@@ -1,7 +1,7 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: rglview.cpp 952 2013-07-24 22:38:45Z murdoch $
+// $Id: rglview.cpp 955 2013-07-31 13:03:39Z murdoch $
 
 
 
@@ -710,11 +710,17 @@ void RGLView::setScale(double* src)
 
 void RGLView::setDefaultFont(const char* family, int style, double cex, bool useFreeType)
 {
-  renderContext.font = View::windowImpl->getFont(family, style, cex, useFreeType);
+    GLFont* font = View::windowImpl->getFont(family, style, cex, useFreeType);
+    if (!font)
+	error("font not available");
+    renderContext.font = font;
 }
   
 const char* RGLView::getFontFamily() const 
 {
+  if (!renderContext.font)
+    error("font not available");
+      
   return renderContext.font->family;
 }
 
@@ -725,6 +731,8 @@ void RGLView::setFontFamily(const char *family)
 
 int RGLView::getFontStyle() const 
 {
+  if (!renderContext.font)
+    error("font not available");
   return renderContext.font->style;
 }
 
@@ -735,6 +743,8 @@ void RGLView::setFontStyle(int style)
 
 double RGLView::getFontCex() const 
 {
+  if (!renderContext.font)
+    error("font not available");
   return renderContext.font->cex;
 }
 
@@ -745,11 +755,15 @@ void RGLView::setFontCex(double cex)
 
 const char* RGLView::getFontname() const 
 {
+  if (!renderContext.font)
+    error("font not available");
   return renderContext.font->fontname;
 }
 
 bool RGLView::getFontUseFreeType() const
 {
+  if (!renderContext.font)
+    error("font not available");
   return renderContext.font->useFreeType;
 }
 

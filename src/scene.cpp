@@ -1,9 +1,9 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: scene.cpp 941 2013-05-13 22:48:05Z murdoch $
+// $Id: scene.cpp 956 2013-08-02 19:45:40Z murdoch $
 
-
+#include "gl2ps.h"
 #include "scene.h"
 #include "rglmath.h"
 #include "render.h"
@@ -566,7 +566,10 @@ void Scene::render(RenderContext* renderContext)
     SAVEGLERROR;
     
     // SETUP BLENDING
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
+    if (renderContext->gl2psActive == GL2PS_NONE) 
+      glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
+    else
+      gl2psBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
 
     SAVEGLERROR;
     

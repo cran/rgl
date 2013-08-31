@@ -4,7 +4,7 @@
 // C++ header
 // This file is part of rgl
 //
-// $Id: glgui.hpp 947 2013-07-18 00:36:47Z murdoch $
+// $Id: glgui.hpp 954 2013-07-31 02:09:01Z murdoch $
 
 #include "opengl.hpp"
 #include <vector>
@@ -38,6 +38,7 @@ public:
   virtual double width(const char* text) = 0;
   virtual double width(const wchar_t* text) = 0;
   virtual double height() = 0;
+  virtual bool valid(const char* text) { return true; };
   // justify returns false if justification puts the text outside the viewport
   GLboolean justify(double width, double height, double adjx, double adjy, const RenderContext& rc);
   char* family;
@@ -78,6 +79,7 @@ public:
   double width(const char* text);
   double width(const wchar_t* text);
   double height();
+  bool valid(const char* text);
   
   GLuint listBase;
   GLuint firstGlyph;
