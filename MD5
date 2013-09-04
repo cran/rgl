@@ -1,5 +1,5 @@
 e73499cb89e0d6e97b8ba271c46739fd *COPYING
-619077776331e71ebd9e3c33f767e668 *DESCRIPTION
+75917d34eb2fb22f882bc46d58e23400 *DESCRIPTION
 3551032b185c7ba7b6763dd9cefb7073 *NAMESPACE
 924eeb2faa0ef90099ad9176b1cc5013 *R/addNormals.mesh3d.R
 24205f22f8c6a012605bbba11b609686 *R/animate.R
@@ -11,7 +11,7 @@ d614a914d367d10d4718ad28e0c493fc *R/cylinder3d.R
 5e855bf30c385ae3c1b662a862d3bb5a *R/ellipse3d.R
 543d421e8e5fdf0128e0f77d262ee0d3 *R/enum.R
 50ec73e5b7c3ef0296cf34708c272a9d *R/fonts.R
-5fc873c21fb3f9818e08352349e6c993 *R/getscene.R
+08180ac29fb788f52ea0a0d78b02ba51 *R/getscene.R
 482897346c21cde324d6c5b781120676 *R/grid3d.R
 a85c5a66d08b2c0f8ac98d49f365aae7 *R/identify3d.R
 6d37abb99d2ac4c669721dab0eaad5b0 *R/internal.R
@@ -25,7 +25,7 @@ e7329453008644d2c2a8a474cc029c99 *R/oh3d.R
 9aae183111d53b7c2ed5d9b51f1b1389 *R/plot3d.R
 af9a986f1752f610b392a47202f8cb59 *R/plugin.R
 b67f8e25f986db0a965df97b44ce8cb3 *R/ply.R
-6c1cec007579f6cf5df437cfa84fb478 *R/r3d.rgl.R
+36418c31c95c68f794d4eb42332c50d7 *R/r3d.rgl.R
 63896d797aeddfe599f9358d058a3305 *R/rgl.bringtotop.R
 74587ab5c50b49b660dc09a72b5187f0 *R/scene.R
 06ca697fc07bde9e5d06d936bb4ad5e9 *R/selectpoints3d.R
@@ -36,7 +36,7 @@ cd2c25a71a00743e10700942991fd823 *R/subdivision.mesh3d.R
 7483d1f9bc2e0ddc2ca49c7361051297 *R/triangulate.R
 0e5f3a6cd94e403b978dfbf540fa89f2 *R/turn3d.R
 db51085efb75206ecd8f0957ab5431b4 *R/webGL.R
-e6847c955b8d17f81172d31c3243b8a0 *R/zzz.R
+ede02f6d66a0b5a03f189a55d142d0dc *R/zzz.R
 d0feda47b4171a619aeb46648abe76a3 *README
 20f788753f012ab52f6ea88465c3e455 *cleanup
 805d0874959d91f7283d67eb534655ef *configure
@@ -56,7 +56,7 @@ e151f89d37172afa14164c3680e7629b *demo/regression.r
 154cec7452c730564d63034357b897a0 *demo/shapes3d.R
 13ef215dbb591bc9d82ad4831b04361a *demo/stereo.R
 70324e9f3c6750f14dc5fdfe99003625 *demo/subdivision.r
-b5c84d6613fa524ad6ea9027acb200d4 *inst/NEWS
+3d5fd15658c44426d676f034c1451a43 *inst/NEWS
 feff7010f9f522214002265608f637ac *inst/WebGL/CanvasMatrix.js
 268ceb2143fc28fba1d3d595a0f9ad6f *inst/WebGL/template.html
 5bac46c36b13eac1302260ee06b16c0f *inst/demodata/population.dat
@@ -91,7 +91,7 @@ bc60664d75d2adaa584e5c75d0af8a95 *man/grid3d.Rd
 73e139149bc81b223075d06494c4126c *man/material.Rd
 2d28e61be76fc365b0ea97745fc31410 *man/matrices.Rd
 d94a7eb1c891ec0813ce16f7e1a0893b *man/mesh3d.Rd
-7f30138759a134b284f817cd776a0b54 *man/par3d.Rd
+f47acf2cebcdffb1d72ba56a4943f731 *man/par3d.Rd
 637a0bfbe6c8cb6f199909aaf2763ee8 *man/par3dinterp.Rd
 d85ccfc2a02095acee4abd5850f62699 *man/persp3d.Rd
 09c02e4c250a7f4801d42aac3a2227b0 *man/planes.Rd
@@ -303,12 +303,12 @@ c2df43358f9dc57b02321b60feca6637 *src/gl2ps.h
 836975a00f37f262473541077e67fbc0 *src/glgui.hpp
 1f6512452fd07932974b0089ba0c66d9 *src/gui.cpp
 54f00d07a195d199d587f57e5cfd380e *src/gui.hpp
-05f7e73adbab797435fdcd85dfcab4c5 *src/init.cpp
-87e8d49cadb55a7322b4e5b35b0b122e *src/init.hpp
+a49cad306b208d6d2a556824ec01688e *src/init.cpp
+7ae0e06d262245fd283a7ee98bdefd78 *src/init.hpp
 0063e226bec03c1f3b32c4f757e556ad *src/lib.hpp
 326bc4dd707d36afedf0f89a6ddee60e *src/opengl.hpp
 9485537cb3793349d961f41b0794227a *src/osx/osxgui.hpp
-2b5f7cb3e8f69e093a42f753c5acc273 *src/osx/osxgui.mm
+26527ad4f83143b9ab0ef56eac97f971 *src/osx/osxgui.mm
 82e04e2b39dcbfd720a66d4964032733 *src/osx/osxlib.cpp
 b5cd048ac50335c1c5feb8ee7686eca8 *src/par3d.cpp
 a07d42966e0e322e3d8c3d2d7c6f2c3a *src/pixmap.cpp
@@ -328,10 +328,10 @@ c503f5c6213decad7ded4373880b88f6 *src/scene.h
 829e57429d513b5524a2867a413a4f91 *src/select.cpp
 026dccf7c179313e619f6b5dc8abe2f4 *src/select.h
 285b09c1d50f436a6a67038c2f28e537 *src/types.h
-6e25989c0635f77f95c4f853d4991cd1 *src/win32gui.cpp
+dffc854f63e0e236a95d1040011b8fed *src/win32gui.cpp
 d8d2bb2e01ecb4c4b601ad35d848c85d *src/win32gui.hpp
 ceb67bda71588f3a427849bb264998f3 *src/win32lib.cpp
-b017620d800e2aea4228a47af4ea45cf *src/x11gui.cpp
+f66ff7d82ff6c9fa59c6bebb4cf04398 *src/x11gui.cpp
 36fcc61e477eac0eed430b7c982b8fde *src/x11gui.hpp
 e64b30ac42d5cde6b219fc6601160072 *src/x11lib.cpp
 69466e6e7e415d0fec5ed0f3a95934f6 *tests/demos.R
