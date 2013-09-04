@@ -2,7 +2,7 @@
 ## R source file
 ## This file is part of rgl
 ##
-## $Id: zzz.R 947 2013-07-18 00:36:47Z murdoch $
+## $Id: zzz.R 962 2013-09-02 15:02:07Z murdoch $
 ##
 
 ##
@@ -93,7 +93,7 @@
 }
 
 rgl.init <- function(initValue = 0, onlyNULL = FALSE) .Call( rgl_init, 
-    initValue, onlyNULL )
+    initValue, onlyNULL, environment(rgl.init) )
 
 ##
 ## exit-point

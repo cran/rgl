@@ -3,7 +3,7 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: win32gui.cpp 960 2013-08-28 14:34:44Z murdoch $
+// $Id: win32gui.cpp 962 2013-09-02 15:02:07Z murdoch $
 
 #include "win32gui.hpp"
 
@@ -23,6 +23,7 @@ namespace gui {
 
 extern int     gInitValue;
 extern HANDLE  gHandle;
+extern SEXP    rglNamespace;
 static WNDPROC gDefWindowProc;
 static HWND    gMDIClientHandle = 0;
 static HWND    gMDIFrameHandle  = 0;
@@ -371,7 +372,7 @@ GLFont* Win32WindowImpl::getFont(const char* family, int style, double cex,
     if (strcmp(family, "NA") && beginGL()) {  // User passes NA_character_ for default, looks like "NA" here
       
       SEXP Rfontname = VECTOR_ELT(PROTECT(eval(lang2(install("windowsFonts"), 
-                                          ScalarString(mkChar(family))), R_GlobalEnv)),
+                                          ScalarString(mkChar(family))), rglNamespace)),
                                           0);
       if (isString(Rfontname)) {
         const char* fontname = CHAR(STRING_ELT(Rfontname, 0)); 
@@ -437,7 +438,7 @@ GLFont* Win32WindowImpl::getFont(const char* family, int style, double cex,
     char fontname_absolute[MAX_PATH+1] = "";
     int len=0;
     SEXP Rfontname = VECTOR_ELT(PROTECT(eval(lang2(install("rglFonts"), 
-                                          ScalarString(mkChar(family))), R_GlobalEnv)),
+                                          ScalarString(mkChar(family))), rglNamespace)),
                                           0);
     if (isString(Rfontname) && length(Rfontname) >= style) {
       const char* fontname = CHAR(STRING_ELT(Rfontname, style-1)); 

@@ -4,7 +4,7 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: x11gui.cpp 960 2013-08-28 14:34:44Z murdoch $
+// $Id: x11gui.cpp 962 2013-09-02 15:02:07Z murdoch $
 
 // Uncomment for verbose output on stderr:
 // #define RGL_X11_DEBUG
@@ -19,6 +19,7 @@
 
 // ---------------------------------------------------------------------------
 namespace gui {
+extern SEXP    rglNamespace;    
 // ---------------------------------------------------------------------------
 class X11WindowImpl : public WindowImpl
 {
@@ -344,7 +345,7 @@ GLFont* X11WindowImpl::getFont(const char* family, int style, double cex,
 #ifdef HAVE_FREETYPE
     int len=0;
     SEXP Rfontname = VECTOR_ELT(PROTECT(eval(lang2(install("rglFonts"), 
-                                          ScalarString(mkChar(family))), R_GlobalEnv)),
+                                          ScalarString(mkChar(family))), rglNamespace)),
                                           0);
     if (isString(Rfontname) && length(Rfontname) >= style) {
       const char* fontname = CHAR(STRING_ELT(Rfontname, style-1)); 
