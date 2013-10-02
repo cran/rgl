@@ -1,6 +1,6 @@
 e73499cb89e0d6e97b8ba271c46739fd *COPYING
-75917d34eb2fb22f882bc46d58e23400 *DESCRIPTION
-3551032b185c7ba7b6763dd9cefb7073 *NAMESPACE
+de18d5fa018d83e4f040ae73eaef089f *DESCRIPTION
+5293a4869f470206cd2838f21b738427 *NAMESPACE
 924eeb2faa0ef90099ad9176b1cc5013 *R/addNormals.mesh3d.R
 24205f22f8c6a012605bbba11b609686 *R/animate.R
 853ac34ab3568c44d0326e6f89ccd68d *R/aspect3d.R
@@ -11,11 +11,11 @@ d614a914d367d10d4718ad28e0c493fc *R/cylinder3d.R
 5e855bf30c385ae3c1b662a862d3bb5a *R/ellipse3d.R
 543d421e8e5fdf0128e0f77d262ee0d3 *R/enum.R
 50ec73e5b7c3ef0296cf34708c272a9d *R/fonts.R
-08180ac29fb788f52ea0a0d78b02ba51 *R/getscene.R
+3338d41616fcf3e0a751d0bf8a2a978e *R/getscene.R
 482897346c21cde324d6c5b781120676 *R/grid3d.R
 a85c5a66d08b2c0f8ac98d49f365aae7 *R/identify3d.R
 6d37abb99d2ac4c669721dab0eaad5b0 *R/internal.R
-34cbe05d1c0d1f7e9499379459a33413 *R/material.R
+8b057bbbde990aff211072d24d349c8f *R/material.R
 464210d6bb57f31a186614b6c32d9cb7 *R/matrices.R
 31af712b88d88e5d3080745ccc36060a *R/mesh3d.R
 164d11af4a03d1386a8b2452495d8e93 *R/obj.R
@@ -27,7 +27,7 @@ af9a986f1752f610b392a47202f8cb59 *R/plugin.R
 b67f8e25f986db0a965df97b44ce8cb3 *R/ply.R
 36418c31c95c68f794d4eb42332c50d7 *R/r3d.rgl.R
 63896d797aeddfe599f9358d058a3305 *R/rgl.bringtotop.R
-74587ab5c50b49b660dc09a72b5187f0 *R/scene.R
+86765c689ee5f253d08aa56f0c61d3bb *R/scene.R
 06ca697fc07bde9e5d06d936bb4ad5e9 *R/selectpoints3d.R
 9ebe73a8d97c1fa1423d646f41a4f57a *R/shapelist3d.R
 b8fcaff709d438c64fe31c712b04a30a *R/solids3d.R
@@ -35,7 +35,7 @@ b8fcaff709d438c64fe31c712b04a30a *R/solids3d.R
 cd2c25a71a00743e10700942991fd823 *R/subdivision.mesh3d.R
 7483d1f9bc2e0ddc2ca49c7361051297 *R/triangulate.R
 0e5f3a6cd94e403b978dfbf540fa89f2 *R/turn3d.R
-db51085efb75206ecd8f0957ab5431b4 *R/webGL.R
+36fa8ba06b42072f8469bb63c43460fa *R/webGL.R
 ede02f6d66a0b5a03f189a55d142d0dc *R/zzz.R
 d0feda47b4171a619aeb46648abe76a3 *README
 20f788753f012ab52f6ea88465c3e455 *cleanup
@@ -56,7 +56,7 @@ e151f89d37172afa14164c3680e7629b *demo/regression.r
 154cec7452c730564d63034357b897a0 *demo/shapes3d.R
 13ef215dbb591bc9d82ad4831b04361a *demo/stereo.R
 70324e9f3c6750f14dc5fdfe99003625 *demo/subdivision.r
-3d5fd15658c44426d676f034c1451a43 *inst/NEWS
+6b0c979873e847801b9525783359f9a3 *inst/NEWS
 feff7010f9f522214002265608f637ac *inst/WebGL/CanvasMatrix.js
 268ceb2143fc28fba1d3d595a0f9ad6f *inst/WebGL/template.html
 5bac46c36b13eac1302260ee06b16c0f *inst/demodata/population.dat
@@ -83,7 +83,7 @@ cd55ad0a4c0c10a7c27d0e342e4ce598 *man/attributes.Rd
 217a4ff853de1ac8f22bfe0abcb1c299 *man/callbacks.Rd
 34c5f36aad0b8b1b335c7a18b7d43c03 *man/check3d.Rd
 66289d3d8d8dff31a1b17247c45d535c *man/cylinder3d.Rd
-74e9ad60c21c42a189cf33ec8d8b44cd *man/ellipse3d.Rd
+0aaa50db1f44f384dfb37065447eca55 *man/ellipse3d.Rd
 dfabe3b97d8425462b795d76602996b0 *man/extrude3d.Rd
 bc60664d75d2adaa584e5c75d0af8a95 *man/grid3d.Rd
 5f159afbec0bb90ff60255b74ff8e6ec *man/identify3d.Rd
@@ -91,7 +91,7 @@ bc60664d75d2adaa584e5c75d0af8a95 *man/grid3d.Rd
 73e139149bc81b223075d06494c4126c *man/material.Rd
 2d28e61be76fc365b0ea97745fc31410 *man/matrices.Rd
 d94a7eb1c891ec0813ce16f7e1a0893b *man/mesh3d.Rd
-f47acf2cebcdffb1d72ba56a4943f731 *man/par3d.Rd
+24d689cbeada98df7dfcda6db44a33f7 *man/par3d.Rd
 637a0bfbe6c8cb6f199909aaf2763ee8 *man/par3dinterp.Rd
 d85ccfc2a02095acee4abd5850f62699 *man/persp3d.Rd
 09c02e4c250a7f4801d42aac3a2227b0 *man/planes.Rd
@@ -111,7 +111,7 @@ be61d6a7b60885ea5d9ec21aa6672658 *man/rgl.bringtotop.Rd
 fb4a194f72781107fee21f315997467a *man/rgl.useNULL.Rd
 2e6c57b9ca7de346eda82501d4a5f1b9 *man/rgl.user2window.Rd
 2adeabe6c4329842920c9fc5b3f27485 *man/scene.Rd
-3fb9cd69c33800872d3cba4fb86d8f63 *man/scene3d.Rd
+b41d05f4776b32515717a263e415ece5 *man/scene3d.Rd
 f2137d8f6f45830534d08be4a297838e *man/select3d.Rd
 97670b159b7665886e80b2e9b26d2958 *man/selectpoints3d.Rd
 627f7ecd2399b6e94b0183824d6027b6 *man/shapelist3d.Rd
@@ -131,10 +131,10 @@ fa1cf179be2b9e37770093ad5463f3a9 *man/triangulate.Rd
 44867d44939dc48dc354a48728345fce *man/writeWebGL.Rd
 f579d82e870e643682356fe4fe1d44d9 *src/ABCLineSet.cpp
 d2dbb8fba547438175c4e2fdfb193310 *src/ABCLineSet.hpp
-5cadd4320ae6e39ebdc7764f71c1912c *src/BBoxDeco.cpp
+a862e0b3e0a5f43bc33d626343abf0d7 *src/BBoxDeco.cpp
 98f94929500e3a8b6b001c4f6e2914c2 *src/BBoxDeco.hpp
-8a6d2425c92287a87ab5769f53b74431 *src/Background.cpp
-4286d06957024031456e17565a227f72 *src/Background.hpp
+f6324bfc4eafab40d53b893483adf0b8 *src/Background.cpp
+574d98a976a8ff8a6b8940c0940c6b69 *src/Background.hpp
 07787092d891d8e841598acf6a1b267e *src/COPYING.GL2PS
 8db39b3551c5db91d0f5ee301e817241 *src/Color.cpp
 77283f877c0be653c1b57acd81a47925 *src/Color.hpp
@@ -142,7 +142,7 @@ d2dbb8fba547438175c4e2fdfb193310 *src/ABCLineSet.hpp
 0759083ecfefbc0b3d2954c185453b9c *src/DeviceManager.hpp
 82b4b67e417d4bf328ed6bac10d53171 *src/Disposable.cpp
 7d15779aa815d20fdc635f34621c8508 *src/Disposable.hpp
-a748c53cb62314b99f7bde1f6f1081cc *src/Light.cpp
+51b8f66833d2c1e42f5011ba33980483 *src/Light.cpp
 3da0acf483e8e5c2b6f417177b38a350 *src/Light.hpp
 c5eb99341be40487147155b0587655b9 *src/LineSet.cpp
 ac190cb66eabac61bd2630fcf492feae *src/LineStripSet.cpp
@@ -162,7 +162,7 @@ c11f057a194506a1a297ecc00285abf8 *src/QuadSet.cpp
 1ebe36b0b437cc59fde8c5d3c4f5d1ed *src/RenderContext.hpp
 96077b4738ccab29ddc386cc1677cdc0 *src/SceneNode.hpp
 f212910ccc79682a0d1a9638e3d07c5b *src/Shape.cpp
-91a65826a401060acce5da82e58bcef2 *src/Shape.hpp
+d21b17105e28e1393f3f8374aa085852 *src/Shape.hpp
 41d6c63a028e99226f87d1876c10d5d6 *src/SphereMesh.cpp
 008182b732aa3ce804cda4c6a1c40a99 *src/SphereMesh.hpp
 6b9450e0ad8bda1e3dc80e99df9afc14 *src/SphereSet.cpp
@@ -179,7 +179,7 @@ f1f5b5d961be356cebccd0840b551e99 *src/Texture.cpp
 0d57412f83c3a9916be3e2a5d14538be *src/Texture.hpp
 de62ec66cec67ef962a057f40dac589b *src/Viewpoint.cpp
 7d6f75506c5affa7163da23b9f3bd848 *src/Viewpoint.hpp
-c8496e95260e3096888e0e51fce27e11 *src/api.cpp
+2959acd5735653b24632d3daa3521659 *src/api.cpp
 11d327b5e1409360e3d5cdc657a965bc *src/api.h
 69fe236cdf8914012d5b85998b8114c0 *src/assert.cpp
 59bef1d4d9abbd9491169bf837582fcb *src/assert.hpp

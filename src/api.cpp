@@ -1,7 +1,7 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: api.cpp 947 2013-07-18 00:36:47Z murdoch $
+// $Id: api.cpp 969 2013-09-15 15:09:43Z murdoch $
 
 #include "lib.hpp"
 
@@ -819,8 +819,18 @@ void rgl_getmaterial(int *successptr, int *id, int* idata, char** cdata, double*
       Shape* shape = scene->get_shape(*id, true);
       if (shape) 
         mat = shape->getMaterial(); /* success! successptr will be set below */
-      else
-        return;
+      else {
+	BBoxDeco* bboxdeco = scene->get_bboxdeco();
+	if (bboxdeco && *id == bboxdeco->getObjID())
+	  mat = bboxdeco->getMaterial();
+	else {
+	  Background* background = scene->get_background();
+	  if (background && *id == background->getObjID())
+	    mat = background->getMaterial();
+	  else
+	    return;
+        }
+      }
     } else
       return;
   }
@@ -1350,7 +1360,7 @@ char* getFamily()
   const char* f;
   char* result = NULL;
   
-  if (deviceManager && (device = deviceManager->getCurrentDevice())) {
+  if (deviceManager && (device = deviceManager->getAnyDevice())) {
     f = device->getRGLView()->getFontFamily();
     result = R_alloc(strlen(f)+1, 1);
     strcpy(result, f);
@@ -1376,7 +1386,7 @@ int getFont()
 {
   Device* device;
   
-  if (deviceManager && (device = deviceManager->getCurrentDevice())) {
+  if (deviceManager && (device = deviceManager->getAnyDevice())) {
     int result = device->getRGLView()->getFontStyle();
     CHECKGLERROR;
     return result;
@@ -1400,7 +1410,7 @@ double getCex()
 {
   Device* device;
   
-  if (deviceManager && (device = deviceManager->getCurrentDevice())) {
+  if (deviceManager && (device = deviceManager->getAnyDevice())) {
     double result = device->getRGLView()->getFontCex();
     CHECKGLERROR;  
     return result;
@@ -1424,7 +1434,7 @@ int getUseFreeType()
 {
   Device* device;
   
-  if (deviceManager && (device = deviceManager->getCurrentDevice())) {
+  if (deviceManager && (device = deviceManager->getAnyDevice())) {
     int result = (int) device->getRGLView()->getFontUseFreeType();
     CHECKGLERROR;  
     return result;
@@ -1450,7 +1460,7 @@ char* getFontname()
   const char* f;
   char* result = NULL;
   
-  if (deviceManager && (device = deviceManager->getCurrentDevice())) {
+  if (deviceManager && (device = deviceManager->getAnyDevice())) {
     f = device->getRGLView()->getFontname();
     result = R_alloc(strlen(f)+1, 1);
     strcpy(result, f);
@@ -1463,7 +1473,7 @@ int getAntialias()
 {
   Device* device;
   
-  if (deviceManager && (device = deviceManager->getCurrentDevice())) {
+  if (deviceManager && (device = deviceManager->getAnyDevice())) {
     WindowImpl* windowImpl = device->getRGLView()->windowImpl;
     if (windowImpl->beginGL()) {
       int result;      

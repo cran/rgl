@@ -22,8 +22,7 @@ scene3d <- function() {
   getObject <- function(id, type) {
     result <- list(id=id, type=type)
     
-    if (!(type %in% c("background", "bboxdeco")))
-      result$material <- matdiff(rgl.getmaterial(id=id))
+    result$material <- matdiff(rgl.getmaterial(id=id))
     
     attribs <- c("vertices", "normals", "colors", "texcoords", "dim",
           "texts", "cex", "adj", "radii", "ids",
@@ -40,6 +39,17 @@ scene3d <- function() {
         objlist[[i]] <- getObject(result$ids[i,1], result$types[i,1])
       result$objects <- objlist
     }
+    if (type == "background") {
+      flags <- rgl.attrib(id, "flags")
+      result$sphere <- flags["sphere", 1]
+      result$fogtype <- if (flags["linear_fog", 1]) "linear"
+                        else if (flags["exp_fog", 1]) "exp"
+			else if (flags["exp2_fog", 1]) "exp2"
+			else "none"
+    } else if (type == "bboxdeco") {
+      flags <- rgl.attrib(id, "flags")
+      result$draw_front <- flags["draw_front", 1]
+    }
     class(result) <- c(paste0("rgl", type), "rglobject")
     result
   }
@@ -54,9 +64,6 @@ scene3d <- function() {
     
   obj <- rgl.ids("background")
   bg <- getObject(obj$id, "background")
-  col <- bg$colors
-  bg$color <- rgb(col[,1], col[,2], col[,3])
-  bg$colors <- NULL
   result$bg <- bg
   
   if (nrow(obj <- rgl.ids("bboxdeco")))
@@ -103,6 +110,9 @@ plot3d.rglscene <- function(x, add=FALSE, ...) {
     }
     if (!is.null(x$bg)) {
       if (is.null(params$bg)) params$bg <- list()
+      params$bg[names(params$material)] <- params$material
+      params$bg[names(x$bg$material)] <- x$bg$material
+      x$bg$material <- x$bg$id <- x$bg$type <- NULL
       params$bg[names(x$bg)] <- x$bg
     }
     if (!is.null(x$par3d)) {
@@ -214,8 +224,7 @@ plot3d.rglobject <- function(x, ...) {
 }
 
 plot3d.rglbboxdeco <- function(x, ...) {
-  # FIXME: can't read these
-  args <- list(draw_front = TRUE, front="lines", back="lines")     
+  args <- list()     
   v <- x$vertices
   t <- x$texts
   ind <- is.na(v[,2]) & is.na(v[,3])
@@ -223,18 +232,32 @@ plot3d.rglbboxdeco <- function(x, ...) {
     args$xat <- v[ind,1]
     if (!is.null(t))
       args$xlab <- t[ind]
+    else
+      args$xlab <- signif(args$xat, 4)
   }
   ind <- is.na(v[,1]) & is.na(v[,3])
   if (any(ind)) {
     args$yat <- v[ind,2]
     if (!is.null(t))
       args$ylab <- t[ind]
+    else
+      args$ylab <- signif(args$yat, 4)
   }
   ind <- is.na(v[,1]) & is.na(v[,2])
   if (any(ind)) {
     args$zat <- v[ind,3]
     if (!is.null(t))
       args$zlab <- t[ind]
+    else
+      args$zlab <- signif(args$zat, 4)
   }
+  args$draw_front <- x$draw_front
+  args <- c(args, x$material)
+  
   do.call("bbox3d", args)
+}
+
+plot3d.rglbackground <- function(x, ...) {
+  args <- c(list(sphere = x$sphere, fogtype = x$fogtype), x$material)
+  do.call("bg3d", args)
 }
