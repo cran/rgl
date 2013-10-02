@@ -2,7 +2,7 @@
 ## R source file
 ## This file is part of rgl
 ##
-## $Id: scene.R 930 2013-02-27 15:11:35Z murdoch $
+## $Id: scene.R 970 2013-09-16 01:18:23Z murdoch $
 ##
 
 ##
@@ -132,8 +132,13 @@ rgl.attrib <- function( id, attrib, first=1,
                            "type",	     # types
                            "flag"	     # flags
                            )[[attrib]]
-  if (attrib == 14) 
-    rownames(result) <- c("viewpoint", "finite")
+  if (attrib == 14)
+    if (id %in% rgl.ids("lights")$id)
+      rownames(result) <- c("viewpoint", "finite")[first:last]
+    else if (id %in% rgl.ids("background")$id)
+      rownames(result) <- c("sphere", "linear_fog", "exp_fog", "exp2_fog")[first:last]
+    else if (id %in% rgl.ids("bboxdeco")$id)
+      rownames(result) <- "draw_front"[first:last]
  
   result
 }
