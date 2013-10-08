@@ -4,7 +4,7 @@
 // C++ header file
 // This file is part of RGL
 //
-// $Id: rglmath.h 806 2011-04-26 18:53:13Z murdoch $
+// $Id: rglmath.h 976 2013-10-04 15:06:19Z murdoch $
 
 
 using namespace std;
@@ -17,6 +17,8 @@ using namespace std;
 #ifndef M_PI
 #define M_PI      3.1415926535897932384626433832795
 #endif
+
+namespace rgl {
 
 namespace math {
 
@@ -207,5 +209,7 @@ struct PolarCoord
 
 
 typedef Vec4 Vertex4;
+
+} // namespace rgl
 
 #endif /* MATH_H */

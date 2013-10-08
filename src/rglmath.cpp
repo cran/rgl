@@ -1,10 +1,12 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: rglmath.cpp 753 2009-03-15 17:41:20Z murdoch $
+// $Id: rglmath.cpp 976 2013-10-04 15:06:19Z murdoch $
 
 #include "rglmath.h"
 #include "R.h"
+
+using namespace rgl;
 
 //////////////////////////////////////////////////////////////////////////////
 //

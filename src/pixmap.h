@@ -4,10 +4,12 @@
 // C++ header file
 // This file is part of RGL
 //
-// $Id: pixmap.h 586 2007-08-03 19:47:16Z dmurdoch $
+// $Id: pixmap.h 976 2013-10-04 15:06:19Z murdoch $
 
 #include <cstdio>
 #include "opengl.hpp"
+
+namespace rgl {
 
 class PixmapFormat;
   
@@ -45,5 +47,7 @@ public:
 
 
 extern PixmapFormat* pixmapFormat[PIXMAP_FILEFORMAT_LAST];
+
+} // namespace rgl
 
 #endif /* PIXMAP_H */

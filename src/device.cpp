@@ -1,17 +1,21 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: device.cpp 947 2013-07-18 00:36:47Z murdoch $
+// $Id: device.cpp 976 2013-10-04 15:06:19Z murdoch $
 // ---------------------------------------------------------------------------
+#include <cstring>
 #include "Device.hpp"
 #include "lib.hpp"
+
+using namespace rgl;
+
 // ---------------------------------------------------------------------------
 Device::Device(int id, bool useNULL) : id_(id)
 {
   scene   = new Scene();
   rglview = new RGLView(scene);
-  window  = new Window( rglview, lib::getGUIFactory(useNULL) );
-  devtype = lib::GUIFactoryName(useNULL);
+  window  = new Window( rglview, getGUIFactory(useNULL) );
+  devtype = GUIFactoryName(useNULL);
   window->addDisposeListener(this);
 }
 // ---------------------------------------------------------------------------

@@ -4,16 +4,16 @@
 // C++ header file
 // This file is part of RGL
 //
-// $Id: rglview.h 917 2013-01-23 23:54:52Z murdoch $
+// $Id: rglview.h 976 2013-10-04 15:06:19Z murdoch $
 
 
-#include "gui.hpp"
 #include "scene.h"
+#include "gui.hpp"
 #include "fps.h"
 #include "select.h"
 #include "pixmap.h"
 
-using namespace gui;
+namespace rgl {
 
 enum MouseModeID {mmTRACKBALL = 1, mmXAXIS, mmYAXIS, mmZAXIS, mmPOLAR, 
                   mmSELECTING, mmZOOM, mmFOV, mmUSER};
@@ -179,5 +179,7 @@ private:
   double  mousePosition[4];
 
 };
+
+} // namespace rgl
 
 #endif /* RGLVIEW_H */

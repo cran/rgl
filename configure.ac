@@ -1,12 +1,14 @@
 ## 
 ## This file is part of RGL
 ##
-## Process this file with autoconf to produce a configure script.
+## It uses some R-specific macros, so process it in two steps:
+## 1. Copy m4/R.m4 from the R source directory to rgl/aclocal.m4
+## 2. Process configure.ac with autoconf to produce a configure script.
 ## NB:  the files in src/build/autoconf may need updating for a new
 ##      version of autoconf
 ##
 ##
-## $Id: configure.ac 928 2013-02-07 16:43:55Z murdoch $
+## $Id: configure.ac 982 2013-10-06 16:24:58Z murdoch $
 ##
 
 AC_PREREQ(2.50)
@@ -27,6 +29,8 @@ fi
 
 AC_PROG_CPP
 AC_PROG_CC
+
+R_GCC4_VISIBILITY
 
 AC_ARG_ENABLE([cocoa],
 [  --disable-cocoa            use X11 instead of Mac OS X native Cocoa UI]

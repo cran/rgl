@@ -1,14 +1,16 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: devicemanager.cpp 952 2013-07-24 22:38:45Z murdoch $
+// $Id: devicemanager.cpp 976 2013-10-04 15:06:19Z murdoch $
 
-#include "DeviceManager.hpp"
-#include "types.h"
 #include <algorithm>
 #include <cstdio>
+#include "DeviceManager.hpp"
+#include "types.h"
 #include "assert.hpp"
 #include "lib.hpp"
+
+using namespace rgl;
 
 DeviceManager::DeviceManager(bool in_useNULLDevice) 
  : newID(1), devices(), current( devices.end() ), useNULLDevice(in_useNULLDevice)

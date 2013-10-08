@@ -3,17 +3,17 @@
 
 #include "DeviceManager.hpp"
 
+using namespace rgl;
+
+namespace rgl {
 extern DeviceManager* deviceManager;
+}
 
 /* These defines are not in the installed version of R */
 #include "R.h"
 
 #include <Rdefines.h>
 #include <Rinternals.h>
-
-extern "C" {
-EXPORT_SYMBOL SEXP rgl_setMouseCallbacks(SEXP button, SEXP begin, SEXP update, SEXP end);
-}
 
 static void userControl(void *userData, int mouseX, int mouseY)
 {
@@ -37,7 +37,7 @@ static void userCleanup(void **userData)
   }
 }
 
-SEXP rgl_setMouseCallbacks(SEXP button, SEXP begin, SEXP update, SEXP end)
+SEXP rgl::rgl_setMouseCallbacks(SEXP button, SEXP begin, SEXP update, SEXP end)
 {
   Device* device;
   if (deviceManager && (device = deviceManager->getCurrentDevice())) {

@@ -4,11 +4,13 @@
 // C++ header file
 // This file is part of RGL
 //
-// $Id: DeviceManager.hpp 952 2013-07-24 22:38:45Z murdoch $
+// $Id: DeviceManager.hpp 976 2013-10-04 15:06:19Z murdoch $
 
 #include "Device.hpp"
 
 #include <list>
+
+namespace rgl {
 
 /**
  * Manager component that is used as a front-end for multiple devices access
@@ -43,6 +45,8 @@ private:
   Iterator  current; 
   bool	    useNULLDevice;
 };
+
+} // namespace rgl
 
 #endif // DEVICE_MANAGER_HPP
 

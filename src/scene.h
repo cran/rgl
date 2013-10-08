@@ -4,15 +4,13 @@
 // C++ header file
 // This file is part of RGL
 //
-// $Id: scene.h 941 2013-05-13 22:48:05Z murdoch $
+// $Id: scene.h 976 2013-10-04 15:06:19Z murdoch $
 
-#include "types.h"
 #include <vector>
+#include "types.h"
 
 #include "SceneNode.hpp"
-
 #include "geom.hpp"
-
 #include "String.hpp"
 #include "Color.hpp"
 #include "Texture.hpp"
@@ -29,6 +27,8 @@
 #include "Viewpoint.hpp"
 #include "Background.hpp"
 #include "BBoxDeco.hpp"
+
+namespace rgl {
 
 class Scene {
 public:
@@ -187,6 +187,7 @@ private:
   bool bboxChanges;
 };
 
+} // namespace rgl
 
 #endif /* SCENE_HPP */
 
