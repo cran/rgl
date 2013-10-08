@@ -4,11 +4,13 @@
 // C++ header
 // This file is part of rgl
 //
-// $Id: glgui.hpp 954 2013-07-31 02:09:01Z murdoch $
+// $Id: glgui.hpp 976 2013-10-04 15:06:19Z murdoch $
 
 #include "opengl.hpp"
 #include <vector>
 #include "RenderContext.hpp"
+
+namespace rgl {
 
 // CLASS
 //   GLFont
@@ -161,6 +163,8 @@ typedef std::vector<GLFont*> FontArray;
 # define ISSLASH(C) ((C) == '/')
 # define IS_ABSOLUTE_PATH(P) ISSLASH ((P)[0])
 #endif
+
+} // namespace rgl
 
 #endif /* GL_GUI_H */
 

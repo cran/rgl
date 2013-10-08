@@ -4,12 +4,13 @@
 // C++ header file
 // This file is part of RGL
 //
-// $Id: Device.hpp 947 2013-07-18 00:36:47Z murdoch $
+// $Id: Device.hpp 976 2013-10-04 15:06:19Z murdoch $
 
 #include "Disposable.hpp"
 #include "types.h"
 #include "rglview.h"
 
+namespace rgl {
 
 //
 // class Device
@@ -72,6 +73,8 @@ private:
   const char* devtype;
   int    id_;
 };
+
+} // namespace rgl
 
 #endif // RGL_DEVICE_HPP
 

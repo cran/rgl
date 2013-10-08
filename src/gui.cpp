@@ -1,12 +1,13 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: gui.cpp 666 2008-04-17 13:44:58Z dmurdoch $
+// $Id: gui.cpp 976 2013-10-04 15:06:19Z murdoch $
 // ---------------------------------------------------------------------------
 #include "gui.hpp"
 #include "lib.hpp"
-// ---------------------------------------------------------------------------
-namespace gui {
+
+using namespace rgl;
+
 // ---------------------------------------------------------------------------
 // WindowImpl common code
 // ---------------------------------------------------------------------------
@@ -285,5 +286,3 @@ void Window::getFonts(FontArray& outfonts, int nfonts, char** family, int* style
   windowImpl->getFonts(outfonts, nfonts, family, style, cex, useFreeType);
 }
 // ---------------------------------------------------------------------------
-} // namespace gui
-

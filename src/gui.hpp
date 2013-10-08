@@ -4,14 +4,14 @@
 // C++ header file
 // This file is part of RGL
 //
-// $Id: gui.hpp 947 2013-07-18 00:36:47Z murdoch $
+// $Id: gui.hpp 976 2013-10-04 15:06:19Z murdoch $
 // ---------------------------------------------------------------------------
-#include <cstring>
 #include "types.h"
 #include "glgui.hpp"
 #include "Disposable.hpp"
-// ---------------------------------------------------------------------------
-namespace gui {
+
+namespace rgl {
+
 // ---------------------------------------------------------------------------
 enum {
   GUI_ButtonLeft = 1,
@@ -99,16 +99,10 @@ public:
   virtual WindowImpl* createWindowImpl(Window*) = 0;
 };
 // ---------------------------------------------------------------------------
-} // namespace gui
-// ---------------------------------------------------------------------------
 //
 // implementation specific
 //
-namespace lib {
-gui::GUIFactory* getGUIFactory(bool useNULLDevice);
-}
-// ---------------------------------------------------------------------------
-namespace gui {
+rgl::GUIFactory* getGUIFactory(bool useNULLDevice);
 // ---------------------------------------------------------------------------
 //
 // ABSTRACT GUI TOOLKIT
@@ -167,7 +161,7 @@ class Window : public View, public Disposable
 {
 public:
 
-  Window(View* child=NULL, GUIFactory* factory=lib::getGUIFactory(0) );
+  Window(View* child=NULL, GUIFactory* factory=rgl::getGUIFactory(0) );
   ~Window();
 
 // overloaded view methods:
@@ -213,7 +207,8 @@ public:
   bool skipRedraw;  
 };
 // ---------------------------------------------------------------------------
-} // namespace gui
-// ---------------------------------------------------------------------------
+
+} // namespace rgl
+
 #endif // RGL_GUI_HPP 
 

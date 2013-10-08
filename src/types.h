@@ -1,15 +1,15 @@
 #ifndef RGL_TYPES_H
 #define RGL_TYPES_H
 
+#include <cstring>
 #include "pragma.h"
 
 // C++ header file
 // This file is part of RGL
 //
-// $Id: types.h 880 2012-05-08 11:54:12Z murdoch $
+// $Id: types.h 976 2013-10-04 15:06:19Z murdoch $
 
-
-#include <cstring>
+namespace rgl {
 
 //
 //
@@ -154,6 +154,8 @@ inline int   getMax(int a, int b)     { return (a >= b) ? a : b; }
 inline float getMax(float a, float b) { return (a >= b) ? a : b; }
 inline float clamp(float v, float floor, float ceil) { return (v<floor) ? floor : ( (v>ceil) ? ceil : v ); }
 inline int   clamp(int   v, int   floor, int   ceil) { return (v<floor) ? floor : ( (v>ceil) ? ceil : v ); }
+
+} // namespace rgl
 
 #endif /* RGL_TYPES_H */
 

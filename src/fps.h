@@ -4,9 +4,11 @@
 // C++ header file
 // This file is part of RGL
 //
-// $Id: fps.h 376 2005-08-03 23:58:47Z dadler $
+// $Id: fps.h 976 2013-10-04 15:06:19Z murdoch $
 
 #include "scene.h"
+
+namespace rgl {
 
 //
 // FPS COUNTER
@@ -23,6 +25,8 @@ public:
   void init(double t);
   void render(double t, RenderContext* ctx);
 };
+
+} // namespace rgl
 
 #endif // RGL_FPS_H
 

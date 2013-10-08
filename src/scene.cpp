@@ -1,7 +1,7 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: scene.cpp 956 2013-08-02 19:45:40Z murdoch $
+// $Id: scene.cpp 976 2013-10-04 15:06:19Z murdoch $
 
 #include "gl2ps.h"
 #include "scene.h"
@@ -12,6 +12,8 @@
 #include <algorithm>
 #include <functional>
 #include "R.h"
+
+using namespace rgl;
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -697,7 +699,7 @@ void Scene::invalidateDisplaylists()
   }
 }
 
-bool sameID(SceneNode* node, int id)
+bool rgl::sameID(SceneNode* node, int id)
 { 
   return node->getObjID() == id; 
 }

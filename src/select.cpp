@@ -1,11 +1,13 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: select.cpp 586 2007-08-03 19:47:16Z dmurdoch $
+// $Id: select.cpp 976 2013-10-04 15:06:19Z murdoch $
 
 #include "select.h"
 
 #include <cstdio>
+
+using namespace rgl;
 
 void SELECT::render(double* position)
 {
