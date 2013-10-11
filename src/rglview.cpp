@@ -1,7 +1,7 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: rglview.cpp 976 2013-10-04 15:06:19Z murdoch $
+// $Id: rglview.cpp 986 2013-10-11 11:35:10Z murdoch $
 
 
 
@@ -800,7 +800,7 @@ bool RGLView::postscript(int formatID, const char* filename, bool drawText)
 {
   bool success = false;
 
-  FILE *fp = fopen(filename, "wb");  
+  std::FILE *fp = fopen(filename, "wb");  
   char *oldlocale = setlocale(LC_NUMERIC, "C");
   
   GLint buffsize = 0, state = GL2PS_OVERFLOW;

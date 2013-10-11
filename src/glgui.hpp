@@ -4,10 +4,14 @@
 // C++ header
 // This file is part of rgl
 //
-// $Id: glgui.hpp 976 2013-10-04 15:06:19Z murdoch $
+// $Id: glgui.hpp 985 2013-10-09 14:03:47Z murdoch $
 
 #include "opengl.hpp"
 #include <vector>
+#ifdef HAVE_FREETYPE
+#include "FTGL/ftgl.h"
+#endif
+
 #include "RenderContext.hpp"
 
 namespace rgl {
@@ -89,10 +93,6 @@ public:
   unsigned int* widths;
   unsigned int ascent;
 };
-
-#ifdef HAVE_FREETYPE
-#include "FTGL/ftgl.h"
-#endif
 
 //
 // CLASS

@@ -4,7 +4,7 @@
 // C++ header file
 // This file is part of RGL
 //
-// $Id: DeviceManager.hpp 976 2013-10-04 15:06:19Z murdoch $
+// $Id$
 
 #include "Device.hpp"
 

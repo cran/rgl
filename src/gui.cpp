@@ -1,7 +1,7 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: gui.cpp 976 2013-10-04 15:06:19Z murdoch $
+// $Id$
 // ---------------------------------------------------------------------------
 #include "gui.hpp"
 #include "lib.hpp"
