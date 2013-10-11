@@ -7,7 +7,7 @@
 // C++ header file
 // This file is part of RGL
 //
-// $Id: types.h 976 2013-10-04 15:06:19Z murdoch $
+// $Id$
 
 namespace rgl {
 

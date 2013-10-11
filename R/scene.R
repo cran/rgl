@@ -2,7 +2,7 @@
 ## R source file
 ## This file is part of rgl
 ##
-## $Id: scene.R 979 2013-10-06 14:54:36Z murdoch $
+## $Id: scene.R 984 2013-10-08 10:17:26Z murdoch $
 ##
 
 ##

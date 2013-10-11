@@ -1,7 +1,7 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: pixmap.cpp 977 2013-10-04 16:57:22Z murdoch $
+// $Id: pixmap.cpp 986 2013-10-11 11:35:10Z murdoch $
 
 using namespace std;
 #include "pixmap.h"
@@ -89,7 +89,7 @@ bool Pixmap::load(const char* filename)
 {
   bool success = false;
 
-  FILE* file = NULL;
+  std::FILE* file = NULL;
 
   file = fopen(filename, "rb");
   if (!file) {
@@ -130,7 +130,7 @@ bool Pixmap::load(const char* filename)
 
 bool Pixmap::save(PixmapFormat* format, const char* filename)
 {
-  FILE* file = NULL;
+  std::FILE* file = NULL;
 
   file = fopen(filename, "wb");
   if (!file) {
