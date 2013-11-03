@@ -1,6 +1,6 @@
 #
 # R3D rendering functions - rgl implementation
-# $Id: r3d.rgl.R 963 2013-09-03 14:59:26Z murdoch $
+# $Id: r3d.rgl.R 987 2013-10-26 14:07:14Z murdoch $
 # 
 
 # Node Management
@@ -160,6 +160,11 @@ spheres3d   <- function(x,y=NULL,z=NULL,radius=1,...) {
 planes3d   <- function(a,b=NULL,c=NULL,d=0,...) {
   .check3d(); save <- material3d(); on.exit(material3d(save))
   do.call("rgl.planes", c(list(a=a,b=b,c=c,d=d), .fixMaterialArgs(..., Params = save)))
+}
+
+clipplanes3d   <- function(a,b=NULL,c=NULL,d=0) {
+  .check3d()
+  rgl.clipplanes(a=a,b=b,c=c,d=d)
 }
 
 abclines3d   <- function(x,y=NULL,z=NULL,a,b=NULL,c=NULL,...) {

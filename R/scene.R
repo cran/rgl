@@ -2,7 +2,7 @@
 ## R source file
 ## This file is part of rgl
 ##
-## $Id: scene.R 984 2013-10-08 10:17:26Z murdoch $
+## $Id: scene.R 987 2013-10-26 14:07:14Z murdoch $
 ##
 
 ##
@@ -570,6 +570,34 @@ rgl.planes <- function( a, b=NULL, c=NULL, d=0,...)
   invisible(ret$success)
 
 }
+
+##
+## add clip planes
+##
+
+rgl.clipplanes <- function( a, b=NULL, c=NULL, d=0)
+{
+  normals  <- rgl.vertex(a, b, c)
+  nnormals <- rgl.nvertex(normals)
+  noffsets <- length(d)
+  
+  idata <- as.integer( c( nnormals, noffsets ) )
+   
+  ret <- .C( rgl_clipplanes,
+    success = as.integer(FALSE),
+    idata,
+    as.numeric(normals),    
+    as.numeric(d),
+    NAOK=TRUE
+  )
+
+  if (! ret$success)
+    print("rgl_planes failed")
+    
+  invisible(ret$success)
+
+}
+
 
 ##
 ## add abclines

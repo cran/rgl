@@ -542,3 +542,8 @@ v0.93.986
   - Changes have been made to satisfy the stringent requirements of
     the Solaris compiler.
     
+v0.93.991
+  - Added clipplanes3d function to implement clip planes.  (Still
+    only partially implemented.)
+  - Cleaned up includes; they were causing an error in OS X.
+  

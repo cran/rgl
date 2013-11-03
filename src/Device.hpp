@@ -4,7 +4,7 @@
 // C++ header file
 // This file is part of RGL
 //
-// $Id$
+// $Id: Device.hpp 976 2013-10-04 15:06:19Z murdoch $
 
 #include "Disposable.hpp"
 #include "types.h"
