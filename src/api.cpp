@@ -1,24 +1,17 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: api.cpp 977 2013-10-04 16:57:22Z murdoch $
+// $Id: api.cpp 988 2013-10-26 14:58:27Z murdoch $
 
 #include "lib.hpp"
-
-using namespace rgl;
-
-extern "C" {
-
-#include "api.h"
-
-} // extern C
-
 #include "DeviceManager.hpp"
 #include "rglview.h"
 
 #include "lib.hpp"
 #include "R.h"
+#include "api.h"
 
+using namespace rgl;
 //
 // API Success is encoded as integer type:
 //
@@ -684,6 +677,24 @@ void rgl::rgl_planes(int* successptr, int* idata, double* normals, double* offse
     int noffset = idata[1];
 
     success = as_success( device->add( new PlaneSet(currentMaterial, nnormal, normals, noffset, offsets) ) );
+    CHECKGLERROR;
+
+  }
+  *successptr = success;
+}
+
+void rgl::rgl_clipplanes(int* successptr, int* idata, double* normals, double* offsets)
+{
+  int success = RGL_FAIL;
+
+  Device* device;
+
+  if (deviceManager && (device = deviceManager->getAnyDevice())) {
+
+    int nnormal = idata[0];
+    int noffset = idata[1];
+
+    success = as_success( device->add( new ClipPlaneSet(currentMaterial, nnormal, normals, noffset, offsets) ) );
     CHECKGLERROR;
 
   }
@@ -1489,3 +1500,14 @@ int rgl::rgl_getAntialias()
   }
   return 1;
 }
+
+int rgl::rgl_getMaxClipPlanes()
+{
+  int result;
+  glGetError();
+  glGetIntegerv(GL_MAX_CLIP_PLANES, &result);
+  if (glGetError() == GL_NO_ERROR)
+    return result;
+  else
+    return 6;
+}  

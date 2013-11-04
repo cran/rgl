@@ -4,7 +4,7 @@
 // C++ header file
 // This file is part of RGL
 //
-// $Id$
+// $Id: scene.h 987 2013-10-26 14:07:14Z murdoch $
 
 #include <vector>
 #include "types.h"
@@ -22,6 +22,7 @@
 #include "SpriteSet.hpp"
 #include "SphereSet.hpp"
 #include "PlaneSet.hpp"
+#include "ClipPlane.hpp"
 #include "ABCLineSet.hpp"
 #include "Surface.hpp"
 #include "Viewpoint.hpp"
@@ -168,6 +169,7 @@ private:
 
   std::vector<Shape*> unsortedShapes;
   std::vector<Shape*> zsortShapes;
+  std::vector<Shape*> clipPlanes;
   
   void renderZsort(RenderContext* renderContext);
   

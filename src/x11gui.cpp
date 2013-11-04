@@ -4,7 +4,7 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id$
+// $Id: x11gui.cpp 976 2013-10-04 15:06:19Z murdoch $
 
 // Uncomment for verbose output on stderr:
 // #define RGL_X11_DEBUG
