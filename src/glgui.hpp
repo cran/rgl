@@ -4,7 +4,7 @@
 // C++ header
 // This file is part of rgl
 //
-// $Id: glgui.hpp 985 2013-10-09 14:03:47Z murdoch $
+// $Id: glgui.hpp 991 2013-11-20 20:26:13Z murdoch $
 
 #include "opengl.hpp"
 #include <vector>
@@ -33,7 +33,7 @@ public:
     memcpy(fontname, in_fontname, strlen(in_fontname) + 1);    
   };
   
-  ~GLFont()
+  virtual ~GLFont()
   {
     delete [] family;
     delete [] fontname;
@@ -53,6 +53,9 @@ public:
   char* fontname;
   bool useFreeType;
   int gl2ps_centering;
+private:
+  GLFont(const GLFont &);
+  GLFont &operator=(const GLFont &);
 };
 
 #define GL_BITMAP_FONT_FIRST_GLYPH  32
