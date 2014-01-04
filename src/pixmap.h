@@ -4,7 +4,7 @@
 // C++ header file
 // This file is part of RGL
 //
-// $Id: pixmap.h 986 2013-10-11 11:35:10Z murdoch $
+// $Id: pixmap.h 991 2013-11-20 20:26:13Z murdoch $
 
 #include <cstdio>
 #include "opengl.hpp"
@@ -40,6 +40,7 @@ public:
 
 class PixmapFormat {
 public:
+  virtual ~PixmapFormat() { }  
   virtual bool checkSignature(std::FILE* file) = 0;
   virtual bool load(std::FILE* file, Pixmap* pixmap) = 0;
   virtual bool save(std::FILE* file, Pixmap* pixmap) = 0;

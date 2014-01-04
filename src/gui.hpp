@@ -4,7 +4,7 @@
 // C++ header file
 // This file is part of RGL
 //
-// $Id: gui.hpp 976 2013-10-04 15:06:19Z murdoch $
+// $Id: gui.hpp 991 2013-11-20 20:26:13Z murdoch $
 // ---------------------------------------------------------------------------
 #include "types.h"
 #include "glgui.hpp"
@@ -61,6 +61,9 @@ public:
   { 
     fonts.resize(1);
   }
+
+  virtual ~WindowImpl() { }
+
   inline  void unbind() { window = 0; }
   virtual void setTitle(const char* title) = 0;
   virtual void setWindowRect(int left, int top, int right, int bottom) = 0;
@@ -96,6 +99,7 @@ protected:
 class GUIFactory
 {
 public:
+  virtual ~GUIFactory() { }    
   virtual WindowImpl* createWindowImpl(Window*) = 0;
 };
 // ---------------------------------------------------------------------------

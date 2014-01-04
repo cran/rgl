@@ -1,5 +1,5 @@
 e73499cb89e0d6e97b8ba271c46739fd *COPYING
-8369924e1be8dbe7fb540d9ce8f7b5f4 *DESCRIPTION
+8e88b93f41c9cb0d460db421cb9aa903 *DESCRIPTION
 5906c1f5f4acca52d1e91598e5e7bdae *NAMESPACE
 924eeb2faa0ef90099ad9176b1cc5013 *R/addNormals.mesh3d.R
 24205f22f8c6a012605bbba11b609686 *R/animate.R
@@ -11,7 +11,7 @@ d614a914d367d10d4718ad28e0c493fc *R/cylinder3d.R
 5e855bf30c385ae3c1b662a862d3bb5a *R/ellipse3d.R
 543d421e8e5fdf0128e0f77d262ee0d3 *R/enum.R
 50ec73e5b7c3ef0296cf34708c272a9d *R/fonts.R
-3338d41616fcf3e0a751d0bf8a2a978e *R/getscene.R
+11aa7956b8577b5c1e6efeae506fbacb *R/getscene.R
 482897346c21cde324d6c5b781120676 *R/grid3d.R
 a85c5a66d08b2c0f8ac98d49f365aae7 *R/identify3d.R
 6d37abb99d2ac4c669721dab0eaad5b0 *R/internal.R
@@ -35,7 +35,7 @@ b8fcaff709d438c64fe31c712b04a30a *R/solids3d.R
 cd2c25a71a00743e10700942991fd823 *R/subdivision.mesh3d.R
 7483d1f9bc2e0ddc2ca49c7361051297 *R/triangulate.R
 0e5f3a6cd94e403b978dfbf540fa89f2 *R/turn3d.R
-a77ae6aeb7bf9e959b0d62b66e40dcd5 *R/webGL.R
+e9f78eb4f1eeeac93bbf2f66cf063155 *R/webGL.R
 1382bde1c480ee5049f36704a366239a *R/zzz.R
 d0feda47b4171a619aeb46648abe76a3 *README
 a6a183397bea52041e6eebb1e2609eb2 *cleanup
@@ -56,7 +56,7 @@ e151f89d37172afa14164c3680e7629b *demo/regression.r
 154cec7452c730564d63034357b897a0 *demo/shapes3d.R
 13ef215dbb591bc9d82ad4831b04361a *demo/stereo.R
 70324e9f3c6750f14dc5fdfe99003625 *demo/subdivision.r
-0f70ba4c7a7c0fab5def13acf133ab5f *inst/NEWS
+dfb6ec6acd66eca6683b9664c657552b *inst/NEWS
 feff7010f9f522214002265608f637ac *inst/WebGL/CanvasMatrix.js
 268ceb2143fc28fba1d3d595a0f9ad6f *inst/WebGL/template.html
 5bac46c36b13eac1302260ee06b16c0f *inst/demodata/population.dat
@@ -91,7 +91,7 @@ bc60664d75d2adaa584e5c75d0af8a95 *man/grid3d.Rd
 73e139149bc81b223075d06494c4126c *man/material.Rd
 2d28e61be76fc365b0ea97745fc31410 *man/matrices.Rd
 d94a7eb1c891ec0813ce16f7e1a0893b *man/mesh3d.Rd
-32065f13f23be820abc4a63bb8008925 *man/par3d.Rd
+a6864ae58eb16905927773cdf257898e *man/par3d.Rd
 637a0bfbe6c8cb6f199909aaf2763ee8 *man/par3dinterp.Rd
 d85ccfc2a02095acee4abd5850f62699 *man/persp3d.Rd
 2b36ad8348320e3f6c2d405e56483c5b *man/planes.Rd
@@ -111,7 +111,7 @@ be61d6a7b60885ea5d9ec21aa6672658 *man/rgl.bringtotop.Rd
 fb4a194f72781107fee21f315997467a *man/rgl.useNULL.Rd
 2e6c57b9ca7de346eda82501d4a5f1b9 *man/rgl.user2window.Rd
 2adeabe6c4329842920c9fc5b3f27485 *man/scene.Rd
-b41d05f4776b32515717a263e415ece5 *man/scene3d.Rd
+fcfff24f34922183b5f2778fefbc08f2 *man/scene3d.Rd
 f2137d8f6f45830534d08be4a297838e *man/select3d.Rd
 97670b159b7665886e80b2e9b26d2958 *man/selectpoints3d.Rd
 627f7ecd2399b6e94b0183824d6027b6 *man/shapelist3d.Rd
@@ -131,7 +131,7 @@ fa1cf179be2b9e37770093ad5463f3a9 *man/triangulate.Rd
 44867d44939dc48dc354a48728345fce *man/writeWebGL.Rd
 be3d67ffb354f2117d5bf66dd88c40b2 *src/ABCLineSet.cpp
 aa26d6627d9e83fdcc3ee1d41d64fc8c *src/ABCLineSet.hpp
-5d33e897a01e590a75c478f289ebbffc *src/BBoxDeco.cpp
+ba9aa97658a87b8062a1159f7295f1fa *src/BBoxDeco.cpp
 639d0374fc7f47f2632e581437f97275 *src/BBoxDeco.hpp
 97964c4854d13eedd65a66b948d882aa *src/Background.cpp
 82ae228b5291e4dc02c9589f66a6e810 *src/Background.hpp
@@ -143,8 +143,8 @@ c2c59ee43a5c6a8cf1240cfe28a5c479 *src/ClipPlane.cpp
 5b36991b01d7c4323c9663ccc3331391 *src/Device.hpp
 f05f7bfb9a1b82074b168bd2b942b7ae *src/DeviceManager.hpp
 8351e228dbcb91c68405e55afbec506c *src/Disposable.cpp
-656fa37e5f43da361448c779512b7e5a *src/Disposable.hpp
-25e751110301e46421b9239a6515dd36 *src/Light.cpp
+a03f1553ae491c2ad18cf0fcdf773d09 *src/Disposable.hpp
+e93c93ddbbc3107ce256150505d9001d *src/Light.cpp
 e1dba656a116e319839e6827750fffd2 *src/Light.hpp
 8c5b3b8b9b9ab9248e0c188094826cd3 *src/LineSet.cpp
 e29e9bbf3e2db0be63c19d643adaedc3 *src/LineStripSet.cpp
@@ -173,8 +173,9 @@ f7ec48e0c9fd6b171f59eb57203e73f1 *src/SphereSet.hpp
 6a08b11f080f051a139bec251e95b11a *src/SpriteSet.hpp
 832ce0209481da4ca248270bfc7f98ba *src/String.cpp
 26a8a9eff2fb6eb4e9c93e5121d7c7af *src/String.hpp
-00403001259ddcc96ab40bd2d77d83b1 *src/Surface.cpp
-8801b75c5c2f0d215b9656a6e7a319f6 *src/Surface.hpp
+ffd3b06200da3ab8835fc9deb76191ba *src/Surface.cpp
+430212d1be6aa57c7f417075b409e2ba *src/Surface.cpp.save
+df0be0afee84edd865af72889f326e77 *src/Surface.hpp
 2a412165a0219a7e0fa40c1cfcd61f04 *src/TextSet.cpp
 2ea1d7eadf4833a621cb1c0d5e0e6e98 *src/TextSet.hpp
 736e135b489dbe7fa63230c666570289 *src/Texture.cpp
@@ -302,9 +303,9 @@ e5aa79236fa82468d5e415401e5ddd0f *src/fps.h
 c2df43358f9dc57b02321b60feca6637 *src/gl2ps.h
 11c4ec1cd621afa3b8203875bf0175ca *src/glErrors.cpp
 2755932b3525a35e2f862541b234e6e5 *src/glgui.cpp
-730410d9332d0f2e1c264ffb65f1b501 *src/glgui.hpp
+7355d9ce33602d688f31205e71eb62f8 *src/glgui.hpp
 fff0cfda24179d57c394f773330b761b *src/gui.cpp
-b6fe0183ec9990920a4fcd64ba76740d *src/gui.hpp
+3d8b4fb0516746cf5fcfa2eafbb69ce3 *src/gui.hpp
 c48a61ff1d319c67088ff31f7cf6f064 *src/init.cpp
 98b41399ac5f905f55cf3b051f7e7eae *src/init.hpp
 8f2d61a8d353bc9a83083ac1017c690e *src/lib.hpp
@@ -314,7 +315,7 @@ befab2ece489c1f9a2b903d0314dfccf *src/osx/osxgui.mm
 50cd2eb5ffb4abf236db336abc4b2175 *src/osx/osxlib.cpp
 48df6e1a24f95ade626bae40058248d8 *src/par3d.cpp
 d8bd4ead3e7c41a0bd7038cc577386b7 *src/pixmap.cpp
-ea52faac5e3147ff4d16913663343a02 *src/pixmap.h
+ed199f704c09955177657eb1a80319c6 *src/pixmap.h
 43904f04311d5c024c3044177d37eb01 *src/pngpixmap.h
 8e404ccf5d82bfec658d599160595c4e *src/pragma.h
 92ea7a1b8a4633f4d0b1dfb3dfb60179 *src/pretty.c
@@ -330,7 +331,7 @@ b5109063e2d40e59410f74e56eabdee3 *src/rglmath.h
 5b4fa6d68ad19cb4e0a6c1c5e2d3cd69 *src/scene.h
 1d5d3cc76b12eab1f7be77c4e9564a39 *src/select.cpp
 f3fb1125c8e91830a0447f265c0d33e4 *src/select.h
-8d38be206d3c1c2b83d2093854c31386 *src/types.h
+b1c1e5e8d4dc94c9f6e3967575fab332 *src/types.h
 d6d72e66a14efb480fa03453d18d2267 *src/win32gui.cpp
 eb709f12fe1784523c8f8144bc07da89 *src/win32gui.hpp
 4dd6e7c0119244f2bfb267fe4a2e2553 *src/win32lib.cpp
