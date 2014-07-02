@@ -2,7 +2,7 @@
 ## R source file
 ## This file is part of rgl
 ##
-## $Id: device.R 947 2013-07-18 00:36:47Z murdoch $
+## $Id: device.R 998 2014-03-20 19:08:26Z murdoch $
 ##
 
 ##
@@ -109,7 +109,7 @@ rgl.snapshot <- function( filename, fmt="png", top=TRUE )
   ret <- .C( rgl_snapshot,
     success=FALSE,
     idata,
-    as.character(filename)
+    normalizePath(filename, mustWork = FALSE)
   )
 
   if (! ret$success)
@@ -128,7 +128,7 @@ rgl.postscript <- function( filename, fmt="eps", drawText=TRUE )
   ret <- .C( rgl_postscript,
     success=FALSE,
     idata,
-    as.character(filename)
+    normalizePath(filename, mustWork = FALSE)
   )
 
   if (! ret$success)

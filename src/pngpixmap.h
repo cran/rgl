@@ -5,7 +5,7 @@
 // C++ header file
 // This file is part of RGL
 //
-// $Id: pngpixmap.h 986 2013-10-11 11:35:10Z murdoch $
+// $Id: pngpixmap.h 1088 2014-06-10 23:39:06Z murdoch $
 
 namespace rgl {
 
@@ -281,15 +281,9 @@ unsupported:
 
     png_structp png_ptr;
     png_infop info_ptr;
-    int bufsize;
     unsigned char buffer[4096];
     bool error;
     bool finish;
-
-    int width;
-    int height;
-    int bit_depth;
-
 
   };
 

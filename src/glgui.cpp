@@ -1,7 +1,7 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: glgui.cpp 976 2013-10-04 15:06:19Z murdoch $
+// $Id: glgui.cpp 1077 2014-05-18 14:59:02Z murdoch $
 
 #include <cstdio>
 #ifdef HAVE_FREETYPE
@@ -13,6 +13,7 @@
 #include "gl2ps.h"
 #include "opengl.hpp"
 #include "RenderContext.hpp"
+#include "platform.h"
 
 using namespace rgl;
 

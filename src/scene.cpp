@@ -1,7 +1,7 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: scene.cpp 989 2013-10-26 15:00:21Z murdoch $
+// $Id: scene.cpp 1018 2014-04-04 18:23:37Z murdoch $
 
 #include "gl2ps.h"
 #include "scene.h"
@@ -442,7 +442,8 @@ void Scene::render(RenderContext* renderContext)
 
   // Color Buffer (optional - depends on background node)
   
-  clearFlags |= background->getClearFlags(renderContext);
+  if (background)
+    clearFlags |= background->getClearFlags(renderContext);
 
   // clear
   glClear(clearFlags);
@@ -506,7 +507,8 @@ void Scene::render(RenderContext* renderContext)
   // DISABLE Z-BUFFER FOR WRITING
   glDepthMask(GL_FALSE);
 
-  background->render(renderContext);
+  if (background)
+    background->render(renderContext);
 
   SAVEGLERROR;
   

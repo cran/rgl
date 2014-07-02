@@ -4,7 +4,7 @@
 // C++ header file
 // This file is part of RGL
 //
-// $Id: rglview.h 976 2013-10-04 15:06:19Z murdoch $
+// $Id: rglview.h 1088 2014-06-10 23:39:06Z murdoch $
 
 
 #include "scene.h"
@@ -121,7 +121,6 @@ private:
   void adjustZoomEnd();
 
   int zoomBaseY;
-  float zoomCamBase;
 
 // o DRAG FEATURE: adjustFOV (field of view)
 

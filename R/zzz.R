@@ -2,7 +2,7 @@
 ## R source file
 ## This file is part of rgl
 ##
-## $Id: zzz.R 979 2013-10-06 14:54:36Z murdoch $
+## $Id: zzz.R 1099 2014-07-02 12:53:33Z murdoch $
 ##
 
 ##
@@ -19,6 +19,8 @@
   # OS-specific 
   initValue <- 0  
   
+  dynlib <- "rgl"
+  
   onlyNULL <- rgl.useNULL()
   
   if ( .Platform$OS.type == "unix" ) {
@@ -31,10 +33,18 @@
       if ( .Platform$GUI == "AQUA" && 
             file.exists(system.file("libs",.Platform$r_arch, "aglrgl.so", lib.loc=lib, package = pkg))) {
           initValue <- 1
+          dynlib <- "aglrgl"
       }
     }
   } 
-  
+  dll <- library.dynam(dynlib, pkg, lib)
+
+  routines <- getDLLRegisteredRoutines(dynlib, addNames = FALSE)
+  ns <- asNamespace(pkg)
+  for(i in 1:4)
+    lapply(routines[[i]],
+      function(sym) assign(sym$name, sym, envir = ns))
+      
   if ( .Platform$OS.type == "windows" && !onlyNULL) {
     frame <- getWindowsHandle("Frame")    
     ## getWindowsHandle was numeric pre-2.6.0 

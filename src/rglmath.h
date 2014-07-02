@@ -4,13 +4,12 @@
 // C++ header file
 // This file is part of RGL
 //
-// $Id: rglmath.h 976 2013-10-04 15:06:19Z murdoch $
-
-
-using namespace std;
+// $Id: rglmath.h 1081 2014-05-19 19:55:27Z murdoch $
 
 #include <cmath>
 #include <cfloat>
+
+using namespace std;
 
 #include "types.h"
 

@@ -2,7 +2,7 @@
 ## R source file
 ## This file is part of rgl
 ##
-## $Id: material.R 970 2013-09-16 01:18:23Z murdoch $
+## $Id: material.R 998 2014-03-20 19:08:26Z murdoch $
 ##
 
 ##
@@ -74,6 +74,8 @@ rgl.material <- function (
 
   if (is.null(texture))
     texture <- ""
+  else 
+    texture <- normalizePath(texture)
 
   textype <- rgl.enum.textype( textype )
   texminfilter <- rgl.enum.texminfilter( texminfilter )

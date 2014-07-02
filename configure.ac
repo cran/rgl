@@ -8,7 +8,7 @@
 ##      version of autoconf
 ##
 ##
-## $Id: configure.ac 982 2013-10-06 16:24:58Z murdoch $
+## $Id: configure.ac 1099 2014-07-02 12:53:33Z murdoch $
 ##
 
 AC_PREREQ(2.50)
@@ -109,6 +109,10 @@ if test x$darwin == "xyes" -a "x$enable_cocoa" != "xno" ; then
   AGLCPPFLAGS="${CPPFLAGS} -DRGL_USE_COCOA"
   AGLLIBS="${LIBS} -framework Cocoa"
   BUILD_AGL_TRUE=""
+  if test -e /System/Library/Frameworks/GLKit.framework ; then
+    AGLCPPFLAGS="-I/System/Library/Frameworks/GLKit.framework/Headers ${AGLCPPFLAGS}"
+    AGLLIBS="-framework GLKit ${AGLLIBS}"
+  fi
 else
   BUILD_AGL_TRUE="#"
 fi
@@ -135,6 +139,10 @@ fi
       # OSX 10.5 messes up X11; this works around it
       LIBS="-framework OpenGL -dylib_file /System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libGL.dylib:/System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libGL.dylib ${LIBS}"
     fi
+    if test -e /System/Library/Frameworks/GLKit.framework ; then
+      CPPFLAGS="-I/System/Library/Frameworks/GLKit.framework/Headers ${CPPFLAGS}"
+      LIBS="-framework GLKit ${LIBS}"
+    fi    
     # some X11 installations on OSX 10.5 feature -rpath which doesn't work when used in
     # conjunction with 10.4u SDK (and is redundant anyway since OS X always uses full paths)
     if test rpath`echo "${LIBS}" | sed -n 's/.*-Wl,-rpath,.*/Yes/p' 2>/dev/null` = rpathYes; then
