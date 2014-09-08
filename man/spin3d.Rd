@@ -6,11 +6,14 @@ This creates a function to use with \code{\link{play3d}} to
 spin an rgl scene at a fixed rate.
 }
 \usage{
-spin3d(axis = c(0, 0, 1), rpm = 5)
+spin3d(axis = c(0, 0, 1), rpm = 5,
+       dev = rgl.cur(), subscene = currentSubscene3d(dev))
 }
 \arguments{
   \item{axis}{ The desired axis of rotation }
   \item{rpm}{ The rotation speed in rotations per minute }
+  \item{dev}{ Which rgl device to use }
+  \item{subscene}{ Which subscene to use }
 }
 \value{
 A function with header \code{function(time, base=M)}, where \code{M}
@@ -27,14 +30,14 @@ minute about the specified \code{axis}.
 open3d()
 plot3d(oh3d(col="lightblue", alpha=0.5))
 if (!rgl.useNULL())
-  play3d(spin3d(axis=c(1,0,0), rpm=20), duration=3)
+  play3d(spin3d(axis=c(1,0,0), rpm=30), duration=2)
 
 # Show spinning sprites, and rotate the whole view
 open3d()
 spriteid <- NULL
 
-spin1 <- spin3d(rpm=3 ) # the scene spinner
-spin2 <- spin3d(rpm=6 ) # the sprite spinner
+spin1 <- spin3d(rpm=4.5 ) # the scene spinner
+spin2 <- spin3d(rpm=9 ) # the sprite spinner
 
 f <- function(time) {
     par3d(skipRedraw = TRUE) # stops intermediate redraws
@@ -48,6 +51,6 @@ f <- function(time) {
     spin1(time)
 }
 if (!rgl.useNULL())
-  play3d(f, duration=3)
+  play3d(f, duration=2)
 }
 \keyword{ dplot }

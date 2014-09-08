@@ -1,11 +1,11 @@
-#include "lib.hpp"
+#include "lib.h"
 #include "types.h"
 #include <png.h>
 
 // C++ header file
 // This file is part of RGL
 //
-// $Id: pngpixmap.h 1088 2014-06-10 23:39:06Z murdoch $
+// $Id: pngpixmap.h 1115 2014-07-18 13:51:22Z murdoch $
 
 namespace rgl {
 

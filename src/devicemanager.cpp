@@ -1,14 +1,14 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: devicemanager.cpp 976 2013-10-04 15:06:19Z murdoch $
+// $Id: devicemanager.cpp 1115 2014-07-18 13:51:22Z murdoch $
 
 #include <algorithm>
 #include <cstdio>
-#include "DeviceManager.hpp"
+#include "DeviceManager.h"
 #include "types.h"
-#include "assert.hpp"
-#include "lib.hpp"
+#include "assert.h"
+#include "lib.h"
 
 using namespace rgl;
 

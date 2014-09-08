@@ -1,10 +1,10 @@
-#include "config.hpp"
+#include "config.h"
 #ifdef RGL_X11
 // ---------------------------------------------------------------------------
 // C++ source
 // This file is part of RGL.
 //
-// $Id: x11gui.cpp 1088 2014-06-10 23:39:06Z murdoch $
+// $Id: x11gui.cpp 1131 2014-09-06 20:28:54Z murdoch $
 
 // Uncomment for verbose output on stderr:
 // #define RGL_X11_DEBUG
@@ -13,8 +13,8 @@
 #include <X11/keysym.h>
 #include <cstdio>
 #include <Rinternals.h>
-#include "x11gui.hpp"
-#include "lib.hpp"
+#include "x11gui.h"
+#include "lib.h"
 #include "R.h"
 
 namespace rgl {
@@ -216,7 +216,7 @@ void X11WindowImpl::processEvent(XEvent& ev)
   char   keybuffer[8];
   KeySym keysym;
   XComposeStatus compose;
-  int    count, keycode;
+  int    keycode;
   ::Window root, child;
   int    rootx, rooty, winx, winy;
   unsigned int  mask;
@@ -263,14 +263,14 @@ void X11WindowImpl::processEvent(XEvent& ev)
       }
       break;
     case KeyPress:
-      count = XLookupString(&ev.xkey, keybuffer, sizeof(keybuffer), &keysym, &compose);
+      XLookupString(&ev.xkey, keybuffer, sizeof(keybuffer), &keysym, &compose);
       keycode = translate_key(keysym);
       if (keycode)
         if (window)
           window->keyPress(keycode);
       break;
     case KeyRelease:
-      count = XLookupString(&ev.xkey, keybuffer, sizeof(keybuffer), &keysym, &compose);
+      XLookupString(&ev.xkey, keybuffer, sizeof(keybuffer), &keysym, &compose);
       keycode = translate_key(keysym);
       if (keycode)
         if (window)
@@ -697,5 +697,5 @@ void X11GUIFactory::notifyDelete(::Window xwindowid)
   windowMap.erase(xwindowid);
 }
 // ---------------------------------------------------------------------------
-#endif // RGL_X11_HPP
+#endif // RGL_X11_H
 

@@ -1,4 +1,4 @@
-#include "../config.hpp"
+#include "../config.h"
 // ---------------------------------------------------------------------------
 #ifdef RGL_COCOA
 /**
@@ -9,12 +9,12 @@
 #error Cocoa backend reguires FreeType font render
 #endif
 // ---------------------------------------------------------------------------
-#include "osxgui.hpp"
-#include "../lib.hpp"
+#include "osxgui.h"
+#include "../lib.h"
 // ---------------------------------------------------------------------------
 #include <AppKit/AppKit.h>
-#include "../opengl.hpp"
-#include "../assert.hpp"
+#include "../opengl.h"
+#include "../assert.h"
 #include "../R.h"
 #include <Rinternals.h>
 // ---------------------------------------------------------------------------
@@ -48,7 +48,7 @@ public:
                   bool useFreeType);
 
   // events received from GL Cocoa class
-  void on_dealloc();
+  void on_windowWillClose();
   void on_paint();
   void on_resize(int width, int height);
   void on_buttonPress(int button, int x, int y);
@@ -66,7 +66,7 @@ private:
 // ---------------------------------------------------------------------------
 // interfaces
 // ---------------------------------------------------------------------------
-@interface GLView : NSOpenGLView {
+@interface GLView : NSOpenGLView <NSWindowDelegate> {
   rgl::OSXWindowImpl *impl;
   NSUInteger lastModifierFlags;
 }
@@ -125,6 +125,7 @@ OSXWindowImpl::OSXWindowImpl(Window* window)
   [osxWindow setContentView:view];
   [osxWindow makeFirstResponder:view];
   [osxWindow setReleasedWhenClosed:YES];
+  [osxWindow setDelegate:view];
   [view release];
 #ifdef HAVE_FREETYPE
   // Determine path to system font
@@ -242,7 +243,7 @@ void OSXWindowImpl::bringToTop(int stay)
   [osxWindow makeKeyAndOrderFront:nil];
 }
 // ---------------------------------------------------------------------------
-void OSXWindowImpl::on_dealloc()
+void OSXWindowImpl::on_windowWillClose()
 {
   if (window) window->notifyDestroy();
   delete this;
@@ -330,10 +331,10 @@ bool OSXGUIFactory::hasEventLoop()
   return self;
 }
 
-- (void)dealloc
+- (void)windowWillClose:(NSNotification *)notification
 {
-  if (impl) impl->on_dealloc();
-  [super dealloc];
+  if (impl) impl->on_windowWillClose();
+  impl = NULL;
 }
 
 - (void)drawRect:(NSRect)theRect

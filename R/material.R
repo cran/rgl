@@ -2,7 +2,7 @@
 ## R source file
 ## This file is part of rgl
 ##
-## $Id: material.R 998 2014-03-20 19:08:26Z murdoch $
+## $Id: material.R 1113 2014-07-16 13:03:01Z murdoch $
 ##
 
 ##
@@ -141,7 +141,9 @@ rgl.getmaterial <- function(ncolors, id = NULL) {
   ddata <- ret$ddata
   cdata <- ret$cdata
   
-  list(color = rgb(idata[23 + 3*(1:idata[1])], idata[24 + 3*(1:idata[1])], idata[25 + 3*(1:idata[1])], maxColorValue = 255),
+  list(color = rgb(idata[23 + 3*(seq_len(idata[1]))], 
+                   idata[24 + 3*(seq_len(idata[1]))], 
+                   idata[25 + 3*(seq_len(idata[1]))], maxColorValue = 255),
        alpha = if (idata[11]) ddata[seq(from=4, length=idata[11])] else 1,
        lit = idata[2] > 0,
        ambient = rgb(idata[12], idata[13], idata[14], maxColorValue = 255),

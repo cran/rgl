@@ -2,7 +2,7 @@
 ## R source file
 ## This file is part of rgl
 ##
-## $Id: zzz.R 1099 2014-07-02 12:53:33Z murdoch $
+## $Id: zzz.R 1113 2014-07-16 13:03:01Z murdoch $
 ##
 
 ##
@@ -64,6 +64,8 @@
              mono  = rep(system.file("fonts/FreeMono.ttf", package="rgl"), 4),
              symbol = rep(system.file("fonts/FreeSerif.ttf", package="rgl"), 4))
   }
+  
+  .rglEnv$subsceneList <- NULL
 	 
   ret <- rgl.init(initValue, onlyNULL)
   

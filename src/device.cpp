@@ -1,11 +1,11 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: device.cpp 976 2013-10-04 15:06:19Z murdoch $
+// $Id: device.cpp 1115 2014-07-18 13:51:22Z murdoch $
 // ---------------------------------------------------------------------------
 #include <cstring>
-#include "Device.hpp"
-#include "lib.hpp"
+#include "Device.h"
+#include "lib.h"
 
 using namespace rgl;
 

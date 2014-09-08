@@ -1,18 +1,18 @@
-#include "config.hpp"
+#include "config.h"
 #ifdef RGL_W32
 // C++ source
 // This file is part of RGL.
 //
-// $Id: win32gui.cpp 976 2013-10-04 15:06:19Z murdoch $
+// $Id: win32gui.cpp 1115 2014-07-18 13:51:22Z murdoch $
 
-#include "win32gui.hpp"
+#include "win32gui.h"
 
-#include "lib.hpp"
-#include "glgui.hpp"
+#include "lib.h"
+#include "glgui.h"
 
 #include <winuser.h>
 #include <shlobj.h>
-#include "assert.hpp"
+#include "assert.h"
 #include "R.h"
 #include <Rinternals.h>
 

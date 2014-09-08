@@ -1,7 +1,7 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: glgui.cpp 1077 2014-05-18 14:59:02Z murdoch $
+// $Id: glgui.cpp 1131 2014-09-06 20:28:54Z murdoch $
 
 #include <cstdio>
 #ifdef HAVE_FREETYPE
@@ -9,10 +9,11 @@
 #include "R.h"
 #endif
 #include "types.h"
-#include "glgui.hpp"
+#include "glgui.h"
 #include "gl2ps.h"
-#include "opengl.hpp"
-#include "RenderContext.hpp"
+#include "opengl.h"
+#include "RenderContext.h"
+#include "subscene.h"
 #include "platform.h"
 
 using namespace rgl;
@@ -47,7 +48,7 @@ GLboolean GLFont::justify(double width, double height, double adjx, double adjy,
     glGetDoublev(GL_CURRENT_RASTER_POSITION, pos);    
     pos[0] = pos[0] - scaling*width*(adjx-basex); 
     pos[1] = pos[1] - scaling*height*(adjy-basey);
-    gluUnProject( pos[0], pos[1], pos[2], rc.modelview, rc.projection, rc.viewport, pos2, pos2 + 1, pos2 + 2);
+    gluUnProject( pos[0], pos[1], pos[2], rc.subscene->modelMatrix, rc.subscene->projMatrix, rc.subscene->pviewport, pos2, pos2 + 1, pos2 + 2);
     glRasterPos3dv(pos2);
   }
   
@@ -63,7 +64,7 @@ GLboolean GLFont::justify(double width, double height, double adjx, double adjy,
 GLBitmapFont::~GLBitmapFont() {
     delete [] widths;
     if (nglyph) glDeleteLists(listBase+GL_BITMAP_FONT_FIRST_GLYPH, nglyph);
-};
+}
 
 double GLBitmapFont::width(const char* text) {
   double result = 0.0;

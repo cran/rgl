@@ -1,18 +1,18 @@
 
 #include <ctype.h>
 #include <Rinternals.h>
-#include "config.hpp"
+#include "config.h"
 // C++ source
 // This file is part of RGL.
 //
 // $Id: win32gui.cpp 923 2013-01-27 10:41:11Z murdoch $
 
-#include "NULLgui.hpp"
+#include "NULLgui.h"
 
-#include "lib.hpp"
-#include "glgui.hpp"
+#include "lib.h"
+#include "glgui.h"
 
-#include "assert.hpp"
+#include "assert.h"
 #include "R.h"
 
 // ---------------------------------------------------------------------------
@@ -23,7 +23,7 @@ class NULLWindowImpl : public WindowImpl
 { 
 public:
   NULLWindowImpl(Window* in_window);
-  ~NULLWindowImpl() {};
+  ~NULLWindowImpl();
   void setTitle(const char* title) {};
   void setWindowRect(int left, int top, int right, int bottom);
   void getWindowRect(int *left, int *top, int *right, int *bottom);
@@ -31,7 +31,7 @@ public:
   void hide() {};
   void bringToTop(int stay) {};
   void update() {};
-  void destroy() {};
+  void destroy() { if (window) window->notifyDestroy(); };
   void captureMouse(View* pView) {};
   void releaseMouse() {};
   GLFont* getFont(const char* family, int style, double cex, 
@@ -58,6 +58,12 @@ NULLWindowImpl::NULLWindowImpl(Window* in_window)
 {
   setWindowRect(0, 0, 256, 256);
   fonts[0] = new NULLFont("sans", 1, 1.0);
+}
+
+NULLWindowImpl::~NULLWindowImpl()
+{
+  if (window) 
+    window->notifyDestroy(); 
 }
 
 void NULLWindowImpl::setWindowRect(int left, int top, int right, int bottom)

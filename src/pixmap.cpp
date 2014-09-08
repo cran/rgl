@@ -1,12 +1,12 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: pixmap.cpp 1081 2014-05-19 19:55:27Z murdoch $
+// $Id: pixmap.cpp 1115 2014-07-18 13:51:22Z murdoch $
 
 #include "pixmap.h"
 using namespace std;
 
-#include "lib.hpp"
+#include "lib.h"
 
 // PNG FORMAT IMPLEMENTATION
 

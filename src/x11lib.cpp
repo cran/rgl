@@ -1,19 +1,19 @@
-#include "config.hpp"
+#include "config.h"
 #ifdef RGL_X11
 // C++ source
 // This file is part of RGL.
 //
-// $Id: x11lib.cpp 977 2013-10-04 16:57:22Z murdoch $
+// $Id: x11lib.cpp 1115 2014-07-18 13:51:22Z murdoch $
 
 #include "R.h"
-#include "lib.hpp"
+#include "lib.h"
 
-#include "NULLgui.hpp"
+#include "NULLgui.h"
 //
 // ===[ GUI IMPLEMENTATION ]=================================================
 //
 
-#include "x11gui.hpp"
+#include "x11gui.h"
 
 using namespace rgl;
 

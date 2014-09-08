@@ -4,7 +4,7 @@
 // C++ header file
 // This file is part of RGL
 //
-// $Id: rglmath.h 1081 2014-05-19 19:55:27Z murdoch $
+// $Id: rglmath.h 1113 2014-07-16 13:03:01Z murdoch $
 
 #include <cmath>
 #include <cfloat>
@@ -157,6 +157,7 @@ public:
   void setIdentity(void);
   void setRotate(const int axis, const float degree);
   void getData(double* dest);
+  void transpose();
 private:
   inline float  val(int row, int column) const { return data[4*column+row]; }
   inline float& ref(int row, int column) { return data[4*column+row]; }
@@ -187,6 +188,18 @@ struct Rect2
   { }
   int x, y;
   int width, height;
+};
+
+struct Rect2d
+{
+  Rect2d(double in_x, double in_y, double in_w, double in_h)
+  : x(in_x)
+  , y(in_y)
+  , width(in_w)
+  , height(in_h) 
+  { }
+  double x, y;
+  double width, height;
 };
 
 

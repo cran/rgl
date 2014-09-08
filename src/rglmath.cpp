@@ -1,7 +1,7 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: rglmath.cpp 976 2013-10-04 15:06:19Z murdoch $
+// $Id: rglmath.cpp 1113 2014-07-16 13:03:01Z murdoch $
 
 #include "rglmath.h"
 #include "R.h"
@@ -273,6 +273,15 @@ void Matrix4x4::setRotate(const int axis, const float degree) {
       ref(1,1) = c;
       break;
   }
+}
+
+void Matrix4x4::transpose() {
+  for (int i = 0; i < 3; i++)
+    for (int j = i+1; j < 4; j++) {
+      float temp = val(i,j);
+      ref(i,j) = val(j,i);
+      ref(j,i) = temp;
+    }
 }
 
 void Matrix4x4::getData(double* dest)
