@@ -1,10 +1,11 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: gui.cpp 1115 2014-07-18 13:51:22Z murdoch $
+// $Id: gui.cpp 1137 2014-09-24 19:03:24Z murdoch $
 // ---------------------------------------------------------------------------
 #include "gui.h"
 #include "lib.h"
+#include "R.h"
 
 using namespace rgl;
 
@@ -286,3 +287,26 @@ void Window::getFonts(FontArray& outfonts, int nfonts, char** family, int* style
   windowImpl->getFonts(outfonts, nfonts, family, style, cex, useFreeType);
 }
 // ---------------------------------------------------------------------------
+
+int WindowImpl::getAntialias()
+{
+  if (beginGL()) {
+    int result;      
+    glGetIntegerv(GL_SAMPLES, &result);
+    endGL();
+    CHECKGLERROR;
+    return result;
+  }
+  return 1;
+}
+
+int WindowImpl::getMaxClipPlanes()
+{
+  int result;
+  glGetError();
+  glGetIntegerv(GL_MAX_CLIP_PLANES, &result);
+  if (glGetError() == GL_NO_ERROR)
+    return result;
+  else
+    return 6;
+}

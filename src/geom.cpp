@@ -38,8 +38,10 @@ void AABox::operator += (const Vertex& v)
 
 void AABox::operator += (const AABox& aabox)
 {
-  *this += aabox.vmin;
-  *this += aabox.vmax;
+  if (aabox.isValid()) {
+    *this += aabox.vmin;
+    *this += aabox.vmax;
+  }
 }
 
 void AABox::operator += (const Sphere& sphere)
@@ -166,3 +168,28 @@ void Frustum::enclose(float sphere_radius, float fovangle, int width, int height
   bottom = -hheight;
   top    =  hheight;
 }
+
+Matrix4x4 Frustum::getMatrix()
+{
+  double data[16];
+  memset(data, 0, sizeof(data));
+  if (ortho) {
+    data[0] = 2/(right - left);
+    data[5] = 2/(top - bottom);
+    data[10] = -2/(zfar - znear);
+    data[12] = -(right + left)/(right - left);
+    data[13] = -(top + bottom)/(top - bottom);
+    data[14] = -(zfar + znear)/(zfar - znear);
+    data[15] = 1;
+  } else {
+    data[0] = 2*znear/(right - left);
+    data[5] = 2*znear/(top - bottom);
+    data[8] = (right + left)/(right - left);
+    data[9] = (top + bottom)/(top - bottom);
+    data[10] = -(zfar + znear)/(zfar - znear);
+    data[11] = -1;
+    data[14] = -2*zfar*znear/(zfar - znear);
+  }
+  return Matrix4x4(data);
+}
+   

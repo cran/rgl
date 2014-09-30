@@ -4,7 +4,7 @@
 // C++ header file
 // This file is part of RGL
 //
-// $Id: gui.h 1115 2014-07-18 13:51:22Z murdoch $
+// $Id: gui.h 1137 2014-09-24 19:03:24Z murdoch $
 // ---------------------------------------------------------------------------
 #include "types.h"
 #include "glgui.h"
@@ -85,7 +85,8 @@ public:
                           bool useFreeType) = 0;
   void getFonts(FontArray& outfonts, int nfonts, char** family, int* style, double* cex, 
                 bool useFreeType);
-
+  virtual int getAntialias();
+  virtual int getMaxClipPlanes();
   // OpenGL support (FIXME: remove)
   FontArray fonts;
 protected:

@@ -93,3 +93,5 @@ decorate3d <- function(xlim = ranges$xlim, ylim = ranges$ylim, zlim = ranges$zli
     
     invisible(result)
 }
+
+plot3d.function <- function(x, ...) persp3d(x, ...)

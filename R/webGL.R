@@ -236,8 +236,8 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
       if (!toplevel)
 '	  vNormal = normalize((vec4(aNorm, 1.)*normMatrix).xyz);	  
 	  vec4 pos = mvMatrix * vec4(uOrig, 1.);
-	  pos = pos/pos.w + vec4(uSize*(vec4(aPos, 1.)*usermat).xyz,0.);
-	  gl_Position = prMatrix * pos;',
+	  vPosition = pos/pos.w + vec4(uSize*(vec4(aPos, 1.)*usermat).xyz,0.);
+	  gl_Position = prMatrix * vPosition;',
 	  	  
 '	}
 	</script>
@@ -929,7 +929,8 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
       if (clipplanes) subst(paste0(
 '	   var clipLoc%id%p', seq_len(clipplanes), ' = gl.getUniformLocation(prog%id%, "vClipplane', seq_len(clipplanes), '");'),
            id)
-	)	
+	)
+	
 
     if (is_indexed) {
       if (type %in% c("quads", "text", "sprites") && !sprites_3d) {
@@ -1774,11 +1775,8 @@ writeWebGL <- function(dir="webGL", filename=file.path(dir, "index.html"),
     i <- i + 1
     flags[i,] <- getFlags(ids[i], types[i])
     if (flags[i, "sprites_3d"]) {
-      nsub <- rgl.attrib.count(ids[i], "ids")
-      ids <- c(ids, rgl.attrib(ids[i], "ids"))
-      toplevel <- c(toplevel, rep(FALSE, nsub))
-      types <- c(types, rgl.attrib(ids[i], "types"))	
-      flags <- rbind(flags, matrix(NA, nsub, NCOL(flags)))
+      subids <- rgl.attrib(ids[i], "ids")
+      toplevel[ids %in% subids] <- FALSE
     }  
   }        
   flags <- cbind(flags, toplevel=toplevel)

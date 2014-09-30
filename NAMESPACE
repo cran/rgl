@@ -59,12 +59,14 @@ export(.check3d,
  
  S3method(plot3d, default)
  S3method(persp3d, default)
+ S3method(persp3d, "function")
  
  S3method(plot3d, rglscene)
  S3method(plot3d, rglobject)
  S3method(plot3d, rglbboxdeco)
  S3method(plot3d, rglbackground)
  S3method(plot3d, rglsubscene)
+ S3method(plot3d, "function")
  
  S3method(print, rglscene)
  S3method(print, rglobject)

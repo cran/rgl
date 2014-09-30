@@ -1,7 +1,7 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: device.cpp 1115 2014-07-18 13:51:22Z murdoch $
+// $Id: device.cpp 1138 2014-09-25 17:52:54Z murdoch $
 // ---------------------------------------------------------------------------
 #include <cstring>
 #include "Device.h"
@@ -14,6 +14,7 @@ Device::Device(int id, bool useNULL) : id_(id)
 {
   scene   = new Scene();
   rglview = new RGLView(scene);
+  rglview->setNULLActive(useNULL);
   window  = new Window( rglview, getGUIFactory(useNULL) );
   devtype = GUIFactoryName(useNULL);
   window->addDisposeListener(this);
