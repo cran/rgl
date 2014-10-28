@@ -4,7 +4,7 @@
 // C++ header file
 // This file is part of RGL
 //
-// $Id: scene.h 1115 2014-07-18 13:51:22Z murdoch $
+// $Id: scene.h 1156 2014-10-26 20:48:43Z murdoch $
 
 #include <vector>
 #include "types.h"
@@ -95,8 +95,13 @@ public:
   // ---[ Renderable interface ]---------------------------------------------
   
   /**
-   * TODO: implements Renderable
-   **/
+   * update matrices etc.
+   */
+  void update(RenderContext* renderContext);
+  
+  /**
+   * do OpenGL plotting
+   */
   void render(RenderContext* renderContext);
 
   // ---[ bindable component ]-----------------------------------------------

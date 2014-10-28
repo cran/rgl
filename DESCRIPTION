@@ -1,5 +1,5 @@
 Package: rgl
-Version: 0.94.1143
+Version: 0.95.1157
 Title: 3D visualization device system (OpenGL)
 Author: Daniel Adler <dadler@uni-goettingen.de>, Duncan Murdoch <murdoch@stats.uwo.ca>, and others (see README)
 Maintainer: Duncan Murdoch <murdoch@stats.uwo.ca>
@@ -17,8 +17,8 @@ SystemRequirements: OpenGL, GLU Library, zlib (optional), libpng
 BugReports: https://r-forge.r-project.org/projects/rgl/
 Repository: CRAN
 Repository/R-Forge/Project: rgl
-Repository/R-Forge/Revision: 1143
-Repository/R-Forge/DateTimeStamp: 2014-09-29 18:50:37
-Date/Publication: 2014-09-30 17:21:29
-Packaged: 2014-09-29 19:35:14 UTC; rforge
+Repository/R-Forge/Revision: 1157
+Repository/R-Forge/DateTimeStamp: 2014-10-27 12:18:35
+Date/Publication: 2014-10-28 20:00:59
+Packaged: 2014-10-27 12:24:48 UTC; rforge
 NeedsCompilation: yes

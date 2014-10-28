@@ -2,7 +2,7 @@
 ## R source file
 ## This file is part of rgl
 ##
-## $Id: scene.R 1113 2014-07-16 13:03:01Z murdoch $
+## $Id: scene.R 1154 2014-10-22 20:30:03Z murdoch $
 ##
 
 ##
@@ -213,12 +213,14 @@ rgl.bg <- function(sphere=FALSE, fogtype="none", color=c("black","white"), back=
   idata   <- as.integer(c(sphere,fogtype))
 
   ret <- .C( rgl_bg, 
-    success = FALSE,
+    success = as.integer(FALSE),
     idata
   )
 
   if (! ret$success)
     stop("rgl_bg")
+    
+  invisible(ret$success)
 }
 
 
@@ -854,14 +856,9 @@ rgl.setselectstate <- function(state = "current")
 
 rgl.projection <- function()
 {
-    obs <- -par3d("observer") 
-    newmodel <- par3d("modelMatrix")
-    oldmodelMatrix <- t(translationMatrix(obs[1], obs[2], obs[3])) %*% newmodel
-    list(model = oldmodelMatrix,
+    list(model = par3d("modelMatrix"),
     	 proj = par3d("projMatrix"),
-    	 view = par3d("viewport"),
-    	 observer = -obs,
-    	 newmodel = newmodel)
+    	 view = par3d("viewport"))
 }   
      
 rgl.select3d <- function(button = c("left", "middle", "right")) {
@@ -883,7 +880,7 @@ rgl.select3d <- function(button = c("left", "middle", "right")) {
   	lly <- ury
   	ury <- temp
   }
-  proj <- rgl.projection();
+  proj <- rgl.projection()
   function(x,y=NULL,z=NULL) {
     pixel <- rgl.user2window(x,y,z,projection=proj)
     x <- pixel[,1]

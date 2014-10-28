@@ -1,7 +1,7 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: scene.cpp 1128 2014-09-06 14:03:37Z murdoch $
+// $Id: scene.cpp 1156 2014-10-26 20:48:43Z murdoch $
 
 #include "gl2ps.h"
 #include "scene.h"
@@ -226,10 +226,13 @@ void Scene::setupLightModel()
   SAVEGLERROR;  
 }
   
+void Scene::update(RenderContext* renderContext)
+{
+  rootSubscene.update(renderContext);
+}
+
 void Scene::render(RenderContext* renderContext)
 {
-
-  renderContext->subscene  = &rootSubscene;
 
   //
   // CLEAR BUFFERS

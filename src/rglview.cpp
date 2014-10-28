@@ -1,7 +1,7 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: rglview.cpp 1138 2014-09-25 17:52:54Z murdoch $
+// $Id: rglview.cpp 1157 2014-10-27 12:18:35Z murdoch $
 
 
 
@@ -106,12 +106,15 @@ void RGLView::paint(void) {
   
   renderContext.time = t;
   renderContext.deltaTime = dt;
-
-  SAVEGLERROR;  
   
-  if (windowImpl->beginGL()) {
-    scene->render(&renderContext);
+  /* This doesn't do any actual plotting, but it calculates matrices etc. */
+  scene->update(&renderContext);
 
+  /* This section does the OpenGL plotting */
+  if (windowImpl->beginGL()) {
+    SAVEGLERROR;  
+    scene->render(&renderContext);
+    glViewport(0,0, width, height);
     if (selectState == msCHANGING)
       select.render(mousePosition);
     if (flags & FSHOWFPS && selectState == msNONE)
@@ -122,9 +125,6 @@ void RGLView::paint(void) {
     
     SAVEGLERROR;
   }
-
-//  if (flags & FAUTOUPDATE)
-//    windowImpl->update();
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -979,9 +979,4 @@ bool RGLView::postscript(int formatID, const char* filename, bool drawText)
   fclose(fp);
 
   return success;
-}
-
-void RGLView::setNULLActive(bool nullActive)
-{
-  renderContext.NULLActive = nullActive;
 }

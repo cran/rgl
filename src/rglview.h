@@ -4,7 +4,7 @@
 // C++ header file
 // This file is part of RGL
 //
-// $Id: rglview.h 1138 2014-09-25 17:52:54Z murdoch $
+// $Id: rglview.h 1157 2014-10-27 12:18:35Z murdoch $
 
 
 #include "scene.h"
@@ -75,7 +75,6 @@ public:
   void        setFontUseFreeType(bool useFreeType);
   void	      setDefaultFont(const char *family, int style, double cex, bool useFreeType);
   const char* getFontname() const;
-  void	      setNULLActive(bool nullActive);
   
   /* NB:  these functions do not maintain consistency with userMatrix */
   
