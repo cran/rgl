@@ -1,5 +1,5 @@
 e73499cb89e0d6e97b8ba271c46739fd *COPYING
-f6560d3c6b4044fc62e055069d4a104b *DESCRIPTION
+1906fa7b2f0ee7664a0523558b4e46f7 *DESCRIPTION
 38040632632399d68bfd8c3048761689 *NAMESPACE
 924eeb2faa0ef90099ad9176b1cc5013 *R/addNormals.mesh3d.R
 7e5a0230e29d98c07c4a2cf79d17547b *R/animate.R
@@ -58,7 +58,7 @@ bb7b69a42a128d44ccc9232aa9b13eca *demo/regression.r
 154cec7452c730564d63034357b897a0 *demo/shapes3d.R
 866ebfda71509e83a98a7a034e004269 *demo/stereo.R
 70324e9f3c6750f14dc5fdfe99003625 *demo/subdivision.r
-d74ee8ae33612863d34ef7d8531fdd41 *inst/NEWS
+010e703b5f961f92d7120a1e4eaad324 *inst/NEWS
 feff7010f9f522214002265608f637ac *inst/WebGL/CanvasMatrix.js
 6488b5fca9e0cf3f5c10722f05d62541 *inst/WebGL/CanvasMatrix.src.js
 268ceb2143fc28fba1d3d595a0f9ad6f *inst/WebGL/template.html
@@ -322,8 +322,8 @@ d127f3a894c9e092ba105972520fa32f *src/init.cpp
 206a91ded65d4e36bc783d0ab1306bd2 *src/osx/osxgui.mm
 2b3c46d3c9749d84f1d0d630cf955062 *src/osx/osxlib.cpp
 eddfb41b29978a987f0aee9245cee885 *src/par3d.cpp
-c521e5beda1ee60d02034e0279cd439c *src/pixmap.cpp
-4adc3c2dcdd9ac7884ed56f8dde76b1e *src/pixmap.h
+8e4f5e050685ba7bb347406f5bcf4ea5 *src/pixmap.cpp
+4823fcd47dff6930865d7fb056dd0b25 *src/pixmap.h
 56c23f46f775513981a5f8ae15e9a4e4 *src/platform.cpp
 990da172f3a90201bfc36f747d733427 *src/platform.h
 7760951fc0827c62f7ac4869304ca7a6 *src/pngpixmap.h
@@ -335,7 +335,7 @@ c521e5beda1ee60d02034e0279cd439c *src/pixmap.cpp
 d140e13b2a81bf64aca893a3de84c40f *src/rgl-win.def
 fe953c704bc921334d7f9a5dabda5dd1 *src/rglmath.cpp
 87a7067a1fe7250632e07d342c7f1f5d *src/rglmath.h
-e1758099c05c501a969d93062c9dece5 *src/rglview.cpp
+0cc1a11fc3f9d4f3b55e120f63ef9bb9 *src/rglview.cpp
 ae6392c537db122d3f23d565deee8203 *src/rglview.h
 c281d3efc5b1981fd6598d7f9f739059 *src/scene.cpp
 5a3aa027fe44f17efb14bac9f24b6e6e *src/scene.h

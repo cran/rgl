@@ -4,7 +4,7 @@
 // C++ header file
 // This file is part of RGL
 //
-// $Id: pixmap.h 1115 2014-07-18 13:51:22Z murdoch $
+// $Id: pixmap.h 1158 2014-11-11 17:27:21Z murdoch $
 
 #include <cstdio>
 #include "opengl.h"
@@ -28,7 +28,7 @@ public:
   bool init(PixmapTypeID typeID, int width, int height, int bits_per_channel);
   bool load(const char* filename);
   bool save(PixmapFormat* format, const char* filename);
-
+  void clear();
   PixmapTypeID typeID;
   unsigned int width;
   unsigned int height;
