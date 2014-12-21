@@ -307,3 +307,55 @@ writeOBJ <- function(con,
   
   invisible(filename)
 }
+
+readOBJ <- function(con, ...) {
+  lines <- readLines(con)
+  instrs <- sub(" .*", "", lines)
+  vertices <- read.table(textConnection(lines[instrs == "v"]),
+                         col.names = c("instr", "x", "y", "z"),
+                         colClasses = c(instr = "character", 
+                                        x="numeric",
+                                        y="numeric",
+                                        z="numeric"))
+  vertices <- with(vertices, rbind(x, y, z))
+  tfaces <- grepl("^f\\W+\\w+\\W+\\w+\\W+\\w+$", lines)
+  triangles <- read.table(textConnection(lines[tfaces]),
+                      col.names = c("instr", "v1", "v2", "v3"),
+                      colClasses = "character")
+  triangles <- with(triangles, rbind(v1, v2, v3))
+  if (length(grep("/", triangles))) {
+    warning("normals and/or textures ignored")
+    triangles <- sub("/.*", "", triangles)   
+  }
+  triangles <- structure(as.numeric(triangles),
+                         dim = dim(triangles))
+  qfaces <- grepl("^f\\W+\\w+\\W+\\w+\\W+\\w+\\W+\\w+$", lines)
+  if (any(qfaces)) {
+    quads <- read.table(textConnection(lines[qfaces]),
+                        col.names = c("instr", "v1", "v2", "v3", "v4"),
+                        colClasses = "character")
+    quads <- with(quads, rbind(v1, v2, v3, v4))
+    if (length(grep("/", quads))) {
+      warning("normals and/or textures ignored")
+      quads <- sub("/.*", "", quads)
+    }
+    quads <- structure(as.numeric(quads), dim = dim(quads))
+  }
+  others <- strsplit(lines[instrs == "f" & !tfaces & !qfaces], " ")
+  # FIXME:  this will be really slow if there are a lot of others
+  # Should pre-allocate extra space.
+  for (i in seq_along(others)) {
+    v <- as.numeric(others[[i]][-1])
+    tri <- triangulate(t(vertices[,v]))
+    tri <- structure(v[tri], dim = dim(tri))
+    triangles <- cbind(triangles, tri)
+  }  
+  ignored <- unique(instrs)
+  ignored <- ignored[!(ignored %in% c("v", "f", "", "#"))]
+  if (length(ignored))
+    warning("instructions ", paste0('"', ignored, '"', collapse = ", "), " ignored.")
+  result <- tmesh3d(vertices, triangles, homogeneous = FALSE, ...)
+  if (any(qfaces)) 
+    result$ib <- quads
+  result
+}

@@ -613,3 +613,28 @@ v0.94
 0.95.1158
   - rgl.snapshot() now works with the NULL device (but produces a 
     black snapshot).  This allows testing with RGL_USE_NULL.
+
+0.95.1196
+  - writeWebGL() now includes an argument "commonParts", to allow
+    omission of common code in multi-figure displays.
+  - If template is NULL in writeWebGL(), no template file is used. 
+  - The NULL device did not handle changes to par3d("windowRect")
+    properly.
+  - The persp.function() method is now smarter about setting default
+    axis labels.
+  - The package now contains a vignette giving an overview of
+    the functions. 
+  - Subscenes with "ignoreExtent" set to TRUE were not plotted.
+  - The bounding box calculations now take clipping planes into account.
+  - writeWebGL() did not display the bboxdeco properly when working
+    in a subscene.
+  - Added clipping regions to plot3d() and persp3d().
+  - Export the GramSchmidt function (request of Remko Duursma)
+  - Added readOBJ(), with a very limited ability to read OBJ 
+    shapefiles.
+  - triangulate() now supports polygons expressed with 3
+    coordinates (though they are still assumed to be planar).
+  - par3d() now includes "listeners", a list of subscenes that
+    respond to mouse actions in the current subscene.
+  - The Windows configuration file has been modified to work in 
+    R-devel (to become R 3.2.0).

@@ -74,6 +74,7 @@ public:
   void addLight(Light* light);
   void addSubscene(Subscene* subscene);
   void addBBox(const AABox& bbox, bool changes);
+  void intersectClipplanes(void);
   
   /**
    * hide shape or light or bboxdeco
@@ -175,6 +176,9 @@ public:
   void getScale(double* dest);
   void getPosition(double* dest);
   
+  void setMouseListeners(unsigned int n, int* ids);
+  void getMouseListeners(unsigned int max, int* ids);
+  
   float getDistance(const Vertex& v) const;
 
 // Translate from OpenGL window-relative coordinates (relative to bottom left corner of window) to
@@ -189,6 +193,13 @@ public:
   
   Background* get_background(); 
   
+  /* This vector lists other subscenes that will be controlled
+     by mouse actions on this one.  We do it by ID rather
+     than pointer so we can detect when any are invalid.  
+     Initially only the subscene itself is in the list. */
+     
+  std::vector<int> mouseListeners;
+  
   // These are set after rendering the scene
   Vec4 Zrow;
   Vec4 Wrow;
@@ -201,7 +212,13 @@ private:
    * compute bounding-box
    **/
   void calcDataBBox();
+  
+  /**
+   * shrink bounding-box when something has been removed
+   **/
 
+  void shrinkBBox();
+  
   /**
    * bounding box of subscene
    **/

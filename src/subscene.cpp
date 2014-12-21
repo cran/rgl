@@ -26,6 +26,7 @@ Subscene::Subscene(Embedding in_viewport, Embedding in_projection, Embedding in_
   data_bbox.invalidate();
   modelMatrix.setIdentity();
   projMatrix.setIdentity(); 
+  mouseListeners.push_back(getObjID());
 }
 
 Subscene::~Subscene() 
@@ -118,6 +119,7 @@ void Subscene::addShape(Shape* shape)
     zsortShapes.push_back(shape);
   } else if ( shape->isClipPlane() ) {
     clipPlanes.push_back(static_cast<ClipPlaneSet*>(shape));
+    shrinkBBox();
   } else
     unsortedShapes.push_back(shape);
 }
@@ -126,8 +128,9 @@ void Subscene::addBBox(const AABox& bbox, bool changes)
 {
   data_bbox += bbox;
   bboxChanges |= changes;
+  intersectClipplanes();
   if (parent && !ignoreExtent) 
-    parent->addBBox(bbox, changes);
+    parent->addBBox(data_bbox, changes);
 }
   
 void Subscene::addLight(Light* light)
@@ -163,7 +166,7 @@ void Subscene::hideShape(int id)
     unsortedShapes.erase(std::find_if(unsortedShapes.begin(), unsortedShapes.end(),
                          std::bind2nd(std::ptr_fun(&sameID), id)));
       
-  calcDataBBox();
+  shrinkBBox();
 }
 
 void Subscene::hideLight(int id)
@@ -199,7 +202,7 @@ Subscene* Subscene::hideSubscene(int id, Subscene* current)
         current = (*i)->parent;  
       (*i)->parent = NULL;
       subscenes.erase(i);
-      calcDataBBox();
+      shrinkBBox();
       return current;
     } 
   }
@@ -488,22 +491,11 @@ ModelViewpoint* Subscene::getModelViewpoint()
 void Subscene::update(RenderContext* renderContext)
 {
   GLdouble saveprojection[16];
-  Rect2 saveviewport(0,0,0,0);
+  
 
   renderContext->subscene = this;
   
-  if (do_viewport > EMBED_INHERIT) {
-  
-    //
-    // SETUP VIEWPORT TRANSFORMATION
-    //
-    if (parent)  
-      saveviewport = parent->pviewport;
-    setupViewport(renderContext);
-
-  } else
-    pviewport = parent->pviewport;
-
+  setupViewport(renderContext);
   if (bboxChanges) 
     calcDataBBox();
   
@@ -536,7 +528,10 @@ void Subscene::update(RenderContext* renderContext)
   // transformations, we don't bother using the parent one, we reconstruct in
   // every subscene.
   
-  setupModelViewMatrix(renderContext, total_bsphere.center);
+  if (do_projection > EMBED_INHERIT || do_model > EMBED_INHERIT)
+    setupModelViewMatrix(renderContext, total_bsphere.center);
+  else
+    modelMatrix = parent->modelMatrix;
     
   // update subscenes
     
@@ -597,7 +592,7 @@ void Subscene::render(RenderContext* renderContext)
   // RENDER MODEL
   //
 
-  if (data_bbox.isValid() ) {
+  // if (data_bbox.isValid() ) {
 
     //
     // RENDER SOLID SHAPES
@@ -673,7 +668,7 @@ void Subscene::render(RenderContext* renderContext)
     /* Reset clipplanes */
     disableClipplanes(renderContext);
     SAVEGLERROR;
-  }
+  // }
   
   // Render subscenes
     
@@ -707,8 +702,27 @@ void Subscene::calcDataBBox()
       bboxChanges |= shape->getBBoxChanges();
     }
   }
+  intersectClipplanes(); 
 }
 
+void Subscene::intersectClipplanes(void) 
+{
+  std::vector<ClipPlaneSet*>::iterator iter;
+  for (iter = clipPlanes.begin() ; iter != clipPlanes.end() ; ++iter ) {
+      ClipPlaneSet* plane = *iter;
+      plane->intersectBBox(data_bbox);
+      SAVEGLERROR;
+  }
+}
+
+/* Call this when adding a clipplane that can shrink things */
+void Subscene::shrinkBBox(void)
+{
+  if (parent) parent->shrinkBBox();
+  else {
+      calcDataBBox();
+  }
+}
 // ---------------------------------------------------------------------------
 void Subscene::setIgnoreExtent(int in_ignoreExtent)
 {
@@ -947,6 +961,20 @@ void Subscene::setViewport(double x, double y, double width, double height)
   viewport.y = y;
   viewport.width = width;
   viewport.height = height;
+}
+
+void Subscene::setMouseListeners(unsigned int n, int* ids)
+{
+  mouseListeners.clear();
+  for (unsigned int i = 0; i < n; i++)
+    mouseListeners.push_back(ids[i]);
+}
+
+void Subscene::getMouseListeners(unsigned int max, int* ids)
+{
+  max = max > mouseListeners.size() ? mouseListeners.size() : max;  
+  for (unsigned int i = 0; i < max; i++)
+    ids[i] = mouseListeners[i];
 }
 
 float Subscene::getDistance(const Vertex& v) const

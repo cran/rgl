@@ -4,7 +4,7 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: x11gui.cpp 1131 2014-09-06 20:28:54Z murdoch $
+// $Id: x11gui.cpp 1197 2014-12-20 19:07:08Z murdoch $
 
 // Uncomment for verbose output on stderr:
 // #define RGL_X11_DEBUG
@@ -116,8 +116,10 @@ void X11WindowImpl::getWindowRect(int *left, int *top, int *right, int *bottom)
   ::Window root, child;
   int x, y;
   unsigned int width, height, border_width, depth;
-  factory->processEvents();
-  factory->flushX();
+  do {
+    factory->flushX();
+    factory->processEvents();
+  } while (XEventsQueued(factory->xdisplay, QueuedAfterFlush));
   XGetGeometry(factory->xdisplay, xwindow, &root, &x, &y, &width, &height, &border_width, &depth);
   XTranslateCoordinates(factory->xdisplay, xwindow, root, x, y, left, top, &child);
   XTranslateCoordinates(factory->xdisplay, xwindow, root, x+width, y+height, right, bottom, &child);

@@ -5,7 +5,7 @@
 // C++ header file
 // This file is part of RGL
 //
-// $Id: pngpixmap.h 1115 2014-07-18 13:51:22Z murdoch $
+// $Id: pngpixmap.h 1197 2014-12-20 19:07:08Z murdoch $
 
 namespace rgl {
 
@@ -19,7 +19,8 @@ public:
   {
     unsigned char buf[8];
 
-    fread(buf, 1, 8, fd);
+    if (fread(buf, 1, 8, fd) < 8)
+      return false;
     fseek(fd, 0, SEEK_SET);
 
     return !png_sig_cmp(buf, 0, 8);
