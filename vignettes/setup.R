@@ -1,41 +1,10 @@
-
-library(rgl)
 options(rgl.useNULL=TRUE)
-
-hook_webgl <- local({
-  commonParts <- TRUE
-  function (before, options, envir) 
-  {
-    if (before || rgl::rgl.cur() == 0 || !requireNamespace("knitr")) 
-      return()
-    out_type <- knitr::opts_knit$get("out.format")
-    if (!length(intersect(out_type, c("markdown", "html"))))       
-      stop("hook_webgl is for HTML only.  Use knitr::hook_rgl instead.")
-    
-    name <- tempfile("webgl", tmpdir = ".", fileext = ".html")
-    on.exit(unlink(name))
-    dpi <- 96 # was options$dpi
-    rgl::par3d(windowRect = dpi * c(0, 0, options$fig.width, 
-                                            options$fig.height))
-    Sys.sleep(0.1)
-    prefix = gsub("[^[:alnum:]]", "_", options$label)
-    prefix = sub("^([^[:alpha:]])", "_\\1", prefix)
-    rgl::writeWebGL(dir = dirname(name), 
-                    filename = name, 
-                    snapshot = !rgl.useNULL(),
-                    template = NULL, 
-                    prefix = prefix, 
-                    commonParts = commonParts)
-    if (!isTRUE(options$rgl.keepopen) && rgl.cur())
-      rgl.close()
-    commonParts <<- FALSE
-    res <- readLines(name)
-    res <- res[!grepl("^\\s*$", res)]
-    paste(gsub("^\\s+", "", res), collapse = "\n")
-  }
-})
+library(rgl)
 
 knitr::knit_hooks$set(rgl = hook_webgl)
+
+if (requireNamespace("rmarkdown") && !rmarkdown::pandoc_available("1.13.1"))
+  warning("These vignettes assume pandoc version 1.13.1; older versions may give poor formatting.")
 
 documentedfns <- c()
 indexfns <- function(fns, text = paste0("`", fns, "`"), show = TRUE) {
@@ -44,6 +13,23 @@ indexfns <- function(fns, text = paste0("`", fns, "`"), show = TRUE) {
                     if (show) linkfn(fns, text, pkg = "rgl"), 
                     '</a>')
   paste(anchors, collapse=if (show) ", " else "")
+}
+
+indexclass <- 
+indexproperties <- function(fns, text = paste0("`", fns, "`"), show = TRUE) {
+	documentedfns <<- c(documentedfns, fns)
+	anchors <- paste0('<a name="', fns, '">', 
+			  if (show) text, 
+			  '</a>')
+	paste(anchors, collapse=if (show) ", " else "")
+}
+
+indexmethods <- function(fns, text = paste0("`", fns, "()`"), show = TRUE) {
+	documentedfns <<- c(documentedfns, fns)
+	anchors <- paste0('<a name="', fns, '">', 
+			  if (show) text, 
+			  '</a>')
+	paste(anchors, collapse=if (show) ", " else "")
 }
 
 linkfn <- function(fn, text = paste0("`", fn, "`"), pkg = NA) {
@@ -75,4 +61,14 @@ writeIndex <- function(cols = 4) {
   cat('\n<div class="nostripes">\n')
   print(knitr::kable(matrix(entries, ncol=cols), format="pandoc"))
   cat("</div>\n")
+}
+
+# This displays the string code as `r code` when entered
+# as `r rinline(code)`.  Due to Stephane Laurent
+rinline <- function(code, script = FALSE){
+  if (script)
+    html <- "`r CODE`"
+  else
+    html <- '<code  class="r">``` `r CODE` ```</code>'
+  sub("CODE", code, html)
 }

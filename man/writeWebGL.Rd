@@ -11,7 +11,7 @@ it in a browser.
 writeWebGL(dir = "webGL", filename = file.path(dir, "index.html"), 
            template = system.file(file.path("WebGL", "template.html"), package = "rgl"),
            prefix = "",
-           snapshot = TRUE, commonParts = TRUE,
+           snapshot = TRUE, commonParts = TRUE, reuse = NULL, 
            font = "Arial", width, height)
 }
 \arguments{
@@ -38,6 +38,10 @@ figures on the same page.  Currently this includes
 a reference to and copy of the \file{CanvasMatrix.js}
 file in the output.
 }
+  \item{reuse}{
+  When writing several figures on the same page, set this
+to a dataframe containing values to reuse.  See the Value section below.
+  }
   \item{font}{
   The font to use for text.
 }
@@ -50,7 +54,7 @@ the \code{par3d("windowRect")} dimensions will be used.
 This function writes out a web page containing Javascript that reconstructs the scene in WebGL.
 
 Use the \code{template} argument to give the filename of a web page that is to contain the
-code for the new scene.  It should contain a single line containing \code{paste("\%", prefix, "WebGL\%")}, e.g.
+code for the new scene.  It should contain a single line containing \code{paste0("\%", prefix, "WebGL\%")}, e.g.
 \code{\%WebGL\%} with the default empty prefix.  That line will be replaced by the Javascript and other
 code necessary to reproduce the current scene.  The template may also contain the string \code{"\%rglVersion\%"}
 which will be replaced with the current \pkg{rgl} version number.  If
@@ -77,9 +81,24 @@ development progresses:
 object.  \code{writeWebGL} will print a warning if this limit is exceeded, but it is up to the user
 to break his scene into smaller objects.  (And 65535 vertices may not be small enough!)
 }
+
+There is some experimental support for modification of the scene by other Javascript code 
+on the same web page.  Currently this is limited to the following.  There will be a global variable
+created with name \code{<prefix>rgl}, where \code{<prefix>} will be replaced by the 
+\code{prefix} argument to \code{writeWebGL}.  Currently this variable will contain properties 
+corresponding to some of the components returned by \code{\link{par3d}}, namely \code{FOV}, \code{zoom},
+\code{userMatrix} and \code{listeners}.  Each of these components should be indexed by a subscene
+number to obtain the value for that subscene; for example, use \code{<prefix>rgl.userMatrix[3]} to obtain
+the user matrix for subscene 3 as a \code{CanvasMatrix4} object (defined in the \file{CanvasMatrix.js}
+library).  After modifying any of these values, user code should insert a call \code{<prefix>rgl.drawScene();}
+to update the display.
 }
 \value{
-The \code{filename} is returned.
+The \code{filename} is returned.  If \code{reuse} is not \code{NULL},
+it will have an attribute called \code{"reuse"} which contains a dataframe
+with columns \code{"id"} and \code{"prefix"} identifying the prefix used
+for objects drawn in this scene.  This dataframe can be used as the \code{reuse}
+argument in subsequent calls to \code{writeWebGL}.
 }
 \references{
 \url{http://www.webgl.org}
@@ -107,7 +126,11 @@ write the scene to a file in various other formats.
 plot3d(rnorm(100), rnorm(100), rnorm(100), type = "s", col = "red")
 # This writes a copy into temporary directory 'webGL', and then displays it
 filename <- writeWebGL(dir = file.path(tempdir(), "webGL"), 
-                       width = 500)
+                       width = 500, reuse = TRUE)
+# Display the "reuse" attribute
+attr(filename, "reuse")
+
+# Display the scene in a browser
 if (interactive())
   browseURL(paste0("file://", filename))
 }
