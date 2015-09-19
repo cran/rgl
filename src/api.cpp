@@ -1,7 +1,7 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: api.cpp 1128 2014-09-06 14:03:37Z murdoch $
+// $Id: api.cpp 1252 2015-06-28 05:26:12Z murdoch $
 
 #include "lib.h"
 #include "DeviceManager.h"
@@ -1122,10 +1122,10 @@ void rgl::rgl_bbox(int* successptr,
 
   if (deviceManager && (device = deviceManager->getAnyDevice())) {
 
-    int   xticks     =        idata[0];
+    int   xticks     =        idata[0]; /* these are length of xat etc. */
     int   yticks     =        idata[1];
     int   zticks     =        idata[2];
-    int   xlen       =        idata[3];
+    int   xlen       =        idata[3]; /* these are suggested tick counts */
     int   ylen       =        idata[4];
     int   zlen       =        idata[5];
     int   marklen_rel =       idata[6];

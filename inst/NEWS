@@ -665,3 +665,42 @@ v0.94
   - Added hook_rgl() and hook_webgl() functions, based on the knitr
     functions. 
     
+0.95.1336
+  - Made error and warning text more consistent.
+  - Dropped chunk option "rgl.keepopen"; replaced it
+    with "rgl.newwindow". 
+  - Added matrixSetter() function to allow multiple controls to
+    modify one matrix.
+  - Added "accumulate" argument to the subset WebGL controls.
+  - The "nticks" argument to bbox3d() was never used and has
+    been removed.  Use "xlen", "ylen" or "zlen".  
+  - Setting "xlen" etc. to zero in bbox3d or rgl.bbox() now
+    (correctly) suppresses tick marks. (Reported by 
+    Philipp Angerer.)
+  - Dependencies and imports have been updated.
+  - Specifying "normals" or "texcoords" in both a
+    "mesh3d" object and a call to shade3d() to display
+    it caused an error; now the shade3d() specified
+    value has priority if "override" is TRUE (the default).
+  - Added vertexSetter() function to allow easier access to 
+    vertex attributes.
+  - Used Jeroen Ooms' js::jshints() function to clean up the
+    WebGL Javascript code.
+  - Allowed "values = NULL" in propertySetter() and vertexSetter()
+    to allow code to directly set values.
+  - When used with clipping on the bounds, persp3d() and plot3d()
+    did not work properly with a shared mouse.  (Reported by
+    Marian Talbert.)
+  - Shaders are now stored in Javascript strings, not separate
+    <script> sections.
+  - Shape centers are now stored by scene3d().
+  - Font family and numeric font number (style) are now returned
+    by rgl.attrib() and are stored by scene3d().
+  - Fixed a bug (reported by Dominick Samperi) that caused
+    vignettes using WebGL code in knitr to fail to initialize
+    properly.  This required adding the setupKnitr() function, 
+    which should be called at the start of each vignette.  
+    It is *not* called automatically.
+  - Fixed a bug (reported by Kurt Hornik) that caused rgl to
+    fail to compile when libfreetype 2.6 was linked.
+  - Fixed a bug in writePLY (reported by Kurt Hornik).

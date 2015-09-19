@@ -11,14 +11,14 @@ rgl.enum <- function ( name, ..., multi = FALSE)
   max <- length(names)
 
   if ( any( is.na(pos) ) )
-    stop("symbolic value must be chosen from ", list(names) )
+    stop(gettextf("Symbolic value must be chosen from: %s", list(names)), domain = NA)
   else if ( (max+1) %in% pos )
     pos <- seq_along(names)
     
   id  <- unlist(choices[pos])
   
   if ( length(id) > 1 && !multi )
-    stop("multiple choices not allowed")
+    stop("Multiple choices not allowed")
  
   return( id )
 }
@@ -30,7 +30,8 @@ rgl.enum( type, shapes=1, lights=2, bboxdeco=3, userviewpoint=4, material=5, bac
 rgl.enum.attribtype <- function (attrib)
 rgl.enum( attrib, vertices=1, normals=2, colors=3, texcoords=4, dim=5, 
           texts=6, cex=7, adj=8, radii=9, centers=10, ids=11, 
-          usermatrix=12, types=13, flags=14, offsets=15)
+          usermatrix=12, types=13, flags=14, offsets=15,
+	  family=16, font=17)
 
 rgl.enum.pixfmt <- function (fmt)
 rgl.enum( fmt, png=0 )

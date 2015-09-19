@@ -2,7 +2,7 @@
 ## R source file
 ## This file is part of rgl
 ##
-## $Id: zzz.R 1113 2014-07-16 13:03:01Z murdoch $
+## $Id: zzz.R 1332 2015-09-12 16:56:13Z murdoch $
 ##
 
 ##
@@ -70,7 +70,7 @@
   ret <- rgl.init(initValue, onlyNULL)
   
   if (!ret) {
-    warning("error in rgl_init")
+    warning("Error in 'rgl_init'")
   }
   
 }

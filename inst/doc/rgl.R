@@ -1,12 +1,13 @@
 ## ----setup, echo=FALSE, results="asis"-----------------------------------
 source("setup.R")
+knitr::opts_chunk$set(rgl.newwindow = TRUE)
 set.seed(123)
 
-## ----plot3d, rgl=TRUE----------------------------------------------------
+## ----plot3d, webgl=TRUE--------------------------------------------------
 with(iris, plot3d(Sepal.Length, Sepal.Width, Petal.Length, 
                   type="s", col=as.numeric(Species)))
 
-## ----persp3d, rgl=TRUE, fig.height=3, fig.width=6------------------------
+## ----persp3d, webgl=TRUE, fig.height=3, fig.width=6----------------------
 library(MASS)
 # from the fitdistr example
 set.seed(123)
@@ -28,13 +29,13 @@ persp3d(loglik,
         xlim = xlim, ylim = ylim, zlim = zlim,
         n = 30)
 
-## ----rgl=TRUE, fig.width=3, fig.height=3---------------------------------
+## ----webgl=TRUE, fig.width=3, fig.height=3-------------------------------
 triangles3d(cbind(x=rnorm(9), y=rnorm(9), z=rnorm(9)), col = "green")
 decorate3d()
 bg3d("lightgray")
 aspect3d(1,1,1)
 
-## ----results="hide",rgl=TRUE---------------------------------------------
+## ----results="hide",webgl=TRUE-------------------------------------------
 open3d()
 cols <- rainbow(7)
 layout3d(matrix(1:16, 4,4), heights=c(1,3,1,3))

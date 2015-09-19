@@ -4,22 +4,25 @@
 
 subsetSlider <- function(subsets, labels = names(subsets),
                          fullset = Reduce(union, subsets), 
-                         subscenes = currentSubscene3d(), prefixes = "", ...) {
+                         subscenes = currentSubscene3d(), prefixes = "", 
+                         accumulate = FALSE, ...) {
   propertySlider(subsetSetter(subsets, fullset = fullset,
-                              subscenes = subscenes, prefixes = prefixes),
+                              subscenes = subscenes, prefixes = prefixes,
+                              accumulate = accumulate),
                  labels = labels, ...)
 }
 
 subsetSetter <- function(subsets, subscenes = currentSubscene3d(), prefixes = "",  
-			 fullset = Reduce(union, subsets)) {
+			 fullset = Reduce(union, subsets),
+			 accumulate = FALSE) {
   nsubs <- max(length(subscenes), length(prefixes))
   subscenes <- rep(subscenes, length.out = nsubs)
   prefixes <- rep(prefixes, length.out = nsubs)
   result <- subst(
 'function(value) {
-  var ids = [%vals%]; 
-  var fullset = [%fullset%];
-  var f = function(x) { return fullset.indexOf(x) < 0 };
+  var i, ids = [%vals%],
+      fullset = [%fullset%],
+      f = function(x) { return fullset.indexOf(x) < 0; };
   value = Math.round(value);', 
     vals = paste(paste0("[", sapply(subsets, 
         				function(i) paste(i, collapse=",")), 
@@ -28,8 +31,13 @@ subsetSetter <- function(subsets, subscenes = currentSubscene3d(), prefixes = ""
   for (i in seq_len(nsubs)) 
     result <- c(result, subst(
 '  var entries = %prefix%rgl.getSubsceneEntries(%subscene%);
-  entries = entries.filter(f);
-  entries = entries.concat(ids[value]);
+  entries = entries.filter(f);', prefix = prefixes[i], subscene = subscenes[i]),
+      if (accumulate)
+'  for (i=0; i<=value; i++)
+    entries = entries.concat(ids[i]);'
+      else
+'  entries = entries.concat(ids[value]);',
+      subst('
   %prefix%rgl.setSubsceneEntries(entries, %subscene%);',
       prefix = prefixes[i], subscene = subscenes[i]))
   result <- c(result, '}')
@@ -47,15 +55,15 @@ toggleButton <- function(subset, subscenes = currentSubscene3d(), prefixes = "",
   prefixes <- rep(prefixes, length.out = nsubs)
   result <- subst(
 '<button type="button" id="%id%" name="%name%" onclick = "(function(){
-  var subset = [%subset%];',
+  var subset = [%subset%], i;',
     name, id, subset = paste(subset, collapse=","))
   for (i in seq_len(nsubs)) 
     result <- c(result, subst(
 '  if (%prefix%rgl.inSubscene(subset[0], %subscene%)) {
-    for (var i=0; i<subset.length; i++)
+    for (i=0; i<subset.length; i++)
       %prefix%rgl.delFromSubscene(subset[i], %subscene%);
   } else {
-    for (var i=0; i<subset.length; i++)
+    for (i=0; i<subset.length; i++)
       %prefix%rgl.addToSubscene(subset[i], %subscene%);
   }', prefix = prefixes[i], subscene = subscenes[i]))
   prefixes <- unique(prefixes)
@@ -84,6 +92,7 @@ propertySlider <- function(setter = propertySetter,
                            labels = displayVals(sliderVals), 
                            id = basename(tempfile("input")), name = id,
 			   outputid = paste0(id, "text"),
+			   index = NULL,
                            ...)  {
   displayVals <- function(x) {
     base <- signif(mean(x), 2)
@@ -98,7 +107,7 @@ propertySlider <- function(setter = propertySetter,
     if (is.function(setter))
       setters[i] <- setter <- setter(...)
     if (!inherits(setter, "propertySetter"))
-    stop(dQuote(setter), " must be a propertySetter object.")
+    stop("'setter' must be a propertySetter object")
     
     param <- c(param, attr(setter, "param"))
     prefixes <- c(prefixes, attr(setter, "prefixes"))
@@ -116,16 +125,26 @@ propertySlider <- function(setter = propertySetter,
   }
   result <- subst(
 '<script>%prefix%rgl.%id% = function(value){', prefix, id)
-  for (i in seq_along(setters))
-    result <- c(result, subst(
-'   (%setter%)(value);', setter = setters[i]))
+  for (i in seq_along(setters)) {
+    setter <- setters[[i]]
+    if (inherits(setter, "indexedSetter")) {
+      if (is.null(index)) stop("indexed setter requires an index")
+      settername <- attr(setter, "name")
+    }
+    result <- c(result, 
+    	    
+      if (!inherits(setter, "indexedSetter")) subst(
+'   (%setter%)(value);', setter)
+      else subst(
+'   %settername%(value, %index%);', settername, index=index-1))
+  }
   for (p in unique(prefixes))
     result <- c(result, subst(
 '   %prefix%rgl.drawScene();', prefix = p))
   result <- c(result, subst(
 '   var lvalue = Math.round((value - %minS%)/%step%);
    var labels = [%labels%]; %setoutput%
-}
+};
 %prefix%rgl.%id%(%init%);</script>
 <input type="range" min="%minS%" max="%maxS%" step="%step%" value="%init%" id="%id%" name="%name%"
 oninput = "%prefix%rgl.%id%(this.valueAsNumber)">%outputfield%', 
@@ -136,46 +155,58 @@ oninput = "%prefix%rgl.%id%(this.valueAsNumber)">%outputfield%',
   invisible(id)
 }
 
-propertySetter <- function(values, entries, properties, objids, prefixes = "",
+propertySetter <- function(values = NULL, entries, properties, objids, prefixes = "",
                            param = seq_len(NROW(values)), interp = TRUE,
 			   digits = 7)  {
-  values <- matrix(values, NROW(values))
-  ncol <- ncol(values)
-  stopifnot(length(entries) == ncol,
-            all(diff(param) > 0))
+  direct <- is.null(values)
+  ncol <- length(entries)
+  if (direct) 
+    interp <- FALSE
+  else {    
+    values <- matrix(values, NROW(values))
+    stopifnot(ncol(values) == ncol,
+              all(diff(param) > 0))
+  }
   prefixes <- rep(prefixes, length.out = ncol)
+  if (!ncol) return(structure("function(value) {}", param = param, 
+  			    prefixes = prefixes,
+  			    class = "propertySetter"))
   properties <- rep(properties, length.out = ncol)
   objids <- rep(objids, length.out = ncol)
   prefix <- prefixes[1]
   property <- properties[1]
   objid <- objids[1]
+  
   if (interp) values <- rbind(values[1,], values, values[nrow(values),])
-  get <- if (property == "userMatrix") ".getAsArray()" else ""
-  load <- if (property == "userMatrix") ".load(propvals)" else "= propvals"
-  result <- c(subst(
-'function(value){
-   var values = [%vals%];', 
+  get <- if (grepl("^userMatrix", property)) ".getAsArray()" else ""
+  load <- if (grepl("^userMatrix", property)) ".load(propvals)" else "= propvals"
+  result <- c(
+'function(value){',
+
+    if (!direct) subst(
+'   var values = [%vals%],', 
      vals = paste(formatC(as.vector(t(values)), digits = digits, width = 1), 
      	          collapse = ",")),
      
    subst(
-'   var propvals = %prefix%rgl.%property%[%objid%]%get%;',
+'   propvals = %prefix%rgl.%property%[%objid%]%get%;',
      prefix, property, objid, get),   
 
    if (interp) subst(
-'   var svals = [-Infinity, %svals%, Infinity];
+'   var svals = [-Infinity, %svals%, Infinity],
+        v1, v2;
    for (var i = 1; i < svals.length; i++) 
      if (value <= svals[i]) {
        var p = (svals[i] - value)/(svals[i] - svals[i-1]);',
      svals = paste(formatC(param, digits = digits, width = 1), collapse = ","))
-   else
+   else if (!direct)
 '   value = Math.round(value);')
      
   for (j in seq_along(entries)) {
     newprefix <- prefixes[j]
     newprop <- properties[j]
-    newget <- if (newprop == "userMatrix") ".getAsArray()" else ""
-    newload <- if (newprop == "userMatrix") ".load(propvals)" else "= propvals"
+    newget <- if (grepl("^userMatrix", newprop)) ".getAsArray()" else ""
+    newload <- if (grepl("^userMatrix", newprop)) ".load(propvals)" else " = propvals"
     newid <- objids[j]
     multiplier <- ifelse(ncol>1, paste0(ncol, "*"), "")
     offset <-     ifelse(j>1,  paste0("+", j-1), "")
@@ -183,16 +214,22 @@ propertySetter <- function(values, entries, properties, objids, prefixes = "",
     
     if (newprefix != prefix || newprop != property || newid != objid) subst(
 '   %prefix%rgl.%property%[%objid%]%load%;
-    propvals = %newprefix%rgl.%newprop%[%newid%]%newget%;', 
+   propvals = %newprefix%rgl.%newprop%[%newid%]%newget%;', 
       prefix, property, objid, load, newget, newprefix, newprop, newid),
     
     if (interp) subst(
-'       var v1 = values[%multiplier%(i-1)%offset%];
-       var v2 = values[%multiplier%i%offset%];
+'       v1 = values[%multiplier%(i-1)%offset%];
+       v2 = values[%multiplier%i%offset%];
        propvals[%entry%] = p*v1 + (1-p)*v2;', entry=entries[j], multiplier, offset)
-     else subst(
+     else if (!direct) subst(
 '   propvals[%entry%] = values[%multiplier%value%offset%];', 
-      entry=entries[j], multiplier, offset))
+      entry = entries[j], multiplier, offset)
+     else if (ncol == 1) subst( 
+'   propvals[%entry%] = value;',
+     	entry = entries[j], jm1 = j - 1)
+     else subst( 
+'   propvals[%entry%] = value[%jm1%];',
+      entry = entries[j], jm1 = j - 1))
       
     prefix <- newprefix  
     property <- newprop
@@ -209,23 +246,141 @@ propertySetter <- function(values, entries, properties, objids, prefixes = "",
       prefix, property, objid, load))
 
   needsBinding <- unique(data.frame(prefixes, objids)[properties == "values",])
+  if (nrow(needsBinding))
+    result <- c(result, 
+'   var gl;')	
   for (i in seq_len(nrow(needsBinding))) {
     prefix <- needsBinding[i, 1]
     objid <- needsBinding[i, 2]
     result <- c(result, subst(
-'   var gl = %prefix%rgl.gl; 
-   gl.bindBuffer(gl.ARRAY_BUFFER, %prefix%rgl.buf[%objid%]);
-   gl.bufferData(gl.ARRAY_BUFFER, %prefix%rgl.values[%objid%], gl.STATIC_DRAW);',
-   	prefix, objid))
+'   if (typeof %prefix%rgl.buf[%objid%] !== "undefined") {
+     gl = %prefix%rgl.gl;
+     gl.bindBuffer(gl.ARRAY_BUFFER, %prefix%rgl.buf[%objid%]);
+     gl.bufferData(gl.ARRAY_BUFFER, %prefix%rgl.values[%objid%], gl.STATIC_DRAW);
+   }', prefix, objid))
    }
    result <- c(result, '}')
-  structure(paste(result, collapse = "\n"),
-    param = param, prefixes = prefixes,
+  result <- structure(paste(result, collapse = "\n"),
+    prefixes = prefixes,
     class = "propertySetter")
+  if (!direct)
+    attr(result, "param") <- param
+  result
 }
 
+vertexSetter <- function(values = NULL, vertices = 1, attributes, objid, prefix = "",
+			 param = seq_len(NROW(values)), interp = TRUE,
+			 digits = 7)  {
+  attribofs <- c(x = 'vofs', y = 'vofs', z = 'vofs', 
+  	    r = 'cofs', g = 'cofs', b = 'cofs', a = 'cofs', 
+            nx = 'nofs', ny = 'nofs', nz = 'nofs',
+	    radius = 'radofs', 
+            ox = 'oofs', oy = 'oofs', oz = 'oofs', 
+  	    ts = 'tofs', tt = 'tofs')
+  attribofsofs <- structure(c(0:2, 0:3, 0:2, 0, 0:2, 0:1),
+  			    names = names(attribofs))
+  direct <- is.null(values)
+  ncol <- max(if (is.matrix(values)) ncol(values), 
+  	      length(vertices), length(attributes))
+  if (direct) 
+    interp <- FALSE
+  else {    
+    values <- matrix(values, NROW(values))
+    stopifnot(ncol(values) == ncol,
+  		  all(diff(param) > 0))
+  }
+  
+  attributes <- match.arg(attributes, names(attribofs), several.ok = TRUE)
+  stopifnot(length(objid) == 1,
+	    length(prefix) == 1,
+            all(attributes %in% names(attribofs)),
+	    all(diff(param) > 0))
+  vertices <- rep(vertices, length.out = ncol)
+  attributes <- rep(attributes, length.out = ncol)
+  
+  if (!ncol) return(structure("function(value) {}", param = param, 
+			      prefixes = prefix,
+			      class = c("vertexSetter", "propertySetter")))
+	
+  if (interp) values <- rbind(values[1,], values, values[nrow(values),])
+  result <- c(
+'function(value){',
+
+    if (direct)
+'  var ofs;'
+    else subst(
+'  var ofs, values = [%vals%],', 
+    vals = paste(formatC(as.vector(t(values)), digits = digits, width = 1), 
+	         collapse = ",")),
+		
+    subst(
+'  propvals = %prefix%rgl.values[%objid%],
+  stride = %prefix%rgl.offsets[%objid%].stride;',
+	prefix, objid),   
+		
+    if (interp) subst(
+'  var p, v1, v2, svals = [-Infinity, %svals%, Infinity];
+  for (var i = 1; i < svals.length; i++) 
+    if (value <= svals[i]) {
+      p = (svals[i] - value)/(svals[i] - svals[i-1]);',	svals = paste(formatC(param, digits = digits, width = 1), collapse = ","))
+    else if (!direct)
+'  value = Math.round(value);')
+	
+  for (j in seq_along(vertices)) {
+    multiplier <- ifelse(ncol>1, paste0(ncol, "*"), "")
+    offset <-     ifelse(j>1,  paste0("+", j-1), "")
+    entry <- ifelse(vertices[j] == 1, 'ofs',
+		    subst('%vertexm1%*stride + ofs',
+			  vertexm1 = vertices[j]-1))
+    result <- c(result,
+      subst(
+'  ofs = %prefix%rgl.offsets[%objid%].%attribofs%;
+  if (ofs < 0)
+    alert("Attribute %attribute% not found in object %objid%");',
+        prefix, objid, attribofs = attribofs[attributes[j]], 
+        attribute = attributes[j]),
+
+      if (attribofsofs[attributes[j]] > 0)
+      	subst(
+'  ofs = ofs + %attribofsofs%;', attribofsofs = attribofsofs[attributes[j]]),
+   
+      if (interp) subst(
+'  v1 = values[%multiplier%(i-1)%offset%];
+  v2 = values[%multiplier%i%offset%];
+  propvals[%entry%] = p*v1 + (1-p)*v2;', 
+        entry, multiplier, offset)
+      else if (!direct) subst(
+'  propvals[%entry%] = values[%multiplier%value%offset%];', 
+	entry, multiplier, offset)
+      else if (ncol == 1) subst(
+'  propvals[%entry%] = value;', 
+      	entry)
+      else subst(
+'  propvals[%entry%] = value[%jm1%];', 
+      	entry, jm1 = j - 1))
+
+  }  
+  result <- c(result, 
+    if (interp)
+'       break;
+  }',
+    subst(
+'  %prefix%rgl.values[%objid%] = propvals;
+  if (typeof %prefix%rgl.buf[%objid%] !== "undefined") {
+    var gl = %prefix%rgl.gl;
+    gl.bindBuffer(gl.ARRAY_BUFFER, %prefix%rgl.buf[%objid%]);
+    gl.bufferData(gl.ARRAY_BUFFER, %prefix%rgl.values[%objid%], gl.STATIC_DRAW);
+  }', prefix, objid))
+
+    result <- c(result, '}')
+    structure(paste(result, collapse = "\n"),
+      param = param, prefixes = prefix,
+      class = c("vertexSetter", "propertySetter"))
+}
+
+
 par3dinterpSetter <- function(fn, from, to, steps, subscene = f0$subscene,
-			      omitConstant = TRUE, ...) {
+			      omitConstant = TRUE, rename = character(), ...) {
   times <- seq(from, to, length.out = steps+1)
   fvals <- lapply(times, fn)
   f0 <- fvals[[1]]
@@ -236,6 +391,9 @@ par3dinterpSetter <- function(fn, from, to, steps, subscene = f0$subscene,
   props <- c("FOV", "userMatrix", "scale", "zoom")
   for(i in seq_along(props)) {
     prop <- props[i]
+    propname <- rename[prop]
+    if (is.na(propname)) 
+    	propname <- prop
     if (!is.null(value <- f0[[prop]])) {
       newvals <- sapply(fvals, function(e) as.numeric(e[[prop]]))
       if (is.matrix(newvals)) newvals <- t(newvals)
@@ -243,16 +401,62 @@ par3dinterpSetter <- function(fn, from, to, steps, subscene = f0$subscene,
       cols <- NCOL(newvals)
       stopifnot(rows == length(fvals))
       entries <- c(entries, seq_len(cols)-1)
-      properties <- c(properties, rep(prop, cols))
+      properties <- c(properties, rep(propname, cols))
       values <- cbind(values, newvals)
     }
   }
   if (omitConstant) keep <- apply(values, 2, var) > 0
   else keep <- TRUE 
-	
+
   propertySetter(values = values[,keep], entries = entries[keep], 
 		 properties = properties[keep], 
 		 objids = subscene, param = times, ...)
+}
+
+matrixSetter <- function(fns, from, to, steps, subscene = currentSubscene3d(), matrix = "userMatrix",
+			omitConstant = TRUE, prefix = "", ...) {
+  n <- length(fns)
+  from <- rep(from, length.out = n)
+  to <- rep(to, length.out = n)
+  steps <- rep(steps, length.out = n)
+  settername <- basename(tempfile("fn", ""))
+  propname <- paste0("userMatrix", settername) # Needs to match "^userMatrix" regexp
+  param <- numeric()
+  prefixes <- character()
+  result <- subst(
+'%prefix%rgl.%settername% = function(value, index){
+     var fns = new Array();', prefix, settername)
+  product <- ''
+  for (i in seq_len(n)) {
+    setter <- par3dinterpSetter(fns[[i]], from[i], to[i], steps[i],
+    			        omitConstant = TRUE, subscene = i-1, prefixes = prefix,
+    			        rename = c(userMatrix = propname), ...)
+    result <- c(result, subst(
+'     fns[%i%] = ', i=i-1), setter)
+    param <- c(param, attr(setter, "param"))
+  }
+  result <- c(result, 
+'   fns[index](value);
+   var newmatrix = new CanvasMatrix4();',
+    paste0(subst(
+'   newmatrix.multLeft(%prefix%rgl.%propname%[', prefix, propname), 0:(n-1), ']);'),
+    subst(
+'   %prefix%rgl.%matrix%[%subscene%].load(newmatrix);
+ }
+ %prefix%rgl.%propname% = new Array();', prefix, subscene, propname, matrix),
+    paste0(subst(
+' %prefix%rgl.%propname%[', prefix, propname), 0:(n-1), '] = new CanvasMatrix4();'))
+  structure(paste(result, collapse="\n"),
+  	    param = sort(unique(param)),
+  	    prefixes = prefix,
+  	    name = subst('%prefix%rgl.%settername%', prefix, settername),
+  	    class = c("matrixSetter", "indexedSetter", "propertySetter"))
+}
+
+print.indexedSetter <- function(x, inScript = FALSE, ...) {
+  if (!inScript) cat("<script>\n")
+  cat(x)
+  if (!inScript) cat("\n</script>")
 }
 
 ageSetter <- function(births, ages, colors = NULL, alpha = NULL, 
@@ -280,10 +484,11 @@ ageSetter <- function(births, ages, colors = NULL, alpha = NULL,
   objids <- rep(objids, length.out = nobjs)
   result <- subst(
 '  function(time){
-    var ages = [-Infinity, %ages%, Infinity];
-    var births = [%births%];
-    var j = new Array(births.length);
-    var p = new Array(births.length);',
+    var ages = [-Infinity, %ages%, Infinity],
+        births = [%births%],
+        j = new Array(births.length),
+        p = new Array(births.length),
+        i, age, j0, propvals, stride, ofs;',
     ages = formatVec(ages), births = formatVec(births))
   rows <- c(1,1:n, n)
   if ("colors" %in% attribs) 
@@ -316,9 +521,9 @@ ageSetter <- function(births, ages, colors = NULL, alpha = NULL,
 '    var texcoords = [%values%];', values = formatVec(texcoords[rows,])))
   }
   result <- c(result,
-'    for (var i = 0; i < births.length; i++) {
-      var age = time - births[i];
-      for (var j0 = 1; age > ages[j0]; j0++);
+'    for (i = 0; i < births.length; i++) {
+      age = time - births[i];
+      for (j0 = 1; age > ages[j0]; j0++);
       if (ages[j0] == Infinity)
         p[i] = 1;       
       else if (ages[j0] > ages[j0-1])
@@ -331,17 +536,17 @@ ageSetter <- function(births, ages, colors = NULL, alpha = NULL,
     prefix <- prefixes[j]
     objid <- objids[j]
     result <- c(result, subst(
-'    var propvals = %prefix%rgl.values[%objid%];
-    var stride = %prefix%rgl.offsets[%objid%]["stride"];',
+'    propvals = %prefix%rgl.values[%objid%];
+    stride = %prefix%rgl.offsets[%objid%].stride;',
       prefix, objid))
     for (a in attribs) {
       ofs <- c(colors = "cofs", alpha = "cofs", radii = "radofs",
       	       vertices = "vofs", normals = "nofs", origins = "oofs",
       	       texcoords = "tofs")[a]
       result <- c(result, subst(
-'    var ofs = %prefix%rgl.offsets[%objid%]["%ofs%"];
+'    ofs = %prefix%rgl.offsets[%objid%].%ofs%;
     if (ofs >= 0) {
-      for (var i = 0; i < births.length; i++) {', 
+      for (i = 0; i < births.length; i++) {', 
         prefix, objid, ofs))
       dim <- c(colors = 3, alpha = 1, radii = 1,
       	 vertices = 3, normals = 3, origins = 2,
@@ -372,5 +577,5 @@ ageSetter <- function(births, ages, colors = NULL, alpha = NULL,
   result <- c(result, '  }')
   structure(paste(result, collapse = "\n"),
             param = param, prefixes = prefixes,
-  	    class = "propertySetter")
+  	    class = c("ageSetter", "propertySetter"))
 }

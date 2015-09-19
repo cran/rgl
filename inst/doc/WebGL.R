@@ -2,12 +2,12 @@
 source("setup.R")
 set.seed(123)
 
-## ----plot3d, rgl=TRUE----------------------------------------------------
+## ----plot3d, webgl=TRUE--------------------------------------------------
 with(iris, plot3d(Sepal.Length, Sepal.Width, Petal.Length, 
                   type="s", col=as.numeric(Species)))
 subid <- currentSubscene3d()
 
-## ----toggle, rgl = TRUE, rgl.keepopen = TRUE-----------------------------
+## ----toggle, webgl = TRUE, rgl.newwindow = TRUE--------------------------
 sphereid <- with(subset(iris, Species == "setosa"), 
      spheres3d(Sepal.Length, Sepal.Width, Petal.Length, 
                   col=as.numeric(Species),
@@ -34,7 +34,7 @@ toggleButton(sphereid, label = "setosa", prefix = "toggle", subscene = subid)
 toggleButton(sphereid+1, label = "versicolor", prefix = "toggle", subscene = subid)
 toggleButton(sphereid+2, label = "virginica", prefix = "toggle", subscene = subid)
 
-## ----slider, rgl=TRUE, rgl.keepopen=TRUE---------------------------------
+## ----slider, webgl=TRUE--------------------------------------------------
 
 ## ----results="asis"------------------------------------------------------
 subsetSlider(subsets = list(setosa = sphereid, 
@@ -44,7 +44,7 @@ subsetSlider(subsets = list(setosa = sphereid,
              prefixes = "slider", subscenes = subid, 
              init = 3)
 
-## ----userMatrix, rgl=TRUE------------------------------------------------
+## ----userMatrix, webgl=TRUE----------------------------------------------
 
 ## ----results="asis"------------------------------------------------------
 M <- r3dDefaults$userMatrix
@@ -56,7 +56,20 @@ propertySlider(setter = par3dinterpSetter(fn, 0, 1.5, steps=15,
 					   subscene = subid),
 	       step = 0.01)
 
-## ----curve, rgl=TRUE-----------------------------------------------------
+## ----vertex, webgl=TRUE--------------------------------------------------
+
+## ----results="asis"------------------------------------------------------
+setosa <- subset(iris, Species == "setosa")
+which <- which.min(setosa$Sepal.Width)
+init <- setosa$Sepal.Length[which]
+propertySlider(
+	vertexSetter(values = matrix(c(init,8,0,1,0,1,0,1), nrow=2),
+	             attributes=c("x", "r", "g", "b"), 
+		     vertices = which, objid = sphereid, 
+		     prefix = "vertex"), 
+	step=0.01)
+
+## ----curve, webgl=TRUE---------------------------------------------------
 time <- 0:500
 xyz <- cbind(cos(time/20), sin(time/10), time)
 lineid <- plot3d(xyz, type="l", col = c("black", "black"))["data"]

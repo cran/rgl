@@ -174,12 +174,8 @@ property int vertex2\n", file=con)
     n <- nrow(vertices)
     inds <- seq_len(n)    
     if (pointsAsEdges) {
-      if (withNormals)
-        normals <- 0*vertices
       base <- nrow(Vertices)
-      Vertices <<- rbind(Vertices, cbind(vertices, 
-      					 if (withColors) colors,
-      					 if (withNormals) normals))
+      Vertices <<- rbind(Vertices, vertices)
       Edges <<- rbind(Edges, base + cbind(inds, inds) - 1 )  
     } else {
       radius <- pointRadius*avgScale()
@@ -294,15 +290,16 @@ property int vertex2\n", file=con)
     allids <- rgl.ids()
     ind <- match(ids, allids$id)
     keep <- !is.na(ind)
-    if (any(!keep)) warning("object(s) with id ", paste(ids[!keep], collapse=" "), " not found")
+    if (any(!keep)) warning(gettextf("Object(s) with id %s not found", paste(ids[!keep], collapse=" ")), 
+    			    domain = NA)
     ids <- ids[keep]
     types <- allids$type[ind[keep]]
   }  
     
   unknowntypes <- setdiff(types, knowntypes)
   if (length(unknowntypes))
-    warning("Object type(s) ", 
-      paste("'", unknowntypes, "'", sep="", collapse=", "), " not handled.")
+    warning(gettextf("Object type(s) %s not handled", 
+      paste("'", unknowntypes, "'", sep="", collapse=", ")), domain = NA)
 
   keep <- types %in% knowntypes
   ids <- ids[keep]

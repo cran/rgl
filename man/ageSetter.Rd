@@ -63,7 +63,8 @@ chosen that is not a property of the corresponding object, a
 Javascript \code{alert()} will be generated.  
 }
 \value{
-A character vector of class \code{"propertySetter"} containing Javascript
+A character vector of class \code{c("ageSetter", "propertySetter")} 
+containing Javascript
 code defining a function suitable for use in a \code{\link{propertySlider}}.
 
 The function takes a single argument, \code{time}, and uses it to compute the
@@ -78,7 +79,7 @@ Duncan Murdoch
 }
 \seealso{
 \code{\link{propertySlider}}; more detailed control is available in
-\code{\link{propertySetter}}.
+\code{\link{vertexSetter}}.
 }
 \examples{
 propertySlider(ageSetter(births = 1:10, ages = c(-1, 0, 1), 

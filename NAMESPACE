@@ -8,7 +8,8 @@ export(.check3d,
 	gc3d, getr3dDefaults, GramSchmidt, grid3d, 
 	hook_rgl, hook_webgl,
 	icosahedron3d, identify3d, identityMatrix,  
-	layout3d, legend3d, light3d, lines3d, material3d, mfrow3d, movie3d, mtext3d, 
+	layout3d, legend3d, light3d, lines3d, material3d, 
+        matrixSetter, mfrow3d, movie3d, mtext3d, 
 	newSubscene3d, next3d, observer3d, octahedron3d, oh3d, open3d, 
 	par3d, par3dinterp, par3dinterpSetter, particles3d, persp3d, planes3d, 
         play3d, plot3d, points3d, 
@@ -23,7 +24,7 @@ export(.check3d,
 	rgl.attrib, rgl.attrib.count, rgl.dev.list, rgl.useNULL,
 	rgl.viewpoint, rgl.window2user, rglFonts, r3dDefaults, rotate3d, rotationMatrix,
 	scale3d, scaleMatrix, scene3d, segments3d, select3d, selectpoints3d,
-	rgl.setMouseCallbacks, rgl.setWheelCallback, shade3d, 
+	rgl.setMouseCallbacks, rgl.setWheelCallback, setupKnitr, shade3d, 
 	shapelist3d, snapshot3d, 
 	spheres3d, spin3d, sprites3d, subdivision3d, 
 	subsceneInfo, subsceneList, subsetSetter, subsetSlider, Sweave.snapshot,
@@ -31,7 +32,7 @@ export(.check3d,
 	tetrahedron3d, text3d,
 	texts3d, title3d, toggleButton, triangulate, 
 	tmesh3d, transform3d, translate3d, translationMatrix, triangles3d,
-	turn3d, useSubscene3d, view3d, wire3d, writeOBJ, writePLY, writeSTL, writeWebGL)
+	turn3d, useSubscene3d, vertexSetter, view3d, wire3d, writeOBJ, writePLY, writeSTL, writeWebGL)
 
  S3method(dot3d, shapelist3d)
  S3method(wire3d, shapelist3d)
@@ -76,11 +77,18 @@ export(.check3d,
  S3method(print, rglscene)
  S3method(print, rglobject)
  S3method(print, rglsubscene)
+ S3method(print, indexedSetter)
  
  S3method(summary, rglscene)
  S3method(summary, rglsubscene)
  
  if(tools:::.OStype() == "windows") {
-   import(utils) # only needed for getWindowsHandle
+   importFrom(utils, getWindowsHandle)
  }
  
+ importFrom(graphics, legend, par, plot, polygon)
+ importFrom(grDevices, col2rgb, colorRamp, dev.off, png, 
+ 	    postscript, rgb, xy.coords, xyz.coords)
+ importFrom(stats, approxfun, qchisq, qf, splinefun, var)
+ importFrom(utils, file_test, flush.console,
+ 	    packageVersion, read.table)

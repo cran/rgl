@@ -2,6 +2,8 @@
 \alias{propertySlider}
 \alias{propertySetter}
 \alias{par3dinterpSetter}
+\alias{matrixSetter}
+\alias{vertexSetter}
 \title{
 Write HTML/Javascript code to control a WebGL display.
 }
@@ -16,12 +18,21 @@ propertySlider(setter = propertySetter,
 	     labels = displayVals(sliderVals), 
 	     id = basename(tempfile("input")), name = id,
 	     outputid = paste0(id, "text"),
+	     index = NULL,
 	     ...) 
 	     
-propertySetter(values, entries, properties, objids, prefixes = "",
+propertySetter(values = NULL, entries, properties, objids, prefixes = "",
                param = seq_len(NROW(values)), interp = TRUE, digits = 7) 
                
-par3dinterpSetter(fn, from, to, steps, subscene, omitConstant = TRUE, ...)
+par3dinterpSetter(fn, from, to, steps, subscene, omitConstant = TRUE, 
+                  rename = character(), ...)
+
+matrixSetter(fns, from, to, steps, subscene = currentSubscene3d(), 
+             matrix = "userMatrix", omitConstant = TRUE, prefix = "", ...) 
+             
+vertexSetter(values, vertices = 1, attributes, objid, prefix = "",
+	     param = seq_len(NROW(values)), interp = TRUE,
+	     digits = 7)
 }
 \arguments{
   \item{setter}{A function to write Javascript code, or its output, or
@@ -34,33 +45,85 @@ par3dinterpSetter(fn, from, to, steps, subscene, omitConstant = TRUE, ...)
   \item{name}{The name of the input control that will be generated.}
   \item{outputid}{The \code{id} of the output control that
 will display the slider value, or \code{NULL} for none.}
+  \item{index}{The 1-based index of this slider:  it controls the
+  corresponding entry in an indexed setter such as \code{matrixSetter}.}
   \item{...}{See Details below.}
-  \item{values}{An array of values; rows correspond to slider positions.}
+  \item{values}{An array of values; rows correspond to slider positions.  Alternatively, \code{NULL}; the generated function takes a
+  single value or array of values and applies them directly.}
   \item{entries, properties, objids, prefixes}{Vectors describing
   the columns of \code{values}.  See the details below.}
   \item{param}{Parameter values corresponding to each row of \code{values}.}
   \item{interp}{Whether to interpolate values.  If \code{FALSE}, 
-  the Javascript function will expect non-negative integer values.}
+  the Javascript function will expect non-negative integer values.
+  Ignored if \code{values} is \code{NULL}.}
   \item{digits}{How many significant digits to emit in the Javascript code.}
   \item{fn}{A function returned from \code{\link{par3dinterp}}.}
   \item{from, to, steps}{Values where \code{fn} should be evaluated.}
   \item{subscene}{Which subscene's properties should be modified?}
   \item{omitConstant}{If \code{TRUE}, do not set values that are
   constant across the range.}
+  \item{rename}{A named character vector of names of Javascript properties
+  to modify.  See the details.}
+  \item{fns}{A list containing functions returned from 
+    \code{\link{par3dinterp}}.}
+  \item{matrix}{A character string giving the Javascript property
+    name of the matrix to modify.}
+  \item{prefix}{The prefix of the scene containing \code{matrix}.}
+  \item{vertices}{A vector of vertex numbers (1-based) within 
+  an object.}
+  \item{attributes}{A vector of attributes of a vertex, 
+  from \code{c("x", "y", "z", "r", "g", "b", "a", "nx", "ny", "nz",
+               "radius", "ox", "oy", "oz", "ts", "tt")}.  See
+               Details.}
+  \item{objid}{The object containing the vertices to be modified.}
 }
 \details{
 The \code{...} parameters to \code{propertySlider} will be passed to
 \code{setter} if the latter is a function, otherwise ignored. 
 
-The \code{...} parameters to \code{par3dinterpSetter} will be passed
-to \code{propertySetter}.
+The \code{...} parameters to \code{par3dinterpSetter}
+will be passed to \code{propertySetter}.
+
+The \code{...} parameters to \code{matrixSetter} will be passed to the
+\code{par3dinterpSetter} functions used for each of the functions
+in \code{fns}.
 
 \code{propertySetter} is a low-level general purpose function for modifying
 properties of objects in the scene.  It is mainly for internal use.
 \code{propertySlider} uses it to generate Javascript for a slider control
-to manipulate those properties.  \code{par3dinterpSetter} uses
-it to set parameters corresponding to values produced by the result of
-\code{par3dinterp}.
+to manipulate those properties.  
+
+\code{vertexSetter} modifies attributes of vertices in a single
+object.  The \code{attributes} are properties of each vertex 
+in a scene; not all are applicable to all objects. In order, 
+the are: coordinates of the vertex \code{"x", "y", "z"}, color
+of the vertex \code{"r", "g", "b", "a"}, normal at the vertex
+\code{"nx", "ny", "nz"}, radius of a sphere at the vertex
+\code{"radius"}, origin within a texture \code{"ox", "oy"} and
+perhaps \code{"oz"}, texture coordinates \code{"ts", "tt"}.
+
+\code{propertySetter} and \code{vertexSetter} allow values to be 
+specified in two ways.
+The normal way when used with a slider is to interpolate between
+specified values indexed by the slider.  If \code{values = NULL},
+the value of the slider is used directly (and only one entry can
+be set).  Multiple entries can be set directly by passing
+an array of values in custom Javascript code.
+
+\code{par3dinterpSetter} uses \code{propertySetter}
+to set parameters corresponding to values produced by the result of
+\code{par3dinterp}.  Its \code{rename} argument allows translation
+of names, e.g. \code{rename = c(userMatrix = "myMatrix")} would
+cause the \code{"userMatrix"} result from \code{\link{par3dinterp}}
+to be used to modify the Javascript \code{myMatrix} property.
+
+\code{matrixSetter} is used in the situation where multiple controls
+(e.g. sliders) are used to determine the value of a matrix, typically
+\code{"userMatrix"}.  It will generate one \code{par3dinterpSetter}
+function for each of the entries in \code{fns}; these will be called
+when a \code{propertySlider} with the corresponding (1-based) index
+is changed, and the results multiplied together from right to left
+to produce a new value for whichever property is named in \code{matrix}.
 
 The rows of the \code{values} matrix correspond to different settings
 for numeric properties.  The columns are values to insert into those properties.
@@ -102,6 +165,16 @@ which gives access to the local environment where it was
 created, so for example \code{attr(value, "env")$prefixes} will
 give access to the \code{prefixes} argument if \code{value}
 was produced by \code{"propertySetter"}.
+
+\code{par3dinterpSetter} returns a \code{propertySetter} result.
+
+\code{matrixSetter} is similar to \code{propertySetter}, but
+the Javascript function takes arguments \code{value, index}, 
+and the class of the result is 
+\code{c("matrixSetter", "indexedSetter", "propertySetter")}.
+
+\code{vertexSetter} is similar to \code{propertySetter}, but
+the class of the result is \code{c("vertexSetter", "propertySetter")}.
 }
 \author{
 Duncan Murdoch
