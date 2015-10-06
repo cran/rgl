@@ -2,7 +2,7 @@
 ## R source file
 ## This file is part of rgl
 ##
-## $Id: scene.R 1324 2015-09-06 19:52:37Z murdoch $
+## $Id: scene.R 1357 2015-09-30 19:49:19Z murdoch $
 ##
 
 ##
@@ -305,7 +305,7 @@ rgl.bbox <- function(
   if (! ret$success)
     stop("'rgl_bbox' failed")
     
-  invisible(1)
+  invisible(ret$success)
 
 }
 

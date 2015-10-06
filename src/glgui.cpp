@@ -1,7 +1,7 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: glgui.cpp 1137 2014-09-24 19:03:24Z murdoch $
+// $Id: glgui.cpp 1366 2015-10-05 15:25:06Z murdoch $
 
 #include <cstdio>
 #ifdef HAVE_FREETYPE
@@ -99,7 +99,7 @@ double GLBitmapFont::height() {
 
 bool GLBitmapFont::valid(const char* text) {
   for (int i=0; text[i]; i++)
-    if ((int)text[i] < (int)firstGlyph || text[i] - firstGlyph >= (int)nglyph)
+    if ((int)text[i] < (int)firstGlyph || (int)text[i] - (int)firstGlyph >= (int)nglyph)
       return false;
   return true;
 }

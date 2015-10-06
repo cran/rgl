@@ -1,74 +1,212 @@
 <!DOCTYPE html>
-
-<html xmlns="http://www.w3.org/1999/xhtml">
-
+<html>
 <head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 
-<meta charset="utf-8">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="generator" content="pandoc" />
+<title>Introduction</title>
 
-<meta name="author" content="Duncan Murdoch" />
-
-<meta name="date" content="2015-09-19" />
-
-<title>User Interaction in WebGL</title>
-
-
-
-<style type="text/css">code{white-space: pre;}</style>
-<style type="text/css">
-table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
-  margin: 0; padding: 0; vertical-align: baseline; border: none; }
-table.sourceCode { width: 100%; line-height: 100%; }
-td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
-td.sourceCode { padding-left: 5px; }
-code > span.kw { color: #007020; font-weight: bold; }
-code > span.dt { color: #902000; }
-code > span.dv { color: #40a070; }
-code > span.bn { color: #40a070; }
-code > span.fl { color: #40a070; }
-code > span.ch { color: #4070a0; }
-code > span.st { color: #4070a0; }
-code > span.co { color: #60a0b0; font-style: italic; }
-code > span.ot { color: #007020; }
-code > span.al { color: #ff0000; font-weight: bold; }
-code > span.fu { color: #06287e; }
-code > span.er { color: #ff0000; font-weight: bold; }
-</style>
-<style type="text/css">
-  pre:not([class]) {
-    background-color: white;
+<script type="text/javascript">
+window.onload = function() {
+  var imgs = document.getElementsByTagName('img'), i, img;
+  for (i = 0; i < imgs.length; i++) {
+    img = imgs[i];
+    // center an image if it is the only element of its parent
+    if (img.parentElement.childElementCount === 1)
+      img.parentElement.style.textAlign = 'center';
   }
+};
+</script>
+
+<!-- Styles for R syntax highlighter -->
+<style type="text/css">
+   pre .operator,
+   pre .paren {
+     color: rgb(104, 118, 135)
+   }
+
+   pre .literal {
+     color: #990073
+   }
+
+   pre .number {
+     color: #099;
+   }
+
+   pre .comment {
+     color: #998;
+     font-style: italic
+   }
+
+   pre .keyword {
+     color: #900;
+     font-weight: bold
+   }
+
+   pre .identifier {
+     color: rgb(0, 0, 0);
+   }
+
+   pre .string {
+     color: #d14;
+   }
+</style>
+
+<!-- R syntax highlighter -->
+<script type="text/javascript">
+var hljs=new function(){function m(p){return p.replace(/&/gm,"&amp;").replace(/</gm,"&lt;")}function f(r,q,p){return RegExp(q,"m"+(r.cI?"i":"")+(p?"g":""))}function b(r){for(var p=0;p<r.childNodes.length;p++){var q=r.childNodes[p];if(q.nodeName=="CODE"){return q}if(!(q.nodeType==3&&q.nodeValue.match(/\s+/))){break}}}function h(t,s){var p="";for(var r=0;r<t.childNodes.length;r++){if(t.childNodes[r].nodeType==3){var q=t.childNodes[r].nodeValue;if(s){q=q.replace(/\n/g,"")}p+=q}else{if(t.childNodes[r].nodeName=="BR"){p+="\n"}else{p+=h(t.childNodes[r])}}}if(/MSIE [678]/.test(navigator.userAgent)){p=p.replace(/\r/g,"\n")}return p}function a(s){var r=s.className.split(/\s+/);r=r.concat(s.parentNode.className.split(/\s+/));for(var q=0;q<r.length;q++){var p=r[q].replace(/^language-/,"");if(e[p]){return p}}}function c(q){var p=[];(function(s,t){for(var r=0;r<s.childNodes.length;r++){if(s.childNodes[r].nodeType==3){t+=s.childNodes[r].nodeValue.length}else{if(s.childNodes[r].nodeName=="BR"){t+=1}else{if(s.childNodes[r].nodeType==1){p.push({event:"start",offset:t,node:s.childNodes[r]});t=arguments.callee(s.childNodes[r],t);p.push({event:"stop",offset:t,node:s.childNodes[r]})}}}}return t})(q,0);return p}function k(y,w,x){var q=0;var z="";var s=[];function u(){if(y.length&&w.length){if(y[0].offset!=w[0].offset){return(y[0].offset<w[0].offset)?y:w}else{return w[0].event=="start"?y:w}}else{return y.length?y:w}}function t(D){var A="<"+D.nodeName.toLowerCase();for(var B=0;B<D.attributes.length;B++){var C=D.attributes[B];A+=" "+C.nodeName.toLowerCase();if(C.value!==undefined&&C.value!==false&&C.value!==null){A+='="'+m(C.value)+'"'}}return A+">"}while(y.length||w.length){var v=u().splice(0,1)[0];z+=m(x.substr(q,v.offset-q));q=v.offset;if(v.event=="start"){z+=t(v.node);s.push(v.node)}else{if(v.event=="stop"){var p,r=s.length;do{r--;p=s[r];z+=("</"+p.nodeName.toLowerCase()+">")}while(p!=v.node);s.splice(r,1);while(r<s.length){z+=t(s[r]);r++}}}}return z+m(x.substr(q))}function j(){function q(x,y,v){if(x.compiled){return}var u;var s=[];if(x.k){x.lR=f(y,x.l||hljs.IR,true);for(var w in x.k){if(!x.k.hasOwnProperty(w)){continue}if(x.k[w] instanceof Object){u=x.k[w]}else{u=x.k;w="keyword"}for(var r in u){if(!u.hasOwnProperty(r)){continue}x.k[r]=[w,u[r]];s.push(r)}}}if(!v){if(x.bWK){x.b="\\b("+s.join("|")+")\\s"}x.bR=f(y,x.b?x.b:"\\B|\\b");if(!x.e&&!x.eW){x.e="\\B|\\b"}if(x.e){x.eR=f(y,x.e)}}if(x.i){x.iR=f(y,x.i)}if(x.r===undefined){x.r=1}if(!x.c){x.c=[]}x.compiled=true;for(var t=0;t<x.c.length;t++){if(x.c[t]=="self"){x.c[t]=x}q(x.c[t],y,false)}if(x.starts){q(x.starts,y,false)}}for(var p in e){if(!e.hasOwnProperty(p)){continue}q(e[p].dM,e[p],true)}}function d(B,C){if(!j.called){j();j.called=true}function q(r,M){for(var L=0;L<M.c.length;L++){if((M.c[L].bR.exec(r)||[null])[0]==r){return M.c[L]}}}function v(L,r){if(D[L].e&&D[L].eR.test(r)){return 1}if(D[L].eW){var M=v(L-1,r);return M?M+1:0}return 0}function w(r,L){return L.i&&L.iR.test(r)}function K(N,O){var M=[];for(var L=0;L<N.c.length;L++){M.push(N.c[L].b)}var r=D.length-1;do{if(D[r].e){M.push(D[r].e)}r--}while(D[r+1].eW);if(N.i){M.push(N.i)}return f(O,M.join("|"),true)}function p(M,L){var N=D[D.length-1];if(!N.t){N.t=K(N,E)}N.t.lastIndex=L;var r=N.t.exec(M);return r?[M.substr(L,r.index-L),r[0],false]:[M.substr(L),"",true]}function z(N,r){var L=E.cI?r[0].toLowerCase():r[0];var M=N.k[L];if(M&&M instanceof Array){return M}return false}function F(L,P){L=m(L);if(!P.k){return L}var r="";var O=0;P.lR.lastIndex=0;var M=P.lR.exec(L);while(M){r+=L.substr(O,M.index-O);var N=z(P,M);if(N){x+=N[1];r+='<span class="'+N[0]+'">'+M[0]+"</span>"}else{r+=M[0]}O=P.lR.lastIndex;M=P.lR.exec(L)}return r+L.substr(O,L.length-O)}function J(L,M){if(M.sL&&e[M.sL]){var r=d(M.sL,L);x+=r.keyword_count;return r.value}else{return F(L,M)}}function I(M,r){var L=M.cN?'<span class="'+M.cN+'">':"";if(M.rB){y+=L;M.buffer=""}else{if(M.eB){y+=m(r)+L;M.buffer=""}else{y+=L;M.buffer=r}}D.push(M);A+=M.r}function G(N,M,Q){var R=D[D.length-1];if(Q){y+=J(R.buffer+N,R);return false}var P=q(M,R);if(P){y+=J(R.buffer+N,R);I(P,M);return P.rB}var L=v(D.length-1,M);if(L){var O=R.cN?"</span>":"";if(R.rE){y+=J(R.buffer+N,R)+O}else{if(R.eE){y+=J(R.buffer+N,R)+O+m(M)}else{y+=J(R.buffer+N+M,R)+O}}while(L>1){O=D[D.length-2].cN?"</span>":"";y+=O;L--;D.length--}var r=D[D.length-1];D.length--;D[D.length-1].buffer="";if(r.starts){I(r.starts,"")}return R.rE}if(w(M,R)){throw"Illegal"}}var E=e[B];var D=[E.dM];var A=0;var x=0;var y="";try{var s,u=0;E.dM.buffer="";do{s=p(C,u);var t=G(s[0],s[1],s[2]);u+=s[0].length;if(!t){u+=s[1].length}}while(!s[2]);if(D.length>1){throw"Illegal"}return{r:A,keyword_count:x,value:y}}catch(H){if(H=="Illegal"){return{r:0,keyword_count:0,value:m(C)}}else{throw H}}}function g(t){var p={keyword_count:0,r:0,value:m(t)};var r=p;for(var q in e){if(!e.hasOwnProperty(q)){continue}var s=d(q,t);s.language=q;if(s.keyword_count+s.r>r.keyword_count+r.r){r=s}if(s.keyword_count+s.r>p.keyword_count+p.r){r=p;p=s}}if(r.language){p.second_best=r}return p}function i(r,q,p){if(q){r=r.replace(/^((<[^>]+>|\t)+)/gm,function(t,w,v,u){return w.replace(/\t/g,q)})}if(p){r=r.replace(/\n/g,"<br>")}return r}function n(t,w,r){var x=h(t,r);var v=a(t);var y,s;if(v){y=d(v,x)}else{return}var q=c(t);if(q.length){s=document.createElement("pre");s.innerHTML=y.value;y.value=k(q,c(s),x)}y.value=i(y.value,w,r);var u=t.className;if(!u.match("(\\s|^)(language-)?"+v+"(\\s|$)")){u=u?(u+" "+v):v}if(/MSIE [678]/.test(navigator.userAgent)&&t.tagName=="CODE"&&t.parentNode.tagName=="PRE"){s=t.parentNode;var p=document.createElement("div");p.innerHTML="<pre><code>"+y.value+"</code></pre>";t=p.firstChild.firstChild;p.firstChild.cN=s.cN;s.parentNode.replaceChild(p.firstChild,s)}else{t.innerHTML=y.value}t.className=u;t.result={language:v,kw:y.keyword_count,re:y.r};if(y.second_best){t.second_best={language:y.second_best.language,kw:y.second_best.keyword_count,re:y.second_best.r}}}function o(){if(o.called){return}o.called=true;var r=document.getElementsByTagName("pre");for(var p=0;p<r.length;p++){var q=b(r[p]);if(q){n(q,hljs.tabReplace)}}}function l(){if(window.addEventListener){window.addEventListener("DOMContentLoaded",o,false);window.addEventListener("load",o,false)}else{if(window.attachEvent){window.attachEvent("onload",o)}else{window.onload=o}}}var e={};this.LANGUAGES=e;this.highlight=d;this.highlightAuto=g;this.fixMarkup=i;this.highlightBlock=n;this.initHighlighting=o;this.initHighlightingOnLoad=l;this.IR="[a-zA-Z][a-zA-Z0-9_]*";this.UIR="[a-zA-Z_][a-zA-Z0-9_]*";this.NR="\\b\\d+(\\.\\d+)?";this.CNR="\\b(0[xX][a-fA-F0-9]+|(\\d+(\\.\\d*)?|\\.\\d+)([eE][-+]?\\d+)?)";this.BNR="\\b(0b[01]+)";this.RSR="!|!=|!==|%|%=|&|&&|&=|\\*|\\*=|\\+|\\+=|,|\\.|-|-=|/|/=|:|;|<|<<|<<=|<=|=|==|===|>|>=|>>|>>=|>>>|>>>=|\\?|\\[|\\{|\\(|\\^|\\^=|\\||\\|=|\\|\\||~";this.ER="(?![\\s\\S])";this.BE={b:"\\\\.",r:0};this.ASM={cN:"string",b:"'",e:"'",i:"\\n",c:[this.BE],r:0};this.QSM={cN:"string",b:'"',e:'"',i:"\\n",c:[this.BE],r:0};this.CLCM={cN:"comment",b:"//",e:"$"};this.CBLCLM={cN:"comment",b:"/\\*",e:"\\*/"};this.HCM={cN:"comment",b:"#",e:"$"};this.NM={cN:"number",b:this.NR,r:0};this.CNM={cN:"number",b:this.CNR,r:0};this.BNM={cN:"number",b:this.BNR,r:0};this.inherit=function(r,s){var p={};for(var q in r){p[q]=r[q]}if(s){for(var q in s){p[q]=s[q]}}return p}}();hljs.LANGUAGES.cpp=function(){var a={keyword:{"false":1,"int":1,"float":1,"while":1,"private":1,"char":1,"catch":1,"export":1,virtual:1,operator:2,sizeof:2,dynamic_cast:2,typedef:2,const_cast:2,"const":1,struct:1,"for":1,static_cast:2,union:1,namespace:1,unsigned:1,"long":1,"throw":1,"volatile":2,"static":1,"protected":1,bool:1,template:1,mutable:1,"if":1,"public":1,friend:2,"do":1,"return":1,"goto":1,auto:1,"void":2,"enum":1,"else":1,"break":1,"new":1,extern:1,using:1,"true":1,"class":1,asm:1,"case":1,typeid:1,"short":1,reinterpret_cast:2,"default":1,"double":1,register:1,explicit:1,signed:1,typename:1,"try":1,"this":1,"switch":1,"continue":1,wchar_t:1,inline:1,"delete":1,alignof:1,char16_t:1,char32_t:1,constexpr:1,decltype:1,noexcept:1,nullptr:1,static_assert:1,thread_local:1,restrict:1,_Bool:1,complex:1},built_in:{std:1,string:1,cin:1,cout:1,cerr:1,clog:1,stringstream:1,istringstream:1,ostringstream:1,auto_ptr:1,deque:1,list:1,queue:1,stack:1,vector:1,map:1,set:1,bitset:1,multiset:1,multimap:1,unordered_set:1,unordered_map:1,unordered_multiset:1,unordered_multimap:1,array:1,shared_ptr:1}};return{dM:{k:a,i:"</",c:[hljs.CLCM,hljs.CBLCLM,hljs.QSM,{cN:"string",b:"'\\\\?.",e:"'",i:"."},{cN:"number",b:"\\b(\\d+(\\.\\d*)?|\\.\\d+)(u|U|l|L|ul|UL|f|F)"},hljs.CNM,{cN:"preprocessor",b:"#",e:"$"},{cN:"stl_container",b:"\\b(deque|list|queue|stack|vector|map|set|bitset|multiset|multimap|unordered_map|unordered_set|unordered_multiset|unordered_multimap|array)\\s*<",e:">",k:a,r:10,c:["self"]}]}}}();hljs.LANGUAGES.r={dM:{c:[hljs.HCM,{cN:"number",b:"\\b0[xX][0-9a-fA-F]+[Li]?\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"number",b:"\\b\\d+(?:[eE][+\\-]?\\d*)?L\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"number",b:"\\b\\d+\\.(?!\\d)(?:i\\b)?",e:hljs.IMMEDIATE_RE,r:1},{cN:"number",b:"\\b\\d+(?:\\.\\d*)?(?:[eE][+\\-]?\\d*)?i?\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"number",b:"\\.\\d+(?:[eE][+\\-]?\\d*)?i?\\b",e:hljs.IMMEDIATE_RE,r:1},{cN:"keyword",b:"(?:tryCatch|library|setGeneric|setGroupGeneric)\\b",e:hljs.IMMEDIATE_RE,r:10},{cN:"keyword",b:"\\.\\.\\.",e:hljs.IMMEDIATE_RE,r:10},{cN:"keyword",b:"\\.\\.\\d+(?![\\w.])",e:hljs.IMMEDIATE_RE,r:10},{cN:"keyword",b:"\\b(?:function)",e:hljs.IMMEDIATE_RE,r:2},{cN:"keyword",b:"(?:if|in|break|next|repeat|else|for|return|switch|while|try|stop|warning|require|attach|detach|source|setMethod|setClass)\\b",e:hljs.IMMEDIATE_RE,r:1},{cN:"literal",b:"(?:NA|NA_integer_|NA_real_|NA_character_|NA_complex_)\\b",e:hljs.IMMEDIATE_RE,r:10},{cN:"literal",b:"(?:NULL|TRUE|FALSE|T|F|Inf|NaN)\\b",e:hljs.IMMEDIATE_RE,r:1},{cN:"identifier",b:"[a-zA-Z.][a-zA-Z0-9._]*\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"operator",b:"<\\-(?!\\s*\\d)",e:hljs.IMMEDIATE_RE,r:2},{cN:"operator",b:"\\->|<\\-",e:hljs.IMMEDIATE_RE,r:1},{cN:"operator",b:"%%|~",e:hljs.IMMEDIATE_RE},{cN:"operator",b:">=|<=|==|!=|\\|\\||&&|=|\\+|\\-|\\*|/|\\^|>|<|!|&|\\||\\$|:",e:hljs.IMMEDIATE_RE,r:0},{cN:"operator",b:"%",e:"%",i:"\\n",r:1},{cN:"identifier",b:"`",e:"`",r:0},{cN:"string",b:'"',e:'"',c:[hljs.BE],r:0},{cN:"string",b:"'",e:"'",c:[hljs.BE],r:0},{cN:"paren",b:"[[({\\])}]",e:hljs.IMMEDIATE_RE,r:0}]}};
+hljs.initHighlightingOnLoad();
+</script>
+
+
+
+<style type="text/css">
+body, td {
+   font-family: sans-serif;
+   background-color: white;
+   font-size: 13px;
+}
+
+body {
+  max-width: 800px;
+  margin: auto;
+  padding: 1em;
+  line-height: 20px;
+}
+
+tt, code, pre {
+   font-family: 'DejaVu Sans Mono', 'Droid Sans Mono', 'Lucida Console', Consolas, Monaco, monospace;
+}
+
+h1 {
+   font-size:2.2em;
+}
+
+h2 {
+   font-size:1.8em;
+}
+
+h3 {
+   font-size:1.4em;
+}
+
+h4 {
+   font-size:1.0em;
+}
+
+h5 {
+   font-size:0.9em;
+}
+
+h6 {
+   font-size:0.8em;
+}
+
+a:visited {
+   color: rgb(50%, 0%, 50%);
+}
+
+pre, img {
+  max-width: 100%;
+}
+pre {
+  overflow-x: auto;
+}
+pre code {
+   display: block; padding: 0.5em;
+}
+
+code {
+  font-size: 92%;
+  border: 1px solid #ccc;
+}
+
+code[class] {
+  background-color: #F8F8F8;
+}
+
+table, td, th {
+  border: none;
+}
+
+blockquote {
+   color:#666666;
+   margin:0;
+   padding-left: 1em;
+   border-left: 0.5em #EEE solid;
+}
+
+hr {
+   height: 0px;
+   border-bottom: none;
+   border-top-width: thin;
+   border-top-style: dotted;
+   border-top-color: #999999;
+}
+
+@media print {
+   * {
+      background: transparent !important;
+      color: black !important;
+      filter:none !important;
+      -ms-filter: none !important;
+   }
+
+   body {
+      font-size:12pt;
+      max-width:100%;
+   }
+
+   a, a:visited {
+      text-decoration: underline;
+   }
+
+   hr {
+      visibility: hidden;
+      page-break-before: always;
+   }
+
+   pre, blockquote {
+      padding-right: 1em;
+      page-break-inside: avoid;
+   }
+
+   tr, img {
+      page-break-inside: avoid;
+   }
+
+   img {
+      max-width: 100% !important;
+   }
+
+   @page :left {
+      margin: 15mm 20mm 15mm 10mm;
+   }
+
+   @page :right {
+      margin: 15mm 10mm 15mm 20mm;
+   }
+
+   p, h2, h3 {
+      orphans: 3; widows: 3;
+   }
+
+   h2, h3 {
+      page-break-after: avoid;
+   }
+}
 </style>
 
 
-<link href="data:text/css,body%20%7B%0A%20%20background%2Dcolor%3A%20%23fff%3B%0A%20%20margin%3A%201em%20auto%3B%0A%20%20max%2Dwidth%3A%20700px%3B%0A%20%20overflow%3A%20visible%3B%0A%20%20padding%2Dleft%3A%202em%3B%0A%20%20padding%2Dright%3A%202em%3B%0A%20%20font%2Dfamily%3A%20%22Open%20Sans%22%2C%20%22Helvetica%20Neue%22%2C%20Helvetica%2C%20Arial%2C%20sans%2Dserif%3B%0A%20%20font%2Dsize%3A%2014px%3B%0A%20%20line%2Dheight%3A%201%2E35%3B%0A%7D%0A%0A%23header%20%7B%0A%20%20text%2Dalign%3A%20center%3B%0A%7D%0A%0A%23TOC%20%7B%0A%20%20clear%3A%20both%3B%0A%20%20margin%3A%200%200%2010px%2010px%3B%0A%20%20padding%3A%204px%3B%0A%20%20width%3A%20400px%3B%0A%20%20border%3A%201px%20solid%20%23CCCCCC%3B%0A%20%20border%2Dradius%3A%205px%3B%0A%0A%20%20background%2Dcolor%3A%20%23f6f6f6%3B%0A%20%20font%2Dsize%3A%2013px%3B%0A%20%20line%2Dheight%3A%201%2E3%3B%0A%7D%0A%20%20%23TOC%20%2Etoctitle%20%7B%0A%20%20%20%20font%2Dweight%3A%20bold%3B%0A%20%20%20%20font%2Dsize%3A%2015px%3B%0A%20%20%20%20margin%2Dleft%3A%205px%3B%0A%20%20%7D%0A%0A%20%20%23TOC%20ul%20%7B%0A%20%20%20%20padding%2Dleft%3A%2040px%3B%0A%20%20%20%20margin%2Dleft%3A%20%2D1%2E5em%3B%0A%20%20%20%20margin%2Dtop%3A%205px%3B%0A%20%20%20%20margin%2Dbottom%3A%205px%3B%0A%20%20%7D%0A%20%20%23TOC%20ul%20ul%20%7B%0A%20%20%20%20margin%2Dleft%3A%20%2D2em%3B%0A%20%20%7D%0A%20%20%23TOC%20li%20%7B%0A%20%20%20%20line%2Dheight%3A%2016px%3B%0A%20%20%7D%0A%0Atable%20%7B%0A%20%20margin%3A%201em%20auto%3B%0A%20%20border%2Dwidth%3A%201px%3B%0A%20%20border%2Dcolor%3A%20%23DDDDDD%3B%0A%20%20border%2Dstyle%3A%20outset%3B%0A%20%20border%2Dcollapse%3A%20collapse%3B%0A%7D%0Atable%20th%20%7B%0A%20%20border%2Dwidth%3A%202px%3B%0A%20%20padding%3A%205px%3B%0A%20%20border%2Dstyle%3A%20inset%3B%0A%7D%0Atable%20td%20%7B%0A%20%20border%2Dwidth%3A%201px%3B%0A%20%20border%2Dstyle%3A%20inset%3B%0A%20%20line%2Dheight%3A%2018px%3B%0A%20%20padding%3A%205px%205px%3B%0A%7D%0Atable%2C%20table%20th%2C%20table%20td%20%7B%0A%20%20border%2Dleft%2Dstyle%3A%20none%3B%0A%20%20border%2Dright%2Dstyle%3A%20none%3B%0A%7D%0Atable%20thead%2C%20table%20tr%2Eeven%20%7B%0A%20%20background%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0A%0Ap%20%7B%0A%20%20margin%3A%200%2E5em%200%3B%0A%7D%0A%0Ablockquote%20%7B%0A%20%20background%2Dcolor%3A%20%23f6f6f6%3B%0A%20%20padding%3A%200%2E25em%200%2E75em%3B%0A%7D%0A%0Ahr%20%7B%0A%20%20border%2Dstyle%3A%20solid%3B%0A%20%20border%3A%20none%3B%0A%20%20border%2Dtop%3A%201px%20solid%20%23777%3B%0A%20%20margin%3A%2028px%200%3B%0A%7D%0A%0Adl%20%7B%0A%20%20margin%2Dleft%3A%200%3B%0A%7D%0A%20%20dl%20dd%20%7B%0A%20%20%20%20margin%2Dbottom%3A%2013px%3B%0A%20%20%20%20margin%2Dleft%3A%2013px%3B%0A%20%20%7D%0A%20%20dl%20dt%20%7B%0A%20%20%20%20font%2Dweight%3A%20bold%3B%0A%20%20%7D%0A%0Aul%20%7B%0A%20%20margin%2Dtop%3A%200%3B%0A%7D%0A%20%20ul%20li%20%7B%0A%20%20%20%20list%2Dstyle%3A%20circle%20outside%3B%0A%20%20%7D%0A%20%20ul%20ul%20%7B%0A%20%20%20%20margin%2Dbottom%3A%200%3B%0A%20%20%7D%0A%0Apre%2C%20code%20%7B%0A%20%20background%2Dcolor%3A%20%23f7f7f7%3B%0A%20%20border%2Dradius%3A%203px%3B%0A%20%20color%3A%20%23333%3B%0A%7D%0Apre%20%7B%0A%20%20white%2Dspace%3A%20pre%2Dwrap%3B%20%20%20%20%2F%2A%20Wrap%20long%20lines%20%2A%2F%0A%20%20border%2Dradius%3A%203px%3B%0A%20%20margin%3A%205px%200px%2010px%200px%3B%0A%20%20padding%3A%2010px%3B%0A%7D%0Apre%3Anot%28%5Bclass%5D%29%20%7B%0A%20%20background%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0A%0Acode%20%7B%0A%20%20font%2Dfamily%3A%20Consolas%2C%20Monaco%2C%20%27Courier%20New%27%2C%20monospace%3B%0A%20%20font%2Dsize%3A%2085%25%3B%0A%7D%0Ap%20%3E%20code%2C%20li%20%3E%20code%20%7B%0A%20%20padding%3A%202px%200px%3B%0A%7D%0A%0Adiv%2Efigure%20%7B%0A%20%20text%2Dalign%3A%20center%3B%0A%7D%0Aimg%20%7B%0A%20%20background%2Dcolor%3A%20%23FFFFFF%3B%0A%20%20padding%3A%202px%3B%0A%20%20border%3A%201px%20solid%20%23DDDDDD%3B%0A%20%20border%2Dradius%3A%203px%3B%0A%20%20border%3A%201px%20solid%20%23CCCCCC%3B%0A%20%20margin%3A%200%205px%3B%0A%7D%0A%0Ah1%20%7B%0A%20%20margin%2Dtop%3A%200%3B%0A%20%20font%2Dsize%3A%2035px%3B%0A%20%20line%2Dheight%3A%2040px%3B%0A%7D%0A%0Ah2%20%7B%0A%20%20border%2Dbottom%3A%204px%20solid%20%23f7f7f7%3B%0A%20%20padding%2Dtop%3A%2010px%3B%0A%20%20padding%2Dbottom%3A%202px%3B%0A%20%20font%2Dsize%3A%20145%25%3B%0A%7D%0A%0Ah3%20%7B%0A%20%20border%2Dbottom%3A%202px%20solid%20%23f7f7f7%3B%0A%20%20padding%2Dtop%3A%2010px%3B%0A%20%20font%2Dsize%3A%20120%25%3B%0A%7D%0A%0Ah4%20%7B%0A%20%20border%2Dbottom%3A%201px%20solid%20%23f7f7f7%3B%0A%20%20margin%2Dleft%3A%208px%3B%0A%20%20font%2Dsize%3A%20105%25%3B%0A%7D%0A%0Ah5%2C%20h6%20%7B%0A%20%20border%2Dbottom%3A%201px%20solid%20%23ccc%3B%0A%20%20font%2Dsize%3A%20105%25%3B%0A%7D%0A%0Aa%20%7B%0A%20%20color%3A%20%230033dd%3B%0A%20%20text%2Ddecoration%3A%20none%3B%0A%7D%0A%20%20a%3Ahover%20%7B%0A%20%20%20%20color%3A%20%236666ff%3B%20%7D%0A%20%20a%3Avisited%20%7B%0A%20%20%20%20color%3A%20%23800080%3B%20%7D%0A%20%20a%3Avisited%3Ahover%20%7B%0A%20%20%20%20color%3A%20%23BB00BB%3B%20%7D%0A%20%20a%5Bhref%5E%3D%22http%3A%22%5D%20%7B%0A%20%20%20%20text%2Ddecoration%3A%20underline%3B%20%7D%0A%20%20a%5Bhref%5E%3D%22https%3A%22%5D%20%7B%0A%20%20%20%20text%2Ddecoration%3A%20underline%3B%20%7D%0A%0A%2F%2A%20Class%20described%20in%20https%3A%2F%2Fbenjeffrey%2Ecom%2Fposts%2Fpandoc%2Dsyntax%2Dhighlighting%2Dcss%0A%20%20%20Colours%20from%20https%3A%2F%2Fgist%2Egithub%2Ecom%2Frobsimmons%2F1172277%20%2A%2F%0A%0Acode%20%3E%20span%2Ekw%20%7B%20color%3A%20%23555%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%2F%2A%20Keyword%20%2A%2F%0Acode%20%3E%20span%2Edt%20%7B%20color%3A%20%23902000%3B%20%7D%20%2F%2A%20DataType%20%2A%2F%0Acode%20%3E%20span%2Edv%20%7B%20color%3A%20%2340a070%3B%20%7D%20%2F%2A%20DecVal%20%28decimal%20values%29%20%2A%2F%0Acode%20%3E%20span%2Ebn%20%7B%20color%3A%20%23d14%3B%20%7D%20%2F%2A%20BaseN%20%2A%2F%0Acode%20%3E%20span%2Efl%20%7B%20color%3A%20%23d14%3B%20%7D%20%2F%2A%20Float%20%2A%2F%0Acode%20%3E%20span%2Ech%20%7B%20color%3A%20%23d14%3B%20%7D%20%2F%2A%20Char%20%2A%2F%0Acode%20%3E%20span%2Est%20%7B%20color%3A%20%23d14%3B%20%7D%20%2F%2A%20String%20%2A%2F%0Acode%20%3E%20span%2Eco%20%7B%20color%3A%20%23888888%3B%20font%2Dstyle%3A%20italic%3B%20%7D%20%2F%2A%20Comment%20%2A%2F%0Acode%20%3E%20span%2Eot%20%7B%20color%3A%20%23007020%3B%20%7D%20%2F%2A%20OtherToken%20%2A%2F%0Acode%20%3E%20span%2Eal%20%7B%20color%3A%20%23ff0000%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%2F%2A%20AlertToken%20%2A%2F%0Acode%20%3E%20span%2Efu%20%7B%20color%3A%20%23900%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%2F%2A%20Function%20calls%20%2A%2F%20%0Acode%20%3E%20span%2Eer%20%7B%20color%3A%20%23a61717%3B%20background%2Dcolor%3A%20%23e3d2d2%3B%20%7D%20%2F%2A%20ErrorTok%20%2A%2F%0A%0A" rel="stylesheet" type="text/css" />
 
 </head>
 
 <body>
+<pre><code>## Loading required namespace: rmarkdown
+</code></pre>
 
-
-
-<div id="header">
-<h1 class="title">User Interaction in WebGL</h1>
-<h4 class="author"><em>Duncan Murdoch</em></h4>
-<h4 class="date"><em>September 19, 2015</em></h4>
-</div>
-
-<div id="TOC">
-<ul>
-<li><a href="#introduction">Introduction</a></li>
-<li><a href="#autogenerated-controls">Autogenerated controls</a></li>
-<li><a href="#user-defined-mouse-controls">User Defined Mouse Controls</a></li>
-<li><a href="#reference-for-rglclass">Reference for <code>rglClass</code></a><ul>
-<li><a href="#methods">Methods</a></li>
-<li><a href="#properties">Properties</a></li>
-</ul></li>
-<li><a href="#index">Index</a></li>
-</ul>
-</div>
+<pre><code>## Warning: These vignettes assume pandoc version 1.13.1; older versions may
+## give poor formatting.
+</code></pre>
 
 <style>
 .nostripes tr.even {background-color: white;}
@@ -77,18 +215,29 @@ table th {border-style: none;}
 table td {border-style: none;}
 a[href^=".."] {text-decoration: underline;}
 </style>
-<div id="introduction" class="section level2">
+
 <h2>Introduction</h2>
-<p>This document describes how to use embedded Javascript to control a WebGL display in an HTML document. For more general information, see <a href="rgl.html">rgl Overview</a>.</p>
-<p>We start with two simple examples. The next section gives reference information.</p>
-<p>Consider the simple plot of the iris data. We insert a code chunk with label <code>plot3d</code> (which will be used below).</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">with</span>(iris, <span class="kw">plot3d</span>(Sepal.Length, Sepal.Width, Petal.Length, 
-                  <span class="dt">type=</span><span class="st">&quot;s&quot;</span>, <span class="dt">col=</span><span class="kw">as.numeric</span>(Species)))
-subid &lt;-<span class="st"> </span><span class="kw">currentSubscene3d</span>()</code></pre>
-<script src="data:application/x-javascript,CanvasMatrix4%3Dfunction%28m%29%7Bif%28typeof%20m%3D%3D%27object%27%29%7Bif%28%22length%22in%20m%26%26m%2Elength%3E%3D16%29%7Bthis%2Eload%28m%5B0%5D%2Cm%5B1%5D%2Cm%5B2%5D%2Cm%5B3%5D%2Cm%5B4%5D%2Cm%5B5%5D%2Cm%5B6%5D%2Cm%5B7%5D%2Cm%5B8%5D%2Cm%5B9%5D%2Cm%5B10%5D%2Cm%5B11%5D%2Cm%5B12%5D%2Cm%5B13%5D%2Cm%5B14%5D%2Cm%5B15%5D%29%3Breturn%7Delse%20if%28m%20instanceof%20CanvasMatrix4%29%7Bthis%2Eload%28m%29%3Breturn%7D%7Dthis%2EmakeIdentity%28%29%7D%3BCanvasMatrix4%2Eprototype%2Eload%3Dfunction%28%29%7Bif%28arguments%2Elength%3D%3D1%26%26typeof%20arguments%5B0%5D%3D%3D%27object%27%29%7Bvar%20matrix%3Darguments%5B0%5D%3Bif%28%22length%22in%20matrix%26%26matrix%2Elength%3D%3D16%29%7Bthis%2Em11%3Dmatrix%5B0%5D%3Bthis%2Em12%3Dmatrix%5B1%5D%3Bthis%2Em13%3Dmatrix%5B2%5D%3Bthis%2Em14%3Dmatrix%5B3%5D%3Bthis%2Em21%3Dmatrix%5B4%5D%3Bthis%2Em22%3Dmatrix%5B5%5D%3Bthis%2Em23%3Dmatrix%5B6%5D%3Bthis%2Em24%3Dmatrix%5B7%5D%3Bthis%2Em31%3Dmatrix%5B8%5D%3Bthis%2Em32%3Dmatrix%5B9%5D%3Bthis%2Em33%3Dmatrix%5B10%5D%3Bthis%2Em34%3Dmatrix%5B11%5D%3Bthis%2Em41%3Dmatrix%5B12%5D%3Bthis%2Em42%3Dmatrix%5B13%5D%3Bthis%2Em43%3Dmatrix%5B14%5D%3Bthis%2Em44%3Dmatrix%5B15%5D%3Breturn%7Dif%28arguments%5B0%5Dinstanceof%20CanvasMatrix4%29%7Bthis%2Em11%3Dmatrix%2Em11%3Bthis%2Em12%3Dmatrix%2Em12%3Bthis%2Em13%3Dmatrix%2Em13%3Bthis%2Em14%3Dmatrix%2Em14%3Bthis%2Em21%3Dmatrix%2Em21%3Bthis%2Em22%3Dmatrix%2Em22%3Bthis%2Em23%3Dmatrix%2Em23%3Bthis%2Em24%3Dmatrix%2Em24%3Bthis%2Em31%3Dmatrix%2Em31%3Bthis%2Em32%3Dmatrix%2Em32%3Bthis%2Em33%3Dmatrix%2Em33%3Bthis%2Em34%3Dmatrix%2Em34%3Bthis%2Em41%3Dmatrix%2Em41%3Bthis%2Em42%3Dmatrix%2Em42%3Bthis%2Em43%3Dmatrix%2Em43%3Bthis%2Em44%3Dmatrix%2Em44%3Breturn%7D%7Dthis%2EmakeIdentity%28%29%7D%3BCanvasMatrix4%2Eprototype%2EgetAsArray%3Dfunction%28%29%7Breturn%5Bthis%2Em11%2Cthis%2Em12%2Cthis%2Em13%2Cthis%2Em14%2Cthis%2Em21%2Cthis%2Em22%2Cthis%2Em23%2Cthis%2Em24%2Cthis%2Em31%2Cthis%2Em32%2Cthis%2Em33%2Cthis%2Em34%2Cthis%2Em41%2Cthis%2Em42%2Cthis%2Em43%2Cthis%2Em44%5D%7D%3BCanvasMatrix4%2Eprototype%2EgetAsWebGLFloatArray%3Dfunction%28%29%7Breturn%20new%20WebGLFloatArray%28this%2EgetAsArray%28%29%29%7D%3BCanvasMatrix4%2Eprototype%2EmakeIdentity%3Dfunction%28%29%7Bthis%2Em11%3D1%3Bthis%2Em12%3D0%3Bthis%2Em13%3D0%3Bthis%2Em14%3D0%3Bthis%2Em21%3D0%3Bthis%2Em22%3D1%3Bthis%2Em23%3D0%3Bthis%2Em24%3D0%3Bthis%2Em31%3D0%3Bthis%2Em32%3D0%3Bthis%2Em33%3D1%3Bthis%2Em34%3D0%3Bthis%2Em41%3D0%3Bthis%2Em42%3D0%3Bthis%2Em43%3D0%3Bthis%2Em44%3D1%7D%3BCanvasMatrix4%2Eprototype%2Etranspose%3Dfunction%28%29%7Bvar%20tmp%3Dthis%2Em12%3Bthis%2Em12%3Dthis%2Em21%3Bthis%2Em21%3Dtmp%3Btmp%3Dthis%2Em13%3Bthis%2Em13%3Dthis%2Em31%3Bthis%2Em31%3Dtmp%3Btmp%3Dthis%2Em14%3Bthis%2Em14%3Dthis%2Em41%3Bthis%2Em41%3Dtmp%3Btmp%3Dthis%2Em23%3Bthis%2Em23%3Dthis%2Em32%3Bthis%2Em32%3Dtmp%3Btmp%3Dthis%2Em24%3Bthis%2Em24%3Dthis%2Em42%3Bthis%2Em42%3Dtmp%3Btmp%3Dthis%2Em34%3Bthis%2Em34%3Dthis%2Em43%3Bthis%2Em43%3Dtmp%7D%3BCanvasMatrix4%2Eprototype%2Einvert%3Dfunction%28%29%7Bvar%20det%3Dthis%2E%5Fdeterminant4x4%28%29%3Bif%28Math%2Eabs%28det%29%3C1e%2D8%29return%20null%3Bthis%2E%5FmakeAdjoint%28%29%3Bthis%2Em11%2F%3Ddet%3Bthis%2Em12%2F%3Ddet%3Bthis%2Em13%2F%3Ddet%3Bthis%2Em14%2F%3Ddet%3Bthis%2Em21%2F%3Ddet%3Bthis%2Em22%2F%3Ddet%3Bthis%2Em23%2F%3Ddet%3Bthis%2Em24%2F%3Ddet%3Bthis%2Em31%2F%3Ddet%3Bthis%2Em32%2F%3Ddet%3Bthis%2Em33%2F%3Ddet%3Bthis%2Em34%2F%3Ddet%3Bthis%2Em41%2F%3Ddet%3Bthis%2Em42%2F%3Ddet%3Bthis%2Em43%2F%3Ddet%3Bthis%2Em44%2F%3Ddet%7D%3BCanvasMatrix4%2Eprototype%2Etranslate%3Dfunction%28x%2Cy%2Cz%29%7Bif%28x%3D%3Dundefined%29x%3D0%3Bif%28y%3D%3Dundefined%29y%3D0%3Bif%28z%3D%3Dundefined%29z%3D0%3Bvar%20matrix%3Dnew%20CanvasMatrix4%28%29%3Bmatrix%2Em41%3Dx%3Bmatrix%2Em42%3Dy%3Bmatrix%2Em43%3Dz%3Bthis%2EmultRight%28matrix%29%7D%3BCanvasMatrix4%2Eprototype%2Escale%3Dfunction%28x%2Cy%2Cz%29%7Bif%28x%3D%3Dundefined%29x%3D1%3Bif%28z%3D%3Dundefined%29%7Bif%28y%3D%3Dundefined%29%7By%3Dx%3Bz%3Dx%7Delse%20z%3D1%7Delse%20if%28y%3D%3Dundefined%29y%3Dx%3Bvar%20matrix%3Dnew%20CanvasMatrix4%28%29%3Bmatrix%2Em11%3Dx%3Bmatrix%2Em22%3Dy%3Bmatrix%2Em33%3Dz%3Bthis%2EmultRight%28matrix%29%7D%3BCanvasMatrix4%2Eprototype%2Erotate%3Dfunction%28angle%2Cx%2Cy%2Cz%29%7Bangle%3Dangle%2F180%2AMath%2EPI%3Bangle%2F%3D2%3Bvar%20sinA%3DMath%2Esin%28angle%29%3Bvar%20cosA%3DMath%2Ecos%28angle%29%3Bvar%20sinA2%3DsinA%2AsinA%3Bvar%20length%3DMath%2Esqrt%28x%2Ax%2By%2Ay%2Bz%2Az%29%3Bif%28length%3D%3D0%29%7Bx%3D0%3By%3D0%3Bz%3D1%7Delse%20if%28length%21%3D1%29%7Bx%2F%3Dlength%3By%2F%3Dlength%3Bz%2F%3Dlength%7Dvar%20mat%3Dnew%20CanvasMatrix4%28%29%3Bif%28x%3D%3D1%26%26y%3D%3D0%26%26z%3D%3D0%29%7Bmat%2Em11%3D1%3Bmat%2Em12%3D0%3Bmat%2Em13%3D0%3Bmat%2Em21%3D0%3Bmat%2Em22%3D1%2D2%2AsinA2%3Bmat%2Em23%3D2%2AsinA%2AcosA%3Bmat%2Em31%3D0%3Bmat%2Em32%3D%2D2%2AsinA%2AcosA%3Bmat%2Em33%3D1%2D2%2AsinA2%3Bmat%2Em14%3Dmat%2Em24%3Dmat%2Em34%3D0%3Bmat%2Em41%3Dmat%2Em42%3Dmat%2Em43%3D0%3Bmat%2Em44%3D1%7Delse%20if%28x%3D%3D0%26%26y%3D%3D1%26%26z%3D%3D0%29%7Bmat%2Em11%3D1%2D2%2AsinA2%3Bmat%2Em12%3D0%3Bmat%2Em13%3D%2D2%2AsinA%2AcosA%3Bmat%2Em21%3D0%3Bmat%2Em22%3D1%3Bmat%2Em23%3D0%3Bmat%2Em31%3D2%2AsinA%2AcosA%3Bmat%2Em32%3D0%3Bmat%2Em33%3D1%2D2%2AsinA2%3Bmat%2Em14%3Dmat%2Em24%3Dmat%2Em34%3D0%3Bmat%2Em41%3Dmat%2Em42%3Dmat%2Em43%3D0%3Bmat%2Em44%3D1%7Delse%20if%28x%3D%3D0%26%26y%3D%3D0%26%26z%3D%3D1%29%7Bmat%2Em11%3D1%2D2%2AsinA2%3Bmat%2Em12%3D2%2AsinA%2AcosA%3Bmat%2Em13%3D0%3Bmat%2Em21%3D%2D2%2AsinA%2AcosA%3Bmat%2Em22%3D1%2D2%2AsinA2%3Bmat%2Em23%3D0%3Bmat%2Em31%3D0%3Bmat%2Em32%3D0%3Bmat%2Em33%3D1%3Bmat%2Em14%3Dmat%2Em24%3Dmat%2Em34%3D0%3Bmat%2Em41%3Dmat%2Em42%3Dmat%2Em43%3D0%3Bmat%2Em44%3D1%7Delse%7Bvar%20x2%3Dx%2Ax%3Bvar%20y2%3Dy%2Ay%3Bvar%20z2%3Dz%2Az%3Bmat%2Em11%3D1%2D2%2A%28y2%2Bz2%29%2AsinA2%3Bmat%2Em12%3D2%2A%28x%2Ay%2AsinA2%2Bz%2AsinA%2AcosA%29%3Bmat%2Em13%3D2%2A%28x%2Az%2AsinA2%2Dy%2AsinA%2AcosA%29%3Bmat%2Em21%3D2%2A%28y%2Ax%2AsinA2%2Dz%2AsinA%2AcosA%29%3Bmat%2Em22%3D1%2D2%2A%28z2%2Bx2%29%2AsinA2%3Bmat%2Em23%3D2%2A%28y%2Az%2AsinA2%2Bx%2AsinA%2AcosA%29%3Bmat%2Em31%3D2%2A%28z%2Ax%2AsinA2%2By%2AsinA%2AcosA%29%3Bmat%2Em32%3D2%2A%28z%2Ay%2AsinA2%2Dx%2AsinA%2AcosA%29%3Bmat%2Em33%3D1%2D2%2A%28x2%2By2%29%2AsinA2%3Bmat%2Em14%3Dmat%2Em24%3Dmat%2Em34%3D0%3Bmat%2Em41%3Dmat%2Em42%3Dmat%2Em43%3D0%3Bmat%2Em44%3D1%7Dthis%2EmultRight%28mat%29%7D%3BCanvasMatrix4%2Eprototype%2EmultRight%3Dfunction%28mat%29%7Bvar%20m11%3D%28this%2Em11%2Amat%2Em11%2Bthis%2Em12%2Amat%2Em21%2Bthis%2Em13%2Amat%2Em31%2Bthis%2Em14%2Amat%2Em41%29%3Bvar%20m12%3D%28this%2Em11%2Amat%2Em12%2Bthis%2Em12%2Amat%2Em22%2Bthis%2Em13%2Amat%2Em32%2Bthis%2Em14%2Amat%2Em42%29%3Bvar%20m13%3D%28this%2Em11%2Amat%2Em13%2Bthis%2Em12%2Amat%2Em23%2Bthis%2Em13%2Amat%2Em33%2Bthis%2Em14%2Amat%2Em43%29%3Bvar%20m14%3D%28this%2Em11%2Amat%2Em14%2Bthis%2Em12%2Amat%2Em24%2Bthis%2Em13%2Amat%2Em34%2Bthis%2Em14%2Amat%2Em44%29%3Bvar%20m21%3D%28this%2Em21%2Amat%2Em11%2Bthis%2Em22%2Amat%2Em21%2Bthis%2Em23%2Amat%2Em31%2Bthis%2Em24%2Amat%2Em41%29%3Bvar%20m22%3D%28this%2Em21%2Amat%2Em12%2Bthis%2Em22%2Amat%2Em22%2Bthis%2Em23%2Amat%2Em32%2Bthis%2Em24%2Amat%2Em42%29%3Bvar%20m23%3D%28this%2Em21%2Amat%2Em13%2Bthis%2Em22%2Amat%2Em23%2Bthis%2Em23%2Amat%2Em33%2Bthis%2Em24%2Amat%2Em43%29%3Bvar%20m24%3D%28this%2Em21%2Amat%2Em14%2Bthis%2Em22%2Amat%2Em24%2Bthis%2Em23%2Amat%2Em34%2Bthis%2Em24%2Amat%2Em44%29%3Bvar%20m31%3D%28this%2Em31%2Amat%2Em11%2Bthis%2Em32%2Amat%2Em21%2Bthis%2Em33%2Amat%2Em31%2Bthis%2Em34%2Amat%2Em41%29%3Bvar%20m32%3D%28this%2Em31%2Amat%2Em12%2Bthis%2Em32%2Amat%2Em22%2Bthis%2Em33%2Amat%2Em32%2Bthis%2Em34%2Amat%2Em42%29%3Bvar%20m33%3D%28this%2Em31%2Amat%2Em13%2Bthis%2Em32%2Amat%2Em23%2Bthis%2Em33%2Amat%2Em33%2Bthis%2Em34%2Amat%2Em43%29%3Bvar%20m34%3D%28this%2Em31%2Amat%2Em14%2Bthis%2Em32%2Amat%2Em24%2Bthis%2Em33%2Amat%2Em34%2Bthis%2Em34%2Amat%2Em44%29%3Bvar%20m41%3D%28this%2Em41%2Amat%2Em11%2Bthis%2Em42%2Amat%2Em21%2Bthis%2Em43%2Amat%2Em31%2Bthis%2Em44%2Amat%2Em41%29%3Bvar%20m42%3D%28this%2Em41%2Amat%2Em12%2Bthis%2Em42%2Amat%2Em22%2Bthis%2Em43%2Amat%2Em32%2Bthis%2Em44%2Amat%2Em42%29%3Bvar%20m43%3D%28this%2Em41%2Amat%2Em13%2Bthis%2Em42%2Amat%2Em23%2Bthis%2Em43%2Amat%2Em33%2Bthis%2Em44%2Amat%2Em43%29%3Bvar%20m44%3D%28this%2Em41%2Amat%2Em14%2Bthis%2Em42%2Amat%2Em24%2Bthis%2Em43%2Amat%2Em34%2Bthis%2Em44%2Amat%2Em44%29%3Bthis%2Em11%3Dm11%3Bthis%2Em12%3Dm12%3Bthis%2Em13%3Dm13%3Bthis%2Em14%3Dm14%3Bthis%2Em21%3Dm21%3Bthis%2Em22%3Dm22%3Bthis%2Em23%3Dm23%3Bthis%2Em24%3Dm24%3Bthis%2Em31%3Dm31%3Bthis%2Em32%3Dm32%3Bthis%2Em33%3Dm33%3Bthis%2Em34%3Dm34%3Bthis%2Em41%3Dm41%3Bthis%2Em42%3Dm42%3Bthis%2Em43%3Dm43%3Bthis%2Em44%3Dm44%7D%3BCanvasMatrix4%2Eprototype%2EmultLeft%3Dfunction%28mat%29%7Bvar%20m11%3D%28mat%2Em11%2Athis%2Em11%2Bmat%2Em12%2Athis%2Em21%2Bmat%2Em13%2Athis%2Em31%2Bmat%2Em14%2Athis%2Em41%29%3Bvar%20m12%3D%28mat%2Em11%2Athis%2Em12%2Bmat%2Em12%2Athis%2Em22%2Bmat%2Em13%2Athis%2Em32%2Bmat%2Em14%2Athis%2Em42%29%3Bvar%20m13%3D%28mat%2Em11%2Athis%2Em13%2Bmat%2Em12%2Athis%2Em23%2Bmat%2Em13%2Athis%2Em33%2Bmat%2Em14%2Athis%2Em43%29%3Bvar%20m14%3D%28mat%2Em11%2Athis%2Em14%2Bmat%2Em12%2Athis%2Em24%2Bmat%2Em13%2Athis%2Em34%2Bmat%2Em14%2Athis%2Em44%29%3Bvar%20m21%3D%28mat%2Em21%2Athis%2Em11%2Bmat%2Em22%2Athis%2Em21%2Bmat%2Em23%2Athis%2Em31%2Bmat%2Em24%2Athis%2Em41%29%3Bvar%20m22%3D%28mat%2Em21%2Athis%2Em12%2Bmat%2Em22%2Athis%2Em22%2Bmat%2Em23%2Athis%2Em32%2Bmat%2Em24%2Athis%2Em42%29%3Bvar%20m23%3D%28mat%2Em21%2Athis%2Em13%2Bmat%2Em22%2Athis%2Em23%2Bmat%2Em23%2Athis%2Em33%2Bmat%2Em24%2Athis%2Em43%29%3Bvar%20m24%3D%28mat%2Em21%2Athis%2Em14%2Bmat%2Em22%2Athis%2Em24%2Bmat%2Em23%2Athis%2Em34%2Bmat%2Em24%2Athis%2Em44%29%3Bvar%20m31%3D%28mat%2Em31%2Athis%2Em11%2Bmat%2Em32%2Athis%2Em21%2Bmat%2Em33%2Athis%2Em31%2Bmat%2Em34%2Athis%2Em41%29%3Bvar%20m32%3D%28mat%2Em31%2Athis%2Em12%2Bmat%2Em32%2Athis%2Em22%2Bmat%2Em33%2Athis%2Em32%2Bmat%2Em34%2Athis%2Em42%29%3Bvar%20m33%3D%28mat%2Em31%2Athis%2Em13%2Bmat%2Em32%2Athis%2Em23%2Bmat%2Em33%2Athis%2Em33%2Bmat%2Em34%2Athis%2Em43%29%3Bvar%20m34%3D%28mat%2Em31%2Athis%2Em14%2Bmat%2Em32%2Athis%2Em24%2Bmat%2Em33%2Athis%2Em34%2Bmat%2Em34%2Athis%2Em44%29%3Bvar%20m41%3D%28mat%2Em41%2Athis%2Em11%2Bmat%2Em42%2Athis%2Em21%2Bmat%2Em43%2Athis%2Em31%2Bmat%2Em44%2Athis%2Em41%29%3Bvar%20m42%3D%28mat%2Em41%2Athis%2Em12%2Bmat%2Em42%2Athis%2Em22%2Bmat%2Em43%2Athis%2Em32%2Bmat%2Em44%2Athis%2Em42%29%3Bvar%20m43%3D%28mat%2Em41%2Athis%2Em13%2Bmat%2Em42%2Athis%2Em23%2Bmat%2Em43%2Athis%2Em33%2Bmat%2Em44%2Athis%2Em43%29%3Bvar%20m44%3D%28mat%2Em41%2Athis%2Em14%2Bmat%2Em42%2Athis%2Em24%2Bmat%2Em43%2Athis%2Em34%2Bmat%2Em44%2Athis%2Em44%29%3Bthis%2Em11%3Dm11%3Bthis%2Em12%3Dm12%3Bthis%2Em13%3Dm13%3Bthis%2Em14%3Dm14%3Bthis%2Em21%3Dm21%3Bthis%2Em22%3Dm22%3Bthis%2Em23%3Dm23%3Bthis%2Em24%3Dm24%3Bthis%2Em31%3Dm31%3Bthis%2Em32%3Dm32%3Bthis%2Em33%3Dm33%3Bthis%2Em34%3Dm34%3Bthis%2Em41%3Dm41%3Bthis%2Em42%3Dm42%3Bthis%2Em43%3Dm43%3Bthis%2Em44%3Dm44%7D%3BCanvasMatrix4%2Eprototype%2Eortho%3Dfunction%28left%2Cright%2Cbottom%2Ctop%2Cnear%2Cfar%29%7Bvar%20tx%3D%28left%2Bright%29%2F%28left%2Dright%29%3Bvar%20ty%3D%28top%2Bbottom%29%2F%28top%2Dbottom%29%3Bvar%20tz%3D%28far%2Bnear%29%2F%28far%2Dnear%29%3Bvar%20matrix%3Dnew%20CanvasMatrix4%28%29%3Bmatrix%2Em11%3D2%2F%28left%2Dright%29%3Bmatrix%2Em12%3D0%3Bmatrix%2Em13%3D0%3Bmatrix%2Em14%3D0%3Bmatrix%2Em21%3D0%3Bmatrix%2Em22%3D2%2F%28top%2Dbottom%29%3Bmatrix%2Em23%3D0%3Bmatrix%2Em24%3D0%3Bmatrix%2Em31%3D0%3Bmatrix%2Em32%3D0%3Bmatrix%2Em33%3D%2D2%2F%28far%2Dnear%29%3Bmatrix%2Em34%3D0%3Bmatrix%2Em41%3Dtx%3Bmatrix%2Em42%3Dty%3Bmatrix%2Em43%3Dtz%3Bmatrix%2Em44%3D1%3Bthis%2EmultRight%28matrix%29%7D%3BCanvasMatrix4%2Eprototype%2Efrustum%3Dfunction%28left%2Cright%2Cbottom%2Ctop%2Cnear%2Cfar%29%7Bvar%20matrix%3Dnew%20CanvasMatrix4%28%29%3Bvar%20A%3D%28right%2Bleft%29%2F%28right%2Dleft%29%3Bvar%20B%3D%28top%2Bbottom%29%2F%28top%2Dbottom%29%3Bvar%20C%3D%2D%28far%2Bnear%29%2F%28far%2Dnear%29%3Bvar%20D%3D%2D%282%2Afar%2Anear%29%2F%28far%2Dnear%29%3Bmatrix%2Em11%3D%282%2Anear%29%2F%28right%2Dleft%29%3Bmatrix%2Em12%3D0%3Bmatrix%2Em13%3D0%3Bmatrix%2Em14%3D0%3Bmatrix%2Em21%3D0%3Bmatrix%2Em22%3D2%2Anear%2F%28top%2Dbottom%29%3Bmatrix%2Em23%3D0%3Bmatrix%2Em24%3D0%3Bmatrix%2Em31%3DA%3Bmatrix%2Em32%3DB%3Bmatrix%2Em33%3DC%3Bmatrix%2Em34%3D%2D1%3Bmatrix%2Em41%3D0%3Bmatrix%2Em42%3D0%3Bmatrix%2Em43%3DD%3Bmatrix%2Em44%3D0%3Bthis%2EmultRight%28matrix%29%7D%3BCanvasMatrix4%2Eprototype%2Eperspective%3Dfunction%28fovy%2Caspect%2CzNear%2CzFar%29%7Bvar%20top%3DMath%2Etan%28fovy%2AMath%2EPI%2F360%29%2AzNear%3Bvar%20bottom%3D%2Dtop%3Bvar%20left%3Daspect%2Abottom%3Bvar%20right%3Daspect%2Atop%3Bthis%2Efrustum%28left%2Cright%2Cbottom%2Ctop%2CzNear%2CzFar%29%7D%3BCanvasMatrix4%2Eprototype%2Elookat%3Dfunction%28eyex%2Ceyey%2Ceyez%2Ccenterx%2Ccentery%2Ccenterz%2Cupx%2Cupy%2Cupz%29%7Bvar%20matrix%3Dnew%20CanvasMatrix4%28%29%3Bvar%20zx%3Deyex%2Dcenterx%3Bvar%20zy%3Deyey%2Dcentery%3Bvar%20zz%3Deyez%2Dcenterz%3Bvar%20mag%3DMath%2Esqrt%28zx%2Azx%2Bzy%2Azy%2Bzz%2Azz%29%3Bif%28mag%29%7Bzx%2F%3Dmag%3Bzy%2F%3Dmag%3Bzz%2F%3Dmag%7Dvar%20yx%3Dupx%3Bvar%20yy%3Dupy%3Bvar%20yz%3Dupz%3Bxx%3Dyy%2Azz%2Dyz%2Azy%3Bxy%3D%2Dyx%2Azz%2Byz%2Azx%3Bxz%3Dyx%2Azy%2Dyy%2Azx%3Byx%3Dzy%2Axz%2Dzz%2Axy%3Byy%3D%2Dzx%2Axz%2Bzz%2Axx%3Byx%3Dzx%2Axy%2Dzy%2Axx%3Bmag%3DMath%2Esqrt%28xx%2Axx%2Bxy%2Axy%2Bxz%2Axz%29%3Bif%28mag%29%7Bxx%2F%3Dmag%3Bxy%2F%3Dmag%3Bxz%2F%3Dmag%7Dmag%3DMath%2Esqrt%28yx%2Ayx%2Byy%2Ayy%2Byz%2Ayz%29%3Bif%28mag%29%7Byx%2F%3Dmag%3Byy%2F%3Dmag%3Byz%2F%3Dmag%7Dmatrix%2Em11%3Dxx%3Bmatrix%2Em12%3Dxy%3Bmatrix%2Em13%3Dxz%3Bmatrix%2Em14%3D0%3Bmatrix%2Em21%3Dyx%3Bmatrix%2Em22%3Dyy%3Bmatrix%2Em23%3Dyz%3Bmatrix%2Em24%3D0%3Bmatrix%2Em31%3Dzx%3Bmatrix%2Em32%3Dzy%3Bmatrix%2Em33%3Dzz%3Bmatrix%2Em34%3D0%3Bmatrix%2Em41%3D0%3Bmatrix%2Em42%3D0%3Bmatrix%2Em43%3D0%3Bmatrix%2Em44%3D1%3Bmatrix%2Etranslate%28%2Deyex%2C%2Deyey%2C%2Deyez%29%3Bthis%2EmultRight%28matrix%29%7D%3BCanvasMatrix4%2Eprototype%2E%5Fdeterminant2x2%3Dfunction%28a%2Cb%2Cc%2Cd%29%7Breturn%20a%2Ad%2Db%2Ac%7D%3BCanvasMatrix4%2Eprototype%2E%5Fdeterminant3x3%3Dfunction%28a1%2Ca2%2Ca3%2Cb1%2Cb2%2Cb3%2Cc1%2Cc2%2Cc3%29%7Breturn%20a1%2Athis%2E%5Fdeterminant2x2%28b2%2Cb3%2Cc2%2Cc3%29%2Db1%2Athis%2E%5Fdeterminant2x2%28a2%2Ca3%2Cc2%2Cc3%29%2Bc1%2Athis%2E%5Fdeterminant2x2%28a2%2Ca3%2Cb2%2Cb3%29%7D%3BCanvasMatrix4%2Eprototype%2E%5Fdeterminant4x4%3Dfunction%28%29%7Bvar%20a1%3Dthis%2Em11%3Bvar%20b1%3Dthis%2Em12%3Bvar%20c1%3Dthis%2Em13%3Bvar%20d1%3Dthis%2Em14%3Bvar%20a2%3Dthis%2Em21%3Bvar%20b2%3Dthis%2Em22%3Bvar%20c2%3Dthis%2Em23%3Bvar%20d2%3Dthis%2Em24%3Bvar%20a3%3Dthis%2Em31%3Bvar%20b3%3Dthis%2Em32%3Bvar%20c3%3Dthis%2Em33%3Bvar%20d3%3Dthis%2Em34%3Bvar%20a4%3Dthis%2Em41%3Bvar%20b4%3Dthis%2Em42%3Bvar%20c4%3Dthis%2Em43%3Bvar%20d4%3Dthis%2Em44%3Breturn%20a1%2Athis%2E%5Fdeterminant3x3%28b2%2Cb3%2Cb4%2Cc2%2Cc3%2Cc4%2Cd2%2Cd3%2Cd4%29%2Db1%2Athis%2E%5Fdeterminant3x3%28a2%2Ca3%2Ca4%2Cc2%2Cc3%2Cc4%2Cd2%2Cd3%2Cd4%29%2Bc1%2Athis%2E%5Fdeterminant3x3%28a2%2Ca3%2Ca4%2Cb2%2Cb3%2Cb4%2Cd2%2Cd3%2Cd4%29%2Dd1%2Athis%2E%5Fdeterminant3x3%28a2%2Ca3%2Ca4%2Cb2%2Cb3%2Cb4%2Cc2%2Cc3%2Cc4%29%7D%3BCanvasMatrix4%2Eprototype%2E%5FmakeAdjoint%3Dfunction%28%29%7Bvar%20a1%3Dthis%2Em11%3Bvar%20b1%3Dthis%2Em12%3Bvar%20c1%3Dthis%2Em13%3Bvar%20d1%3Dthis%2Em14%3Bvar%20a2%3Dthis%2Em21%3Bvar%20b2%3Dthis%2Em22%3Bvar%20c2%3Dthis%2Em23%3Bvar%20d2%3Dthis%2Em24%3Bvar%20a3%3Dthis%2Em31%3Bvar%20b3%3Dthis%2Em32%3Bvar%20c3%3Dthis%2Em33%3Bvar%20d3%3Dthis%2Em34%3Bvar%20a4%3Dthis%2Em41%3Bvar%20b4%3Dthis%2Em42%3Bvar%20c4%3Dthis%2Em43%3Bvar%20d4%3Dthis%2Em44%3Bthis%2Em11%3Dthis%2E%5Fdeterminant3x3%28b2%2Cb3%2Cb4%2Cc2%2Cc3%2Cc4%2Cd2%2Cd3%2Cd4%29%3Bthis%2Em21%3D%2Dthis%2E%5Fdeterminant3x3%28a2%2Ca3%2Ca4%2Cc2%2Cc3%2Cc4%2Cd2%2Cd3%2Cd4%29%3Bthis%2Em31%3Dthis%2E%5Fdeterminant3x3%28a2%2Ca3%2Ca4%2Cb2%2Cb3%2Cb4%2Cd2%2Cd3%2Cd4%29%3Bthis%2Em41%3D%2Dthis%2E%5Fdeterminant3x3%28a2%2Ca3%2Ca4%2Cb2%2Cb3%2Cb4%2Cc2%2Cc3%2Cc4%29%3Bthis%2Em12%3D%2Dthis%2E%5Fdeterminant3x3%28b1%2Cb3%2Cb4%2Cc1%2Cc3%2Cc4%2Cd1%2Cd3%2Cd4%29%3Bthis%2Em22%3Dthis%2E%5Fdeterminant3x3%28a1%2Ca3%2Ca4%2Cc1%2Cc3%2Cc4%2Cd1%2Cd3%2Cd4%29%3Bthis%2Em32%3D%2Dthis%2E%5Fdeterminant3x3%28a1%2Ca3%2Ca4%2Cb1%2Cb3%2Cb4%2Cd1%2Cd3%2Cd4%29%3Bthis%2Em42%3Dthis%2E%5Fdeterminant3x3%28a1%2Ca3%2Ca4%2Cb1%2Cb3%2Cb4%2Cc1%2Cc3%2Cc4%29%3Bthis%2Em13%3Dthis%2E%5Fdeterminant3x3%28b1%2Cb2%2Cb4%2Cc1%2Cc2%2Cc4%2Cd1%2Cd2%2Cd4%29%3Bthis%2Em23%3D%2Dthis%2E%5Fdeterminant3x3%28a1%2Ca2%2Ca4%2Cc1%2Cc2%2Cc4%2Cd1%2Cd2%2Cd4%29%3Bthis%2Em33%3Dthis%2E%5Fdeterminant3x3%28a1%2Ca2%2Ca4%2Cb1%2Cb2%2Cb4%2Cd1%2Cd2%2Cd4%29%3Bthis%2Em43%3D%2Dthis%2E%5Fdeterminant3x3%28a1%2Ca2%2Ca4%2Cb1%2Cb2%2Cb4%2Cc1%2Cc2%2Cc4%29%3Bthis%2Em14%3D%2Dthis%2E%5Fdeterminant3x3%28b1%2Cb2%2Cb3%2Cc1%2Cc2%2Cc3%2Cd1%2Cd2%2Cd3%29%3Bthis%2Em24%3Dthis%2E%5Fdeterminant3x3%28a1%2Ca2%2Ca3%2Cc1%2Cc2%2Cc3%2Cd1%2Cd2%2Cd3%29%3Bthis%2Em34%3D%2Dthis%2E%5Fdeterminant3x3%28a1%2Ca2%2Ca3%2Cb1%2Cb2%2Cb3%2Cd1%2Cd2%2Cd3%29%3Bthis%2Em44%3Dthis%2E%5Fdeterminant3x3%28a1%2Ca2%2Ca3%2Cb1%2Cb2%2Cb3%2Cc1%2Cc2%2Cc3%29%7D%0A" type="text/javascript"></script>
-<canvas id="plot3dtextureCanvas" style="display: none;" width="256" height="256">
-Your browser does not support the HTML5 canvas element.
-</canvas>
+
+<p>This document describes how to use embedded Javascript to 
+control a WebGL display in an HTML document.  For more 
+general information, see <a href="rgl.html">rgl Overview</a>.</p>
+
+<p>We start with two simple examples.  The next section gives 
+reference information.</p>
+
+<p>Consider the simple plot of the iris data.  We
+insert a code chunk with label <code>plot3d</code> (which will be used below).</p>
+
+<pre><code class="r">with(iris, plot3d(Sepal.Length, Sepal.Width, Petal.Length, 
+                  type=&quot;s&quot;, col=as.numeric(Species)))
+subid &lt;- currentSubscene3d()
+</code></pre>
+
+<script src="CanvasMatrix.js" type="text/javascript"></script>
+
+<p><canvas id="plot3dtextureCanvas" style="display: none;" width="256" height="256">
+Your browser does not support the HTML5 canvas element.</canvas></p>
+
 <script type="text/javascript">
 var min = Math.min,
 max = Math.max,
@@ -212,15 +361,67 @@ this.getSubsceneEntries = function(subscene) {
 return(this.subscenes[subscene].concat(this.clipplanes[subscene]).
 concat(this.transparent[subscene]).concat(this.opaque[subscene]));
 };
+this.getPowerOfTwo = function(value) {
+var pow = 1;
+while(pow<value) {
+pow *= 2;
+}
+return pow;
+};
+this.handleLoadedTexture = function(id) {
+var gl = this.gl, textureCanvas = this.textureCanvas;
+gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+gl.bindTexture(gl.TEXTURE_2D, this.texture[id]);
+gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, textureCanvas);
+gl.generateMipmap(gl.TEXTURE_2D);
+gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_NEAREST);
+gl.bindTexture(gl.TEXTURE_2D, null);
+};
+this.loadImageNowOrLater = function(name, id) {
+var image = document.getElementById(name),
+self = this;
+if (image.rglTextureLoaded) {
+this.loadImageToTexture(image, id);
+} else {
+image.addEventListener("load", 
+function() {
+self.loadImageToTexture(this, id);
+}); 
+}
+};
+this.loadImageToTexture = function(image, id) {
+var canvas = this.textureCanvas,
+ctx = canvas.getContext("2d"),
+w = image.width,
+h = image.height,
+canvasX = this.getPowerOfTwo(w),
+canvasY = this.getPowerOfTwo(h),
+gl = this.gl,
+maxTexSize = gl.getParameter(gl.MAX_TEXTURE_SIZE);
+image.rglTextureLoaded = true;
+while (canvasX > 1 && (canvasX > maxTexSize || canvasY > maxTexSize)) {
+canvasX /= 2;
+canvasY /= 2;
+}
+canvas.width = canvasX;
+canvas.height = canvasY;
+ctx.imageSmoothingEnabled = true;
+ctx.drawImage(image, 0, 0, canvasX, canvasY);
+image.style.display = "none";
+this.handleLoadedTexture(id);
+this.drawScene();
+};
 }).call(rglClass.prototype);
 var plot3drgl = new rglClass();
 plot3drgl.start = function() {
-var i, j, v, ind, texts, f, texinfo;
+var i, j, v, ind, texts, f, texinfo, canvas;
 var debug = function(msg) {
 document.getElementById("plot3ddebug").innerHTML = msg;
 };
 debug("");
-var canvas = document.getElementById("plot3dcanvas");
+canvas = this.canvas = document.getElementById("plot3dcanvas");
+this.textureCanvas = document.getElementById("plot3dtextureCanvas");
 if (!window.WebGLRenderingContext){
 debug(" Your browser does not support WebGL. See <a href=\"http://get.webgl.org\">http://get.webgl.org</a>");
 return;
@@ -236,7 +437,7 @@ debug(" Your browser appears to support WebGL, but did not create a WebGL contex
 return;
 }
 var gl = this.gl,
-width = 481, height = 481;
+width = 505, height = 505;
 canvas.width = width;   canvas.height = height;
 var normMatrix = new CanvasMatrix4(),
 saveMat = {},
@@ -247,7 +448,7 @@ var activeSubscene = 1;
 this.flags[1] = 1195;
 this.zoom[1] = 1;
 this.FOV[1] = 30;
-this.viewport[1] = [0, 0, 480, 480];
+this.viewport[1] = [0, 0, 504, 504];
 this.userMatrix[1] = new CanvasMatrix4();
 this.userMatrix[1].load([
 1, 0, 0, 0,
@@ -259,40 +460,6 @@ this.clipplanes[1] = [];
 this.opaque[1] = [7,9,10,11,12,13,14,15,16,17,18];
 this.transparent[1] = [];
 this.subscenes[1] = [];
-function getPowerOfTwo(value) {
-var pow = 1;
-while(pow<value) {
-pow *= 2;
-}
-return pow;
-}
-function handleLoadedTexture(texture, textureCanvas) {
-gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
-gl.bindTexture(gl.TEXTURE_2D, texture);
-gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, textureCanvas);
-gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_NEAREST);
-gl.generateMipmap(gl.TEXTURE_2D);
-gl.bindTexture(gl.TEXTURE_2D, null);
-}
-function loadImageToTexture(filename, texture) {
-var canvas = document.getElementById("plot3dtextureCanvas"),
-ctx = canvas.getContext("2d"),
-image = new Image();
-image.onload = function() {
-var w = image.width,
-h = image.height,
-canvasX = getPowerOfTwo(w),
-canvasY = getPowerOfTwo(h);
-canvas.width = canvasX;
-canvas.height = canvasY;
-ctx.imageSmoothingEnabled = true;
-ctx.drawImage(image, 0, 0, canvasX, canvasY);
-handleLoadedTexture(texture, canvas);
-plot3drgl.drawScene();
-};
-image.src = filename;
-}
 function drawTextToCanvas(text, cex) {
 var canvasX, canvasY,
 textX, textY,
@@ -310,10 +477,10 @@ for (i = 0; i < text.length; i++)  {
 widths[i] = ctx.measureText(text[i]).width;
 canvasX = (widths[i] > canvasX) ? widths[i] : canvasX;
 }
-canvasX = getPowerOfTwo(canvasX);
+canvasX = plot3drgl.getPowerOfTwo(canvasX);
 var offset = 2*textHeight, // offset to first baseline
 skip = 2*textHeight;   // skip between baselines
-canvasY = getPowerOfTwo(offset + text.length*skip);
+canvasY = plot3drgl.getPowerOfTwo(offset + text.length*skip);
 canvas.width = canvasX;
 canvas.height = canvasY;
 ctx.fillStyle = backgroundColour;
@@ -723,7 +890,7 @@ this.ofsLoc[9] = gl.getAttribLocation(this.prog[9], "aOfs");
 this.texture[9] = gl.createTexture();
 this.texLoc[9] = gl.getAttribLocation(this.prog[9], "aTexcoord");
 this.sampler[9] = gl.getUniformLocation(this.prog[9],"uSampler");
-handleLoadedTexture(this.texture[9], document.getElementById("plot3dtextureCanvas"));
+this.handleLoadedTexture(9);
 this.offsets[9]={vofs:0, cofs:-1, nofs:-1, radofs:-1, oofs:5, tofs:3, stride:7};
 v=new Float32Array([
 6.1, 1.432519, -0.3950545, 0, -0.5, 0.5, 0.5,
@@ -772,7 +939,7 @@ this.ofsLoc[10] = gl.getAttribLocation(this.prog[10], "aOfs");
 this.texture[10] = gl.createTexture();
 this.texLoc[10] = gl.getAttribLocation(this.prog[10], "aTexcoord");
 this.sampler[10] = gl.getUniformLocation(this.prog[10],"uSampler");
-handleLoadedTexture(this.texture[10], document.getElementById("plot3dtextureCanvas"));
+this.handleLoadedTexture(10);
 this.offsets[10]={vofs:0, cofs:-1, nofs:-1, radofs:-1, oofs:5, tofs:3, stride:7};
 v=new Float32Array([
 3.44878, 3.2, -0.3950545, 0, -0.5, 0.5, 0.5,
@@ -821,7 +988,7 @@ this.ofsLoc[11] = gl.getAttribLocation(this.prog[11], "aOfs");
 this.texture[11] = gl.createTexture();
 this.texLoc[11] = gl.getAttribLocation(this.prog[11], "aTexcoord");
 this.sampler[11] = gl.getUniformLocation(this.prog[11],"uSampler");
-handleLoadedTexture(this.texture[11], document.getElementById("plot3dtextureCanvas"));
+this.handleLoadedTexture(11);
 this.offsets[11]={vofs:0, cofs:-1, nofs:-1, radofs:-1, oofs:5, tofs:3, stride:7};
 v=new Float32Array([
 3.44878, 1.432519, 3.95, 0, -0.5, 0.5, 0.5,
@@ -903,7 +1070,7 @@ this.ofsLoc[13] = gl.getAttribLocation(this.prog[13], "aOfs");
 this.texture[13] = gl.createTexture();
 this.texLoc[13] = gl.getAttribLocation(this.prog[13], "aTexcoord");
 this.sampler[13] = gl.getUniformLocation(this.prog[13],"uSampler");
-handleLoadedTexture(this.texture[13], document.getElementById("plot3dtextureCanvas"));
+this.handleLoadedTexture(13);
 this.offsets[13]={vofs:0, cofs:-1, nofs:-1, radofs:-1, oofs:5, tofs:3, stride:7};
 v=new Float32Array([
 5, 1.636459, 0.106298, 0, -0.5, 0.5, 0.5,
@@ -1006,7 +1173,7 @@ this.ofsLoc[15] = gl.getAttribLocation(this.prog[15], "aOfs");
 this.texture[15] = gl.createTexture();
 this.texLoc[15] = gl.getAttribLocation(this.prog[15], "aTexcoord");
 this.sampler[15] = gl.getUniformLocation(this.prog[15],"uSampler");
-handleLoadedTexture(this.texture[15], document.getElementById("plot3dtextureCanvas"));
+this.handleLoadedTexture(15);
 this.offsets[15]={vofs:0, cofs:-1, nofs:-1, radofs:-1, oofs:5, tofs:3, stride:7};
 v=new Float32Array([
 3.75469, 2, 0.106298, 0, -0.5, 0.5, 0.5,
@@ -1122,7 +1289,7 @@ this.ofsLoc[17] = gl.getAttribLocation(this.prog[17], "aOfs");
 this.texture[17] = gl.createTexture();
 this.texLoc[17] = gl.getAttribLocation(this.prog[17], "aTexcoord");
 this.sampler[17] = gl.getUniformLocation(this.prog[17],"uSampler");
-handleLoadedTexture(this.texture[17], document.getElementById("plot3dtextureCanvas"));
+this.handleLoadedTexture(17);
 this.offsets[17]={vofs:0, cofs:-1, nofs:-1, radofs:-1, oofs:5, tofs:3, stride:7};
 v=new Float32Array([
 3.75469, 1.636459, 1, 0, -0.5, 0.5, 0.5,
@@ -1559,10 +1726,10 @@ var vpy0 = {
 1: 0
 };
 var vpWidths = {
-1: 480
+1: 504
 };
 var vpHeights = {
-1: 480
+1: 504
 };
 var activeModel = {
 1: 1
@@ -1574,7 +1741,7 @@ plot3drgl.listeners = {
 1: [ 1 ]
 };
 var whichSubscene = function(coords){
-if (0 <= coords.x && coords.x <= 480 && 0 <= coords.y && coords.y <= 480) return(1);
+if (0 <= coords.x && coords.x <= 504 && 0 <= coords.y && coords.y <= 504) return(1);
 return(1);
 };
 var translateCoords = function(subsceneid, coords){
@@ -1732,67 +1899,86 @@ canvas.addEventListener("DOMMouseScroll", wheelHandler, false);
 canvas.addEventListener("mousewheel", wheelHandler, false);
 };
 </script>
-<canvas id="plot3dcanvas" class="rglWebGL" width="1" height="1">
-</canvas>
+
+<p><canvas id="plot3dcanvas" class="rglWebGL" width="1" height="1"></canvas></p>
+
 <p id="plot3ddebug">
-You must enable Javascript to view this page properly.
-</p>
+You must enable Javascript to view this page properly.</p>
+
 <script>plot3drgl.start();</script>
-<p>We might like a button on the web page to cause a change to the display, e.g. a rotation of the plot. First we add buttons, with the “onclick” event set to a function described below:</p>
+
+<p>We might like a button on the web page to cause a change to the
+display, e.g. a rotation of the plot.  First we add buttons, with
+the &ldquo;onclick&rdquo; event set to a function described below:</p>
+
 <pre><code>&lt;button type=&quot;button&quot; onclick=&quot;rotate(10)&quot;&gt;Forward&lt;/button&gt;
-&lt;button type=&quot;button&quot; onclick=&quot;rotate(-10)&quot;&gt;Backward&lt;/button&gt;</code></pre>
-which produces these buttons:
-<button type="button" onclick="rotate(10)">
-Forward
-</button>
-<button type="button" onclick="rotate(-10)">
-Backward
-</button>
-<p>We stored the subscene number that is currently active in <code>subid</code> in the code chunk above, and use it as <code class="r"><code>`r subid`</code></code> in the script below.</p>
-<p>The <code>rotate()</code> function makes use of the global <code>&lt;prefix&gt;rgl</code> object. The <code>knitr</code> WebGL support sets the prefix to the code chunk label, so the global is called <code>plot3drgl</code>:</p>
+&lt;button type=&quot;button&quot; onclick=&quot;rotate(-10)&quot;&gt;Backward&lt;/button&gt;
+</code></pre>
+
+<p>which produces these buttons: 
+<button type="button" onclick="rotate(10)">Forward</button>
+<button type="button" onclick="rotate(-10)">Backward</button></p>
+
+<p>We stored the subscene number that is currently active in
+<code>subid</code> in the code chunk above, and use it as <code  class="r"><code>`r subid`</code></code>
+in the script below.</p>
+
+<p>The <code>rotate()</code> function makes use of the global <code>&lt;prefix&gt;rgl</code>
+object.  The <code>knitr</code> WebGL support sets the prefix to the 
+code chunk label, so the global is called <code>plot3drgl</code>:</p>
+
 <pre><code>&lt;script type=&quot;text/javascript&quot;&gt;
 var rotate = function(angle) {
   plot3drgl.userMatrix[`r subid`].rotate(angle, 0,1,0);
   plot3drgl.drawScene();
 };
-&lt;/script&gt;</code></pre>
+&lt;/script&gt;
+</code></pre>
+
 <script type="text/javascript">
 var rotate = function(angle) {
   plot3drgl.userMatrix[1].rotate(angle, 0,1,0);
   plot3drgl.drawScene();
 };
 </script>
-</div>
-<div id="autogenerated-controls" class="section level2">
+
 <h2>Autogenerated controls</h2>
-<p>We can also change the contents of the plot using <a name="toggleButton"><a href="../../rgl/help/toggleButton"><code>toggleButton</code></a></a>. For example, we can redo the previous plot, but with the three species as separate “spheres” objects and buttons to toggle them:</p>
-<pre class="sourceCode r"><code class="sourceCode r">sphereid &lt;-<span class="st"> </span><span class="kw">with</span>(<span class="kw">subset</span>(iris, Species ==<span class="st"> &quot;setosa&quot;</span>), 
-     <span class="kw">spheres3d</span>(Sepal.Length, Sepal.Width, Petal.Length, 
-                  <span class="dt">col=</span><span class="kw">as.numeric</span>(Species),
-                  <span class="dt">radius =</span> <span class="fl">0.211</span>))
-<span class="kw">with</span>(<span class="kw">subset</span>(iris, Species ==<span class="st"> &quot;versicolor&quot;</span>), 
-     <span class="kw">spheres3d</span>(Sepal.Length, Sepal.Width, Petal.Length, 
-               <span class="dt">col=</span><span class="kw">as.numeric</span>(Species),
-               <span class="dt">radius =</span> <span class="fl">0.211</span>))
-<span class="kw">with</span>(<span class="kw">subset</span>(iris, Species ==<span class="st"> &quot;virginica&quot;</span>), 
-     <span class="kw">spheres3d</span>(Sepal.Length, Sepal.Width, Petal.Length, 
-               <span class="dt">col=</span><span class="kw">as.numeric</span>(Species),
-               <span class="dt">radius =</span> <span class="fl">0.211</span>))
-<span class="kw">aspect3d</span>(<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">1</span>)
-<span class="kw">decorate3d</span>()
-subid &lt;-<span class="st"> </span><span class="kw">currentSubscene3d</span>()</code></pre>
-<canvas id="toggletextureCanvas" style="display: none;" width="256" height="256">
-Your browser does not support the HTML5 canvas element.
-</canvas>
+
+<p>We can also change the contents of the plot using <a name="toggleButton"><a href="../../rgl/help/toggleButton"><code>toggleButton</code></a></a>.
+For example, we can redo the previous plot, but with the
+three species as separate &ldquo;spheres&rdquo; objects and buttons to
+toggle them:</p>
+
+<pre><code class="r">sphereid &lt;- with(subset(iris, Species == &quot;setosa&quot;), 
+     spheres3d(Sepal.Length, Sepal.Width, Petal.Length, 
+                  col=as.numeric(Species),
+                  radius = 0.211))
+with(subset(iris, Species == &quot;versicolor&quot;), 
+     spheres3d(Sepal.Length, Sepal.Width, Petal.Length, 
+               col=as.numeric(Species),
+               radius = 0.211))
+with(subset(iris, Species == &quot;virginica&quot;), 
+     spheres3d(Sepal.Length, Sepal.Width, Petal.Length, 
+               col=as.numeric(Species),
+               radius = 0.211))
+aspect3d(1,1,1)
+decorate3d()
+subid &lt;- currentSubscene3d()
+</code></pre>
+
+<p><canvas id="toggletextureCanvas" style="display: none;" width="256" height="256">
+Your browser does not support the HTML5 canvas element.</canvas></p>
+
 <script type="text/javascript">
 var togglergl = new rglClass();
 togglergl.start = function() {
-var i, j, v, ind, texts, f, texinfo;
+var i, j, v, ind, texts, f, texinfo, canvas;
 var debug = function(msg) {
 document.getElementById("toggledebug").innerHTML = msg;
 };
 debug("");
-var canvas = document.getElementById("togglecanvas");
+canvas = this.canvas = document.getElementById("togglecanvas");
+this.textureCanvas = document.getElementById("toggletextureCanvas");
 if (!window.WebGLRenderingContext){
 debug(" Your browser does not support WebGL. See <a href=\"http://get.webgl.org\">http://get.webgl.org</a>");
 return;
@@ -1808,7 +1994,7 @@ debug(" Your browser appears to support WebGL, but did not create a WebGL contex
 return;
 }
 var gl = this.gl,
-width = 481, height = 481;
+width = 505, height = 505;
 canvas.width = width;   canvas.height = height;
 var normMatrix = new CanvasMatrix4(),
 saveMat = {},
@@ -1819,7 +2005,7 @@ var activeSubscene = 19;
 this.flags[19] = 1195;
 this.zoom[19] = 1;
 this.FOV[19] = 30;
-this.viewport[19] = [0, 0, 480, 480];
+this.viewport[19] = [0, 0, 504, 504];
 this.userMatrix[19] = new CanvasMatrix4();
 this.userMatrix[19].load([
 1, 0, 0, 0,
@@ -1831,40 +2017,6 @@ this.clipplanes[19] = [];
 this.opaque[19] = [25,26,27,29,30,31,32,33,34,35,36,37,38];
 this.transparent[19] = [];
 this.subscenes[19] = [];
-function getPowerOfTwo(value) {
-var pow = 1;
-while(pow<value) {
-pow *= 2;
-}
-return pow;
-}
-function handleLoadedTexture(texture, textureCanvas) {
-gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
-gl.bindTexture(gl.TEXTURE_2D, texture);
-gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, textureCanvas);
-gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_NEAREST);
-gl.generateMipmap(gl.TEXTURE_2D);
-gl.bindTexture(gl.TEXTURE_2D, null);
-}
-function loadImageToTexture(filename, texture) {
-var canvas = document.getElementById("toggletextureCanvas"),
-ctx = canvas.getContext("2d"),
-image = new Image();
-image.onload = function() {
-var w = image.width,
-h = image.height,
-canvasX = getPowerOfTwo(w),
-canvasY = getPowerOfTwo(h);
-canvas.width = canvasX;
-canvas.height = canvasY;
-ctx.imageSmoothingEnabled = true;
-ctx.drawImage(image, 0, 0, canvasX, canvasY);
-handleLoadedTexture(texture, canvas);
-togglergl.drawScene();
-};
-image.src = filename;
-}
 function drawTextToCanvas(text, cex) {
 var canvasX, canvasY,
 textX, textY,
@@ -1882,10 +2034,10 @@ for (i = 0; i < text.length; i++)  {
 widths[i] = ctx.measureText(text[i]).width;
 canvasX = (widths[i] > canvasX) ? widths[i] : canvasX;
 }
-canvasX = getPowerOfTwo(canvasX);
+canvasX = togglergl.getPowerOfTwo(canvasX);
 var offset = 2*textHeight, // offset to first baseline
 skip = 2*textHeight;   // skip between baselines
-canvasY = getPowerOfTwo(offset + text.length*skip);
+canvasY = togglergl.getPowerOfTwo(offset + text.length*skip);
 canvas.width = canvasX;
 canvas.height = canvasY;
 ctx.fillStyle = backgroundColour;
@@ -2135,7 +2287,7 @@ this.ofsLoc[29] = gl.getAttribLocation(this.prog[29], "aOfs");
 this.texture[29] = gl.createTexture();
 this.texLoc[29] = gl.getAttribLocation(this.prog[29], "aTexcoord");
 this.sampler[29] = gl.getUniformLocation(this.prog[29],"uSampler");
-handleLoadedTexture(this.texture[29], document.getElementById("toggletextureCanvas"));
+this.handleLoadedTexture(29);
 this.offsets[29]={vofs:0, cofs:-1, nofs:-1, radofs:-1, oofs:5, tofs:3, stride:7};
 v=new Float32Array([
 6.1, 1.432677, -0.3946676, 0, -0.5, 0.5, 0.5,
@@ -2184,7 +2336,7 @@ this.ofsLoc[30] = gl.getAttribLocation(this.prog[30], "aOfs");
 this.texture[30] = gl.createTexture();
 this.texLoc[30] = gl.getAttribLocation(this.prog[30], "aTexcoord");
 this.sampler[30] = gl.getUniformLocation(this.prog[30],"uSampler");
-handleLoadedTexture(this.texture[30], document.getElementById("toggletextureCanvas"));
+this.handleLoadedTexture(30);
 this.offsets[30]={vofs:0, cofs:-1, nofs:-1, radofs:-1, oofs:5, tofs:3, stride:7};
 v=new Float32Array([
 3.449016, 3.2, -0.3946676, 0, -0.5, 0.5, 0.5,
@@ -2233,7 +2385,7 @@ this.ofsLoc[31] = gl.getAttribLocation(this.prog[31], "aOfs");
 this.texture[31] = gl.createTexture();
 this.texLoc[31] = gl.getAttribLocation(this.prog[31], "aTexcoord");
 this.sampler[31] = gl.getUniformLocation(this.prog[31],"uSampler");
-handleLoadedTexture(this.texture[31], document.getElementById("toggletextureCanvas"));
+this.handleLoadedTexture(31);
 this.offsets[31]={vofs:0, cofs:-1, nofs:-1, radofs:-1, oofs:5, tofs:3, stride:7};
 v=new Float32Array([
 3.449016, 1.432677, 3.95, 0, -0.5, 0.5, 0.5,
@@ -2315,7 +2467,7 @@ this.ofsLoc[33] = gl.getAttribLocation(this.prog[33], "aOfs");
 this.texture[33] = gl.createTexture();
 this.texLoc[33] = gl.getAttribLocation(this.prog[33], "aTexcoord");
 this.sampler[33] = gl.getUniformLocation(this.prog[33],"uSampler");
-handleLoadedTexture(this.texture[33], document.getElementById("toggletextureCanvas"));
+this.handleLoadedTexture(33);
 this.offsets[33]={vofs:0, cofs:-1, nofs:-1, radofs:-1, oofs:5, tofs:3, stride:7};
 v=new Float32Array([
 5, 1.636598, 0.1066402, 0, -0.5, 0.5, 0.5,
@@ -2418,7 +2570,7 @@ this.ofsLoc[35] = gl.getAttribLocation(this.prog[35], "aOfs");
 this.texture[35] = gl.createTexture();
 this.texLoc[35] = gl.getAttribLocation(this.prog[35], "aTexcoord");
 this.sampler[35] = gl.getUniformLocation(this.prog[35],"uSampler");
-handleLoadedTexture(this.texture[35], document.getElementById("toggletextureCanvas"));
+this.handleLoadedTexture(35);
 this.offsets[35]={vofs:0, cofs:-1, nofs:-1, radofs:-1, oofs:5, tofs:3, stride:7};
 v=new Float32Array([
 3.754899, 2, 0.1066402, 0, -0.5, 0.5, 0.5,
@@ -2534,7 +2686,7 @@ this.ofsLoc[37] = gl.getAttribLocation(this.prog[37], "aOfs");
 this.texture[37] = gl.createTexture();
 this.texLoc[37] = gl.getAttribLocation(this.prog[37], "aTexcoord");
 this.sampler[37] = gl.getUniformLocation(this.prog[37],"uSampler");
-handleLoadedTexture(this.texture[37], document.getElementById("toggletextureCanvas"));
+this.handleLoadedTexture(37);
 this.offsets[37]={vofs:0, cofs:-1, nofs:-1, radofs:-1, oofs:5, tofs:3, stride:7};
 v=new Float32Array([
 3.754899, 1.636598, 1, 0, -0.5, 0.5, 0.5,
@@ -3051,10 +3203,10 @@ var vpy0 = {
 19: 0
 };
 var vpWidths = {
-19: 480
+19: 504
 };
 var vpHeights = {
-19: 480
+19: 504
 };
 var activeModel = {
 19: 19
@@ -3066,7 +3218,7 @@ togglergl.listeners = {
 19: [ 19 ]
 };
 var whichSubscene = function(coords){
-if (0 <= coords.x && coords.x <= 480 && 0 <= coords.y && coords.y <= 480) return(19);
+if (0 <= coords.x && coords.x <= 504 && 0 <= coords.y && coords.y <= 504) return(19);
 return(19);
 };
 var translateCoords = function(subsceneid, coords){
@@ -3224,107 +3376,112 @@ canvas.addEventListener("DOMMouseScroll", wheelHandler, false);
 canvas.addEventListener("mousewheel", wheelHandler, false);
 };
 </script>
-<canvas id="togglecanvas" class="rglWebGL" width="1" height="1">
-</canvas>
+
+<p><canvas id="togglecanvas" class="rglWebGL" width="1" height="1"></canvas></p>
+
 <p id="toggledebug">
-You must enable Javascript to view this page properly.
-</p>
+You must enable Javascript to view this page properly.</p>
+
 <script>togglergl.start();</script>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">toggleButton</span>(sphereid, <span class="dt">label =</span> <span class="st">&quot;setosa&quot;</span>, <span class="dt">prefix =</span> <span class="st">&quot;toggle&quot;</span>, <span class="dt">subscene =</span> subid)</code></pre>
-<button type="button" id="inputff25326db5fc" name="inputff25326db5fc" onclick="(function(){
+
+<pre><code class="r">toggleButton(sphereid, label = &quot;setosa&quot;, prefix = &quot;toggle&quot;, subscene = subid)
+</code></pre>
+
+<p><button type="button" id="input26ad684c3182" name="input26ad684c3182" onclick = "(function(){
   var subset = [25], i;
   if (togglergl.inSubscene(subset[0], 19)) {
-    for (i=0; i&lt;subset.length; i++)
+    for (i=0; i<subset.length; i++)
       togglergl.delFromSubscene(subset[i], 19);
   } else {
-    for (i=0; i&lt;subset.length; i++)
+    for (i=0; i<subset.length; i++)
       togglergl.addToSubscene(subset[i], 19);
   }
   togglergl.drawScene();
-})()">
-setosa
-</button>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">toggleButton</span>(sphereid<span class="dv">+1</span>, <span class="dt">label =</span> <span class="st">&quot;versicolor&quot;</span>, <span class="dt">prefix =</span> <span class="st">&quot;toggle&quot;</span>, <span class="dt">subscene =</span> subid)</code></pre>
-<button type="button" id="inputff2540c6cd41" name="inputff2540c6cd41" onclick="(function(){
+})()">setosa</button></p>
+
+<pre><code class="r">toggleButton(sphereid+1, label = &quot;versicolor&quot;, prefix = &quot;toggle&quot;, subscene = subid)
+</code></pre>
+
+<p><button type="button" id="input26adeaabcb2" name="input26adeaabcb2" onclick = "(function(){
   var subset = [26], i;
   if (togglergl.inSubscene(subset[0], 19)) {
-    for (i=0; i&lt;subset.length; i++)
+    for (i=0; i<subset.length; i++)
       togglergl.delFromSubscene(subset[i], 19);
   } else {
-    for (i=0; i&lt;subset.length; i++)
+    for (i=0; i<subset.length; i++)
       togglergl.addToSubscene(subset[i], 19);
   }
   togglergl.drawScene();
-})()">
-versicolor
-</button>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">toggleButton</span>(sphereid<span class="dv">+2</span>, <span class="dt">label =</span> <span class="st">&quot;virginica&quot;</span>, <span class="dt">prefix =</span> <span class="st">&quot;toggle&quot;</span>, <span class="dt">subscene =</span> subid)</code></pre>
-<button type="button" id="inputff253bcd87a0" name="inputff253bcd87a0" onclick="(function(){
+})()">versicolor</button></p>
+
+<pre><code class="r">toggleButton(sphereid+2, label = &quot;virginica&quot;, prefix = &quot;toggle&quot;, subscene = subid)
+</code></pre>
+
+<p><button type="button" id="input26ad3f69c6e0" name="input26ad3f69c6e0" onclick = "(function(){
   var subset = [27], i;
   if (togglergl.inSubscene(subset[0], 19)) {
-    for (i=0; i&lt;subset.length; i++)
+    for (i=0; i<subset.length; i++)
       togglergl.delFromSubscene(subset[i], 19);
   } else {
-    for (i=0; i&lt;subset.length; i++)
+    for (i=0; i<subset.length; i++)
       togglergl.addToSubscene(subset[i], 19);
   }
   togglergl.drawScene();
-})()">
-virginica
-</button>
-<p>Note that we need to use <code>results=&quot;asis&quot;</code> for the button code.<br />Normally we would also use <code>echo=FALSE</code>, though I didn’t do so above; then the buttons will end up side-by-side:</p>
-<button type="button" id="inputff2544d4b5bc" name="inputff2544d4b5bc" onclick="(function(){
+})()">virginica</button></p>
+
+<p>Note that we need to use <code>results=&quot;asis&quot;</code> for the button code.<br/>
+Normally we would also use <code>echo=FALSE</code>, though I didn&#39;t do so above;
+then the buttons will end up side-by-side:</p>
+
+<p><button type="button" id="input26ad50f53b1f" name="input26ad50f53b1f" onclick = "(function(){
   var subset = [25], i;
   if (togglergl.inSubscene(subset[0], 19)) {
-    for (i=0; i&lt;subset.length; i++)
+    for (i=0; i<subset.length; i++)
       togglergl.delFromSubscene(subset[i], 19);
   } else {
-    for (i=0; i&lt;subset.length; i++)
+    for (i=0; i<subset.length; i++)
       togglergl.addToSubscene(subset[i], 19);
   }
   togglergl.drawScene();
-})()">
-setosa
-</button>
-<button type="button" id="inputff2568e76cf1" name="inputff2568e76cf1" onclick="(function(){
+})()">setosa</button>
+<button type="button" id="input26ad5fde648c" name="input26ad5fde648c" onclick = "(function(){
   var subset = [26], i;
   if (togglergl.inSubscene(subset[0], 19)) {
-    for (i=0; i&lt;subset.length; i++)
+    for (i=0; i<subset.length; i++)
       togglergl.delFromSubscene(subset[i], 19);
   } else {
-    for (i=0; i&lt;subset.length; i++)
+    for (i=0; i<subset.length; i++)
       togglergl.addToSubscene(subset[i], 19);
   }
   togglergl.drawScene();
-})()">
-versicolor
-</button>
-<button type="button" id="inputff2531a17805" name="inputff2531a17805" onclick="(function(){
+})()">versicolor</button>
+<button type="button" id="input26ad26a36645" name="input26ad26a36645" onclick = "(function(){
   var subset = [27], i;
   if (togglergl.inSubscene(subset[0], 19)) {
-    for (i=0; i&lt;subset.length; i++)
+    for (i=0; i<subset.length; i++)
       togglergl.delFromSubscene(subset[i], 19);
   } else {
-    for (i=0; i&lt;subset.length; i++)
+    for (i=0; i<subset.length; i++)
       togglergl.addToSubscene(subset[i], 19);
   }
   togglergl.drawScene();
-})()">
-virginica
-</button>
-<p>An alternate control to achieve the same thing is <a name="subsetSlider"><a href="../../rgl/help/subsetSlider"><code>subsetSlider</code></a></a>.</p>
-<canvas id="slidertextureCanvas" style="display: none;" width="256" height="256">
-Your browser does not support the HTML5 canvas element.
-</canvas>
+})()">virginica</button></p>
+
+<p>An alternate control to achieve the same thing is <a name="subsetSlider"><a href="../../rgl/help/subsetSlider"><code>subsetSlider</code></a></a>. </p>
+
+<p><canvas id="slidertextureCanvas" style="display: none;" width="256" height="256">
+Your browser does not support the HTML5 canvas element.</canvas></p>
+
 <script type="text/javascript">
 var sliderrgl = new rglClass();
 sliderrgl.start = function() {
-var i, j, v, ind, texts, f, texinfo;
+var i, j, v, ind, texts, f, texinfo, canvas;
 var debug = function(msg) {
 document.getElementById("sliderdebug").innerHTML = msg;
 };
 debug("");
-var canvas = document.getElementById("slidercanvas");
+canvas = this.canvas = document.getElementById("slidercanvas");
+this.textureCanvas = document.getElementById("slidertextureCanvas");
 if (!window.WebGLRenderingContext){
 debug(" Your browser does not support WebGL. See <a href=\"http://get.webgl.org\">http://get.webgl.org</a>");
 return;
@@ -3340,7 +3497,7 @@ debug(" Your browser appears to support WebGL, but did not create a WebGL contex
 return;
 }
 var gl = this.gl,
-width = 481, height = 481;
+width = 505, height = 505;
 canvas.width = width;   canvas.height = height;
 var normMatrix = new CanvasMatrix4(),
 saveMat = {},
@@ -3351,7 +3508,7 @@ var activeSubscene = 19;
 this.flags[19] = 1195;
 this.zoom[19] = 1;
 this.FOV[19] = 30;
-this.viewport[19] = [0, 0, 480, 480];
+this.viewport[19] = [0, 0, 504, 504];
 this.userMatrix[19] = new CanvasMatrix4();
 this.userMatrix[19].load([
 1, 0, 0, 0,
@@ -3363,40 +3520,6 @@ this.clipplanes[19] = [];
 this.opaque[19] = [25,26,27,29,30,31,39,40,41,42,43,44,45];
 this.transparent[19] = [];
 this.subscenes[19] = [];
-function getPowerOfTwo(value) {
-var pow = 1;
-while(pow<value) {
-pow *= 2;
-}
-return pow;
-}
-function handleLoadedTexture(texture, textureCanvas) {
-gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
-gl.bindTexture(gl.TEXTURE_2D, texture);
-gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, textureCanvas);
-gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_NEAREST);
-gl.generateMipmap(gl.TEXTURE_2D);
-gl.bindTexture(gl.TEXTURE_2D, null);
-}
-function loadImageToTexture(filename, texture) {
-var canvas = document.getElementById("slidertextureCanvas"),
-ctx = canvas.getContext("2d"),
-image = new Image();
-image.onload = function() {
-var w = image.width,
-h = image.height,
-canvasX = getPowerOfTwo(w),
-canvasY = getPowerOfTwo(h);
-canvas.width = canvasX;
-canvas.height = canvasY;
-ctx.imageSmoothingEnabled = true;
-ctx.drawImage(image, 0, 0, canvasX, canvasY);
-handleLoadedTexture(texture, canvas);
-sliderrgl.drawScene();
-};
-image.src = filename;
-}
 function drawTextToCanvas(text, cex) {
 var canvasX, canvasY,
 textX, textY,
@@ -3414,10 +3537,10 @@ for (i = 0; i < text.length; i++)  {
 widths[i] = ctx.measureText(text[i]).width;
 canvasX = (widths[i] > canvasX) ? widths[i] : canvasX;
 }
-canvasX = getPowerOfTwo(canvasX);
+canvasX = sliderrgl.getPowerOfTwo(canvasX);
 var offset = 2*textHeight, // offset to first baseline
 skip = 2*textHeight;   // skip between baselines
-canvasY = getPowerOfTwo(offset + text.length*skip);
+canvasY = sliderrgl.getPowerOfTwo(offset + text.length*skip);
 canvas.width = canvasX;
 canvas.height = canvasY;
 ctx.fillStyle = backgroundColour;
@@ -3511,7 +3634,7 @@ this.ofsLoc[29] = gl.getAttribLocation(this.prog[29], "aOfs");
 this.texture[29] = gl.createTexture();
 this.texLoc[29] = gl.getAttribLocation(this.prog[29], "aTexcoord");
 this.sampler[29] = gl.getUniformLocation(this.prog[29],"uSampler");
-handleLoadedTexture(this.texture[29], document.getElementById("slidertextureCanvas"));
+this.handleLoadedTexture(29);
 this.offsets[29]={vofs:0, cofs:-1, nofs:-1, radofs:-1, oofs:5, tofs:3, stride:7};
 this.values[29] = togglergl.values[29];
 f=new Uint16Array([
@@ -3545,7 +3668,7 @@ this.ofsLoc[30] = gl.getAttribLocation(this.prog[30], "aOfs");
 this.texture[30] = gl.createTexture();
 this.texLoc[30] = gl.getAttribLocation(this.prog[30], "aTexcoord");
 this.sampler[30] = gl.getUniformLocation(this.prog[30],"uSampler");
-handleLoadedTexture(this.texture[30], document.getElementById("slidertextureCanvas"));
+this.handleLoadedTexture(30);
 this.offsets[30]={vofs:0, cofs:-1, nofs:-1, radofs:-1, oofs:5, tofs:3, stride:7};
 this.values[30] = togglergl.values[30];
 f=new Uint16Array([
@@ -3579,7 +3702,7 @@ this.ofsLoc[31] = gl.getAttribLocation(this.prog[31], "aOfs");
 this.texture[31] = gl.createTexture();
 this.texLoc[31] = gl.getAttribLocation(this.prog[31], "aTexcoord");
 this.sampler[31] = gl.getUniformLocation(this.prog[31],"uSampler");
-handleLoadedTexture(this.texture[31], document.getElementById("slidertextureCanvas"));
+this.handleLoadedTexture(31);
 this.offsets[31]={vofs:0, cofs:-1, nofs:-1, radofs:-1, oofs:5, tofs:3, stride:7};
 this.values[31] = togglergl.values[31];
 f=new Uint16Array([
@@ -3646,7 +3769,7 @@ this.ofsLoc[40] = gl.getAttribLocation(this.prog[40], "aOfs");
 this.texture[40] = gl.createTexture();
 this.texLoc[40] = gl.getAttribLocation(this.prog[40], "aTexcoord");
 this.sampler[40] = gl.getUniformLocation(this.prog[40],"uSampler");
-handleLoadedTexture(this.texture[40], document.getElementById("slidertextureCanvas"));
+this.handleLoadedTexture(40);
 this.offsets[40]={vofs:0, cofs:-1, nofs:-1, radofs:-1, oofs:5, tofs:3, stride:7};
 v=new Float32Array([
 5, 1.636598, 0.1066402, 0, -0.5, 0.5, 0.5,
@@ -3749,7 +3872,7 @@ this.ofsLoc[42] = gl.getAttribLocation(this.prog[42], "aOfs");
 this.texture[42] = gl.createTexture();
 this.texLoc[42] = gl.getAttribLocation(this.prog[42], "aTexcoord");
 this.sampler[42] = gl.getUniformLocation(this.prog[42],"uSampler");
-handleLoadedTexture(this.texture[42], document.getElementById("slidertextureCanvas"));
+this.handleLoadedTexture(42);
 this.offsets[42]={vofs:0, cofs:-1, nofs:-1, radofs:-1, oofs:5, tofs:3, stride:7};
 v=new Float32Array([
 3.754899, 2, 0.1066402, 0, -0.5, 0.5, 0.5,
@@ -3865,7 +3988,7 @@ this.ofsLoc[44] = gl.getAttribLocation(this.prog[44], "aOfs");
 this.texture[44] = gl.createTexture();
 this.texLoc[44] = gl.getAttribLocation(this.prog[44], "aTexcoord");
 this.sampler[44] = gl.getUniformLocation(this.prog[44],"uSampler");
-handleLoadedTexture(this.texture[44], document.getElementById("slidertextureCanvas"));
+this.handleLoadedTexture(44);
 this.offsets[44]={vofs:0, cofs:-1, nofs:-1, radofs:-1, oofs:5, tofs:3, stride:7};
 v=new Float32Array([
 3.754899, 1.636598, 1, 0, -0.5, 0.5, 0.5,
@@ -4382,10 +4505,10 @@ var vpy0 = {
 19: 0
 };
 var vpWidths = {
-19: 480
+19: 504
 };
 var vpHeights = {
-19: 480
+19: 504
 };
 var activeModel = {
 19: 19
@@ -4397,7 +4520,7 @@ sliderrgl.listeners = {
 19: [ 19 ]
 };
 var whichSubscene = function(coords){
-if (0 <= coords.x && coords.x <= 480 && 0 <= coords.y && coords.y <= 480) return(19);
+if (0 <= coords.x && coords.x <= 504 && 0 <= coords.y && coords.y <= 504) return(19);
 return(19);
 };
 var translateCoords = function(subsceneid, coords){
@@ -4555,19 +4678,23 @@ canvas.addEventListener("DOMMouseScroll", wheelHandler, false);
 canvas.addEventListener("mousewheel", wheelHandler, false);
 };
 </script>
-<canvas id="slidercanvas" class="rglWebGL" width="1" height="1">
-</canvas>
+
+<p><canvas id="slidercanvas" class="rglWebGL" width="1" height="1"></canvas></p>
+
 <p id="sliderdebug">
-You must enable Javascript to view this page properly.
-</p>
+You must enable Javascript to view this page properly.</p>
+
 <script>sliderrgl.start();</script>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">subsetSlider</span>(<span class="dt">subsets =</span> <span class="kw">list</span>(<span class="dt">setosa =</span> sphereid, 
-                  <span class="dt">versicolor =</span> sphereid +<span class="st"> </span><span class="dv">1</span>, 
-                  <span class="dt">virginica =</span> sphereid +<span class="st"> </span><span class="dv">2</span>, 
-                  <span class="dt">all =</span> sphereid +<span class="st"> </span><span class="dv">0</span>:<span class="dv">2</span>),
-             <span class="dt">prefixes =</span> <span class="st">&quot;slider&quot;</span>, <span class="dt">subscenes =</span> subid, 
-             <span class="dt">init =</span> <span class="dv">3</span>)</code></pre>
-<script>sliderrgl.inputff254a6a4a3f = function(value){
+
+<pre><code class="r">subsetSlider(subsets = list(setosa = sphereid, 
+                  versicolor = sphereid + 1, 
+                  virginica = sphereid + 2, 
+                  all = sphereid + 0:2),
+             prefixes = &quot;slider&quot;, subscenes = subid, 
+             init = 3)
+</code></pre>
+
+<script>sliderrgl.input26ad8ab6847 = function(value){
    (function(value) {
   var i, ids = [[25],[26],[27],[25,26,27]],
       fullset = [25,26,27],
@@ -4582,28 +4709,35 @@ You must enable Javascript to view this page properly.
    sliderrgl.drawScene();
    var lvalue = Math.round((value - 0)/1);
    var labels = ['setosa','versicolor','virginica','all']; 
-  label = document.getElementById('inputff254a6a4a3ftext');
+  label = document.getElementById('input26ad8ab6847text');
   if (label !== null) label.value = labels[lvalue];
 };
-sliderrgl.inputff254a6a4a3f(3);</script>
-<input type="range" min="0" max="3" step="1" value="3" id="inputff254a6a4a3f" name="inputff254a6a4a3f" oninput="sliderrgl.inputff254a6a4a3f(this.valueAsNumber)">
-<output id="inputff254a6a4a3ftext" for="inputff254a6a4a3f">
-all
-</output>
-<p>There are several other functions to generate the Javascript code for controls. <a name="par3dinterpSetter"><a href="../../rgl/help/par3dinterpSetter"><code>par3dinterpSetter</code></a></a> generates a function that approximates the result of <a href="#par3dinterp"><code>par3dinterp</code></a>. <a name="propertySetter"><a href="../../rgl/help/propertySetter"><code>propertySetter</code></a></a> is a more general function to set the value of properties of the scene. Both generate Javascript functions, but not the controls to use them; for that, use <a name="propertySlider"><a href="../../rgl/help/propertySlider"><code>propertySlider</code></a></a> or your own custom code.</p>
-For example, the following code (similar to the <a href="#play3d"><code>play3d</code></a> example) rotates the scene in a complex way.
+sliderrgl.input26ad8ab6847(3);</script>
+<input type="range" min="0" max="3" step="1" value="3" id="input26ad8ab6847" name="input26ad8ab6847"
+oninput = "sliderrgl.input26ad8ab6847(this.valueAsNumber)"><output id="input26ad8ab6847text" for="input26ad8ab6847">all</output>
+
+There are several other functions to generate the Javascript
+code for controls.  <a name="par3dinterpSetter"><a href="../../rgl/help/par3dinterpSetter">par3dinterpSetter</a></a> generates
+a function that approximates the result of <a href="#par3dinterp">par3dinterp</a>.
+<a name="propertySetter"><a href="../../rgl/help/propertySetter">propertySetter</a></a> is a more general function to set
+the value of properties of the scene.  Both generate Javascript
+functions, but not the controls to use them; for that, use
+<a name="propertySlider"><a href="../../rgl/help/propertySlider">propertySlider</a></a> or your own custom code.
+
+For example, the following code (similar to the <a href="#play3d">play3d</a>
+example) rotates the scene in a complex way.
 <canvas id="userMatrixtextureCanvas" style="display: none;" width="256" height="256">
-Your browser does not support the HTML5 canvas element.
-</canvas>
+Your browser does not support the HTML5 canvas element.</canvas>
 <script type="text/javascript">
 var userMatrixrgl = new rglClass();
 userMatrixrgl.start = function() {
-var i, j, v, ind, texts, f, texinfo;
+var i, j, v, ind, texts, f, texinfo, canvas;
 var debug = function(msg) {
 document.getElementById("userMatrixdebug").innerHTML = msg;
 };
 debug("");
-var canvas = document.getElementById("userMatrixcanvas");
+canvas = this.canvas = document.getElementById("userMatrixcanvas");
+this.textureCanvas = document.getElementById("userMatrixtextureCanvas");
 if (!window.WebGLRenderingContext){
 debug(" Your browser does not support WebGL. See <a href=\"http://get.webgl.org\">http://get.webgl.org</a>");
 return;
@@ -4619,7 +4753,7 @@ debug(" Your browser appears to support WebGL, but did not create a WebGL contex
 return;
 }
 var gl = this.gl,
-width = 481, height = 481;
+width = 505, height = 505;
 canvas.width = width;   canvas.height = height;
 var normMatrix = new CanvasMatrix4(),
 saveMat = {},
@@ -4630,7 +4764,7 @@ var activeSubscene = 19;
 this.flags[19] = 1195;
 this.zoom[19] = 1;
 this.FOV[19] = 30;
-this.viewport[19] = [0, 0, 480, 480];
+this.viewport[19] = [0, 0, 504, 504];
 this.userMatrix[19] = new CanvasMatrix4();
 this.userMatrix[19].load([
 1, 0, 0, 0,
@@ -4642,40 +4776,6 @@ this.clipplanes[19] = [];
 this.opaque[19] = [25,26,27,29,30,31,46,47,48,49,50,51,52];
 this.transparent[19] = [];
 this.subscenes[19] = [];
-function getPowerOfTwo(value) {
-var pow = 1;
-while(pow<value) {
-pow *= 2;
-}
-return pow;
-}
-function handleLoadedTexture(texture, textureCanvas) {
-gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
-gl.bindTexture(gl.TEXTURE_2D, texture);
-gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, textureCanvas);
-gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_NEAREST);
-gl.generateMipmap(gl.TEXTURE_2D);
-gl.bindTexture(gl.TEXTURE_2D, null);
-}
-function loadImageToTexture(filename, texture) {
-var canvas = document.getElementById("userMatrixtextureCanvas"),
-ctx = canvas.getContext("2d"),
-image = new Image();
-image.onload = function() {
-var w = image.width,
-h = image.height,
-canvasX = getPowerOfTwo(w),
-canvasY = getPowerOfTwo(h);
-canvas.width = canvasX;
-canvas.height = canvasY;
-ctx.imageSmoothingEnabled = true;
-ctx.drawImage(image, 0, 0, canvasX, canvasY);
-handleLoadedTexture(texture, canvas);
-userMatrixrgl.drawScene();
-};
-image.src = filename;
-}
 function drawTextToCanvas(text, cex) {
 var canvasX, canvasY,
 textX, textY,
@@ -4693,10 +4793,10 @@ for (i = 0; i < text.length; i++)  {
 widths[i] = ctx.measureText(text[i]).width;
 canvasX = (widths[i] > canvasX) ? widths[i] : canvasX;
 }
-canvasX = getPowerOfTwo(canvasX);
+canvasX = userMatrixrgl.getPowerOfTwo(canvasX);
 var offset = 2*textHeight, // offset to first baseline
 skip = 2*textHeight;   // skip between baselines
-canvasY = getPowerOfTwo(offset + text.length*skip);
+canvasY = userMatrixrgl.getPowerOfTwo(offset + text.length*skip);
 canvas.width = canvasX;
 canvas.height = canvasY;
 ctx.fillStyle = backgroundColour;
@@ -4790,7 +4890,7 @@ this.ofsLoc[29] = gl.getAttribLocation(this.prog[29], "aOfs");
 this.texture[29] = gl.createTexture();
 this.texLoc[29] = gl.getAttribLocation(this.prog[29], "aTexcoord");
 this.sampler[29] = gl.getUniformLocation(this.prog[29],"uSampler");
-handleLoadedTexture(this.texture[29], document.getElementById("userMatrixtextureCanvas"));
+this.handleLoadedTexture(29);
 this.offsets[29]={vofs:0, cofs:-1, nofs:-1, radofs:-1, oofs:5, tofs:3, stride:7};
 this.values[29] = togglergl.values[29];
 f=new Uint16Array([
@@ -4824,7 +4924,7 @@ this.ofsLoc[30] = gl.getAttribLocation(this.prog[30], "aOfs");
 this.texture[30] = gl.createTexture();
 this.texLoc[30] = gl.getAttribLocation(this.prog[30], "aTexcoord");
 this.sampler[30] = gl.getUniformLocation(this.prog[30],"uSampler");
-handleLoadedTexture(this.texture[30], document.getElementById("userMatrixtextureCanvas"));
+this.handleLoadedTexture(30);
 this.offsets[30]={vofs:0, cofs:-1, nofs:-1, radofs:-1, oofs:5, tofs:3, stride:7};
 this.values[30] = togglergl.values[30];
 f=new Uint16Array([
@@ -4858,7 +4958,7 @@ this.ofsLoc[31] = gl.getAttribLocation(this.prog[31], "aOfs");
 this.texture[31] = gl.createTexture();
 this.texLoc[31] = gl.getAttribLocation(this.prog[31], "aTexcoord");
 this.sampler[31] = gl.getUniformLocation(this.prog[31],"uSampler");
-handleLoadedTexture(this.texture[31], document.getElementById("userMatrixtextureCanvas"));
+this.handleLoadedTexture(31);
 this.offsets[31]={vofs:0, cofs:-1, nofs:-1, radofs:-1, oofs:5, tofs:3, stride:7};
 this.values[31] = togglergl.values[31];
 f=new Uint16Array([
@@ -4925,7 +5025,7 @@ this.ofsLoc[47] = gl.getAttribLocation(this.prog[47], "aOfs");
 this.texture[47] = gl.createTexture();
 this.texLoc[47] = gl.getAttribLocation(this.prog[47], "aTexcoord");
 this.sampler[47] = gl.getUniformLocation(this.prog[47],"uSampler");
-handleLoadedTexture(this.texture[47], document.getElementById("userMatrixtextureCanvas"));
+this.handleLoadedTexture(47);
 this.offsets[47]={vofs:0, cofs:-1, nofs:-1, radofs:-1, oofs:5, tofs:3, stride:7};
 v=new Float32Array([
 5, 1.636598, 0.1066402, 0, -0.5, 0.5, 0.5,
@@ -5028,7 +5128,7 @@ this.ofsLoc[49] = gl.getAttribLocation(this.prog[49], "aOfs");
 this.texture[49] = gl.createTexture();
 this.texLoc[49] = gl.getAttribLocation(this.prog[49], "aTexcoord");
 this.sampler[49] = gl.getUniformLocation(this.prog[49],"uSampler");
-handleLoadedTexture(this.texture[49], document.getElementById("userMatrixtextureCanvas"));
+this.handleLoadedTexture(49);
 this.offsets[49]={vofs:0, cofs:-1, nofs:-1, radofs:-1, oofs:5, tofs:3, stride:7};
 v=new Float32Array([
 3.754899, 2, 0.1066402, 0, -0.5, 0.5, 0.5,
@@ -5144,7 +5244,7 @@ this.ofsLoc[51] = gl.getAttribLocation(this.prog[51], "aOfs");
 this.texture[51] = gl.createTexture();
 this.texLoc[51] = gl.getAttribLocation(this.prog[51], "aTexcoord");
 this.sampler[51] = gl.getUniformLocation(this.prog[51],"uSampler");
-handleLoadedTexture(this.texture[51], document.getElementById("userMatrixtextureCanvas"));
+this.handleLoadedTexture(51);
 this.offsets[51]={vofs:0, cofs:-1, nofs:-1, radofs:-1, oofs:5, tofs:3, stride:7};
 v=new Float32Array([
 3.754899, 1.636598, 1, 0, -0.5, 0.5, 0.5,
@@ -5661,10 +5761,10 @@ var vpy0 = {
 19: 0
 };
 var vpWidths = {
-19: 480
+19: 504
 };
 var vpHeights = {
-19: 480
+19: 504
 };
 var activeModel = {
 19: 19
@@ -5676,7 +5776,7 @@ userMatrixrgl.listeners = {
 19: [ 19 ]
 };
 var whichSubscene = function(coords){
-if (0 <= coords.x && coords.x <= 480 && 0 <= coords.y && coords.y <= 480) return(19);
+if (0 <= coords.x && coords.x <= 504 && 0 <= coords.y && coords.y <= 504) return(19);
 return(19);
 };
 var translateCoords = function(subsceneid, coords){
@@ -5834,21 +5934,25 @@ canvas.addEventListener("DOMMouseScroll", wheelHandler, false);
 canvas.addEventListener("mousewheel", wheelHandler, false);
 };
 </script>
-<canvas id="userMatrixcanvas" class="rglWebGL" width="1" height="1">
-</canvas>
+
+<p><canvas id="userMatrixcanvas" class="rglWebGL" width="1" height="1"></canvas></p>
+
 <p id="userMatrixdebug">
-You must enable Javascript to view this page properly.
-</p>
+You must enable Javascript to view this page properly.</p>
+
 <script>userMatrixrgl.start();</script>
-<pre class="sourceCode r"><code class="sourceCode r">M &lt;-<span class="st"> </span>r3dDefaults$userMatrix
-fn &lt;-<span class="st"> </span><span class="kw">par3dinterp</span>(<span class="dt">time =</span> (<span class="dv">0</span>:<span class="dv">2</span>)*<span class="fl">0.75</span>, <span class="dt">userMatrix =</span> <span class="kw">list</span>(M,
-                                     <span class="kw">rotate3d</span>(M, pi/<span class="dv">2</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>),
-                                     <span class="kw">rotate3d</span>(M, pi/<span class="dv">2</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>) ) )
-<span class="kw">propertySlider</span>(<span class="dt">setter =</span> <span class="kw">par3dinterpSetter</span>(fn, <span class="dv">0</span>, <span class="fl">1.5</span>, <span class="dt">steps=</span><span class="dv">15</span>, 
-                       <span class="dt">prefix =</span> <span class="st">&quot;userMatrix&quot;</span>, 
-                       <span class="dt">subscene =</span> subid),
-           <span class="dt">step =</span> <span class="fl">0.01</span>)</code></pre>
-<script>userMatrixrgl.inputff2517978d5a = function(value){
+
+<pre><code class="r">M &lt;- r3dDefaults$userMatrix
+fn &lt;- par3dinterp(time = (0:2)*0.75, userMatrix = list(M,
+                                     rotate3d(M, pi/2, 1, 0, 0),
+                                     rotate3d(M, pi/2, 0, 1, 0) ) )
+propertySlider(setter = par3dinterpSetter(fn, 0, 1.5, steps=15, 
+                       prefix = &quot;userMatrix&quot;, 
+                       subscene = subid),
+           step = 0.01)
+</code></pre>
+
+<script>userMatrixrgl.input26ad4bc193df = function(value){
    (function(value){
    var values = [1,0,0,0,0.3420201,-0.9396926,0,0.9396926,0.3420201,1,0,0,0,0.3420201,-0.9396926,0,0.9396926,0.3420201,0.9998637,0.01530909,0.006182005,-0.0005731673,0.4063968,-0.9136965,-0.01650021,0.9135684,0.4063502,0.998369,0.05070307,0.02623844,-0.007314602,0.5694157,-0.8220172,-0.05661938,0.8204846,0.5688579,0.994286,0.08726108,0.06148823,-0.02793499,0.7686299,-0.6390835,-0.1030288,0.6337141,0.7666756,0.9891054,0.1056615,0.1024996,-0.06017974,0.9256743,-0.3735044,-0.1343463,0.3632668,0.9219481,0.9869455,0.0975766,0.1281305,-0.08703014,0.9925308,-0.08548915,-0.1355152,0.07322191,0.9880659,0.9907124,0.06879497,0.1172868,-0.08668432,0.9841065,0.1549846,-0.1047606,-0.1637121,0.9809299,0.9981252,0.02685711,0.05499827,-0.0424958,0.9507813,0.3069348,-0.04404794,-0.3086966,0.9501401,0.9967362,-0.03391975,-0.0732553,0.05723623,0.9368655,0.3449741,0.05692893,-0.348041,0.9357492,0.9546708,-0.1350528,-0.2652627,0.2030747,0.9470569,0.2486845,0.2176334,-0.29128,0.9315534,0.8280962,-0.2984868,-0.4745127,0.3438076,0.9389938,0.009332723,0.4427787,-0.1708694,0.8801992,0.6034845,-0.5142712,-0.6093699,0.3967293,0.8565686,-0.3299942,0.6916736,-0.04260846,0.7209523,0.3452672,-0.7195484,-0.6025286,0.3200916,0.6937994,-0.6451231,0.8822312,0.02987549,0.4698675,0.1448145,-0.8559505,-0.4963642,0.1736775,0.515853,-0.8388873,0.974097,0.0352758,0.2233623,0.0341197,-0.921358,-0.3872147,0.04873981,0.3885133,-0.9201532,0.9982286,0.01252258,0.05816277,5.551115e-17,-0.9396926,-0.3420201,-5.551115e-17,0.3420201,-0.9396926,1,5.551115e-17,0,5.551115e-17,-0.9396926,-0.3420201,-5.551115e-17,0.3420201,-0.9396926,1,5.551115e-17,0],
    propvals = userMatrixrgl.userMatrix[19].getAsArray();
@@ -5891,29 +5995,49 @@ fn &lt;-<span class="st"> </span><span class="kw">par3dinterp</span>(<span class
    userMatrixrgl.drawScene();
    var lvalue = Math.round((value - 0)/0.01);
    var labels = ['0','0.01','0.02','0.03','0.04','0.05','0.0600000000000001','0.07','0.08','0.09','0.1','0.11','0.12','0.13','0.14','0.15','0.16','0.17','0.18','0.19','0.2','0.21','0.22','0.23','0.24','0.25','0.26','0.27','0.28','0.29','0.3','0.31','0.32','0.33','0.34','0.35','0.36','0.37','0.38','0.39','0.4','0.41','0.42','0.43','0.44','0.45','0.46','0.47','0.48','0.49','0.5','0.51','0.52','0.53','0.54','0.55','0.56','0.57','0.58','0.59','0.6','0.61','0.62','0.63','0.64','0.65','0.66','0.67','0.68','0.69','0.7','0.71','0.72','0.73','0.74','0.75','0.76','0.77','0.78','0.79','0.8','0.81','0.82','0.83','0.84','0.85','0.86','0.87','0.88','0.89','0.9','0.91','0.92','0.93','0.94','0.95','0.96','0.97','0.98','0.99','1','1.01','1.02','1.03','1.04','1.05','1.06','1.07','1.08','1.09','1.1','1.11','1.12','1.13','1.14','1.15','1.16','1.17','1.18','1.19','1.2','1.21','1.22','1.23','1.24','1.25','1.26','1.27','1.28','1.29','1.3','1.31','1.32','1.33','1.34','1.35','1.36','1.37','1.38','1.39','1.4','1.41','1.42','1.43','1.44','1.45','1.46','1.47','1.48','1.49','1.5']; 
-  label = document.getElementById('inputff2517978d5atext');
+  label = document.getElementById('input26ad4bc193dftext');
   if (label !== null) label.value = labels[lvalue];
 };
-userMatrixrgl.inputff2517978d5a(0);</script>
-<input type="range" min="0" max="1.5" step="0.01" value="0" id="inputff2517978d5a" name="inputff2517978d5a" oninput="userMatrixrgl.inputff2517978d5a(this.valueAsNumber)">
-<output id="inputff2517978d5atext" for="inputff2517978d5a">
-0
-</output>
-<p>Some things to note: The generated Javascript slider has 150 increments, so that motion appears smooth. However, storing 150 <code>userMatrix</code> values would take up a lot of space, so we use interpolation in the Javascript code. However, the Javascript code can only do linear interpolation, not the more complex spline-based SO(3) interpolation done by <a href="#par3dinterp"><code>par3dinterp</code></a>. Because of this, we need to output 15 steps from <a href="#par3dinterpSetter"><code>par3dinterpSetter</code></a> so that the distortions of linear interpolation are not visible.</p>
-<p>Another function that auto-generates Javascript code is <a name="clipplaneSlider"><a href="../../rgl/help/clipplaneSlider"><code>clipplaneSlider</code></a></a>. This function allows the user to control the location of a clipping plane by moving a slider. Both it and <a href="#par3dinterpSetter"><code>par3dinterpSetter</code></a> are implemented using the more general <a name="propertySlider"><a href="../../rgl/help/propertySlider"><code>propertySlider</code></a></a>, which allows control of multiple objects in multiple scenes, but which does require knowledge of the internal representation of the scene in its Javascript implementation.</p>
-<p>Less general than <a href="#propertySetter"><code>propertySetter</code></a> is <a name="vertexSetter"><a href="../../rgl/help/vertexSetter"><code>vertexSetter</code></a></a>. This function sets attributes of individual vertices in a scene. For example, to set the x-coordinate of the closest point in the setosa group, and modify its colour from black to white,</p>
+userMatrixrgl.input26ad4bc193df(0);</script>
+<input type="range" min="0" max="1.5" step="0.01" value="0" id="input26ad4bc193df" name="input26ad4bc193df"
+oninput = "userMatrixrgl.input26ad4bc193df(this.valueAsNumber)"><output id="input26ad4bc193dftext" for="input26ad4bc193df">0</output>
+Some things to note:  The generated Javascript slider has 150 increments,
+so that motion appears smooth.  However, storing 150 userMatrix values
+would take up a lot of space, so we use interpolation
+in the Javascript code.  However, the Javascript code can only do 
+linear interpolation, not the more complex spline-based SO(3)
+interpolation done by <a href="#par3dinterp">par3dinterp</a>.  Because of this,
+we need to output 15 steps from <a href="#par3dinterpSetter">par3dinterpSetter</a>
+so that the distortions of linear interpolation are not visible.  
+
+Another function that auto-generates Javascript code is 
+<a name="clipplaneSlider"><a href="../../rgl/help/clipplaneSlider">clipplaneSlider</a></a>.  This function allows the user to control
+the location of a clipping plane by moving a slider.  Both it 
+and <a href="#par3dinterpSetter">par3dinterpSetter</a> are implemented
+using the more general <a name="propertySlider"><a href="../../rgl/help/propertySlider">propertySlider</a></a>, which 
+allows control of multiple objects in multiple scenes, but which 
+does require knowledge of the internal representation of the scene
+in its Javascript implementation.
+
+
+Less general than <a href="#propertySetter">propertySetter</a> is
+<a name="vertexSetter"><a href="../../rgl/help/vertexSetter">vertexSetter</a></a>.  This function sets attributes
+of individual vertices in a scene.  For example, to set the
+x-coordinate of the closest point in the setosa group, and modify
+its colour from black to white,
+
 <canvas id="vertextextureCanvas" style="display: none;" width="256" height="256">
-Your browser does not support the HTML5 canvas element.
-</canvas>
+Your browser does not support the HTML5 canvas element.</canvas>
 <script type="text/javascript">
 var vertexrgl = new rglClass();
 vertexrgl.start = function() {
-var i, j, v, ind, texts, f, texinfo;
+var i, j, v, ind, texts, f, texinfo, canvas;
 var debug = function(msg) {
 document.getElementById("vertexdebug").innerHTML = msg;
 };
 debug("");
-var canvas = document.getElementById("vertexcanvas");
+canvas = this.canvas = document.getElementById("vertexcanvas");
+this.textureCanvas = document.getElementById("vertextextureCanvas");
 if (!window.WebGLRenderingContext){
 debug(" Your browser does not support WebGL. See <a href=\"http://get.webgl.org\">http://get.webgl.org</a>");
 return;
@@ -5929,7 +6053,7 @@ debug(" Your browser appears to support WebGL, but did not create a WebGL contex
 return;
 }
 var gl = this.gl,
-width = 481, height = 481;
+width = 505, height = 505;
 canvas.width = width;   canvas.height = height;
 var normMatrix = new CanvasMatrix4(),
 saveMat = {},
@@ -5940,7 +6064,7 @@ var activeSubscene = 19;
 this.flags[19] = 1195;
 this.zoom[19] = 1;
 this.FOV[19] = 30;
-this.viewport[19] = [0, 0, 480, 480];
+this.viewport[19] = [0, 0, 504, 504];
 this.userMatrix[19] = new CanvasMatrix4();
 this.userMatrix[19].load([
 1, 0, 0, 0,
@@ -5952,40 +6076,6 @@ this.clipplanes[19] = [];
 this.opaque[19] = [25,26,27,29,30,31,53,54,55,56,57,58,59];
 this.transparent[19] = [];
 this.subscenes[19] = [];
-function getPowerOfTwo(value) {
-var pow = 1;
-while(pow<value) {
-pow *= 2;
-}
-return pow;
-}
-function handleLoadedTexture(texture, textureCanvas) {
-gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
-gl.bindTexture(gl.TEXTURE_2D, texture);
-gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, textureCanvas);
-gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_NEAREST);
-gl.generateMipmap(gl.TEXTURE_2D);
-gl.bindTexture(gl.TEXTURE_2D, null);
-}
-function loadImageToTexture(filename, texture) {
-var canvas = document.getElementById("vertextextureCanvas"),
-ctx = canvas.getContext("2d"),
-image = new Image();
-image.onload = function() {
-var w = image.width,
-h = image.height,
-canvasX = getPowerOfTwo(w),
-canvasY = getPowerOfTwo(h);
-canvas.width = canvasX;
-canvas.height = canvasY;
-ctx.imageSmoothingEnabled = true;
-ctx.drawImage(image, 0, 0, canvasX, canvasY);
-handleLoadedTexture(texture, canvas);
-vertexrgl.drawScene();
-};
-image.src = filename;
-}
 function drawTextToCanvas(text, cex) {
 var canvasX, canvasY,
 textX, textY,
@@ -6003,10 +6093,10 @@ for (i = 0; i < text.length; i++)  {
 widths[i] = ctx.measureText(text[i]).width;
 canvasX = (widths[i] > canvasX) ? widths[i] : canvasX;
 }
-canvasX = getPowerOfTwo(canvasX);
+canvasX = vertexrgl.getPowerOfTwo(canvasX);
 var offset = 2*textHeight, // offset to first baseline
 skip = 2*textHeight;   // skip between baselines
-canvasY = getPowerOfTwo(offset + text.length*skip);
+canvasY = vertexrgl.getPowerOfTwo(offset + text.length*skip);
 canvas.width = canvasX;
 canvas.height = canvasY;
 ctx.fillStyle = backgroundColour;
@@ -6100,7 +6190,7 @@ this.ofsLoc[29] = gl.getAttribLocation(this.prog[29], "aOfs");
 this.texture[29] = gl.createTexture();
 this.texLoc[29] = gl.getAttribLocation(this.prog[29], "aTexcoord");
 this.sampler[29] = gl.getUniformLocation(this.prog[29],"uSampler");
-handleLoadedTexture(this.texture[29], document.getElementById("vertextextureCanvas"));
+this.handleLoadedTexture(29);
 this.offsets[29]={vofs:0, cofs:-1, nofs:-1, radofs:-1, oofs:5, tofs:3, stride:7};
 this.values[29] = togglergl.values[29];
 f=new Uint16Array([
@@ -6134,7 +6224,7 @@ this.ofsLoc[30] = gl.getAttribLocation(this.prog[30], "aOfs");
 this.texture[30] = gl.createTexture();
 this.texLoc[30] = gl.getAttribLocation(this.prog[30], "aTexcoord");
 this.sampler[30] = gl.getUniformLocation(this.prog[30],"uSampler");
-handleLoadedTexture(this.texture[30], document.getElementById("vertextextureCanvas"));
+this.handleLoadedTexture(30);
 this.offsets[30]={vofs:0, cofs:-1, nofs:-1, radofs:-1, oofs:5, tofs:3, stride:7};
 this.values[30] = togglergl.values[30];
 f=new Uint16Array([
@@ -6168,7 +6258,7 @@ this.ofsLoc[31] = gl.getAttribLocation(this.prog[31], "aOfs");
 this.texture[31] = gl.createTexture();
 this.texLoc[31] = gl.getAttribLocation(this.prog[31], "aTexcoord");
 this.sampler[31] = gl.getUniformLocation(this.prog[31],"uSampler");
-handleLoadedTexture(this.texture[31], document.getElementById("vertextextureCanvas"));
+this.handleLoadedTexture(31);
 this.offsets[31]={vofs:0, cofs:-1, nofs:-1, radofs:-1, oofs:5, tofs:3, stride:7};
 this.values[31] = togglergl.values[31];
 f=new Uint16Array([
@@ -6235,7 +6325,7 @@ this.ofsLoc[54] = gl.getAttribLocation(this.prog[54], "aOfs");
 this.texture[54] = gl.createTexture();
 this.texLoc[54] = gl.getAttribLocation(this.prog[54], "aTexcoord");
 this.sampler[54] = gl.getUniformLocation(this.prog[54],"uSampler");
-handleLoadedTexture(this.texture[54], document.getElementById("vertextextureCanvas"));
+this.handleLoadedTexture(54);
 this.offsets[54]={vofs:0, cofs:-1, nofs:-1, radofs:-1, oofs:5, tofs:3, stride:7};
 v=new Float32Array([
 5, 1.636598, 0.1066402, 0, -0.5, 0.5, 0.5,
@@ -6338,7 +6428,7 @@ this.ofsLoc[56] = gl.getAttribLocation(this.prog[56], "aOfs");
 this.texture[56] = gl.createTexture();
 this.texLoc[56] = gl.getAttribLocation(this.prog[56], "aTexcoord");
 this.sampler[56] = gl.getUniformLocation(this.prog[56],"uSampler");
-handleLoadedTexture(this.texture[56], document.getElementById("vertextextureCanvas"));
+this.handleLoadedTexture(56);
 this.offsets[56]={vofs:0, cofs:-1, nofs:-1, radofs:-1, oofs:5, tofs:3, stride:7};
 v=new Float32Array([
 3.754899, 2, 0.1066402, 0, -0.5, 0.5, 0.5,
@@ -6454,7 +6544,7 @@ this.ofsLoc[58] = gl.getAttribLocation(this.prog[58], "aOfs");
 this.texture[58] = gl.createTexture();
 this.texLoc[58] = gl.getAttribLocation(this.prog[58], "aTexcoord");
 this.sampler[58] = gl.getUniformLocation(this.prog[58],"uSampler");
-handleLoadedTexture(this.texture[58], document.getElementById("vertextextureCanvas"));
+this.handleLoadedTexture(58);
 this.offsets[58]={vofs:0, cofs:-1, nofs:-1, radofs:-1, oofs:5, tofs:3, stride:7};
 v=new Float32Array([
 3.754899, 1.636598, 1, 0, -0.5, 0.5, 0.5,
@@ -6971,10 +7061,10 @@ var vpy0 = {
 19: 0
 };
 var vpWidths = {
-19: 480
+19: 504
 };
 var vpHeights = {
-19: 480
+19: 504
 };
 var activeModel = {
 19: 19
@@ -6986,7 +7076,7 @@ vertexrgl.listeners = {
 19: [ 19 ]
 };
 var whichSubscene = function(coords){
-if (0 <= coords.x && coords.x <= 480 && 0 <= coords.y && coords.y <= 480) return(19);
+if (0 <= coords.x && coords.x <= 504 && 0 <= coords.y && coords.y <= 504) return(19);
 return(19);
 };
 var translateCoords = function(subsceneid, coords){
@@ -7144,22 +7234,26 @@ canvas.addEventListener("DOMMouseScroll", wheelHandler, false);
 canvas.addEventListener("mousewheel", wheelHandler, false);
 };
 </script>
-<canvas id="vertexcanvas" class="rglWebGL" width="1" height="1">
-</canvas>
+
+<p><canvas id="vertexcanvas" class="rglWebGL" width="1" height="1"></canvas></p>
+
 <p id="vertexdebug">
-You must enable Javascript to view this page properly.
-</p>
+You must enable Javascript to view this page properly.</p>
+
 <script>vertexrgl.start();</script>
-<pre class="sourceCode r"><code class="sourceCode r">setosa &lt;-<span class="st"> </span><span class="kw">subset</span>(iris, Species ==<span class="st"> &quot;setosa&quot;</span>)
-which &lt;-<span class="st"> </span><span class="kw">which.min</span>(setosa$Sepal.Width)
-init &lt;-<span class="st"> </span>setosa$Sepal.Length[which]
-<span class="kw">propertySlider</span>(
-    <span class="kw">vertexSetter</span>(<span class="dt">values =</span> <span class="kw">matrix</span>(<span class="kw">c</span>(init,<span class="dv">8</span>,<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">1</span>), <span class="dt">nrow=</span><span class="dv">2</span>),
-                 <span class="dt">attributes=</span><span class="kw">c</span>(<span class="st">&quot;x&quot;</span>, <span class="st">&quot;r&quot;</span>, <span class="st">&quot;g&quot;</span>, <span class="st">&quot;b&quot;</span>), 
-             <span class="dt">vertices =</span> which, <span class="dt">objid =</span> sphereid, 
-             <span class="dt">prefix =</span> <span class="st">&quot;vertex&quot;</span>), 
-    <span class="dt">step=</span><span class="fl">0.01</span>)</code></pre>
-<script>vertexrgl.inputff2558f1735c = function(value){
+
+<pre><code class="r">setosa &lt;- subset(iris, Species == &quot;setosa&quot;)
+which &lt;- which.min(setosa$Sepal.Width)
+init &lt;- setosa$Sepal.Length[which]
+propertySlider(
+    vertexSetter(values = matrix(c(init,8,0,1,0,1,0,1), nrow=2),
+                 attributes=c(&quot;x&quot;, &quot;r&quot;, &quot;g&quot;, &quot;b&quot;), 
+             vertices = which, objid = sphereid, 
+             prefix = &quot;vertex&quot;), 
+    step=0.01)
+</code></pre>
+
+<script>vertexrgl.input26ad1b46e6dc = function(value){
    (function(value){
   var ofs, values = [4.5,0,0,0,4.5,0,0,0,8,1,1,1,8,1,1,1],
   propvals = vertexrgl.values[25],
@@ -7206,31 +7300,44 @@ init &lt;-<span class="st"> </span>setosa$Sepal.Length[which]
    vertexrgl.drawScene();
    var lvalue = Math.round((value - 1)/0.01);
    var labels = ['1','1.01','1.02','1.03','1.04','1.05','1.06','1.07','1.08','1.09','1.1','1.11','1.12','1.13','1.14','1.15','1.16','1.17','1.18','1.19','1.2','1.21','1.22','1.23','1.24','1.25','1.26','1.27','1.28','1.29','1.3','1.31','1.32','1.33','1.34','1.35','1.36','1.37','1.38','1.39','1.4','1.41','1.42','1.43','1.44','1.45','1.46','1.47','1.48','1.49','1.5','1.51','1.52','1.53','1.54','1.55','1.56','1.57','1.58','1.59','1.6','1.61','1.62','1.63','1.64','1.65','1.66','1.67','1.68','1.69','1.7','1.71','1.72','1.73','1.74','1.75','1.76','1.77','1.78','1.79','1.8','1.81','1.82','1.83','1.84','1.85','1.86','1.87','1.88','1.89','1.9','1.91','1.92','1.93','1.94','1.95','1.96','1.97','1.98','1.99','2']; 
-  label = document.getElementById('inputff2558f1735ctext');
+  label = document.getElementById('input26ad1b46e6dctext');
   if (label !== null) label.value = labels[lvalue];
 };
-vertexrgl.inputff2558f1735c(1);</script>
-<input type="range" min="1" max="2" step="0.01" value="1" id="inputff2558f1735c" name="inputff2558f1735c" oninput="vertexrgl.inputff2558f1735c(this.valueAsNumber)">
-<output id="inputff2558f1735ctext" for="inputff2558f1735c">
-1
-</output>
-<p>A related function is <a name="ageSetter"><a href="../../rgl/help/ageSetter"><code>ageSetter</code></a></a>, though it uses a very different specification of the attributes. It is used when the slider controls the “age” of the scene, and attributes of vertices change with their age. For example, to show a point moving along a curve, we could do the following.<br />Note that we need to specify multiple colours in the plot so that the colour is not fixed, and can be controlled by the slider. We also give two <code>ageSetter</code> calls in a list; the <code>propertySlider</code> will control both of them simultaneously.</p>
-<pre class="sourceCode r"><code class="sourceCode r">time &lt;-<span class="st"> </span><span class="dv">0</span>:<span class="dv">500</span>
-xyz &lt;-<span class="st"> </span><span class="kw">cbind</span>(<span class="kw">cos</span>(time/<span class="dv">20</span>), <span class="kw">sin</span>(time/<span class="dv">10</span>), time)
-lineid &lt;-<span class="st"> </span><span class="kw">plot3d</span>(xyz, <span class="dt">type=</span><span class="st">&quot;l&quot;</span>, <span class="dt">col =</span> <span class="kw">c</span>(<span class="st">&quot;black&quot;</span>, <span class="st">&quot;black&quot;</span>))[<span class="st">&quot;data&quot;</span>]
-sphereid &lt;-<span class="st"> </span><span class="kw">spheres3d</span>(xyz[<span class="dv">1</span>, , <span class="dt">drop=</span><span class="ot">FALSE</span>], <span class="dt">radius =</span> <span class="dv">8</span>, <span class="dt">col =</span> <span class="st">&quot;red&quot;</span>)</code></pre>
+vertexrgl.input26ad1b46e6dc(1);</script>
+<input type="range" min="1" max="2" step="0.01" value="1" id="input26ad1b46e6dc" name="input26ad1b46e6dc"
+oninput = "vertexrgl.input26ad1b46e6dc(this.valueAsNumber)"><output id="input26ad1b46e6dctext" for="input26ad1b46e6dc">1</output>
+         
+
+A related function is <a name="ageSetter"><a href="../../rgl/help/ageSetter">ageSetter</a></a>, though it uses
+a very different specification of the attributes.
+It is used when the slider controls the &ldquo;age&rdquo; of the scene, 
+and attributes of vertices change with their age.  For example,
+to show a point moving along a curve, we could do the following.  
+Note that we need to specify multiple colours in the plot so that the
+colour is not fixed, and can be controlled by the slider.  We
+also give two ageSetter calls in a list; the propertySlider
+will control both of them simultaneously.
+
+
+&ldquo;r
+time <- 0:500
+xyz <- cbind(cos(time/20), sin(time/10), time)
+lineid <- plot3d(xyz, type="l", col = c("black", "black"))["data"]
+sphereid <- spheres3d(xyz[1, , drop=FALSE], radius = 8, col = "red")
+```
+
 <canvas id="curvetextureCanvas" style="display: none;" width="256" height="256">
-Your browser does not support the HTML5 canvas element.
-</canvas>
+Your browser does not support the HTML5 canvas element.</canvas>
 <script type="text/javascript">
 var curvergl = new rglClass();
 curvergl.start = function() {
-var i, j, v, ind, texts, f, texinfo;
+var i, j, v, ind, texts, f, texinfo, canvas;
 var debug = function(msg) {
 document.getElementById("curvedebug").innerHTML = msg;
 };
 debug("");
-var canvas = document.getElementById("curvecanvas");
+canvas = this.canvas = document.getElementById("curvecanvas");
+this.textureCanvas = document.getElementById("curvetextureCanvas");
 if (!window.WebGLRenderingContext){
 debug(" Your browser does not support WebGL. See <a href=\"http://get.webgl.org\">http://get.webgl.org</a>");
 return;
@@ -7246,7 +7353,7 @@ debug(" Your browser appears to support WebGL, but did not create a WebGL contex
 return;
 }
 var gl = this.gl,
-width = 481, height = 481;
+width = 505, height = 505;
 canvas.width = width;   canvas.height = height;
 var normMatrix = new CanvasMatrix4(),
 saveMat = {},
@@ -7257,7 +7364,7 @@ var activeSubscene = 19;
 this.flags[19] = 1195;
 this.zoom[19] = 1;
 this.FOV[19] = 30;
-this.viewport[19] = [0, 0, 480, 480];
+this.viewport[19] = [0, 0, 504, 504];
 this.userMatrix[19] = new CanvasMatrix4();
 this.userMatrix[19].load([
 1, 0, 0, 0,
@@ -7269,40 +7376,6 @@ this.clipplanes[19] = [];
 this.opaque[19] = [60,62,63,64,65,66,67,68,69,70,71,72];
 this.transparent[19] = [];
 this.subscenes[19] = [];
-function getPowerOfTwo(value) {
-var pow = 1;
-while(pow<value) {
-pow *= 2;
-}
-return pow;
-}
-function handleLoadedTexture(texture, textureCanvas) {
-gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
-gl.bindTexture(gl.TEXTURE_2D, texture);
-gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, textureCanvas);
-gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_NEAREST);
-gl.generateMipmap(gl.TEXTURE_2D);
-gl.bindTexture(gl.TEXTURE_2D, null);
-}
-function loadImageToTexture(filename, texture) {
-var canvas = document.getElementById("curvetextureCanvas"),
-ctx = canvas.getContext("2d"),
-image = new Image();
-image.onload = function() {
-var w = image.width,
-h = image.height,
-canvasX = getPowerOfTwo(w),
-canvasY = getPowerOfTwo(h);
-canvas.width = canvasX;
-canvas.height = canvasY;
-ctx.imageSmoothingEnabled = true;
-ctx.drawImage(image, 0, 0, canvasX, canvasY);
-handleLoadedTexture(texture, canvas);
-curvergl.drawScene();
-};
-image.src = filename;
-}
 function drawTextToCanvas(text, cex) {
 var canvasX, canvasY,
 textX, textY,
@@ -7320,10 +7393,10 @@ for (i = 0; i < text.length; i++)  {
 widths[i] = ctx.measureText(text[i]).width;
 canvasX = (widths[i] > canvasX) ? widths[i] : canvasX;
 }
-canvasX = getPowerOfTwo(canvasX);
+canvasX = curvergl.getPowerOfTwo(canvasX);
 var offset = 2*textHeight, // offset to first baseline
 skip = 2*textHeight;   // skip between baselines
-canvasY = getPowerOfTwo(offset + text.length*skip);
+canvasY = curvergl.getPowerOfTwo(offset + text.length*skip);
 canvas.width = canvasX;
 canvas.height = canvasY;
 ctx.fillStyle = backgroundColour;
@@ -7887,7 +7960,7 @@ this.ofsLoc[62] = gl.getAttribLocation(this.prog[62], "aOfs");
 this.texture[62] = gl.createTexture();
 this.texLoc[62] = gl.getAttribLocation(this.prog[62], "aTexcoord");
 this.sampler[62] = gl.getUniformLocation(this.prog[62],"uSampler");
-handleLoadedTexture(this.texture[62], document.getElementById("curvetextureCanvas"));
+this.handleLoadedTexture(62);
 this.offsets[62]={vofs:0, cofs:-1, nofs:-1, radofs:-1, oofs:5, tofs:3, stride:7};
 v=new Float32Array([
 1.585484e-05, -1.338987, -84.75, 0, -0.5, 0.5, 0.5,
@@ -7936,7 +8009,7 @@ this.ofsLoc[63] = gl.getAttribLocation(this.prog[63], "aOfs");
 this.texture[63] = gl.createTexture();
 this.texLoc[63] = gl.getAttribLocation(this.prog[63], "aTexcoord");
 this.sampler[63] = gl.getUniformLocation(this.prog[63],"uSampler");
-handleLoadedTexture(this.texture[63], document.getElementById("curvetextureCanvas"));
+this.handleLoadedTexture(63);
 this.offsets[63]={vofs:0, cofs:-1, nofs:-1, radofs:-1, oofs:5, tofs:3, stride:7};
 v=new Float32Array([
 -1.338963, 1.758337e-06, -84.75, 0, -0.5, 0.5, 0.5,
@@ -7985,7 +8058,7 @@ this.ofsLoc[64] = gl.getAttribLocation(this.prog[64], "aOfs");
 this.texture[64] = gl.createTexture();
 this.texLoc[64] = gl.getAttribLocation(this.prog[64], "aTexcoord");
 this.sampler[64] = gl.getUniformLocation(this.prog[64],"uSampler");
-handleLoadedTexture(this.texture[64], document.getElementById("curvetextureCanvas"));
+this.handleLoadedTexture(64);
 this.offsets[64]={vofs:0, cofs:-1, nofs:-1, radofs:-1, oofs:5, tofs:3, stride:7};
 v=new Float32Array([
 -1.338963, -1.338987, 250, 0, -0.5, 0.5, 0.5,
@@ -8087,7 +8160,7 @@ this.ofsLoc[67] = gl.getAttribLocation(this.prog[67], "aOfs");
 this.texture[67] = gl.createTexture();
 this.texLoc[67] = gl.getAttribLocation(this.prog[67], "aTexcoord");
 this.sampler[67] = gl.getUniformLocation(this.prog[67],"uSampler");
-handleLoadedTexture(this.texture[67], document.getElementById("curvetextureCanvas"));
+this.handleLoadedTexture(67);
 this.offsets[67]={vofs:0, cofs:-1, nofs:-1, radofs:-1, oofs:5, tofs:3, stride:7};
 v=new Float32Array([
 -0.5, -1.184489, -61.25942, 0, -0.5, 0.5, 0.5,
@@ -8181,7 +8254,7 @@ this.ofsLoc[69] = gl.getAttribLocation(this.prog[69], "aOfs");
 this.texture[69] = gl.createTexture();
 this.texLoc[69] = gl.getAttribLocation(this.prog[69], "aTexcoord");
 this.sampler[69] = gl.getUniformLocation(this.prog[69],"uSampler");
-handleLoadedTexture(this.texture[69], document.getElementById("curvetextureCanvas"));
+this.handleLoadedTexture(69);
 this.offsets[69]={vofs:0, cofs:-1, nofs:-1, radofs:-1, oofs:5, tofs:3, stride:7};
 v=new Float32Array([
 -1.189578, -0.5, -61.25942, 0, -0.5, 0.5, 0.5,
@@ -8279,7 +8352,7 @@ this.ofsLoc[71] = gl.getAttribLocation(this.prog[71], "aOfs");
 this.texture[71] = gl.createTexture();
 this.texLoc[71] = gl.getAttribLocation(this.prog[71], "aTexcoord");
 this.sampler[71] = gl.getUniformLocation(this.prog[71],"uSampler");
-handleLoadedTexture(this.texture[71], document.getElementById("curvetextureCanvas"));
+this.handleLoadedTexture(71);
 this.offsets[71]={vofs:0, cofs:-1, nofs:-1, radofs:-1, oofs:5, tofs:3, stride:7};
 v=new Float32Array([
 -1.189578, -1.184489, 0, 0, -0.5, 0.5, 0.5,
@@ -8724,10 +8797,10 @@ var vpy0 = {
 19: 0
 };
 var vpWidths = {
-19: 480
+19: 504
 };
 var vpHeights = {
-19: 480
+19: 504
 };
 var activeModel = {
 19: 19
@@ -8739,7 +8812,7 @@ curvergl.listeners = {
 19: [ 19 ]
 };
 var whichSubscene = function(coords){
-if (0 <= coords.x && coords.x <= 480 && 0 <= coords.y && coords.y <= 480) return(19);
+if (0 <= coords.x && coords.x <= 504 && 0 <= coords.y && coords.y <= 504) return(19);
 return(19);
 };
 var translateCoords = function(subsceneid, coords){
@@ -8897,20 +8970,24 @@ canvas.addEventListener("DOMMouseScroll", wheelHandler, false);
 canvas.addEventListener("mousewheel", wheelHandler, false);
 };
 </script>
-<canvas id="curvecanvas" class="rglWebGL" width="1" height="1">
-</canvas>
+
+<p><canvas id="curvecanvas" class="rglWebGL" width="1" height="1"></canvas></p>
+
 <p id="curvedebug">
-You must enable Javascript to view this page properly.
-</p>
+You must enable Javascript to view this page properly.</p>
+
 <script>curvergl.start();</script>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">propertySlider</span>( <span class="kw">list</span>(<span class="kw">ageSetter</span>(<span class="dt">births =</span> time, <span class="dt">ages =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">50</span>),
-              <span class="dt">colors =</span> <span class="kw">c</span>(<span class="st">&quot;gray&quot;</span>, <span class="st">&quot;red&quot;</span>, <span class="st">&quot;gray&quot;</span>),
-              <span class="dt">objids =</span> lineid, <span class="dt">prefixes =</span> <span class="st">&quot;curve&quot;</span>),
-             <span class="kw">ageSetter</span>(<span class="dt">births =</span> <span class="dv">0</span>, <span class="dt">ages =</span> time,
-                  <span class="dt">vertices =</span> xyz, <span class="dt">objids =</span> sphereid,
-                  <span class="dt">prefixes =</span> <span class="st">&quot;curve&quot;</span>)),
-             <span class="dt">maxS =</span> <span class="kw">max</span>(time) +<span class="st"> </span><span class="dv">50</span>)</code></pre>
-<script>curvergl.inputff2579dc733e = function(value){
+
+<pre><code class="r">propertySlider( list(ageSetter(births = time, ages = c(0, 0, 50),
+              colors = c(&quot;gray&quot;, &quot;red&quot;, &quot;gray&quot;),
+              objids = lineid, prefixes = &quot;curve&quot;),
+             ageSetter(births = 0, ages = time,
+                  vertices = xyz, objids = sphereid,
+                  prefixes = &quot;curve&quot;)),
+             maxS = max(time) + 50)
+</code></pre>
+
+<script>curvergl.input26ad2041d186 = function(value){
    (  function(time){
     var ages = [-Infinity, 0,0,50, Infinity],
         births = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,95,96,97,98,99,100,101,102,103,104,105,106,107,108,109,110,111,112,113,114,115,116,117,118,119,120,121,122,123,124,125,126,127,128,129,130,131,132,133,134,135,136,137,138,139,140,141,142,143,144,145,146,147,148,149,150,151,152,153,154,155,156,157,158,159,160,161,162,163,164,165,166,167,168,169,170,171,172,173,174,175,176,177,178,179,180,181,182,183,184,185,186,187,188,189,190,191,192,193,194,195,196,197,198,199,200,201,202,203,204,205,206,207,208,209,210,211,212,213,214,215,216,217,218,219,220,221,222,223,224,225,226,227,228,229,230,231,232,233,234,235,236,237,238,239,240,241,242,243,244,245,246,247,248,249,250,251,252,253,254,255,256,257,258,259,260,261,262,263,264,265,266,267,268,269,270,271,272,273,274,275,276,277,278,279,280,281,282,283,284,285,286,287,288,289,290,291,292,293,294,295,296,297,298,299,300,301,302,303,304,305,306,307,308,309,310,311,312,313,314,315,316,317,318,319,320,321,322,323,324,325,326,327,328,329,330,331,332,333,334,335,336,337,338,339,340,341,342,343,344,345,346,347,348,349,350,351,352,353,354,355,356,357,358,359,360,361,362,363,364,365,366,367,368,369,370,371,372,373,374,375,376,377,378,379,380,381,382,383,384,385,386,387,388,389,390,391,392,393,394,395,396,397,398,399,400,401,402,403,404,405,406,407,408,409,410,411,412,413,414,415,416,417,418,419,420,421,422,423,424,425,426,427,428,429,430,431,432,433,434,435,436,437,438,439,440,441,442,443,444,445,446,447,448,449,450,451,452,453,454,455,456,457,458,459,460,461,462,463,464,465,466,467,468,469,470,471,472,473,474,475,476,477,478,479,480,481,482,483,484,485,486,487,488,489,490,491,492,493,494,495,496,497,498,499,500],
@@ -8986,164 +9063,195 @@ You must enable Javascript to view this page properly.
    curvergl.drawScene();
    var lvalue = Math.round((value - 0)/1);
    var labels = ['0','0','0','0','0','0','10','10','10','10','10','10','10','10','10','20','20','20','20','20','20','20','20','20','20','20','30','30','30','30','30','30','30','30','30','40','40','40','40','40','40','40','40','40','40','40','50','50','50','50','50','50','50','50','50','60','60','60','60','60','60','60','60','60','60','60','70','70','70','70','70','70','70','70','70','80','80','80','80','80','80','80','80','80','80','80','90','90','90','90','90','90','90','90','90','100','100','100','100','100','100','100','100','100','100','100','110','110','110','110','110','110','110','110','110','120','120','120','120','120','120','120','120','120','120','120','130','130','130','130','130','130','130','130','130','140','140','140','140','140','140','140','140','140','140','140','150','150','150','150','150','150','150','150','150','160','160','160','160','160','160','160','160','160','160','160','170','170','170','170','170','170','170','170','170','180','180','180','180','180','180','181','182','183','184','185','186','187','188','189','190','191','192','193','194','195','196','197','198','199','200','201','202','203','204','205','206','207','208','209','210','211','212','213','214','215','216','217','218','219','220','221','222','223','224','225','226','227','228','229','230','231','232','233','234','235','236','237','238','239','240','241','242','243','244','245','246','247','248','249','250','251','252','253','254','255','256','257','258','259','260','261','262','263','264','265','266','267','268','269','270','271','272','273','274','275','276','277','278','279','280','281','282','283','284','285','286','287','288','289','290','291','292','293','294','295','296','297','298','299','300','301','302','303','304','305','306','307','308','309','310','311','312','313','314','315','316','317','318','319','320','321','322','323','324','325','326','327','328','329','330','331','332','333','334','335','336','337','338','339','340','341','342','343','344','345','346','347','348','349','350','351','352','353','354','355','356','357','358','359','360','361','362','363','364','365','366','367','368','369','370','371','372','373','374','375','376','377','378','379','380','380','380','380','380','380','390','390','390','390','390','390','390','390','390','400','400','400','400','400','400','400','400','400','400','400','410','410','410','410','410','410','410','410','410','420','420','420','420','420','420','420','420','420','420','420','430','430','430','430','430','430','430','430','430','440','440','440','440','440','440','440','440','440','440','440','450','450','450','450','450','450','450','450','450','460','460','460','460','460','460','460','460','460','460','460','470','470','470','470','470','470','470','470','470','480','480','480','480','480','480','480','480','480','480','480','490','490','490','490','490','490','490','490','490','500','500','500','500','500','500','500','500','500','500','500','510','510','510','510','510','510','510','510','510','520','520','520','520','520','520','520','520','520','520','520','530','530','530','530','530','530','530','530','530','540','540','540','540','540','540','540','540','540','540','540','550','550','550','550','550']; 
-  label = document.getElementById('inputff2579dc733etext');
+  label = document.getElementById('input26ad2041d186text');
   if (label !== null) label.value = labels[lvalue];
 };
-curvergl.inputff2579dc733e(0);</script>
-<input type="range" min="0" max="550" step="1" value="0" id="inputff2579dc733e" name="inputff2579dc733e" oninput="curvergl.inputff2579dc733e(this.valueAsNumber)">
-<output id="inputff2579dc733etext" for="inputff2579dc733e">
-0
-</output>
-<p>The final function of this type is <a name="matrixSetter"><a href="../../rgl/help/matrixSetter"><code>matrixSetter</code></a></a>, for setting up multiple controls to modify a matrix, typically <code>userMatrix</code>. This is used when complex manipulation of a matrix requires several controls.</p>
-</div>
-<div id="user-defined-mouse-controls" class="section level2">
+curvergl.input26ad2041d186(0);</script>
+
+<p><input type="range" min="0" max="550" step="1" value="0" id="input26ad2041d186" name="input26ad2041d186"
+oninput = "curvergl.input26ad2041d186(this.valueAsNumber)"><output id="input26ad2041d186text" for="input26ad2041d186">0</output></p>
+
+<p>The final function of this type is <a name="matrixSetter"><a href="../../rgl/help/matrixSetter"><code>matrixSetter</code></a></a>, for setting
+up multiple controls to modify a matrix, typically <code>userMatrix</code>. This is used
+when complex manipulation of a matrix requires several controls.</p>
+
 <h2>User Defined Mouse Controls</h2>
-<p><code>rgl</code> allows user defined mouse controls. For these to work within WebGL, you will need to write a Javascript version as well as the R version. This isn’t easy: R provides a lot of support functions which are not easily available in Javascript.</p>
-<p>TODO: write a simple mouse control.</p>
-</div>
-<div id="reference-for-rglclass" class="section level2">
+
+<p><code>rgl</code> allows user defined mouse controls.  For these to work
+within WebGL, you will need to write a Javascript version as
+well as the R version.  This isn&#39;t easy:  R provides a lot
+of support functions which are not easily available in Javascript.</p>
+
+<p>TODO:  write a simple mouse control.</p>
+
 <h2>Reference for <code>rglClass</code></h2>
-<p>In writing the <code>writeWebGL()</code> function, I haven’t tried to prevent access to anything. On the other hand, I haven’t provided access to everything. The parts documented here should remain relatively stable (unless indicated otherwise). Users may also consult the source to <code>writeWebGL</code>, but should be aware that anything that isn’t documented here is subject to change without notice.</p>
+
+<p>In writing the <code>writeWebGL()</code> function, I haven&#39;t tried to prevent access to 
+anything.  On the other hand, I haven&#39;t provided access to
+everything.  The parts documented here should remain relatively stable
+(unless indicated otherwise).  Users may also consult the source
+to <code>writeWebGL</code>, but should be aware that anything that isn&#39;t documented
+here is subject to change without notice.  </p>
+
 <p><a name="rglClass"><code>rglClass</code></a></p>
+
 <p>As documented in <a href="#writeWebGL"><code>writeWebGL</code></a>, the call</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">writeWebGL</span>(..., <span class="dt">prefix =</span> <span class="st">&quot;&lt;prefix&gt;&quot;</span>)</code></pre>
-<p>will create a global object on the output page with name <code>&lt;prefix&gt;rgl</code> and Javascript class <code>rglClass</code>. This class has a large number of properties and methods, some of which are designed to be available for use by other code on the web page.</p>
-<p>Most of the properties are stored as Javascript <code>Array</code> objects, indexed by the <code>rgl</code> id of the subscene to which they apply. There are also Javascript methods attached to the <code>rglClass</code> class.</p>
-<div id="methods" class="section level3">
+
+<pre><code class="r">writeWebGL(..., prefix = &quot;&lt;prefix&gt;&quot;)
+</code></pre>
+
+<p>will create a global object on the output page with name 
+<code>&lt;prefix&gt;rgl</code> and Javascript class <code>rglClass</code>. 
+This class has a large number of properties and methods, some of which are designed
+to be available for use by other code on the web page. </p>
+
+<p>Most of the properties are stored as Javascript <code>Array</code> objects, indexed
+by the <code>rgl</code> id of the subscene to which they apply.  There 
+are also Javascript methods attached to the <code>rglClass</code> class.</p>
+
 <h3>Methods</h3>
+
 <p><a name="drawScene"><code>drawScene()</code></a></p>
-<p>After any change that will affect the display, code should call <code>&lt;prefix&gt;rgl.drawScene()</code> to redraw the scene.</p>
+
+<p>After any change that will affect the display, code should
+call <code>&lt;prefix&gt;rgl.drawScene()</code> to redraw the scene.</p>
+
 <p><a name="inSubscene"><code>inSubscene()</code></a>, <a name="addToSubscene"><code>addToSubscene()</code></a>, <a name="delFromSubscene"><code>delFromSubscene()</code></a></p>
-<p>These methods each take two arguments: <code>id</code> and <code>subscene</code>, which should be the <code>rgl</code> ids of an object and a subscene. <code>inSubscene</code> tests whether <code>id</code> is already included in the subscene, and the others add it or delete it from the subscene.</p>
+
+<p>These methods each take two arguments:  <code>id</code> and <code>subscene</code>,
+which should be the <code>rgl</code> ids of an object and a subscene.
+<code>inSubscene</code> tests whether <code>id</code> is already included in the 
+subscene, and the others 
+add it or delete it from the subscene.</p>
+
 <p><a name="getSubsceneEntries"><code>getSubsceneEntries()</code></a></p>
-<p>This function takes a subscene id as argument, and returns an <code>Array</code> containing all of the ids displayed in that subscene.</p>
+
+<p>This function takes a subscene id as argument, and returns an <code>Array</code>
+containing all of the ids displayed in that subscene.</p>
+
 <p><a name="setSubsceneEntries"><code>setSubsceneEntries()</code></a></p>
-<p>This takes an <code>Array</code> of ids and a subscene id as arguments, and sets the contents of the subscene to the ids.</p>
-</div>
-<div id="properties" class="section level3">
+
+<p>This takes an <code>Array</code> of ids and a subscene id as arguments, and sets
+the contents of the subscene to the ids.</p>
+
 <h3>Properties</h3>
+
 <p><a name="FOV"><code>FOV</code></a>, <a name="listeners"><code>listeners</code></a>, <a name="userMatrix"><code>userMatrix</code></a>, <a name="zoom"><code>zoom</code></a></p>
-<p>These correspond to the <a href="#par3d"><code>par3d</code></a> properties with the same names.</p>
+
+<p>These correspond to the 
+<a href="#par3d"><code>par3d</code></a> properties with the same names.  </p>
+
 <ul>
-<li><code>FOV</code> and <code>zoom</code> are arrays of numbers.</li>
-<li><code>userMatrix</code> is an array of <code>CanvasMatrix4</code> objects (documented in the file <code>system.file(&quot;WebGL/CanvasMatrix.src.js&quot;)</code>.</li>
-<li>Each <code>listeners</code> item is itself an array of subscene ids that “listen” to mouse actions, i.e. <code>listeners[19]</code> would contain all subscene ids that respond to mouse actions in subscene 19.</li>
+<li><code>FOV</code> and <code>zoom</code> are arrays of numbers. </li>
+<li><code>userMatrix</code> is an array
+of <code>CanvasMatrix4</code> objects (documented in the file 
+<code>system.file(&quot;WebGL/CanvasMatrix.src.js&quot;)</code>.</li>
+<li>Each <code>listeners</code> item is itself an array of subscene ids that &quot;listen&rdquo;
+to mouse actions, i.e. <code>listeners[19]</code> would contain all
+subscene ids that respond to mouse actions in subscene 19.</li>
 </ul>
+
 <p><a name="viewport"><code>viewport</code></a></p>
-<p>This property also corresponds to the <a href="#par3d"><code>par3d</code></a> property, but should be considered to be read-only.</p>
+
+<p>This property also corresponds to the
+<a href="#par3d"><code>par3d</code></a> property, but should be considered to be 
+read-only.</p>
+
 <p><a name="drawFns"><code>drawFns</code></a>, <a name="clipFns"><code>clipFns</code></a></p>
-<p>These two arrays contain the code to display each object in the scene. The functions in the <code>drawFns</code> array are called for each object each time it is displayed. The <code>clipFns</code> functions are called when objects being clipped are drawn.</p>
+
+<p>These two arrays contain the code to display 
+each object in the scene.  The functions in the
+<code>drawFns</code> array are called for each object
+each time it is displayed.  The <code>clipFns</code> functions
+are called when objects being clipped are drawn.</p>
+
 <p><a name="values"><code>values</code></a>, <a name="offsets"><code>offsets</code></a></p>
-<p>Most of the data about each object in a scene is contained in the <code>values</code> property. This is an array, indexed by object id. The individual entries are numeric arrays. Though they are singly-indexed, the entries are meant to be interpreted as matrices stored by row. The first 3 columns are generally the coordinates of a vertex, and remaining columns correspond to other values from <a href="#rgl.attrib"><code>rgl.attrib</code></a>.</p>
-<p>The <code>offsets</code> property gives the (0-based) offset of the first column for a particular attribute in a named object. Not all columns will be present in every object; if not present, the corresponding <code>offsets</code> entry will be <code>-1</code>. The entries are</p>
-<table>
-<thead>
-<tr class="header">
-<th align="left">Name</th>
-<th align="left">Meaning</th>
+
+<p>Most of the data about each object in a scene is contained in
+the <code>values</code> property.  This is an array, indexed by object
+id. The individual entries are numeric arrays.  Though they
+are singly-indexed, the entries are meant to be interpreted
+as matrices stored by row.  The first 3 columns are generally
+the coordinates of a vertex, and remaining columns correspond
+to other values from <a href="#rgl.attrib"><code>rgl.attrib</code></a>.  </p>
+
+<p>The <code>offsets</code> property gives the (0-based) offset of the first 
+column for a particular attribute in a named object.  Not all 
+columns will be present in every object; if not
+present, the corresponding <code>offsets</code> entry will be <code>-1</code>.
+The entries are</p>
+
+<table><thead>
+<tr>
+<th>Name</th>
+<th>Meaning</th>
 </tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="left">vofs</td>
-<td align="left">Offset to 3 columns of vertex data in XYZ order</td>
+</thead><tbody>
+<tr>
+<td>vofs</td>
+<td>Offset to 3 columns of vertex data in XYZ order</td>
 </tr>
-<tr class="even">
-<td align="left">cofs</td>
-<td align="left">Offset to 4 columns of colour data in RGBA order</td>
+<tr>
+<td>cofs</td>
+<td>Offset to 4 columns of colour data in RGBA order</td>
 </tr>
-<tr class="odd">
-<td align="left">nofs</td>
-<td align="left">Offset to 3 columns of normal data</td>
+<tr>
+<td>nofs</td>
+<td>Offset to 3 columns of normal data</td>
 </tr>
-<tr class="even">
-<td align="left">radofs</td>
-<td align="left">Offset to 1 column of sphere radius data</td>
+<tr>
+<td>radofs</td>
+<td>Offset to 1 column of sphere radius data</td>
 </tr>
-<tr class="odd">
-<td align="left">oofs</td>
-<td align="left">Offset to 2 columns of text or sprite origin data</td>
+<tr>
+<td>oofs</td>
+<td>Offset to 2 columns of text or sprite origin data</td>
 </tr>
-<tr class="even">
-<td align="left">tofs</td>
-<td align="left">Offset to 2 columns of texture coordinates</td>
+<tr>
+<td>tofs</td>
+<td>Offset to 2 columns of texture coordinates</td>
 </tr>
-<tr class="odd">
-<td align="left">stride</td>
-<td align="left">Total number of columns in <code>values</code></td>
+<tr>
+<td>stride</td>
+<td>Total number of columns in <code>values</code></td>
 </tr>
-</tbody>
-</table>
-<p>For example, to find the blue colour entry for vertex <code>i</code> in an object, one would first check if <code>offsets[&quot;cofs&quot;]</code> was <code>-1</code>, indicating that no colour information was present. If not, the entry could be found using</p>
-<pre><code>values[offsets[&quot;stride&quot;]*(i-1) + offsets[&quot;cofs&quot;] + 2]</code></pre>
-<p>This assumes <code>i</code> is specified using 1-based vertex counting as in R, and writes <code>values</code> and <code>offsets</code> instead of the fully specified <code>&lt;prefix&gt;rgl.values</code> and <code>&lt;prefix&gt;rgl.offsets</code> for clarity.</p>
-<p>Changes to <code>values</code> need to be pushed to the graphics system to be reflected in the scene; see the calls to <code>gl.bindBuffer</code> and <code>gl.bufferData</code> in the source to <a href="#propertySlider"><code>propertySlider</code></a> for details.</p>
-</div>
-</div>
-<div id="index" class="section level2">
+</tbody></table>
+
+<p>For example, to find the blue colour entry for vertex 
+<code>i</code> in an object, one would first check if <code>offsets[&quot;cofs&quot;]</code> was
+<code>-1</code>, indicating that no colour information was present.  If
+not, the entry could be found using</p>
+
+<pre><code>values[offsets[&quot;stride&quot;]*(i-1) + offsets[&quot;cofs&quot;] + 2]
+</code></pre>
+
+<p>This assumes <code>i</code> is specified using 1-based vertex counting
+as in R, and writes <code>values</code> and <code>offsets</code> instead of the
+fully specified <code>&lt;prefix&gt;rgl.values</code> and <code>&lt;prefix&gt;rgl.offsets</code>
+for clarity.</p>
+
+<p>Changes to <code>values</code> need to be pushed to the graphics system
+to be reflected in the scene; see the calls to <code>gl.bindBuffer</code> and
+<code>gl.bufferData</code> in the source to <a href="#propertySlider"><code>propertySlider</code></a>
+for details.</p>
+
 <h2>Index</h2>
+
 <p>The following functions and <code>rglClass</code> properties and methods are described in this document:<br></p>
+
 <div class="nostripes">
-<table>
-<tbody>
-<tr class="odd">
-<td align="left"><a href="#FOV">FOV</a>  </td>
-<td align="left"><a href="#drawFns">drawFns</a>  </td>
-<td align="left"><a href="#offsets">offsets</a>  </td>
-<td align="left"><a href="#setSubsceneEntries">setSubsceneEntries</a>  </td>
-<td align="left"><a href="#viewport">viewport</a>  </td>
-</tr>
-<tr class="even">
-<td align="left"><a href="#addToSubscene">addToSubscene</a>  </td>
-<td align="left"><a href="#drawScene">drawScene</a>  </td>
-<td align="left"><a href="#par3dinterpSetter">par3dinterpSetter</a>  </td>
-<td align="left"><a href="#subsetSlider">subsetSlider</a>  </td>
-<td align="left"><a href="#zoom">zoom</a>  </td>
-</tr>
-<tr class="odd">
-<td align="left"><a href="#ageSetter">ageSetter</a>  </td>
-<td align="left"><a href="#getSubsceneEntries">getSubsceneEntries</a>  </td>
-<td align="left"><a href="#propertySetter">propertySetter</a>  </td>
-<td align="left"><a href="#toggleButton">toggleButton</a>  </td>
-<td align="left"></td>
-</tr>
-<tr class="even">
-<td align="left"><a href="#clipFns">clipFns</a>  </td>
-<td align="left"><a href="#inSubscene">inSubscene</a>  </td>
-<td align="left"><a href="#propertySlider">propertySlider</a>  </td>
-<td align="left"><a href="#userMatrix">userMatrix</a>  </td>
-<td align="left"></td>
-</tr>
-<tr class="odd">
-<td align="left"><a href="#clipplaneSlider">clipplaneSlider</a>  </td>
-<td align="left"><a href="#listeners">listeners</a>  </td>
-<td align="left"><a href="#propertySlider">propertySlider</a>  </td>
-<td align="left"><a href="#values">values</a>  </td>
-<td align="left"></td>
-</tr>
-<tr class="even">
-<td align="left"><a href="#delFromSubscene">delFromSubscene</a>  </td>
-<td align="left"><a href="#matrixSetter">matrixSetter</a>  </td>
-<td align="left"><a href="#rglClass">rglClass</a>  </td>
-<td align="left"><a href="#vertexSetter">vertexSetter</a>  </td>
-<td align="left"></td>
-</tr>
-</tbody>
-</table>
+
+
+&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&ndash;  &mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&ndash;  &mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;  &mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&ndash;  &mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;
+<a href="#FOV">FOV</a>&nbsp;&nbsp;                           <a href="#drawFns">drawFns</a>&nbsp;&nbsp;                         <a href="#offsets">offsets</a>&nbsp;&nbsp;                       <a href="#setSubsceneEntries">setSubsceneEntries</a>&nbsp;&nbsp;   <a href="#viewport">viewport</a>&nbsp;&nbsp; 
+<a href="#addToSubscene">addToSubscene</a>&nbsp;&nbsp;       <a href="#drawScene">drawScene</a>&nbsp;&nbsp;                     <a href="#par3dinterpSetter">par3dinterpSetter</a>&nbsp;&nbsp;   <a href="#subsetSlider">subsetSlider</a>&nbsp;&nbsp;               <a href="#zoom">zoom</a>&nbsp;&nbsp;         
+<a href="#ageSetter">ageSetter</a>&nbsp;&nbsp;               <a href="#getSubsceneEntries">getSubsceneEntries</a>&nbsp;&nbsp;   <a href="#propertySetter">propertySetter</a>&nbsp;&nbsp;         <a href="#toggleButton">toggleButton</a>&nbsp;&nbsp;                                                            
+<a href="#clipFns">clipFns</a>&nbsp;&nbsp;                   <a href="#inSubscene">inSubscene</a>&nbsp;&nbsp;                   <a href="#propertySlider">propertySlider</a>&nbsp;&nbsp;         <a href="#userMatrix">userMatrix</a>&nbsp;&nbsp;                                                                
+<a href="#clipplaneSlider">clipplaneSlider</a>&nbsp;&nbsp;   <a href="#listeners">listeners</a>&nbsp;&nbsp;                     <a href="#propertySlider">propertySlider</a>&nbsp;&nbsp;         <a href="#values">values</a>&nbsp;&nbsp;                                                                        
+<a href="#delFromSubscene">delFromSubscene</a>&nbsp;&nbsp;   <a href="#matrixSetter">matrixSetter</a>&nbsp;&nbsp;               <a href="#rglClass">rglClass</a>&nbsp;&nbsp;                     <a href="#vertexSetter">vertexSetter</a>&nbsp;&nbsp;                                                            
+&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&ndash;  &mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&ndash;  &mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;  &mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&ndash;  &mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;
 </div>
-</div>
-
-
-
-<!-- dynamically load mathjax for compatibility with self-contained -->
-<script>
-  (function () {
-    var script = document.createElement("script");
-    script.type = "text/javascript";
-    script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
-    document.getElementsByTagName("head")[0].appendChild(script);
-  })();
-</script>
 
 </body>
+
 </html>
