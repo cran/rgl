@@ -1,7 +1,7 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: scene.cpp 1156 2014-10-26 20:48:43Z murdoch $
+// $Id: scene.cpp 1415 2015-11-26 20:31:02Z murdoch $
 
 #include "gl2ps.h"
 #include "scene.h"
@@ -202,6 +202,13 @@ BBoxDeco* Scene::get_bboxdeco(int id)
 Subscene* Scene::getSubscene(int id)
 {
   return (Subscene*)get_scenenode(SUBSCENE, id);
+}
+
+Subscene* Scene::whichSubscene(int id)
+{
+  Subscene* result = rootSubscene.whichSubscene(id);
+  if (!result) result = &rootSubscene;
+  return result;
 }
 
 Subscene* Scene::whichSubscene(int mouseX, int mouseY)

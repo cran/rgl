@@ -4,7 +4,7 @@
 // C++ header file
 // This file is part of RGL
 //
-// $Id: scene.h 1156 2014-10-26 20:48:43Z murdoch $
+// $Id: scene.h 1415 2015-11-26 20:31:02Z murdoch $
 
 #include <vector>
 #include "types.h"
@@ -75,8 +75,10 @@ public:
   /**
    * get subscene
    */
-  Subscene* getSubscene(int id);
-  Subscene* whichSubscene(int mouseX, int mouseY); /* coordinates are window-relative */
+  Subscene* getSubscene(int id);  /* get subscene by its id */
+  Subscene* whichSubscene(int id); /* get subscene holding this id */
+  Subscene* whichSubscene(int mouseX, int mouseY); /* get subscene by mouse coords */
+  /* coordinates are window-relative */
 
   /** 
    * set/get the current subscene

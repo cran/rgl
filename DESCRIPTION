@@ -1,10 +1,10 @@
 Package: rgl
-Version: 0.95.1367
+Version: 0.95.1429
 Title: 3D Visualization Using OpenGL
 Author: Daniel Adler <dadler@uni-goettingen.de>, Duncan Murdoch <murdoch@stats.uwo.ca>, and others (see README)
 Maintainer: Duncan Murdoch <murdoch@stats.uwo.ca>
 Depends: R (>= 2.15.0)
-Suggests: MASS, knitr, rmarkdown
+Suggests: MASS, rglwidget (>= 0.1.1427), knitr, rmarkdown
 Imports: graphics, grDevices, stats, utils
 Description: Provides medium to high level functions for 3D interactive graphics, including
     functions modelled on base graphics (plot3d(), etc.) as well as functions for 
@@ -19,8 +19,8 @@ BugReports: https://r-forge.r-project.org/projects/rgl/
 VignetteBuilder: knitr
 Repository: CRAN
 Repository/R-Forge/Project: rgl
-Repository/R-Forge/Revision: 1367
-Repository/R-Forge/DateTimeStamp: 2015-10-06 01:31:02
-Date/Publication: 2015-10-06 15:43:04
+Repository/R-Forge/Revision: 1430
+Repository/R-Forge/DateTimeStamp: 2015-12-06 00:51:12
+Date/Publication: 2015-12-07 09:19:12
 NeedsCompilation: yes
-Packaged: 2015-10-06 01:41:01 UTC; rforge
+Packaged: 2015-12-06 01:06:11 UTC; rforge

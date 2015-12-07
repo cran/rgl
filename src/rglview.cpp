@@ -1,7 +1,7 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: rglview.cpp 1194 2014-12-18 19:48:01Z murdoch $
+// $Id: rglview.cpp 1372 2015-10-15 19:47:06Z murdoch $
 
 
 
@@ -73,10 +73,7 @@ void RGLView::hide()
 
 void RGLView::setWindowImpl(WindowImpl* impl) {
   View::setWindowImpl(impl);
-//
-// Currently the FreeType font handling in AGL on the Mac is too poor to be worth 
-// using, so default to not using it.
-//
+
 #if defined HAVE_FREETYPE
   renderContext.font = impl->getFont("sans", 1, 1, true);
 #else

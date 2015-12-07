@@ -3,7 +3,7 @@
 # AUTO-GENERATED from Makevars.in (using configure/configure.win)
 # This file is part of the RGL project.
 #
-# $Id: Makevars.in 1117 2014-07-18 19:34:30Z murdoch $
+# $Id: Makevars.in 1372 2015-10-15 19:47:06Z murdoch $
 #-DGL_VERSION_1_2 
 
 PKG_CPPFLAGS=@CPPFLAGS@ -Iext
@@ -14,23 +14,5 @@ PKG_CFLAGS=@C_VISIBILITY@
 
 BUILD=GCC3
 
-## the following are used under MacOS X when this calls SHLIB
-## to make the AGL version
-@BUILD_AGL_TRUE@ ifdef MAKINGAGL
-@BUILD_AGL_TRUE@ PKG_CPPFLAGS=@AGLCPPFLAGS@ -Iext
-@BUILD_AGL_TRUE@ PKG_LIBS=@AGLLIBS@
-@BUILD_AGL_TRUE@ AGLSHLIB=
-@BUILD_AGL_TRUE@ endif
+all: $(SHLIB) 
 
-all: $(SHLIB) @BUILD_AGL_TRUE@ $(AGLSHLIB)
-
-$(AGLSHLIB): $(SHLIB) osx/osxgui.mm osx/osxlib.cpp osx/osxgui.h
-	-mkdir Temp
-	-mv x11*.o Temp
-	mkdir -p AGL
-	-mv AGL/* .
-	MAKINGAGL=TRUE $(R_HOME)/bin/R CMD SHLIB  -o $@ *.cpp *.c \
-		osx/*.mm osx/*.cpp
-	mv x11*.o AGL
-	mv Temp/* .
-	rm -rf Temp

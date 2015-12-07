@@ -2,7 +2,7 @@
 ## R source file
 ## This file is part of rgl
 ##
-## $Id: zzz.R 1332 2015-09-12 16:56:13Z murdoch $
+## $Id: zzz.R 1415 2015-11-26 20:31:02Z murdoch $
 ##
 
 ##
@@ -30,11 +30,6 @@
       # For MacOS X we have to remove /usr/X11R6/lib from the DYLD_LIBRARY_PATH
       # because it would override Apple's OpenGL framework
       Sys.setenv("DYLD_LIBRARY_PATH"=gsub("/usr/X11R6/lib","",Sys.getenv("DYLD_LIBRARY_PATH")))
-      if ( .Platform$GUI == "AQUA" && 
-            file.exists(system.file("libs",.Platform$r_arch, "aglrgl.so", lib.loc=lib, package = pkg))) {
-          initValue <- 1
-          dynlib <- "aglrgl"
-      }
     }
   } 
   dll <- library.dynam(dynlib, pkg, lib)
@@ -70,7 +65,10 @@
   ret <- rgl.init(initValue, onlyNULL)
   
   if (!ret) {
-    warning("Error in 'rgl_init'")
+    warning("'rgl_init' failed, running with rgl.useNULL = TRUE", call. = FALSE)
+    options(rgl.useNULL = TRUE)
+    rgl.quit()
+    rgl.init(initValue, TRUE)	
   }
   
 }
