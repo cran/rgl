@@ -1,5 +1,5 @@
 e73499cb89e0d6e97b8ba271c46739fd *COPYING
-938c2b1c44dc536b001bec05e63564c0 *DESCRIPTION
+3f9c9a103ba4affb576a5dec7564b68d *DESCRIPTION
 a014451fd81a551c82122c43cc854f91 *NAMESPACE
 f64cc2e1ab9f1df80bb580bd221393a3 *R/Sweave_knitr.R
 924eeb2faa0ef90099ad9176b1cc5013 *R/addNormals.mesh3d.R
@@ -67,9 +67,9 @@ bb7b69a42a128d44ccc9232aa9b13eca *demo/regression.r
 5544dce93555cfaced50ee41283e9e58 *inst/demodata/region.dat
 feff7010f9f522214002265608f637ac *inst/doc/CanvasMatrix.js
 6178663d6c57d2f32a1f42ae5b4ec326 *inst/doc/WebGL.Rmd
-8f7a5fc237df6c9a76b7b603e2d08da7 *inst/doc/WebGL.html
+f4e86b8c58305fcf03423913add42df8 *inst/doc/WebGL.html
 a43773841e380f713b5206d03d9eef53 *inst/doc/rgl.Rmd
-9c45283ceeb1c22ada4209d62377e3fa *inst/doc/rgl.html
+fa2b753087cc068a1b7552f5f21ffb27 *inst/doc/rgl.html
 b4ef592c88333c7c509dd74fcd1912d9 *inst/fonts/FreeMono.ttf
 867469f13ff81dec9adf2ae2f6ea2899 *inst/fonts/FreeSans.ttf
 dc0004a804503e126bc99998c7a1c677 *inst/fonts/FreeSerif.ttf
@@ -85,7 +85,7 @@ f93d86b65210d8f6e5f6a460bd2e256d *man/3dobjects.Rd
 36193edd2bf704e55ceeddbee64fc1ac *man/GramSchmidt.Rd
 e9bc0980d966600f346989489932253d *man/abclines.Rd
 20b13c30f7ebb52719caf1e5d950a14d *man/addNormals.Rd
-b605dee43af9a593f65d416a6ffe682f *man/ageSetter.Rd
+bdcf8375eaf8da09f3a479ad1ebcd665 *man/ageSetter.Rd
 65b24d9633bcc01ffa6fa3669bce6ea2 *man/aspect3d.Rd
 183627e084c7c208032a726536d1496e *man/attributes.Rd
 0cf6103623fa50a9279cc22d95c58a82 *man/axes3d.Rd
@@ -116,7 +116,7 @@ dadfecaea140ed6ade5db10c4e150c46 *man/par3dinterp.Rd
 ebc0b9d4e3956ffd0f6c7be6d8026043 *man/polygon3d.Rd
 4f2109b4c992a1811e3ab1365f7e5aa0 *man/postscript.Rd
 f8ee8a261f18f776c95d24b52e5a7683 *man/primitive.Rd
-2fae830c16fb4ae7f94de2b993540d9c *man/propertySetter.Rd
+dc0d895e9256056b493cb9ffacf33eed *man/propertySetter.Rd
 9a1f00cfcee7b35ed4a6bb068710d45e *man/r3d.Rd
 d4e5417c0c71b7789d9b9dcd34c911b1 *man/readSTL.Rd
 c1850ba50574ca2cb0cba4b39c6729e4 *man/rgl-internal.Rd
@@ -147,10 +147,10 @@ d1dc2da38e4a718d48da8f6bb3730ffc *man/surface3d.Rd
 91734759b662229aca1cf379a5f7461f *man/triangulate.Rd
 67496ece74b19278232adbfdcbc40d1c *man/turn3d.Rd
 ddfd766c2131b58e6e3d9306bccfecd9 *man/viewpoint.Rd
-4e72b595fcd7206dfe8f3eb3004567e6 *man/webGLcontrols.Rd
+bd68d141e8b8053eee6a60c2a247662d *man/webGLcontrols.Rd
 18906fadefb3a0ec86750790d717d1da *man/writeOBJ.Rd
 f1d2b2c177293d4555d15f73abb78038 *man/writePLY.Rd
-3001258f4c869cf65f95c32844b3caea *man/writeWebGL.Rd
+9d377e3a0aa5819f7ea4b0da21a9747c *man/writeWebGL.Rd
 6d84d6f8a7d01e28e554663decb28967 *src/ABCLineSet.cpp
 4e93c61da331b4806ec9d481f17b47cb *src/ABCLineSet.h
 8c49ee4680b4c35df1166b40c1e69e8c *src/BBoxDeco.cpp
