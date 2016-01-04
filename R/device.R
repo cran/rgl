@@ -2,7 +2,7 @@
 ## R source file
 ## This file is part of rgl
 ##
-## $Id: device.R 1248 2015-05-18 20:33:32Z murdoch $
+## $Id: device.R 1438 2016-01-02 18:44:46Z murdoch $
 ##
 
 ##
@@ -150,7 +150,9 @@ rgl.pixels <- function(component = c("red", "green", "blue"), viewport = par3d("
   compnum <- as.integer(sapply(component, rgl.enum.pixelcomponent))
   stopifnot(length(viewport) == 4)
   ll <- as.integer(viewport[1:2])
+  stopifnot(all(!is.na(ll)), all(ll >= 0))
   size <- as.integer(viewport[3:4])
+  stopifnot(all(!is.na(size), all(size >= 0)))
   result <- array(NA_real_, dim=c(size[1], size[2], length(component)))
   dimnames(result) <- list(NULL, NULL, component)
   if (length(result) > 0)
@@ -158,7 +160,7 @@ rgl.pixels <- function(component = c("red", "green", "blue"), viewport = par3d("
       ret <- .C( rgl_pixels,
         success=FALSE,
         ll, size, compnum[i],
-        values = single(size[1]*size[2]))
+        values = double(size[1]*size[2]))
  
       if (! ret$success)
         warning(gettextf("Error reading component '%s'", component[i]), domain = NA)

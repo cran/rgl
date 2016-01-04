@@ -1,5 +1,5 @@
 e73499cb89e0d6e97b8ba271c46739fd *COPYING
-3f9c9a103ba4affb576a5dec7564b68d *DESCRIPTION
+9a62087c208440d66a309931ac6d4577 *DESCRIPTION
 a014451fd81a551c82122c43cc854f91 *NAMESPACE
 f64cc2e1ab9f1df80bb580bd221393a3 *R/Sweave_knitr.R
 924eeb2faa0ef90099ad9176b1cc5013 *R/addNormals.mesh3d.R
@@ -9,7 +9,7 @@ df94371ac2c376befb4ddb0a6759af0f *R/axes.R
 8b2231cf74fa1b5302be2d5a6b6372d2 *R/bgplot3d.R
 ac4ab4a705386441e9b2b267244dca04 *R/callbacks.R
 03052da5ee72ea4d086fb4864878e35f *R/cylinder3d.R
-251ee111e1201fdfba7169005e8457b6 *R/device.R
+f83e313553f10c22ba366952058573bf *R/device.R
 5e855bf30c385ae3c1b662a862d3bb5a *R/ellipse3d.R
 cf746e286831527f2d8464802aed0e39 *R/enum.R
 ab542483bf671cb977c1680b2ad4568a *R/fonts.R
@@ -61,15 +61,15 @@ bb7b69a42a128d44ccc9232aa9b13eca *demo/regression.r
 154cec7452c730564d63034357b897a0 *demo/shapes3d.R
 866ebfda71509e83a98a7a034e004269 *demo/stereo.R
 70324e9f3c6750f14dc5fdfe99003625 *demo/subdivision.r
-23efa8b03bdf59eaf9a080632d1aea90 *inst/NEWS
+e04b25cceeb2128ebcd731be782f6d9e *inst/NEWS
 8c5d291e3f47c3395fff092f09f599b9 *inst/WebGL/template.html
 5bac46c36b13eac1302260ee06b16c0f *inst/demodata/population.dat
 5544dce93555cfaced50ee41283e9e58 *inst/demodata/region.dat
 feff7010f9f522214002265608f637ac *inst/doc/CanvasMatrix.js
 6178663d6c57d2f32a1f42ae5b4ec326 *inst/doc/WebGL.Rmd
-f4e86b8c58305fcf03423913add42df8 *inst/doc/WebGL.html
+276180b5e44ba0ac17421bcf50166728 *inst/doc/WebGL.html
 a43773841e380f713b5206d03d9eef53 *inst/doc/rgl.Rmd
-fa2b753087cc068a1b7552f5f21ffb27 *inst/doc/rgl.html
+615630eaf7eb4910ce4dcb9a4d981b6d *inst/doc/rgl.html
 b4ef592c88333c7c509dd74fcd1912d9 *inst/fonts/FreeMono.ttf
 867469f13ff81dec9adf2ae2f6ea2899 *inst/fonts/FreeSans.ttf
 dc0004a804503e126bc99998c7a1c677 *inst/fonts/FreeSerif.ttf
@@ -162,7 +162,7 @@ ddb12d362a6ef5d6e7783b40caffa9f1 *src/Background.cpp
 3ba8e335135deb32583e586507a9db03 *src/ClipPlane.h
 92c8148c5c10e5ca9125a8fa6630d975 *src/Color.cpp
 3b231f79bf9228e58fd6fd658d2b4148 *src/Color.h
-2462fe39d1f147b61a196fbfbcf32097 *src/Device.h
+ef44ecd70149fd1a8db74bea37073154 *src/Device.h
 c5bbe1cfd9588774823c353a17445231 *src/DeviceManager.h
 2fdf0fa29216eb97fff8bdf8c382da98 *src/Disposable.cpp
 b128eb378abdd8e63ea8287e7f9f6254 *src/Disposable.h
@@ -202,8 +202,8 @@ eef1deddc0f22ebe8f8c34e139b32f62 *src/TextSet.h
 57491612dd6fd9fd94519e1598a226b0 *src/Texture.h
 49f352b1355b0185b401d22c24d679ca *src/Viewpoint.cpp
 820bc232ed7b5fd0dac01ab5246026ad *src/Viewpoint.h
-cdec280f28fbacfb2481e528d1c2d05a *src/api.cpp
-5ee429740d0958f7c64ac2565409d290 *src/api.h
+cf49168c24b58fa6bf3a93ae327cd9e3 *src/api.cpp
+0c6947ff203bed73cbe033e6d7c1ecef *src/api.h
 bb5f3d08f63b9c2414e546a8b0afd335 *src/assert.cpp
 0e68374c29258e2b6fe6e88fa9b4958d *src/assert.h
 08478727a5b38779bc62b632166b9f7f *src/build/autoconf/config.guess
@@ -211,7 +211,7 @@ b4b24b88055910a6b4dbb0f436af648e *src/build/autoconf/config.sub
 6e5fe73723cd40a28adc5b7b5650c8d1 *src/build/autoconf/install-sh
 43e64bf8f42f33eeeee8a2947d0a7c34 *src/callbacks.cpp
 bccfd3c1231fe09c743279715ed012b2 *src/config.h
-b83764ffbbc259b25cf50035e9fe6713 *src/device.cpp
+d45fe75de23128b1d44be991cbce841b *src/device.cpp
 adfc36a94a36e98cc5fbe2ad8a087db9 *src/devicemanager.cpp
 c83c1ea7f7c9b201cdcf087fa83d10ff *src/ext/GLsdk/GL/gl.h
 b3a541f71a25364db3f2128ecceb23cb *src/ext/GLsdk/GL/glext.h
@@ -331,7 +331,7 @@ c22dabe5e4ff8257a905288ff35d01af *src/glErrors.cpp
 991226eae77aedeeb6cab28bcda90023 *src/lib.h
 77a8ca88c5a5ef57249475a4906932c4 *src/opengl.h
 f558e283f7aaba94b1a6acc0df11a494 *src/par3d.cpp
-8e4f5e050685ba7bb347406f5bcf4ea5 *src/pixmap.cpp
+c105329a33d82519ead8e6841a6110f7 *src/pixmap.cpp
 4823fcd47dff6930865d7fb056dd0b25 *src/pixmap.h
 56c23f46f775513981a5f8ae15e9a4e4 *src/platform.cpp
 990da172f3a90201bfc36f747d733427 *src/platform.h
@@ -344,8 +344,8 @@ f558e283f7aaba94b1a6acc0df11a494 *src/par3d.cpp
 d140e13b2a81bf64aca893a3de84c40f *src/rgl-win.def
 fe953c704bc921334d7f9a5dabda5dd1 *src/rglmath.cpp
 87a7067a1fe7250632e07d342c7f1f5d *src/rglmath.h
-961a85467ecc873b4bd4a7090016b0f6 *src/rglview.cpp
-ae6392c537db122d3f23d565deee8203 *src/rglview.h
+181d701ef27887bd5a3fcc6ad2579972 *src/rglview.cpp
+df2d3d8bfc49477d4ff635f6367be958 *src/rglview.h
 6888e87fa9bafdd0cfbdb872ff833746 *src/scene.cpp
 52daa9d90b27b10fa738da5fceb577d8 *src/scene.h
 1d5d3cc76b12eab1f7be77c4e9564a39 *src/select.cpp

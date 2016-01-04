@@ -1,7 +1,7 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: rglview.cpp 1372 2015-10-15 19:47:06Z murdoch $
+// $Id: rglview.cpp 1442 2016-01-04 13:08:15Z murdoch $
 
 
 
@@ -585,36 +585,46 @@ bool RGLView::snapshot(PixmapFileFormatID formatID, const char* filename)
     // alloc pixmap memory
     Pixmap snapshot;
    
-    snapshot.init(RGB24, width, height, 8);    
-    if ( windowImpl->beginGL() ) {
+    if (snapshot.init(RGB24, width, height, 8)) {
+      if ( windowImpl->beginGL() ) {
         // read front buffer
 
-      glPushAttrib(GL_PIXEL_MODE_BIT);
+        glPushAttrib(GL_PIXEL_MODE_BIT);
 
-      glReadBuffer(GL_FRONT);
-      glPixelStorei(GL_PACK_ALIGNMENT, 1);
-      glReadPixels(0,0,width,height,GL_RGB, GL_UNSIGNED_BYTE, (GLvoid*) snapshot.data);
+        glReadBuffer(GL_FRONT);
+        glPixelStorei(GL_PACK_ALIGNMENT, 1);
+        glReadPixels(0,0,width,height,GL_RGB, GL_UNSIGNED_BYTE, (GLvoid*) snapshot.data);
 
-      glPopAttrib();
+        glPopAttrib();
   
-      windowImpl->endGL();
-    } else
-      snapshot.clear();
-    
-    success = snapshot.save( pixmapFormat[formatID], filename );
-
+        windowImpl->endGL();
+      } else
+        snapshot.clear();
+      
+      success = snapshot.save( pixmapFormat[formatID], filename );
+      
+    } else error("unable to create pixmap");
+    	
   } else error("pixmap save format not supported in this build");
 
   return success;
 }
 
-bool RGLView::pixels( int* ll, int* size, int component, float* result )
+bool RGLView::pixels( int* ll, int* size, int component, double* result )
 {
   bool success = false;
   GLenum format[] = {GL_RED, GL_GREEN, GL_BLUE, GL_ALPHA, 
                       GL_DEPTH_COMPONENT, GL_LUMINANCE};   
   if ( windowImpl->beginGL() ) {
-
+    /*
+     * Some OSX systems appear to have a glReadPixels 
+     * bug causing segfaults when reading the depth component.  
+     * Read those column by column.
+     */
+    bool bycolumn = format[component] == GL_DEPTH_COMPONENT;
+    int n = bycolumn ? size[1] : size[0]*size[1];
+    GLfloat* buffer = (GLfloat*) R_alloc(n, sizeof(GLfloat));
+  	
     glEnable(GL_DEPTH_TEST);
     glDepthMask(GL_TRUE);
   
@@ -624,10 +634,20 @@ bool RGLView::pixels( int* ll, int* size, int component, float* result )
  
     glReadBuffer(GL_FRONT);
     glPixelStorei(GL_PACK_ALIGNMENT, 1);
-    glReadPixels(ll[0],ll[1],size[0],size[1],format[component], GL_FLOAT, (GLvoid*) result);
-
+    
+    if (bycolumn) {
+      for(int ix=0; ix<size[0]; ++ix){
+        glReadPixels(ix+ll[0],ll[1],1,size[1],format[component], GL_FLOAT, (GLvoid*) buffer);
+        for(int iy=0; iy<size[1]; ++iy) {
+          result[ix + iy*size[0]] = buffer[iy];
+        }
+      }	
+    } else {	
+      glReadPixels(ll[0],ll[1],size[0],size[1],format[component], GL_FLOAT, (GLvoid*) buffer);
+      for (int i=0; i<n; i++)
+        result[i] = buffer[i];
+    }
     glPopAttrib();
-
     success = true;
 
     windowImpl->endGL();

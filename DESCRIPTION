@@ -1,5 +1,5 @@
 Package: rgl
-Version: 0.95.1435
+Version: 0.95.1441
 Title: 3D Visualization Using OpenGL
 Author: Daniel Adler <dadler@uni-goettingen.de>, Duncan Murdoch <murdoch@stats.uwo.ca>, and others (see README)
 Maintainer: Duncan Murdoch <murdoch@stats.uwo.ca>
@@ -19,8 +19,8 @@ BugReports: https://r-forge.r-project.org/projects/rgl/
 VignetteBuilder: knitr
 Repository: CRAN
 Repository/R-Forge/Project: rgl
-Repository/R-Forge/Revision: 1435
-Repository/R-Forge/DateTimeStamp: 2015-12-13 20:43:04
-Date/Publication: 2015-12-28 22:01:46
+Repository/R-Forge/Revision: 1442
+Repository/R-Forge/DateTimeStamp: 2016-01-04 13:08:15
+Date/Publication: 2016-01-04 17:37:50
 NeedsCompilation: yes
-Packaged: 2015-12-13 21:11:11 UTC; rforge
+Packaged: 2016-01-04 13:26:11 UTC; rforge

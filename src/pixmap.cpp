@@ -1,7 +1,7 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: pixmap.cpp 1158 2014-11-11 17:27:21Z murdoch $
+// $Id: pixmap.cpp 1436 2016-01-01 15:18:43Z murdoch $
 
 #include "pixmap.h"
 using namespace std;
@@ -81,8 +81,11 @@ bool Pixmap::init(PixmapTypeID in_typeID, int in_width, int in_height, int in_bi
   bytesperrow = ( (channels * bits_per_channel) >> 3 ) * width;
 
   data = new unsigned char [ bytesperrow * height ];
-
-  return true;
+  
+  if (data)
+    return true;
+  else
+    return false;
 }
 
 void Pixmap::clear()

@@ -1,7 +1,7 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: device.cpp 1157 2014-10-27 12:18:35Z murdoch $
+// $Id: device.cpp 1436 2016-01-01 15:18:43Z murdoch $
 // ---------------------------------------------------------------------------
 #include <cstring>
 #include "Device.h"
@@ -127,7 +127,7 @@ bool Device::snapshot(int format, const char* filename)
   return rglview->snapshot( (PixmapFileFormatID) format, filename);
 }
 // ---------------------------------------------------------------------------
-bool Device::pixels(int* ll, int* size, int component, float* result)
+bool Device::pixels(int* ll, int* size, int component, double* result)
 {
   return rglview->pixels( ll, size, component, result);
 }
