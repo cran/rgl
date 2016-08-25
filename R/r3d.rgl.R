@@ -1,6 +1,6 @@
 #
 # R3D rendering functions - rgl implementation
-# $Id: r3d.rgl.R 1252 2015-06-28 05:26:12Z murdoch $
+# $Id: r3d.rgl.R 1506 2016-08-04 13:13:35Z murdoch $
 # 
 
 # Node Management
@@ -25,6 +25,9 @@ clear3d     <- function(type = c("shapes", "bboxdeco", "material"),
     if ( 5 %in% type ) { # material
         if (length(defaults$material))
     	    do.call("material3d", defaults$material)
+    }
+    if ( 6 %in% type ) { # background
+    	do.call("bg3d", as.list(defaults$bg))
     }
 }
 
@@ -90,7 +93,8 @@ material3d  <- function (...)
 bg3d        <- function(...) {
   .check3d(); save <- material3d(); on.exit(material3d(save))
   new <- .fixMaterialArgs(sphere = FALSE, fogtype = "none", 
-                          color = c("black", "white"), back = "lines", Params = save)
+                          color = c("black", "white"), 
+  			  back = "lines", lit = FALSE, Params = save)
   do.call("rgl.bg", .fixMaterialArgs(..., Params = new))
 }
 
@@ -132,7 +136,7 @@ observer3d <- function(x, y=NULL, z=NULL, auto=FALSE) {
   }    
   prev <- .C(rgl_getObserver, success=integer(1), ddata=numeric(3), NAOK = TRUE)$ddata
   .C(rgl_setObserver, success=as.integer(auto), ddata=as.numeric(location), NAOK = TRUE)
-  invisible(prev)
+  lowlevel(prev)
 }
 
 # Shapes

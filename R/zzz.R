@@ -2,7 +2,7 @@
 ## R source file
 ## This file is part of rgl
 ##
-## $Id: zzz.R 1415 2015-11-26 20:31:02Z murdoch $
+## $Id: zzz.R 1456 2016-02-28 14:31:13Z murdoch $
 ##
 
 ##
@@ -30,8 +30,12 @@
       # For MacOS X we have to remove /usr/X11R6/lib from the DYLD_LIBRARY_PATH
       # because it would override Apple's OpenGL framework
       Sys.setenv("DYLD_LIBRARY_PATH"=gsub("/usr/X11R6/lib","",Sys.getenv("DYLD_LIBRARY_PATH")))
+      X11 <- nchar(Sys.getenv("DISPLAY", "")) > 0 || nchar(Sys.which("Xorg")) > 0
+      if (!X11) 
+      	stop("X11 not found; XQuartz (from www.xquartz.org) is required to run rgl.",
+      	     call. = FALSE)
     }
-  } 
+  }
   dll <- library.dynam(dynlib, pkg, lib)
 
   routines <- getDLLRegisteredRoutines(dynlib, addNames = FALSE)

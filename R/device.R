@@ -2,7 +2,7 @@
 ## R source file
 ## This file is part of rgl
 ##
-## $Id: device.R 1438 2016-01-02 18:44:46Z murdoch $
+## $Id: device.R 1502 2016-07-11 00:30:41Z murdoch $
 ##
 
 ##
@@ -13,9 +13,11 @@ rgl.useNULL <- function() {
   opt <- getOption("rgl.useNULL", Sys.getenv("RGL_USE_NULL"))
   if (is.logical(opt)) return(opt)
   opt <- as.character(opt)
-  if (!nchar(opt)) return(FALSE)
-  opt <- pmatch(tolower(opt), c("yes", "true"), nomatch=3)
-  c(TRUE, TRUE, FALSE)[opt]
+  if (nchar(opt)) {
+    opt <- pmatch(tolower(opt), c("yes", "true"), nomatch=3)
+    return(c(TRUE, TRUE, FALSE)[opt])
+  }
+  FALSE
 }
 
 ##
@@ -131,7 +133,7 @@ rgl.postscript <- function( filename, fmt="eps", drawText=TRUE )
   ret <- .C( rgl_postscript,
     success=FALSE,
     idata,
-    normalizePath(filename, mustWork = FALSE)
+    normalizePath(filename, mustWork = FALSE, winslash = "/")
   )
 
   if (! ret$success)

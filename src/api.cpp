@@ -1,7 +1,7 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: api.cpp 1436 2016-01-01 15:18:43Z murdoch $
+// $Id: api.cpp 1456 2016-02-28 14:31:13Z murdoch $
 
 #include "lib.h"
 #include "DeviceManager.h"
@@ -398,8 +398,19 @@ void rgl::rgl_bg(int* successptr, int* idata)
 
     bool sphere    = as_bool( idata[0] );
     int  fogtype   = idata[1];
-
-    success = as_success( device->add( new Background(currentMaterial, sphere, fogtype) ) );
+    Background* bg = new Background(currentMaterial, sphere, fogtype);
+    success = as_success( device->add( bg ) );
+    SceneNode*  quad = bg->getQuad();
+    if (quad) {
+      int save_ignore = device->getIgnoreExtent(),
+      	  save_redraw = device->getSkipRedraw();
+      device->setSkipRedraw(true);
+      device->setIgnoreExtent(true);
+      device->add( quad );
+      device->getScene()->hide(quad->getObjID());
+      device->setIgnoreExtent(save_ignore);
+      device->setSkipRedraw(save_redraw);
+    }
     CHECKGLERROR;
   }
 

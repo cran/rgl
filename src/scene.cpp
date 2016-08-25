@@ -1,7 +1,7 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: scene.cpp 1415 2015-11-26 20:31:02Z murdoch $
+// $Id: scene.cpp 1463 2016-04-23 18:04:00Z murdoch $
 
 #include "gl2ps.h"
 #include "scene.h"
@@ -65,8 +65,12 @@ bool Scene::clear(TypeID type)
         ++iter;
       else {
         hide(node->getObjID());
-        delete node;
-        iter = nodes.erase(iter);
+      	if (node->owner) {
+      	  ++iter;
+      	} else {
+          delete node;
+          iter = nodes.erase(iter);
+      	} 
       }
     } else
       ++iter;

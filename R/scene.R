@@ -2,7 +2,7 @@
 ## R source file
 ## This file is part of rgl
 ##
-## $Id: scene.R 1357 2015-09-30 19:49:19Z murdoch $
+## $Id: scene.R 1511 2016-08-21 10:29:41Z murdoch $
 ##
 
 ##
@@ -26,7 +26,7 @@ rgl.clear <- function( type = "shapes", subscene = 0 )
   material  <- 5 %in% typeid
   modelviewpoint <- 8 %in% typeid
 
-  drop <- typeid %in% c(4:6, 8)
+  drop <- typeid %in% c(4:5, 8)
   typeid <- typeid[!drop]
   type <- names(typeid)
   
@@ -51,9 +51,11 @@ rgl.clear <- function( type = "shapes", subscene = 0 )
     
   if ( material ) 
     rgl.material()
-
+  
   if (! ret)
     stop("'rgl_clear' failed")
+  
+  lowlevel()
 }
 
 
@@ -78,6 +80,7 @@ rgl.pop <- function( type = "shapes", id = 0)
     if (! ret$success)
       stop(gettextf("'rgl.pop' failed for id %d", i), domain = NA)
   }
+  lowlevel()
 }
 
 rgl.ids <- function( type = "shapes", subscene = NA )
@@ -106,16 +109,45 @@ rgl.attrib.count <- function( id, attrib )
   result
 }
 
+rgl.attrib.ncol.values <- c(vertices=3, normals=3, colors=4, texcoords=2, dim=2,
+            texts=1, cex=1, adj=2, radii=1, centers=3, ids=1,
+	    usermatrix=4, types=1, flags=1, offsets=1,
+	    family=1, font=1)
+
+rgl.attrib.info <- function( id = rgl.ids("all", 0)$id, attribs = NULL, showAll = FALSE) {
+  ncol <- rgl.attrib.ncol.values
+  if (is.null(attribs))
+    attribs <- names(ncol)
+  else if (is.numeric(attribs))
+    attribs <- names(ncol)[attribs]
+  na <- length(attribs)
+  ni <- length(id)
+  if (!ni) 
+    result <- data.frame(id = numeric(0), attrib = character(0),
+    		         nrow = numeric(0), ncol = numeric(0),
+    		         stringsAsFactors = FALSE)
+  else
+    result <- data.frame(id = rep(id, each = na),
+    		         attrib = rep(attribs, ni),
+  		         nrow = 0, 
+  		         ncol = rep(ncol[attribs], ni),
+		         stringsAsFactors = FALSE)
+  for (j in seq_len(ni)) 
+    for (i in seq_len(na))
+      result$nrow[i + na*(j - 1)] <- rgl.attrib.count(id[j], result$attrib[i])
+  if (!showAll)
+    result <- result[result$nrow != 0,]
+  rownames(result) <- NULL
+  result
+}	
+
 rgl.attrib <- function( id, attrib, first=1, 
                         last=rgl.attrib.count(id, attrib) )
 {
   stopifnot(length(attrib) == 1 && length(id) == 1 && length(first) == 1)
   if (is.character(attrib))
     attrib <- rgl.enum.attribtype(attrib)
-  ncol <- c(vertices=3, normals=3, colors=4, texcoords=2, dim=2, 
-            texts=1, cex=1, adj=2, radii=1, centers=3, ids=1,
-            usermatrix=4, types=1, flags=1, offsets=1,
-  	    family=1, font=1)[attrib]
+  ncol <- rgl.attrib.ncol.values[attrib]
   count <- max(last - first + 1, 0)
   if (attrib %in% c(6, 13, 16)) { # texts, types and family
     if (count)
@@ -223,7 +255,7 @@ rgl.bg <- function(sphere=FALSE, fogtype="none", color=c("black","white"), back=
   if (! ret$success)
     stop("'rgl_bg' failed")
     
-  invisible(ret$success)
+  lowlevel(ret$success)
 }
 
 
@@ -305,7 +337,7 @@ rgl.bbox <- function(
   if (! ret$success)
     stop("'rgl_bbox' failed")
     
-  invisible(ret$success)
+  lowlevel(ret$success)
 
 }
 
@@ -356,7 +388,7 @@ rgl.light <- function( theta = 0, phi = 0, viewpoint.rel = TRUE, ambient = "#FFF
   if (! ret$success)
     stop("Too many lights; maximum is 8 sources per scene")
     
-  invisible(ret$success)
+  lowlevel(ret$success)
 }
 
 ##
@@ -420,7 +452,7 @@ rgl.primitive <- function( type, x, y=NULL, z=NULL, normals=NULL, texcoords=NULL
     if (! ret$success)
       stop("'rgl_primitive' failed")
       
-    invisible(ret$success)
+    lowlevel(ret$success)
   }
 }
 
@@ -547,7 +579,7 @@ rgl.surface <- function( x, z, y, coords=1:3,  ..., normal_x=NULL, normal_y=NULL
   if (! ret$success)
     stop("'rgl_surface' failed")
     
-  invisible(ret$success)
+  lowlevel(ret$success)
 }
 
 ##
@@ -577,7 +609,7 @@ rgl.spheres <- function( x, y=NULL, z=NULL, radius=1.0,...)
   if (! ret$success)
     stop("'rgl_spheres' failed")
     
-  invisible(ret$success)
+  lowlevel(ret$success)
 
 }
 
@@ -606,7 +638,7 @@ rgl.planes <- function( a, b=NULL, c=NULL, d=0,...)
   if (! ret$success)
     stop("'rgl_planes' failed")
     
-  invisible(ret$success)
+  lowlevel(ret$success)
 
 }
 
@@ -633,7 +665,7 @@ rgl.clipplanes <- function( a, b=NULL, c=NULL, d=0)
   if (! ret$success)
     stop("'rgl_clipplanes' failed")
     
-  invisible(ret$success)
+  lowlevel(ret$success)
 
 }
 
@@ -664,7 +696,7 @@ rgl.abclines <- function(x, y=NULL, z=NULL, a, b=NULL, c=NULL, ...)
   if (! ret$success)
     stop("'rgl_abclines' failed")
     
-  invisible(ret$success)
+  lowlevel(ret$success)
 
 }
 
@@ -725,7 +757,7 @@ rgl.texts <- function(x, y=NULL, z=NULL, text, adj = 0.5, justify, family=par3d(
   if (! ret$success)
     stop("'rgl_texts' failed")
 
-  invisible(ret$success)
+  lowlevel(ret$success)
 }
 
 ##
@@ -759,7 +791,7 @@ rgl.sprites <- function( x, y=NULL, z=NULL, radius=1.0, shapes=NULL,
   if (! ret$success)
     stop("'rgl_sprites' failed")
 
-  invisible(ret$success)
+  lowlevel(ret$success)
 }
 
 ##
@@ -835,6 +867,8 @@ rgl.selectstate <- function()
 
 rgl.select <- function(button = c("left", "middle", "right"))
 {
+	if (rgl.useNULL())
+	  return(NULL)
 	button <- match.arg(button)
 	
 	newhandler <- par3d("mouseMode")
