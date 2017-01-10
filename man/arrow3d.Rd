@@ -100,7 +100,6 @@ Design based on \code{heplots::\link[heplots]{arrow3d}}, which contains modifica
 to a function posted by Barry Rowlingson to R-help on 1/10/2010.  Additions by Duncan Murdoch.
 }
 \examples{
-% For some reason, this fails on R-forge:
 \donttest{
 xyz <- matrix(rnorm(300), ncol = 3)
 plot3d(xyz)

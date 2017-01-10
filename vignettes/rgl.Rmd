@@ -162,6 +162,7 @@ Function                      | Description
 `r indexfns(c("surface3d", "terrain3d"))`:    | a surface (as used in `r linkfn("persp3d")`)
 `r indexfns("arrow3d")`:      | add an arrow to a scene
 `r indexfns("pch3d")`:	      | draw base-style plotting symbols
+`r indexfns("plotmath3d")`:   | used by `r linkfn("text3d")` for math text
 
 ### Axes and other "decorations"
 
@@ -566,6 +567,8 @@ Function                             | Description
 `r indexfns("vertexControl")`       | control properties of vertices
 `r indexfns("playwidget")`       | display and automate controls
 `r indexfns("sceneChange")`      | used in `Shiny` for large scene changes
+`r documentedfns <- c(documentedfns, "%>%");indexfns("pipe", text="%>%")`    | `matgrittr` pipe 
+
 
 Some functions are mainly for internal use:
 `r indexfns(c("elementId2Prefix", "playwidgetOutput", "renderPlaywidget", "rglwidgetOutput", "renderRglwidget", "registerSceneChange"))`. 
@@ -573,7 +576,9 @@ More details are given in the vignette
 [User Interaction in WebGL](WebGL.html).
 The functions `r indexfns(c("lowlevel", "highlevel"))` are also for internal use,
 marking function results for automatic
-printing.
+printing.  Finally, the experimental function
+`r indexfns("setUserShaders")` allows you to
+use hand-written shaders in WebGL.
 
 The older approach uses the `writeWebGL` function to export a scene 
 to HTML and Javascript code.  

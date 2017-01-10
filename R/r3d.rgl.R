@@ -1,6 +1,6 @@
 #
 # R3D rendering functions - rgl implementation
-# $Id: r3d.rgl.R 1506 2016-08-04 13:13:35Z murdoch $
+# $Id: r3d.rgl.R 1526 2016-12-06 13:27:29Z murdoch $
 # 
 
 # Node Management
@@ -40,9 +40,9 @@ pop3d       <- function(...) {.check3d(); rgl.pop(...)}
     "lwd", "fog", "point_antialias", "line_antialias",
     "texture", "textype", "texmipmap",
     "texminfilter", "texmagfilter", "texenvmap",
-    "depth_mask", "depth_test")
+    "depth_mask", "depth_test", "isTransparent")
 
-.material3d.writeOnly <- character(0)
+.material3d.readOnly <- "isTransparent"
 
 # This function expands a list of arguments by putting
 # all entries from Params (i.e. the current settings by default)
@@ -64,8 +64,7 @@ pop3d       <- function(...) {.check3d(); rgl.pop(...)}
 material3d  <- function (...)
 {
     args <- list(...)
-    argnames <- names(args)
-    
+    argnames <- setdiff(names(args), .material3d.readOnly)
     if (!length(args))
 	argnames <- .material3d
     else {
@@ -166,7 +165,11 @@ quads3d     <- function(x,y=NULL,z=NULL,...) {
   do.call("rgl.quads", c(list(x=x,y=y,z=z), .fixMaterialArgs(..., Params = save)))
 }
 
-text3d      <- function(x,y=NULL,z=NULL,texts,adj=0.5,justify,...) {
+text3d      <- function(x, y = NULL, z = NULL,
+			texts, adj = 0.5, justify, 
+			usePlotmath = is.language(texts), ...) {
+  if (usePlotmath) 
+    return(plotmath3d(x = x, y = y, z = z, text = texts, adj = adj, ...))
   .check3d(); save <- material3d(); on.exit(material3d(save))
   new <- .fixMaterialArgs(..., Params = save)
   if (!missing(justify)) new <- c(list(justify=justify), new)

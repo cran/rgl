@@ -93,10 +93,10 @@ material3d(...)
   \item{front, back}{
     Determines the polygon mode for the specified side:
     \describe{
-      \item{"fill"}{filled polygon}
-      \item{"line"}{wireframed polygon}
+      \item{"filled"}{filled polygon}
+      \item{"lines"}{wireframed polygon}
       \item{"points"}{point polygon}
-      \item{"cull"}{culled (hidden) polygon}
+      \item{"culled"}{culled (hidden) polygon}
     }
   }
   \item{size}{ 
@@ -116,9 +116,19 @@ material3d(...)
      \code{"less"} (the default), \code{"equal"}, \code{"lequal"}
      (less than or equal), \code{"greater"}, \code{"notequal"},
      \code{"gequal"} (greater than or equal), \code{"always"}.}
-  \item{...}{Any of the arguments above; see Details below.}
+  \item{...}{Any of the arguments above can
+  be passed to \code{material3d}; see Details below.  \code{rgl.material} will ignore others.}
 }
 \details{
+  Values can be queried by specifying their names
+in a character vector, e.g. \code{material3d("color")}.
+There is one read-only property that can be queried
+but not set:
+
+\describe{
+\item{isTransparent}{Is the current colour transparent?}
+}
+  
   Only one side at a time can be culled.
   
   \code{material3d} is an alternate interface to the material properties, modelled after
@@ -169,6 +179,7 @@ for (i in 1:8) {
   triangles3d(x, y, z + i, col = heat.colors(8)[i])
   texts3d(xmid, ymid, z + i, paste(i, tests[i], sep = ". "), depth_test = tests[i]) 
 }
+highlevel()  # To trigger display
 }
 \keyword{dynamic}
 

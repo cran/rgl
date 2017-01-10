@@ -1,7 +1,7 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: api.cpp 1456 2016-02-28 14:31:13Z murdoch $
+// $Id: api.cpp 1519 2016-09-25 19:11:54Z murdoch $
 
 #include "lib.h"
 #include "DeviceManager.h"
@@ -682,6 +682,7 @@ void rgl::rgl_sprites(int* successptr, int* idata, double* vertex, double* radiu
     int nvertex = idata[0];
     int nradius = idata[1];
     int nshapes = idata[2];
+    bool fixedSize = (bool)idata[3];
     int count = 0;
     Shape** shapelist;
     if (nshapes) {
@@ -704,7 +705,8 @@ void rgl::rgl_sprites(int* successptr, int* idata, double* vertex, double* radiu
     } else 
       shapelist = NULL;
     success = as_success( device->add( new SpriteSet(currentMaterial, nvertex, vertex, nradius, radius,
-    						     device->getIgnoreExtent(), count, shapelist, userMatrix) ) );
+    						     device->getIgnoreExtent(), count, shapelist, userMatrix,
+    						     fixedSize) ) );
     CHECKGLERROR;
   }
 
@@ -1072,8 +1074,9 @@ void rgl::rgl_getmaterial(int *successptr, int *id, int* idata, char** cdata, do
   idata[22] = mat->line_antialias ? 1 : 0;
   idata[23] = mat->depth_mask ? 1 : 0;
   idata[24] = mat->depth_test;
+  idata[25] = mat->isTransparent();
 
-  for (i=0, j=25; (i < mat->colors.getLength()) && (i < (unsigned int)idata[0]); i++) {
+  for (i=0, j=26; (i < mat->colors.getLength()) && (i < (unsigned int)idata[0]); i++) {
     idata[j++] = (int) mat->colors.getColor(i).getRedub();
     idata[j++] = (int) mat->colors.getColor(i).getGreenub();
     idata[j++] = (int) mat->colors.getColor(i).getBlueub();
