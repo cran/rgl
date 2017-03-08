@@ -23,6 +23,7 @@ playwidget(sceneId, ...)
             precision = 3,
             elementId = NULL, respondTo = NULL,
             reinit = NULL,
+            buttonLabels = components, pause = "Pause",
             ...)
 
 \S3method{playwidget}{rglWebGL}(sceneId, controls, elementId = NULL, ...)
@@ -83,6 +84,11 @@ A vector of ids that will need re-initialization before
 being drawn again.
 }
 
+  \item{buttonLabels, pause}{
+These are the labels that will be shown on the buttons if they are displayed.  \code{pause} will
+be shown on the \code{"Play"} button while playing.
+}
+
   \item{...}{The default method passes additional arguments
 to \code{htmlwidgets::\link{createWidget}}.}
 }
@@ -102,7 +108,8 @@ The buttons have the following behaviour:
 
 If \code{respondTo} is used, no \code{components} are shown, as it is assumed Shiny (or whatever control is being referenced) will provide the UI components.
 
-The \code{sceneId} component can be another \code{playwidget} or a \code{\link{rglwidget}} result.  This allows you
+The \code{sceneId} component can be another \code{playwidget}, a \code{\link{rglwidget}} result, or a result of
+\code{htmltools::\link[htmltools]{tags}} or \code{htmltools::\link[htmltools]{tagList}}.  This allows you
 to use a \pkg{magrittr}-style
 \dQuote{pipe} command to join an \code{rglwidget} with one or more \code{\link{playwidget}}s.  If a \code{playwidget} comes
 first, \code{sceneId} should be set to \code{NA}.  If
@@ -144,6 +151,10 @@ Duncan Murdoch
 \code{\link{subsetControl}},
 \code{\link{propertyControl}}, \code{\link{ageControl}} and
 \code{\link{vertexControl}} are possible controls to use.
+
+\code{\link{toggleWidget}} is a wrapper for 
+\code{playwidget} and \code{\link{subsetControl}}
+to insert a single button to toggle some elements in a display.
 }
 \examples{
 saveopts <- options(rgl.useNULL = TRUE)

@@ -24,6 +24,8 @@ playwidget.default <- function(sceneId, controls, start = 0, stop = Inf, interva
                        precision = 3,
                        elementId = NULL, respondTo = NULL,
                        reinit = NULL,
+		       buttonLabels = components,
+		       pause = "Pause",
                        ...) {
 
   sceneId <- as.character(sceneId)
@@ -63,11 +65,29 @@ playwidget.default <- function(sceneId, controls, start = 0, stop = Inf, interva
   if (!length(components))
     components <- character()
   else
-    components <- match.arg(components, several.ok = TRUE)
+    components <- match.arg(components, 
+    			c("Reverse", "Play", "Slower", "Faster", "Reset", "Slider", "Label", "Step"),
+    			several.ok = TRUE)
 
-  if (is.null(stop) && !missing(labels) && length(labels))
+  buttonLabels <- as.character(buttonLabels)
+  pause <- as.character(pause)
+  stopifnot(length(buttonLabels) == length(components),
+  	    length(pause) == 1)
+  
+  for (i in seq_along(controls)) {
+    control <- controls[[i]]
+    if (!is.null(labels)) 
+      labels <- control$labels
+    if (!is.null(control$param)) {
+      start <- min(start, control$param[is.finite(control$param)])
+      stop <- max(stop, control$param[is.finite(control$param)])
+    }
+  }
+
+  if (is.null(stop) && !missing(labels) && length(labels)) {
     stop <- start + (length(labels) - 1)*step
-
+  }
+  
   if (is.null(stop)) {
     if ("Slider" %in% components) {
       warning("Cannot have slider with non-finite limits")
@@ -87,6 +107,8 @@ playwidget.default <- function(sceneId, controls, start = 0, stop = Inf, interva
        interval = interval,
        rate = rate,
        components = components,
+       buttonLabels = buttonLabels,
+       pause = pause,
        loop = loop,
        step = step,
        labels = labels,
@@ -130,27 +152,64 @@ playwidget.rglPlayer <- function(sceneId, controls, ...) {
                                ...)))
 }
 
+linkScene <- function(elementId, thelist) {
+  scene <- NULL
+  for (i in seq_along(thelist)) {
+    if (inherits(thelist[[i]], "rglWebGL")) {
+      scene <- c(scene, thelist[[i]]$elementId)
+      if (!is.null(elementId) && !(elementId %in% thelist[[i]]$x$players))
+        thelist[[i]]$x$players <- c(thelist[[i]]$x$players, elementId)
+    } else if (inherits(thelist[[i]], "shiny.tag")) {
+      link <- linkScene(elementId, thelist[[i]]$children)
+      scene <- c(scene, link$scene)
+      thelist[[i]]$children <- link$thelist
+    } else if (inherits(thelist[[i]], "shiny.tag.list")) {
+      link <- linkScene(elementId, thelist[[i]])
+      scene <- c(scene, link$scene)
+      thelist[[i]] <- link$thelist
+    }
+  }
+  list(scene = scene, thelist = thelist)
+}
+
+playwidget.shiny.tag <- function(sceneId, controls, elementId = NULL, ...) {
+  if (is.null(elementId) && !inShiny())
+    elementId <- paste0("rgl-play", sample(100000, 1))
+  
+  link <- linkScene(elementId, sceneId$children)
+  scene <- link$scene
+  sceneId$children <- link$thelist
+  
+  if (is.null(scene))
+    scene <- NA
+  
+  browsable(tagList(sceneId, playwidget(scene[1], controls, elementId = elementId,
+               ...)))
+}
+
 playwidget.shiny.tag.list <- function(sceneId, controls, elementId = NULL, ...) {
 
   if (is.null(elementId) && !inShiny())
     elementId <- paste0("rgl-play", sample(100000, 1))
-
-  scene <- NULL
-  for (i in seq_along(sceneId)) {
-    if (inherits(sceneId[[i]], "rglWebGL")) {
-      scene <- sceneId[[i]]$elementId
-      if (!is.null(elementId) && !(elementId %in% sceneId[[i]]$x$players))
-        sceneId[[i]]$x$players <- c(sceneId[[i]]$x$players, elementId)
-      break
-    }
-  }
-
+  
+  link <- linkScene(elementId, sceneId)
+  scene <- link$scene
+  sceneId <- link$thelist
+  
   if (is.null(scene))
     scene <- NA
 
   sceneId[[length(sceneId) + 1]] <-
-    playwidget(scene, controls, elementId = elementId,
+    playwidget(scene[1], controls, elementId = elementId,
                                ...)
   sceneId
 }
 
+toggleWidget <- function(sceneId, ids, subscenes = NULL, label = deparse(substitute(ids)), ...) 
+  playwidget(sceneId, 
+	subsetControl(subsets = list(ids, integer()), subscenes = subscenes),
+	start = 0, stop = 1,
+	components = "Step",
+	buttonLabels = label,
+	interval = 1,
+	...)

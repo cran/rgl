@@ -811,3 +811,22 @@ base graphics.
     suggested by Earl F. Glynn.)
   - par3d() reports on the version of OpenGL that it sees
     (as component "glVersion").
+
+0.98.1
+  - Cleaned up configure script.
+  - Cleaned up dynamic entry points.
+  - Added "add = FALSE" argument to persp3d.deldir().
+  - layout3d() handled multi-row cells incorrectly.  (Reported
+    by Felix Carbonell.)
+  - Fixed a bug in subsetControl(), and added
+    toggleWidget()
+  - Renamed the "texture" argument to persp3d.function()
+    to "texcoords" for consistency with other functions, and
+    to avoid a collision with the "texture" material property.
+  - "shiny.tag" objects are now supported as inputs to
+    playwidget(), so that rglwidget() values can be 
+    wrapped in htmltools::div() to set their style.
+  - Fixed bug in scene initialization that sometimes caused it
+    to ignore initial control values.
+  - Added figWidth() and figHeight() functions for sizing
+    rgl plots in R Markdown documents.

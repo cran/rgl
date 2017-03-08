@@ -3,16 +3,13 @@
 # AUTO-GENERATED from Makevars.in (using configure/configure.win)
 # This file is part of the RGL project.
 #
-# $Id: Makevars.in 1372 2015-10-15 19:47:06Z murdoch $
+# $Id: Makevars.in 1542 2017-01-15 23:11:03Z murdoch $
 #-DGL_VERSION_1_2 
 
 PKG_CPPFLAGS=@CPPFLAGS@ -Iext
 PKG_LIBS=@LIBS@
+PKG_CFLAGS=$(C_VISIBILITY)
 AGLSHLIB=agl$(SHLIB)
-PKG_CXXFLAGS=@CXXFLAGS@ @C_VISIBILITY@
-PKG_CFLAGS=@C_VISIBILITY@
-
-BUILD=GCC3
 
 all: $(SHLIB) 
 

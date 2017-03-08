@@ -6,13 +6,15 @@ export(.check3d,
 	clear3d, clearSubsceneList, clipplanes3d, clipplaneSlider, cube3d, cuboctahedron3d, 
         currentSubscene3d, cylinder3d,
         decorate3d, deform.mesh3d, delFromSubscene3d, divide.mesh3d, dodecahedron3d, dot3d, ellipse3d, extrude3d,
+        figWidth, figHeight,
 	gc3d, getr3dDefaults, GramSchmidt, grid3d, 
 	highlevel, hook_rgl, hook_webgl,
 	icosahedron3d, identify3d, identityMatrix,  
 	layout3d, legend3d, light3d, lines3d, lowlevel, material3d, 
         matrixSetter, mfrow3d, movie3d, mtext3d, 
 	newSubscene3d, next3d, normalize.mesh3d, observer3d, octahedron3d, oh3d, open3d, 
-	par3d, par3dinterp, par3dinterpSetter, particles3d, pch3d, persp3d, planes3d, 
+	par3d, par3dinterp, par3dinterpControl, par3dinterpSetter, 
+        particles3d, pch3d, persp3d, planes3d, 
         play3d, plot3d, plotmath3d, points3d, 
 	polygon3d, pop3d, propertySetter, propertySlider,
 	qmesh3d, quads3d, readOBJ, readSTL, rgl.abclines, rgl.bbox, rgl.bg, rgl.bringtotop, rgl.clear,
@@ -33,7 +35,7 @@ export(.check3d,
 	subsceneInfo, subsceneList, subsetSetter, subsetSlider, Sweave.snapshot,
 	surface3d, terrain3d, 
 	tetrahedron3d, text3d,
-	texts3d, title3d, toggleButton, triangulate, 
+	texts3d, title3d, toggleButton, toggleWidget, triangulate, 
 	tmesh3d, transform3d, translate3d, translationMatrix, triangles3d,
 	turn3d, useSubscene3d, vertexSetter, view3d, wire3d, 
         writeASY, writeOBJ, writePLY, writeSTL, writeWebGL)
@@ -116,7 +118,7 @@ export(rglwidget, renderRglwidget, rglwidgetOutput,
 importFrom(htmlwidgets, createWidget, shinyRenderWidget, shinyWidgetOutput, sizingPolicy)
 importFrom(htmltools, includeScript, tags, tagList, browsable)
 importFrom(jsonlite, toJSON)
-importFrom(knitr, fig_path, hook_plot_custom, image_uri, knit_hooks, knit_print, opts_knit)
+importFrom(knitr, fig_path, hook_plot_custom, image_uri, knit_hooks, knit_print, opts_current, opts_knit)
 importFrom(shiny, getDefaultReactiveDomain)
 importFrom(magrittr, "%>%")
 
@@ -124,3 +126,4 @@ S3method(playwidget, default)
 S3method(playwidget, rglWebGL)
 S3method(playwidget, rglPlayer)
 S3method(playwidget, shiny.tag.list)
+S3method(playwidget, shiny.tag)

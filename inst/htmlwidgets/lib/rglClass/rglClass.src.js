@@ -2271,28 +2271,29 @@ rglwidgetClass = function() {
         control.subscenes = this.scene.rootSubscene;
       var value = Math.round(control.value),
           subscenes = [].concat(control.subscenes),
-          i, j, entries, subsceneid,
+          fullset = [].concat(control.fullset),
+          i, j, entries, subsceneid, 
+          adds = [], deletes = [],
           ismissing = function(x) {
-            return control.fullset.indexOf(x) < 0;
+            return fullset.indexOf(x) < 0;
           },
           tointeger = function(x) {
             return parseInt(x, 10);
           };
-
-      for (i=0; i < subscenes.length; i++) {
+      if (control.accumulate)
+        for (i=0; i <= value; i++)
+          adds = adds.concat(control.subsets[i]);
+      else
+        adds = adds.concat(control.subsets[value]);
+      deletes = fullset.filter(function(x) { return adds.indexOf(x) < 0 });  
+      for (i = 0; i < subscenes.length; i++) {
         subsceneid = subscenes[i];
         if (typeof this.getObj(subsceneid) === "undefined")
           this.alertOnce("typeof object is undefined");
-        entries = this.getObj(subsceneid).objects;
-        entries = entries.filter(ismissing);
-        if (control.accumulate) {
-          for (j=0; j<=value; j++)
-            entries = entries.concat(control.subsets[j]);
-        } else {
-          entries = entries.concat(control.subsets[value]);
-        }
-        entries = entries.map(tointeger);
-        this.setSubsceneEntries(this.unique(entries), subsceneid);
+        for (j = 0; j < adds.length; j++)
+          this.addToSubscene(adds[j], subsceneid);
+        for (j = 0; j < deletes.length; j++)
+          this.delFromSubscene(deletes[j], subsceneid);
       }
     };
 
@@ -2306,17 +2307,30 @@ rglwidgetClass = function() {
           nrow = values.length/ncol,
           properties = this.repeatToLen(control.properties, ncol),
           objids = this.repeatToLen(control.objids, ncol),
-          property = properties[0], objid = objids[0],
+          property, objid = objids[0],
           obj = this.getObj(objid),
           propvals, i, v1, v2, p, entry, gl, needsBinding,
           newprop, newid,
 
           getPropvals = function() {
             if (property === "userMatrix")
-              return obj.userMatrix.getAsArray();
+              return obj.par3d.userMatrix.getAsArray();
+            else if (property === "scale" || property === "FOV" || property === "zoom")
+              return [].concat(obj.par3d[property]);
             else
-              return obj[property];
+              return [].concat(obj[property]);
           };
+          
+          putPropvals = function(newvals) {
+            if (newvals.length == 1)
+              newvals = newvals[0];
+            if (property === "userMatrix")
+              obj.par3d.userMatrix.load(newvals);
+            else if (property === "scale" || property === "FOV" || property === "zoom")
+              obj.par3d[property] = newvals;
+            else
+              obj[property] = newvals;
+          }
 
       if (direct && typeof value === "undefined")
         return;
@@ -2338,14 +2352,14 @@ rglwidgetClass = function() {
         value = Math.round(value);
       }
 
-      propvals = getPropvals();
-
       for (j=0; j<entries.length; j++) {
         entry = entries[j];
         newprop = properties[j];
         newid = objids[j];
 
-        if (newprop != property || newid != objid) {
+        if (newprop !== property || newid != objid) {
+          if (typeof property !== "undefined")
+            putPropvals(propvals);
           property = newprop;
           objid = newid;
           obj = this.getObj(objid);
@@ -2361,6 +2375,8 @@ rglwidgetClass = function() {
           this.setElement(propvals, entry, value[j]);
         }
       }
+      putPropvals(propvals);
+        
       needsBinding = [];
       for (j=0; j < entries.length; j++) {
         if (properties[j] === "values" &&
@@ -2546,6 +2562,7 @@ rglwidgetClass = function() {
       var
         self = this,
         components = [].concat(control.components),
+        buttonLabels = [].concat(control.buttonLabels),
 
         Tick = function() { /* "this" will be a timer */
           var i,
@@ -2606,29 +2623,34 @@ rglwidgetClass = function() {
           el.appendChild(output);
         },
 
-        addButton = function(label) {
+        addButton = function(which, label, active) {
           var button = document.createElement("input"),
               onclicks = {Reverse: function() { this.rgltimer.reverse();},
                     Play: function() { this.rgltimer.play();
-                                       this.value = this.rgltimer.enabled ? "Pause" : "Play"; },
+                                       this.value = this.rgltimer.enabled ? this.inactiveValue : this.activeValue; },
                    Slower: function() { this.rgltimer.slower(); },
                    Faster: function() { this.rgltimer.faster(); },
-                   Reset: function() { this.rgltimer.reset(); }};
+                   Reset: function() { this.rgltimer.reset(); },
+              	   Step:  function() { this.rgltimer.step(); }
+              };
           button.rgltimer = el.rgltimer;
           button.type = "button";
           button.value = label;
-          if (label === "Play")
+          button.activeValue = label;
+          button.inactiveValue = active;
+          if (which === "Play")
             button.rgltimer.PlayButton = button;
-          button.onclick = onclicks[label];
+          button.onclick = onclicks[which];
           button.className = "rgl-button";
-          button.id = el.id + "-" + label;
+          button.id = el.id + "-" + which;
           el.appendChild(button);
         };
 
         if (typeof control.reinit !== "undefined" && control.reinit !== null) {
           control.actions.reinit = control.reinit;
         }
-        el.rgltimer = new rgltimerClass(Tick, control.start, control.interval, control.stop, control.value, control.rate, control.loop, control.actions);
+        el.rgltimer = new rgltimerClass(Tick, control.start, control.interval, control.stop, 
+                                        control.step, control.value, control.rate, control.loop, control.actions);
         for (var i=0; i < components.length; i++) {
           switch(components[i]) {
             case "Slider": addSlider(control.start, control.stop,
@@ -2638,7 +2660,7 @@ rglwidgetClass = function() {
                                    control.step, control.precision);
               break;
             default:
-              addButton(components[i]);
+              addButton(components[i], buttonLabels[i], control.pause);
           }
         }
         el.rgltimer.Tick();
@@ -2714,13 +2736,14 @@ rglwidgetClass = function() {
     };
 }).call(rglwidgetClass.prototype);
 
-rgltimerClass = function(Tick, startTime, interval, stopTime, value, rate, loop, actions) {
+rgltimerClass = function(Tick, startTime, interval, stopTime, stepSize, value, rate, loop, actions) {
   this.enabled = false;
   this.timerId = 0;
   this.startTime = startTime;         /* nominal start time in seconds */
   this.value = value;                 /* current nominal time */
   this.interval = interval;           /* seconds between updates */
   this.stopTime = stopTime;           /* nominal stop time */
+  this.stepSize = stepSize;           /* nominal step size */
   this.rate = rate;                   /* nominal units per second */
   this.loop = loop;                   /* "none", "cycle", or "oscillate" */
   this.realStart = undefined;         /* real world start time */
@@ -2742,19 +2765,7 @@ rgltimerClass = function(Tick, startTime, interval, stopTime, value, rate, loop,
     var tick = function(self) {
       var now = new Date();
       self.value = self.multiplier*self.rate*(now - self.realStart)/1000 + self.startTime;
-      if (self.value > self.stopTime || self.value < self.startTime) {
-        if (!self.loop) {
-          self.reset();
-        } else {
-          var cycle = self.stopTime - self.startTime,
-              newval = (self.value - self.startTime) % cycle + self.startTime;
-          if (newval < self.startTime) {
-            newval += cycle;
-          }
-          self.realStart += (self.value - newval)*1000/self.multiplier/self.rate;
-          self.value = newval;
-        }
-      }
+      self.forceToRange();
       if (typeof self.Tick !== "undefined") {
         self.Tick(self.value);
       }
@@ -2764,6 +2775,22 @@ rgltimerClass = function(Tick, startTime, interval, stopTime, value, rate, loop,
     this.timerId = window.setInterval(tick, 1000*this.interval, this);
     this.enabled = true;
   };
+  
+  this.forceToRange = function() {
+    if (this.value > this.stopTime + this.stepSize/2 || this.value < this.startTime - this.stepSize/2) {
+      if (!this.loop) {
+        this.reset();
+      } else {
+        var cycle = this.stopTime - this.startTime + this.stepSize,
+            newval = (this.value - this.startTime) % cycle + this.startTime;
+        if (newval < this.startTime) {
+          newval += cycle;
+        }
+        this.realStart += (this.value - newval)*1000/this.multiplier/this.rate;
+        this.value = newval;
+      }
+    }  	
+  }
 
   this.reset = function() {
     this.value = this.startTime;
@@ -2795,5 +2822,12 @@ rgltimerClass = function(Tick, startTime, interval, stopTime, value, rate, loop,
       this.multiplier = newmult;
     }
   };
+  
+  this.step = function() {
+    this.value += this.rate*this.multiplier;
+    this.forceToRange();
+    if (typeof this.Tick !== "undefined")
+      this.Tick(this.value);
+  }
 
 }).call(rgltimerClass.prototype);

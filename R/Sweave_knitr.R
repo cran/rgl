@@ -177,3 +177,12 @@ setupKnitr <- function() {
     environment(hook_webgl)$reuse <- TRUE
   }
 }
+
+figWidth <- function() 
+  if (length(result <- with(opts_current$get(c("fig.width", "dpi", "fig.retina")),
+	     fig.width*dpi/fig.retina))) result else NULL
+  
+
+figHeight <- function() 
+  if (length(result <- with(opts_current$get(c("fig.height", "dpi", "fig.retina")),
+	     fig.height*dpi/fig.retina))) result else NULL
