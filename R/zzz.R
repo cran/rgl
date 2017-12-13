@@ -2,7 +2,7 @@
 ## R source file
 ## This file is part of rgl
 ##
-## $Id: zzz.R 1456 2016-02-28 14:31:13Z murdoch $
+## $Id: zzz.R 1569 2017-07-10 11:59:28Z murdoch $
 ##
 
 ##
@@ -22,6 +22,7 @@
   dynlib <- "rgl"
   
   onlyNULL <- rgl.useNULL()
+  unixos <- "none"
   
   if ( .Platform$OS.type == "unix" ) {
     unixos <- system("uname",intern=TRUE)
@@ -36,7 +37,12 @@
       	     call. = FALSE)
     }
   }
-  dll <- library.dynam(dynlib, pkg, lib)
+  dll <- try(library.dynam(dynlib, pkg, lib))
+  if (inherits(dll, "try-error"))
+    stop(paste("\tLoading rgl's DLL failed.", 
+    	       if (unixos == "Darwin") 
+    	         "\n\tOn MacOS, rgl depends on XQuartz, which you can download from xquartz.org."),
+         call. = FALSE)
 
   routines <- getDLLRegisteredRoutines(dynlib, addNames = FALSE)
   ns <- asNamespace(pkg)

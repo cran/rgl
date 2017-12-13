@@ -1,7 +1,7 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: scene.cpp 1463 2016-04-23 18:04:00Z murdoch $
+// $Id: scene.cpp 1561 2017-03-21 20:49:34Z murdoch $
 
 #include "gl2ps.h"
 #include "scene.h"
@@ -222,9 +222,11 @@ Subscene* Scene::whichSubscene(int mouseX, int mouseY)
   return result;
 }
 
-void Scene::setCurrentSubscene(Subscene* subscene)
+Subscene* Scene::setCurrentSubscene(Subscene* subscene)
 {
+  Subscene* prev = currentSubscene;
   currentSubscene = subscene;
+  return prev;
 }
 
 void Scene::setupLightModel()
@@ -283,7 +285,8 @@ void Scene::render(RenderContext* renderContext)
   // RENDER MODEL
   //
 
-  rootSubscene.render(renderContext);
+  rootSubscene.render(renderContext, true);  // All opaque stuff
+  rootSubscene.render(renderContext, false); // non-opaque stuff
 }
 
 

@@ -9,9 +9,11 @@ playwidgetOutput <- function(outputId, width = '0px', height = '0px'){
 #' Widget render function for use in Shiny
 #'
 #' @export
-renderPlaywidget <- function(expr, env = parent.frame(), quoted = FALSE) {
+renderPlaywidget <- function(expr, env = parent.frame(), quoted = FALSE, outputArgs = list()) {
   if (!quoted) { expr <- substitute(expr) } # force quoted
-  shinyRenderWidget(expr, rglwidgetOutput, env, quoted = TRUE)
+  markRenderFunction(playwidgetOutput,
+                     shinyRenderWidget(expr, playwidgetOutput, env, quoted = TRUE),
+  		     outputArgs = outputArgs)
 }
 
 playwidget <- function(sceneId, ...)
@@ -27,7 +29,6 @@ playwidget.default <- function(sceneId, controls, start = 0, stop = Inf, interva
 		       buttonLabels = components,
 		       pause = "Pause",
                        ...) {
-
   sceneId <- as.character(sceneId)
 
   if (length(sceneId) != 1)
@@ -37,7 +38,7 @@ playwidget.default <- function(sceneId, controls, start = 0, stop = Inf, interva
     elementId <- paste0("rgl-play", sample(100000, 1))
 
   if (!is.null(respondTo))
-    components <- NULL
+    components <- buttonLabels <- NULL
 
   if (length(stop) != 1 || !is.finite(stop)) stop <- NULL
 

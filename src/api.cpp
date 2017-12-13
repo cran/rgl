@@ -1,7 +1,7 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: api.cpp 1519 2016-09-25 19:11:54Z murdoch $
+// $Id: api.cpp 1561 2017-03-21 20:49:34Z murdoch $
 
 #include "lib.h"
 #include "DeviceManager.h"
@@ -744,10 +744,10 @@ void rgl::rgl_setsubscene(int* id)
     
   if (deviceManager && (device = deviceManager->getAnyDevice())) {
     RGLView* rglview = device->getRGLView();
-    Scene* scene = rglview->getScene();      
+    Scene* scene = rglview->getScene(); 
     Subscene* subscene = scene->getSubscene(*id);
     if (subscene) {
-      scene->setCurrentSubscene(subscene);
+      *id = scene->setCurrentSubscene(subscene)->getObjID();
     } else
       *id = 0;
   } else

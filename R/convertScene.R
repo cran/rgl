@@ -100,56 +100,53 @@ convertScene <- function(x = scene3d(), width = NULL, height = NULL, reuse = NUL
       result$snapshot <<- snapshotimg
 	}
 
-	flagnames <- c("is_lit", "is_smooth", "has_texture", "is_indexed",
+	flagnames <- c("is_lit", "is_smooth", "has_texture",
 		       "depth_sort", "fixed_quads", "is_transparent",
 		       "is_lines", "sprites_3d", "sprite_3d",
 		       "is_subscene", "is_clipplanes",
-		       "fixed_size", "is_points", "is_twosided")
+		       "fixed_size", "is_points", "is_twosided",
+		       "fat_lines")
 
 	getFlags <- function(id) {
 
 	  obj <- getObj(id)
 	  type <- obj$type
 
-		if (type == "subscene")
-			return(getSubsceneFlags(id))
+	  if (type == "subscene")
+	    return(getSubsceneFlags(id))
 
-		result <- structure(rep(FALSE, length(flagnames)), names = flagnames)
-		if (type == "clipplanes") {
-			result["is_clipplanes"] <- TRUE
-			return(result)
-		}
+	  result <- structure(rep(FALSE, length(flagnames)), names = flagnames)
+	  if (type == "clipplanes") {
+	    result["is_clipplanes"] <- TRUE
+	    return(result)
+	  }
 
-		if (type %in% c("light", "bboxdeco"))
-		  return(result)
+	  if (type %in% c("light", "bboxdeco"))
+	    return(result)
 
-		mat <- getMaterial(id)
-		result["is_lit"] <- mat$lit && type %in% c("triangles", "quads", "surface", "planes",
-							   "spheres", "sprites")
+          mat <- getMaterial(id)
+	  result["is_lit"] <- mat$lit && type %in% c("triangles", "quads", "surface", "planes",
+						     "spheres", "sprites")
 
-		result["is_smooth"] <- mat$smooth && type %in% c("triangles", "quads", "surface", "planes",
-								 "spheres")
+	  result["is_smooth"] <- mat$smooth && type %in% c("triangles", "quads", "surface", "planes",
+							   "spheres")
 
-		result["has_texture"] <- has_texture <- !is.null(mat$texture)
+	  result["has_texture"] <- has_texture <- !is.null(mat$texture)
 
-		result["is_transparent"] <- is_transparent <- (has_texture && mat$isTransparent) || any(obj$colors[,"a"] < 1)
+	  result["is_transparent"] <- is_transparent <- (has_texture && mat$isTransparent) || any(obj$colors[,"a"] < 1)
 
-		result["depth_sort"] <- depth_sort <- is_transparent && type %in% c("triangles", "quads", "surface",
+	  result["depth_sort"] <- depth_sort <- is_transparent && type %in% c("triangles", "quads", "surface",
 										    "spheres", "sprites", "text")
+	  result["sprites_3d"] <- sprites_3d <- type == "sprites" && length(obj$ids)
 
-		result["sprites_3d"] <- sprites_3d <- type == "sprites" && length(obj$ids)
-
-		result["is_indexed"] <- (depth_sort ||
-					 type %in% c("quads", "surface", "text", "sprites") ||
-					 type %in% c("triangles") && length(intersect(c("points", "lines"), c(mat$front)))) && 
-			                !sprites_3d
-
-		result["fixed_quads"] <- type %in% c("text", "sprites") && !sprites_3d
-		result["is_lines"]    <- type %in% c("lines", "linestrip", "abclines")
-		result["is_points"]   <- type == "points" || "points" %in% c(mat$front, mat$back)
-		result["is_twosided"] <- type %in% c("quads", "surface", "triangles") && 
-			                   length(unique(c(mat$front, mat$back))) > 1
+	  result["fixed_quads"] <- type %in% c("text", "sprites") && !sprites_3d
+	  result["is_lines"]    <- type %in% c("lines", "linestrip", "abclines")
+	  result["is_points"]   <- type == "points" || "points" %in% c(mat$front, mat$back)
+	  result["is_twosided"] <- type %in% c("quads", "surface", "triangles") && 
+			           length(unique(c(mat$front, mat$back))) > 1
 	  result["fixed_size"]  <- type == "text" || isTRUE(obj$fixedSize)
+	  result["fat_lines"]   <- mat$lwd != 1 && (result["is_lines"] || 
+	  					    "lines" %in% unlist(mat[c("front", "back")]))
 	  result
 	}
 
@@ -208,25 +205,32 @@ convertScene <- function(x = scene3d(), width = NULL, height = NULL, reuse = NUL
 	    text[missing] <- apply(verts[missing,], 1, function(row) format(row[!is.na(row)]))
 
 	  res <- numeric(0)
+	  bbox <- subscene$par3d$bbox
 	  repeat { # Need to make sure the ids here don't clash with those in the scene
-	    tempID <- points3d(subscene$par3d$bbox[1:2],
-	                       subscene$par3d$bbox[3:4],
-	                       subscene$par3d$bbox[5:6])
+	    tempID <- points3d(bbox[1:2],
+	                       bbox[3:4],
+	                       bbox[5:6])
 	    if (tempID > lastID)
 	      break
 	    else
 	      delFromSubscene3d(tempID)
 	  }
 
+	  intersect <- function(limits, points)
+	    which(limits[1] <= points & points <= limits[2])
+	  	
 	  # plot the clipping planes as they affect the bounding box
 	  plotClipplanes(subscene)
+	  
+	  textmat <- mat
+	  mat$front <- mat$back <- "fill"
 
-	  if (any(inds <- is.na(verts[,2]) & is.na(verts[,3])))
-	    res <- c(res, do.call(axis3d, c(list(edge = "x", at = verts[inds, 1], labels = text[inds]), mat)))
-	  if (any(inds <- is.na(verts[,1]) & is.na(verts[,3])))
-	    res <- c(res, do.call(axis3d, c(list(edge = "y", at = verts[inds, 2], labels = text[inds]), mat)))
-	  if (any(inds <- is.na(verts[,1]) & is.na(verts[,2])))
-	    res <- c(res, do.call(axis3d, c(list(edge = "z", at = verts[inds, 3], labels = text[inds]), mat)))
+	  if (any(inds <- is.na(verts[,2]) & is.na(verts[,3])) && length(keep <- intersect(bbox[1:2], verts[inds, 1])))
+	    res <- c(res, do.call(axis3d, c(list(edge = "x", at = verts[inds, 1][keep], labels = text[inds][keep]), mat)))
+	  if (any(inds <- is.na(verts[,1]) & is.na(verts[,3])) && length(keep <- intersect(bbox[3:4], verts[inds, 2])))
+	    res <- c(res, do.call(axis3d, c(list(edge = "y", at = verts[inds, 2][keep], labels = text[inds][keep]), mat)))
+	  if (any(inds <- is.na(verts[,1]) & is.na(verts[,2])) && length(keep <- intersect(bbox[5:6], verts[inds, 3])))
+	    res <- c(res, do.call(axis3d, c(list(edge = "z", at = verts[inds, 3][keep], labels = text[inds][keep]), mat)))
 	  res <- c(res, do.call(box3d, mat))
 	  delFromSubscene3d(c(res, tempID))
 	  res
@@ -257,7 +261,8 @@ convertScene <- function(x = scene3d(), width = NULL, height = NULL, reuse = NUL
 	  }
 	  if (length(origIds))
 	    names(origIds) <- as.character(ids)
-	  structure(ids, origIds = origIds)
+	  if (is.null(ids)) ids
+	  else structure(ids, origIds = origIds)
 	}
 
 		knowntypes <- c("points", "linestrip", "lines", "triangles", "quads",
@@ -415,10 +420,12 @@ convertScene <- function(x = scene3d(), width = NULL, height = NULL, reuse = NUL
 	    obj$par3d$viewport$width <- obj$par3d$viewport$width/fullviewport$width
 	    obj$par3d$viewport$y <- obj$par3d$viewport$y/fullviewport$height
 	    obj$par3d$viewport$height <- obj$par3d$viewport$height/fullviewport$height
-	  } else if (obj$type == "planes" && nrow(obj$vertices) > 3) {
+	  }
+	  if (obj$type == "planes" && nrow(obj$vertices) > 3) {
 	    obj$vertices = obj$vertices[1:3,] # These will be redone
 	                                      # in Javascript
-	  }
+	  } else if (obj$type == "spheres")
+	    obj$centers <- obj$vertices
 	  setObj(cids[i], obj)
 	}
 

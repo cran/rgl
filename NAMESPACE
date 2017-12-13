@@ -104,7 +104,7 @@ export(.check3d,
  importFrom(grDevices, col2rgb, colorRamp, dev.off, png, 
  	    postscript, rgb, xy.coords, xyz.coords)
  importFrom(stats, approxfun, qchisq, qf, splinefun, var)
- importFrom(utils, file_test, flush.console,
+ importFrom(utils, count.fields, file_test, flush.console,
  	    packageVersion, read.table)
  
 # These were in rglwidget
@@ -119,7 +119,7 @@ importFrom(htmlwidgets, createWidget, shinyRenderWidget, shinyWidgetOutput, sizi
 importFrom(htmltools, includeScript, tags, tagList, browsable)
 importFrom(jsonlite, toJSON)
 importFrom(knitr, fig_path, hook_plot_custom, image_uri, knit_hooks, knit_print, opts_current, opts_knit)
-importFrom(shiny, getDefaultReactiveDomain)
+importFrom(shiny, getDefaultReactiveDomain, markRenderFunction)
 importFrom(magrittr, "%>%")
 
 S3method(playwidget, default)

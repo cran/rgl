@@ -1,8 +1,11 @@
 #include "SphereMesh.h"
+#include "subscene.h"
 
 #include "opengl.h"
+#include <map>
 
 using namespace rgl;
+using namespace std;
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -115,6 +118,8 @@ void SphereMesh::update(const Vertex& scale)
   }
 }
 
+struct gridpt {int i; int j;};
+
 void SphereMesh::draw(RenderContext* renderContext)
 {
   vertexArray.beginUse();
@@ -131,13 +136,12 @@ void SphereMesh::draw(RenderContext* renderContext)
     int next = curr + (segments+1);
 
     glBegin(GL_QUAD_STRIP);
-    for(int i=0;i<=segments;i++) {
-      glArrayElement( next + i );
-      glArrayElement( curr + i );
+    for(int j=0;j<=segments;j++) {
+      glArrayElement( next + j );
+      glArrayElement( curr + j );
     }
     glEnd();
   }
-
   vertexArray.endUse();
 
   if (genNormal)
@@ -147,5 +151,36 @@ void SphereMesh::draw(RenderContext* renderContext)
     texCoordArray.endUse();
 }
 
+void SphereMesh::drawBegin(RenderContext* renderContext)
+{
+  vertexArray.beginUse();
+	
+  if (genNormal)
+    normalArray.beginUse();
+	
+  if (genTexCoord)
+    texCoordArray.beginUse();
+  
+  glBegin(GL_QUADS);
+}
+	
+void SphereMesh::drawPrimitive(RenderContext* renderContext, int i)
+{
+  glArrayElement(i);
+  glArrayElement(i + 1);
+  glArrayElement(i + segments + 2);
+  glArrayElement(i + segments + 1);
+}
 
-
+void SphereMesh::drawEnd(RenderContext* renderContext)
+{
+  glEnd();
+	
+  vertexArray.endUse();
+	
+  if (genNormal)
+    normalArray.endUse();
+	
+  if (genTexCoord)
+    texCoordArray.endUse();
+}

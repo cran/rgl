@@ -38,7 +38,15 @@ public:
 */
 
   void draw(RenderContext* renderContext);
+  
+  void drawBegin(RenderContext* renderContext);
+  void drawPrimitive(RenderContext* renderContext, int i);
+  void drawEnd(RenderContext* renderContext);
 
+  int getPrimitiveCount() { return (segments + 1)*sections; }
+  
+  Vertex getPrimitiveCenter(int i) { return vertexArray[i]; }
+  
 private:
   
   Vertex center;

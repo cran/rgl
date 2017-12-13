@@ -80,7 +80,7 @@ playwidget(
 ## ------------------------------------------------------------------------
 time <- 0:500
 xyz <- cbind(cos(time/20), sin(time/10), time)
-lineid <- plot3d(xyz, type="l", col = c("black", "black"))["data"]
+lineid <- plot3d(xyz, type="l", col = "black")["data"]
 sphereid <- spheres3d(xyz[1, , drop=FALSE], radius = 8, col = "red")
 rglwidget() %>%
 playwidget(list(

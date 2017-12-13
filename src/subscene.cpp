@@ -571,7 +571,7 @@ void Subscene::update(RenderContext* renderContext)
     
 }
 
-void Subscene::render(RenderContext* renderContext)
+void Subscene::render(RenderContext* renderContext, bool opaquePass)
 {
   renderContext->subscene = this;
   
@@ -579,7 +579,7 @@ void Subscene::render(RenderContext* renderContext)
   glScissor(pviewport.x, pviewport.y, pviewport.width, pviewport.height);
   SAVEGLERROR;
   
-  if (background) {
+  if (background && opaquePass) {
     GLbitfield clearFlags = background->getClearFlags(renderContext);
 
     // clear
@@ -603,27 +603,22 @@ void Subscene::render(RenderContext* renderContext)
   
   setupLights(renderContext);
   
-  if (background) {
+  if (opaquePass) {
+    if (background) {
     //
     // RENDER BACKGROUND
     //
 
-    // DISABLE Z-BUFFER TEST
-    glDisable(GL_DEPTH_TEST);
+      // DISABLE Z-BUFFER TEST
+      glDisable(GL_DEPTH_TEST);
 
-    // DISABLE Z-BUFFER FOR WRITING
-    glDepthMask(GL_FALSE);
+      // DISABLE Z-BUFFER FOR WRITING
+      glDepthMask(GL_FALSE);
   
-    background->render(renderContext);
-    SAVEGLERROR;
-  }
-  
-  //
-  // RENDER MODEL
-  //
-
-  // if (data_bbox.isValid() ) {
-
+      background->render(renderContext);
+      SAVEGLERROR;
+    }
+ 
     //
     // RENDER SOLID SHAPES
     //
@@ -637,9 +632,6 @@ void Subscene::render(RenderContext* renderContext)
     // DISABLE BLENDING
     glDisable(GL_BLEND);
     
-    // CLIP PLANES
-    renderClipplanes(renderContext);
-    
     //
     // RENDER BBOX DECO
     //
@@ -648,11 +640,15 @@ void Subscene::render(RenderContext* renderContext)
       bboxdeco->render(renderContext);  // This changes the modelview/projection/viewport
 
     SAVEGLERROR;
-
+  }
+  // CLIP PLANES
+  renderClipplanes(renderContext);
+  
+  if (opaquePass) {
     renderUnsorted(renderContext);
 
 // #define NO_BLEND
-
+  } else {
 #ifndef NO_BLEND
     //
     // RENDER BLENDED SHAPES
@@ -688,23 +684,22 @@ void Subscene::render(RenderContext* renderContext)
     
     Zrow = P.getRow(2);
     Wrow = P.getRow(3);
-    
+
     renderZsort(renderContext);
 #endif    
+  }
+  /* Reset flag(s) now that scene has been rendered */
+  getModelViewpoint()->scaleChanged = false;
 
-    /* Reset flag(s) now that scene has been rendered */
-    getModelViewpoint()->scaleChanged = false;
-
-    /* Reset clipplanes */
-    disableClipplanes(renderContext);
-    SAVEGLERROR;
-  // }
+  /* Reset clipplanes */
+  disableClipplanes(renderContext);
+  SAVEGLERROR;
   
   // Render subscenes
     
   std::vector<Subscene*>::const_iterator iter;
   for(iter = subscenes.begin(); iter != subscenes.end(); ++iter) 
-    (*iter)->render(renderContext);
+    (*iter)->render(renderContext, opaquePass);
 }
 
 void Subscene::calcDataBBox()
@@ -882,9 +877,9 @@ void Subscene::renderZsort(RenderContext* renderContext)
   for (iter = zsortShapes.begin() ; iter != zsortShapes.end() ; ++iter ) {
     Shape* shape = *iter;
     shape->renderBegin(renderContext);
-    for (int j = 0; j < shape->getElementCount(); j++) {
+    for (int j = 0; j < shape->getPrimitiveCount(); j++) {
 	ShapeItem* item = new ShapeItem(shape, j);
-	float distance = getDistance( shape->getElementCenter(j) );
+	float distance = getDistance( shape->getPrimitiveCenter(j) );
       distanceMap.insert( std::pair<const float,ShapeItem*>(-distance, item) );
       index++;
     }
@@ -901,7 +896,7 @@ void Subscene::renderZsort(RenderContext* renderContext)
         shape->drawBegin(renderContext);
         prev = shape;
       }
-      shape->drawElement(renderContext, item->itemnum);
+      shape->drawPrimitive(renderContext, item->itemnum);
       delete item;
     }
     if (prev) prev->drawEnd(renderContext);

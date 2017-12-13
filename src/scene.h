@@ -4,7 +4,7 @@
 // C++ header file
 // This file is part of RGL
 //
-// $Id: scene.h 1415 2015-11-26 20:31:02Z murdoch $
+// $Id: scene.h 1561 2017-03-21 20:49:34Z murdoch $
 
 #include <vector>
 #include "types.h"
@@ -83,7 +83,7 @@ public:
   /** 
    * set/get the current subscene
    **/
-  void setCurrentSubscene(Subscene* subscene);
+  Subscene* setCurrentSubscene(Subscene* subscene); /* return previous one */
   Subscene* getCurrentSubscene() const { return currentSubscene; }
   const Subscene* getRootSubscene() const { return &rootSubscene; }
   
