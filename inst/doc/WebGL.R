@@ -93,6 +93,22 @@ playwidget(list(
                  "Reset", "Slider", "Label"),
   loop = TRUE)
 
+## ------------------------------------------------------------------------
+ ids <- with(iris, plot3d(Sepal.Length, Sepal.Width, Petal.Length, 
+                  type="s", col=as.numeric(Species)))
+ par3d(mouseMode = "selecting")
+ rglwidget(shared = rglShared(ids["data"])) %>% rglMouse()
+
+## ------------------------------------------------------------------------
+library(crosstalk)
+sd <- SharedData$new(mtcars)
+ids <- plot3d(sd$origData())
+# Copy the key and group from existing shared data
+rglsd <- rglShared(ids["data"], key = sd$key(), group = sd$groupName())
+htmltools::tagList(rglwidget(shared = rglsd),
+		   filter_checkbox("cylinderselector", 
+		   		   "Cylinders", sd, ~ cyl, inline = TRUE))
+
 ## ----plot3d2-------------------------------------------------------------
 plotids <- with(iris, plot3d(Sepal.Length, Sepal.Width, Petal.Length, 
                   type="s", col=as.numeric(Species)))

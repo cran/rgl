@@ -12,6 +12,33 @@ rmarkdownOutput <- function() {
   NULL
 }
 
+rglShared <- function(id, key = NULL, group = NULL,
+		      deselectedFade = 0.1, 
+		      deselectedColor = NULL,
+		      selectedColor = NULL,
+		      selectedIgnoreNone = TRUE,
+		      filteredFade = 0,
+		      filteredColor = NULL) {
+  data <- as.data.frame(rgl.attrib(id, "vertices"))
+  attr(data, "rglId") <- as.integer(id)
+  attr(data, "rglOptions") <- list(deselectedFade = deselectedFade,
+  				   deselectedColor = if (!is.null(deselectedColor)) as.numeric(col2rgb(deselectedColor, alpha = TRUE)/255),
+  				   selectedColor =   if (!is.null(selectedColor)) as.numeric(col2rgb(selectedColor, alpha = TRUE)/255), 
+  				   selectedIgnoreNone = selectedIgnoreNone,
+  				   filteredFade = filteredFade,
+  				   filteredColor =   if (!is.null(filteredColor)) as.numeric(col2rgb(filteredColor, alpha = TRUE)/255))
+  n <- nrow(data)
+  if (!n)
+    stop("No vertices in object ", id)
+  if (!is.null(key) && (n != length(key) || anyDuplicated(key)))
+    stop("'key' must have exactly one unique value for each vertex")
+  result <- if (is.null(group))
+    SharedData$new(data, key)
+  else
+    SharedData$new(data, key, group)
+  structure(result, class = c("rglShared", class(result)))
+}
+
 rglwidget <- local({
   reuseDF <- NULL
 
@@ -19,7 +46,10 @@ rglwidget <- local({
            controllers = NULL, snapshot = FALSE,
            elementId = NULL,
            reuse = !interactive(),
-           webGLoptions = list(preserveDrawingBuffer = TRUE), ...) {
+           webGLoptions = list(preserveDrawingBuffer = TRUE), 
+  	   shared = NULL, ...) {
+  force(shared) # It might plot something...
+  	
   if (is.na(reuse))
     reuseDF <- NULL # local change only
   else if (!reuse)
@@ -31,10 +61,40 @@ rglwidget <- local({
   if (!inherits(x, "rglscene"))
     stop("First argument should be an rgl scene.")
   
+  if (!is.list(shared))
+    shared <- list(shared)
+  if (length(shared)) {
+    x$crosstalk <- list(key = vector("list", length(shared)),
+    		        group = character(length(shared)),
+    		        id = integer(length(shared)),
+    		        options = vector("list", length(shared)))
+    dependencies <- crosstalkLibs()
+  } else {
+    x$crosstalk <- list(key = list(), 
+    		        group = character(),
+    		        id = integer(),
+    		        options = list())
+    dependencies <- NULL    
+  }
+  	
+  for (i in seq_along(shared)) {
+    s <- shared[[i]]
+    if (is.SharedData(s) && inherits(s, "rglShared")) {
+      x$crosstalk$key[[i]] <- s$key()
+      x$crosstalk$group[i] <- s$groupName()
+      x$crosstalk$id[i] <- attr(s$origData(), "rglId")
+      x$crosstalk$options[[i]] <- attr(s$origData(), "rglOptions")
+    } else if (!is.null(s))
+      stop("'shared' must be an object produced by rglShared() or a list of these")
+  }
   x = convertScene(x, width, height, snapshot = snapshot,
                    elementId = elementId, reuse = reuseDF)
   if (!is.na(reuse))
     reuseDF <<- attr(x, "reuse")
+
+  if (inherits(controllers, "shiny.tag") || 
+      (inherits(controllers, "htmlwidget") && !inherits(controllers, "rglPlayer")))
+    controllers <- tagList(controllers)
 
   if (inherits(controllers, "rglPlayer")) {
     if (is.na(controllers$x$sceneId)) {
@@ -45,19 +105,19 @@ rglwidget <- local({
   } else if (inherits(controllers, "shiny.tag.list")) {
     x$players <- character()
     for (i in seq_along(controllers)) {
-      if (inherits(controllers[[i]], "rglPlayer") && is.na(controllers[[i]]$x$sceneId)) {
-        x$players <- c(x$players, controllers[[i]]$elementId)
+      tag <- controllers[[i]]
+      if (inherits(tag, "rglPlayer") && is.na(tag$x$sceneId)) {
+        x$players <- c(x$players, tag$elementId)
         if (!is.null(elementId))
           controllers[[i]]$x$sceneId <- elementId
-      }
+      } else if (inherits(tag, "shiny.tag") && !tagHasAttribute(tag, "rglSceneId"))
+      	controllers[[i]] <- tagAppendAttributes(tag, rglSceneId = elementId)
     }
   } else if (!is.null(controllers))
     x$players <- controllers
 
   x$webGLoptions <- webGLoptions
 
-  x$context <- list(shiny = inShiny(), rmarkdown = rmarkdownOutput())
-  	
   # create widget
   attr(x, "TOJSON_ARGS") <- list(na = "string")
   result <- structure(htmlwidgets::createWidget(
@@ -67,11 +127,12 @@ rglwidget <- local({
     height = height,
     package = 'rgl',
     elementId = elementId,
+    dependencies = dependencies,
     ...
   ), rglReuse = attr(x, "reuse"))
   if (inherits(controllers, "shiny.tag.list")) {
     controllers[[length(controllers) + 1]] <- result
-    controllers
+    browsable(controllers)
   } else if (inherits(controllers, "rglPlayer")) {
     browsable(tagList(controllers, result))
   } else
