@@ -17,14 +17,17 @@ HTMLWidgets.widget({
 
   renderValue: function(el, x, instance) {
     var ShowValue = function(value) {
-        var rglinstance = window[x.sceneId].rglinstance;
+        var rgldiv = document.getElementById(x.sceneId),
+            rglinstance;
         x.value = value;
       /* We might be running before the scene exists.  If so, it
          will have to apply our initial value. */
-        if (typeof rglinstance !== "undefined") {
+        if (rgldiv && (rglinstance = rgldiv.rglinstance)) {
           rglinstance.Player(el, x);
           x.initialized = true;
         } else {
+          if (x.initialized)
+            rglwidgetClass.prototype.alertOnce("rgl widget '" + x.sceneId + "' not found.");
           x.initialized = false;
           instance.rglPlayer = x;
         }
@@ -33,9 +36,9 @@ HTMLWidgets.widget({
     el.rglPlayer = x;
     instance.rglPlayer = x;
 
-    if (x.respondTo !== null) {
+    if (x.respondTo) {
       var control = window[x.respondTo];
-      if (typeof control !== "undefined") {
+      if (control) {
         var self = this, i,
             state = "idle";
 

@@ -3,8 +3,8 @@ options(rgl.printRglwidget=FALSE)
 
 library(rgl)
 
-if (requireNamespace("rmarkdown") && !rmarkdown::pandoc_available("1.13.1"))
-  stop("These vignettes assume pandoc version 1.13.1; older versions will not work.")
+if (requireNamespace("rmarkdown") && !rmarkdown::pandoc_available("1.14"))
+  stop("These vignettes assume pandoc version 1.14; older versions may not work.")
 
 setupKnitr()
 
@@ -55,15 +55,17 @@ cat('<style>
     ')
 
 writeIndex <- function(cols = 4) {
-  documentedfns <- sort(documentedfns)
-  entries <- paste0('<a href="#', documentedfns, '">', documentedfns, '</a>&nbsp;&nbsp;')
-  len <- length(entries)
-  padding <- ((len + cols - 1) %/% cols) * cols - len
-  if (padding)
-    entries <- c(entries, rep("", length.out=padding))
-  cat('\n<div class="nostripes">\n')
-  print(knitr::kable(matrix(entries, ncol=cols), format="pandoc"))
-  cat("</div>\n")
+  if (!is.null(documentedfns)) {
+    documentedfns <- sort(documentedfns)
+    entries <- paste0('<a href="#', documentedfns, '">', documentedfns, '</a>&nbsp;&nbsp;')
+    len <- length(entries)
+    padding <- ((len + cols - 1) %/% cols) * cols - len
+    if (padding)
+      entries <- c(entries, rep("", length.out=padding))
+    cat('\n<div class="nostripes">\n')
+    print(knitr::kable(matrix(entries, ncol=cols), format="pandoc"))
+    cat("</div>\n")
+  }
 }
 
 # This displays the string code as `r code` when entered

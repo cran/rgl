@@ -893,3 +893,19 @@ base graphics.
     1.14, as 1.13.1 is no longer sufficient.
   - Sphere rendering within R sometimes showed strange
     artifacts.
+    
+0.99.16
+  - Minor fixups to the vignettes.
+  - Now uses the manipulateWidget::combineWidgets function
+    when putting multiple objects into a pipe.
+  - Now accepts fixed CSS units in width and height for rglwidgets.
+  - playwidget() is no longer an S3 generic function.
+  - Textures specified in global material list (e.g. by being
+    used in rgl.* functions) were not handled properly.
+    (Reported by Ty Tuff.)
+  - The configure code to detect freetype has been updated
+    to use pkg-config (code contributed by Dirk Eddelbuettel.)
+  - If a playwidget() has been initialized but it can't find
+    the rglwidget() that it is controlling (likely due to a 
+    typo somewhere), it now throws an alert message.
+    

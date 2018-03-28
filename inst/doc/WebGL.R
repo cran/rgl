@@ -21,7 +21,7 @@ toggleWidget(ids = plotids["data"], label = "Data")
 
 ## ------------------------------------------------------------------------
 toggleWidget(NA, ids = plotids["data"], label = "Data") %>%
-rglwidget(controllers = ., height = 0.8*figHeight()) 
+rglwidget(controllers = .) 
 
 ## ------------------------------------------------------------------------
 clear3d() # Remove the earlier display
@@ -41,10 +41,11 @@ virginica <- with(subset(iris, Species == "virginica"),
 aspect3d(1,1,1)
 axesid <- decorate3d()
 rglwidget() %>%
-toggleWidget(ids = setosa) %>%
+toggleWidget(NA, ids = setosa) %>%
 toggleWidget(ids = versicolor) %>%
 toggleWidget(ids = virginica) %>%
-toggleWidget(ids = axesid)
+toggleWidget(ids = axesid) %>% 
+asRow(last = 4)
 
 ## ------------------------------------------------------------------------
 rglwidget() %>%
@@ -71,11 +72,12 @@ which <- which.min(setosavals$Sepal.Width)
 init <- setosavals$Sepal.Length[which]
 rglwidget() %>%
 playwidget(
-  vertexControl(values = matrix(c(init,   0,      0,       0, 
-                                       8,    1,      1,       1), nrow = 2, byrow = TRUE),
-                       attributes = c("x", "red", "green", "blue"),
-		     vertices = which, objid = setosa),
-	step=0.01)
+  vertexControl(values = matrix(c(init,   0,   0,   0, 
+                                     8,   1,   1,   1), 
+                                nrow = 2, byrow = TRUE),
+                attributes = c("x", "red", "green", "blue"),
+                vertices = which, objid = setosa),
+	step = 0.01)
 
 ## ------------------------------------------------------------------------
 time <- 0:500
@@ -94,20 +96,26 @@ playwidget(list(
   loop = TRUE)
 
 ## ------------------------------------------------------------------------
- ids <- with(iris, plot3d(Sepal.Length, Sepal.Width, Petal.Length, 
+ids <- with(iris, plot3d(Sepal.Length, Sepal.Width, Petal.Length, 
                   type="s", col=as.numeric(Species)))
- par3d(mouseMode = "selecting")
- rglwidget(shared = rglShared(ids["data"])) %>% rglMouse()
+par3d(mouseMode = "selecting")
+rglwidget(shared = rglShared(ids["data"])) %>% 
+rglMouse()
+
+## ----eval = FALSE--------------------------------------------------------
+#  devtools::install_github("dmurdoch/manipulateWidget@forRGL")
 
 ## ------------------------------------------------------------------------
 library(crosstalk)
 sd <- SharedData$new(mtcars)
-ids <- plot3d(sd$origData())
+ids <- plot3d(sd$origData(), col = mtcars$cyl, type = "s")
 # Copy the key and group from existing shared data
 rglsd <- rglShared(ids["data"], key = sd$key(), group = sd$groupName())
-htmltools::tagList(rglwidget(shared = rglsd),
-		   filter_checkbox("cylinderselector", 
-		   		   "Cylinders", sd, ~ cyl, inline = TRUE))
+rglwidget(shared = rglsd) %>%
+asRow("Mouse mode: ", rglMouse(getWidgetId(.)), 
+      "Subset: ", filter_checkbox("cylinderselector", 
+		                "Cylinders", sd, ~ cyl, inline = TRUE),
+      last = 4, colsize = c(1,2,1,2), height = 60)
 
 ## ----plot3d2-------------------------------------------------------------
 plotids <- with(iris, plot3d(Sepal.Length, Sepal.Width, Petal.Length, 
