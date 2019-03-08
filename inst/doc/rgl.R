@@ -30,6 +30,10 @@ persp3d(loglik,
         xlim = xlim, ylim = ylim, zlim = zlim,
         n = 30)
 
+## ------------------------------------------------------------------------
+methods(plot3d)
+methods(persp3d)
+
 ## ----webgl=TRUE, fig.width=3, fig.height=3-------------------------------
 triangles3d(cbind(x=rnorm(9), y=rnorm(9), z=rnorm(9)), col = "green")
 decorate3d()

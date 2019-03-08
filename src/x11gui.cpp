@@ -4,7 +4,7 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: x11gui.cpp 1197 2014-12-20 19:07:08Z murdoch $
+// $Id: x11gui.cpp 1669 2019-03-05 16:28:50Z murdoch $
 
 // Uncomment for verbose output on stderr:
 // #define RGL_X11_DEBUG
@@ -351,22 +351,22 @@ GLFont* X11WindowImpl::getFont(const char* family, int style, double cex,
   
   if (useFreeType) {
 #ifdef HAVE_FREETYPE
-    SEXP Rfontname = VECTOR_ELT(PROTECT(eval(lang2(install("rglFonts"), 
-                                          ScalarString(mkChar(family))), rglNamespace)),
+    SEXP Rfontname = VECTOR_ELT(PROTECT(eval(PROTECT(lang2(PROTECT(install("rglFonts")), 
+                                          PROTECT(ScalarString(mkChar(family))))), rglNamespace)),
                                           0);
     if (isString(Rfontname) && length(Rfontname) >= style) {
       const char* fontname = CHAR(STRING_ELT(Rfontname, style-1)); 
       GLFTFont* font=new GLFTFont(family, style, cex, fontname);
       if (font->font) {
         fonts.push_back(font);
-        UNPROTECT(1);
+        UNPROTECT(4);
         return font;
       } else {
         warning(font->errmsg);
         delete font;
       }
     }
-    UNPROTECT(1);
+    UNPROTECT(4);
 #endif
   }
   if (strcmp(family, fonts[0]->family)) warning("font family \"%s\" not found, using \"%s\"", 

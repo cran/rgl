@@ -1,7 +1,7 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: fps.cpp 1115 2014-07-18 13:51:22Z murdoch $
+// $Id: fps.cpp 1625 2018-09-10 13:43:57Z murdoch $
 
 #include "fps.h"
 
@@ -37,7 +37,7 @@ void FPS::render(double t, RenderContext* ctx)
   glRasterPos2f( 1.0f, -0.9f);
 
   if (ctx->font)
-    ctx->font->draw(buffer, strlen(buffer), -1, 0.0, *ctx);
+    ctx->font->draw(buffer, strlen(buffer), -1, 0.0, 0, *ctx);
 
   framecnt++;
 }

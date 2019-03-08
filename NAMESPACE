@@ -1,5 +1,5 @@
 export(.check3d, 
-        abclines3d, addNormals, addToSubscene3d, 
+        abclines3d, addNormals, addToSubscene3d, arc3d,
         arrow3d, as.mesh3d, asRow,
         ageSetter, asEuclidean, asHomogeneous, aspect3d, axes3d, axis3d, box3d,
         bbox3d, bg3d, bgplot3d, 
@@ -31,12 +31,12 @@ export(.check3d,
 	scale3d, scaleMatrix, scene3d, segments3d, select3d, selectpoints3d,
 	rgl.setMouseCallbacks, rgl.setWheelCallback, setupKnitr, 
         setUserShaders, shade3d, 
-	shapelist3d, show2d, snapshot3d, 
+	shapelist3d, shinyGetPar3d, shinySetPar3d, show2d, snapshot3d, 
 	spheres3d, spin3d, sprites3d, subdivision3d, 
 	subsceneInfo, subsceneList, subsetSetter, subsetSlider, Sweave.snapshot,
 	surface3d, terrain3d, 
-	tetrahedron3d, text3d,
-	texts3d, title3d, toggleButton, toggleWidget, triangulate, 
+	tetrahedron3d, text3d, texts3d, 
+	thigmophobe3d, title3d, toggleButton, toggleWidget, triangulate, 
 	tmesh3d, transform3d, translate3d, translationMatrix, triangles3d,
 	turn3d, useSubscene3d, vertexSetter, view3d, wire3d, 
         writeASY, writeOBJ, writePLY, writeSTL, writeWebGL)
@@ -62,6 +62,9 @@ export(.check3d,
  S3method(plot3d, mesh3d)
  
  S3method(as.mesh3d, deldir)
+ S3method(as.mesh3d, tri)
+ S3method(as.mesh3d, triSht)
+ S3method(as.mesh3d, ashape3d)
  
  S3method(translate3d, default)
  S3method(rotate3d, default)
@@ -76,6 +79,10 @@ export(.check3d,
  S3method(persp3d, default)
  S3method(persp3d, "function")
  S3method(persp3d, deldir)
+ S3method(persp3d, tri)
+ S3method(persp3d, triSht)
+ S3method(persp3d, ashape3d)
+ S3method(persp3d, formula)
  
  S3method(plot3d, rglscene)
  S3method(plot3d, rglobject)
@@ -84,12 +91,19 @@ export(.check3d,
  S3method(plot3d, rglsubscene)
  S3method(plot3d, "function")
  S3method(plot3d, deldir)
+ S3method(plot3d, tri)
+ S3method(plot3d, triSht)
+ S3method(plot3d, ashape3d)
+ S3method(plot3d, formula)
+ S3method(plot3d, lm)
  
  S3method(print, rglscene)
  S3method(print, rglobject)
  S3method(print, rglsubscene)
  S3method(print, indexedSetter)
  S3method(print, rglId)
+ S3method(print, mesh3d)
+ S3method(print, shapelist3d)
  
  S3method(knit_print, rglId)
  
@@ -122,7 +136,8 @@ importFrom(htmltools, HTML, includeScript, tags, tagAppendAttributes,
 	   tagHasAttribute, tagList, browsable, resolveDependencies)
 importFrom(jsonlite, toJSON)
 importFrom(knitr, fig_path, hook_plot_custom, image_uri, knit_hooks, knit_print, opts_current, opts_knit)
-importFrom(shiny, getDefaultReactiveDomain, markRenderFunction)
+importFrom(shiny, getDefaultReactiveDomain, markRenderFunction, registerInputHandler)
 importFrom(magrittr, "%>%")
 importFrom(manipulateWidget, combineWidgets)
+importFrom(stats, coef, predict, residuals)
 

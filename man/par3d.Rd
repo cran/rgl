@@ -3,6 +3,7 @@
 \alias{open3d}
 \alias{r3dDefaults}
 \alias{getr3dDefaults}
+\concept{activeSubscene}
 \concept{antialias}
 \concept{bbox}
 \concept{cex}
@@ -20,6 +21,7 @@
 \concept{skipRedraw}
 \concept{useFreeType}
 \concept{userMatrix}
+\concept{userProjection}
 \concept{viewport}
 \concept{windowRect}
 \concept{zoom}
@@ -124,6 +126,9 @@ r3dDefaults
   may only be used in queries, i.e., they do \emph{not} set anything.
   
   \describe{
+    \item{\code{activeSubscene}}{\emph{\bold{R.O.}} integer.  Used
+    with \code{\link{rgl.setMouseCallbacks}}:  during a 
+    callback, indicates the id of the subscene that was clicked.}
     \item{\code{antialias}}{\emph{\bold{R.O.}} in \code{par3d}, may be
     set in \code{open3d}. The (requested) number of hardware
     antialiasing planes to use (with multisample antialiasing).  The
@@ -179,8 +184,6 @@ r3dDefaults
 	    \code{\link{rgl.setWheelCallback}}.}
 	}
       A common default on Mac OSX is to convert a two finger drag on a trackpad to a mouse wheel rotation.
-      
-      Applies to the whole device.
     }
     \item{\code{observer}}{\emph{\bold{R.O.}}; the position of the observer relative to
       the model.  Set by \code{\link{observer3d}}.  See the Note below.}
@@ -193,6 +196,8 @@ r3dDefaults
       Applies to the whole device.}
     \item{\code{userMatrix}}{a 4 by 4 matrix describing user actions to
       display the scene.}
+    \item{\code{userProjection}}{a 4 by 4 matrix describing
+changes to the projection.}
     \item{\code{viewport}}{real.  A vector giving the dimensions of the
       window in pixels.  The entries are taken to be \code{c(x, y, width, height)} where
       \code{c(x, y)} are the coordinates in pixels of the lower left corner within the window.}
@@ -249,8 +254,9 @@ of the following matrices:
 to translate the origin to the centre of the viewing region.
 \item Using this location and information on the
 normals (which have been similarly transformed), it performs lighting calculations. 
-\item It obtains the projection matrix \code{P = par3d("projMatrix")} and
-multiplies the point by it giving \code{P \%*\% u = (x2, y2, z2, w2)}.
+\item It obtains the projection matrix \code{P = par3d("projMatrix")} based on the bounding box and field of view
+or observer location, multiplies that by the \code{userProjection} matrix to give \code{P}.  It multiplies the point
+by it giving \code{P \%*\% u = (x2, y2, z2, w2)}.
 \item It converts back to Euclidean coordinates by dividing the first 3 coordinates by \code{w2}.
 \item The new value \code{z2/w2} represents the depth into the scene of the point.  Depending
 on what has already been plotted, this depth might be obscured, in which case nothing more is plotted.

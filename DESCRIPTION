@@ -1,11 +1,12 @@
 Package: rgl
-Version: 0.99.16
+Version: 0.100.18
 Title: 3D Visualization Using OpenGL
 Author: Daniel Adler <dadler@uni-goettingen.de>, Duncan Murdoch <murdoch@stats.uwo.ca>, and others (see README)
 Maintainer: Duncan Murdoch <murdoch@stats.uwo.ca>
 Depends: R (>= 3.2.0)
 Suggests: MASS, rmarkdown, deldir, orientlib, lattice, misc3d,
-        rstudioapi, magick
+        rstudioapi, magick, plotrix (>= 3.7-3), tripack, interp,
+        alphashape3d
 Imports: graphics, grDevices, stats, utils, htmlwidgets, htmltools,
         knitr, jsonlite (>= 0.9.20), shiny, magrittr, crosstalk,
         manipulateWidget (>= 0.9.0)
@@ -22,6 +23,6 @@ SystemRequirements: OpenGL, GLU Library, XQuartz (on OSX), zlib
 BugReports: https://r-forge.r-project.org/projects/rgl/
 VignetteBuilder: knitr
 NeedsCompilation: yes
-Packaged: 2018-03-28 12:29:10 UTC; murdoch
+Packaged: 2019-03-05 21:02:05 UTC; murdoch
 Repository: CRAN
-Date/Publication: 2018-03-28 14:53:30 UTC
+Date/Publication: 2019-03-08 16:10:06 UTC

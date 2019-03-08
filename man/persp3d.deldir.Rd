@@ -58,7 +58,8 @@ and the third as the z coordinate.
 
 The \code{...} parameters in \code{plot3d.deldir} 
 are passed to \code{persp3d.deldir}; in \code{persp3d.deldir} they are
-passed to \code{as.mesh3d.deldir}; in \code{as.mesh3d.deldir} they are used as material parameters
+passed to both \code{as.mesh3d.deldir} and \code{persp3d.mesh3d}; 
+in \code{as.mesh3d.deldir} they are used as material parameters
 in a \code{\link{tmesh3d}} call.
 }
 \examples{
@@ -67,12 +68,15 @@ y <- rnorm(200, sd = 5)
 r <- sqrt(x^2 + y^2)
 z <- 10 * sin(r)/r
 col <- cm.colors(20)[1 + round(19*(z - min(z))/diff(range(z)))]
+
 if (requireNamespace("deldir", quietly = TRUE)) {
+  save <- options(rgl.meshColorWarning = FALSE)
   dxyz <- deldir::deldir(x, y, z = z, suppressMsge = TRUE)
   persp3d(dxyz, col = col)
   open3d()
   # Do it without smoothing and with a different orientation.
   persp3d(dxyz, col = col, coords = c("z", "x", "y"), smooth = FALSE)
+  options(save)
 }
 }
 \keyword{graphics}

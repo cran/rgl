@@ -9,9 +9,27 @@
 #include "Light.h"
 #include <map>
 
+
 namespace rgl {
 
 enum Embedding { EMBED_INHERIT=1, EMBED_MODIFY, EMBED_REPLACE };
+enum Embedded  { EM_VIEWPORT = 0, EM_PROJECTION, EM_MODEL, EM_MOUSEHANDLERS};
+
+enum MouseModeID {mmNONE = 0, mmTRACKBALL, mmXAXIS, mmYAXIS, mmZAXIS, mmPOLAR, 
+                  mmSELECTING, mmZOOM, mmFOV, mmUSER};
+
+enum MouseSelectionID {msNONE=1, msCHANGING, msDONE, msABORT};
+
+enum WheelModeID {wmNONE = 0, wmPUSH, wmPULL, wmUSER};
+
+typedef void (*userControlPtr)(void *userData, int mouseX, int mouseY);
+typedef void (*userControlEndPtr)(void *userData);
+typedef void (*userCleanupPtr)(void **userData);
+typedef void (*userWheelPtr)(void *userData, int dir);
+
+typedef void (Subscene::*viewControlPtr)(int mouseX,int mouseY);
+typedef void (Subscene::*viewControlEndPtr)();
+typedef void (Subscene::*viewWheelPtr)(int dir);
 
 class Subscene : public SceneNode {
   /* Subscenes do their own projection.  They can inherit, modify or replace the
@@ -24,6 +42,7 @@ private:
   void setupProjMatrix(RenderContext* rctx, const Sphere& viewSphere);
   void setupModelMatrix(RenderContext* rctx, Vertex center);
   void setupModelViewMatrix(RenderContext* rctx, Vertex center);
+  void setDefaultMouseMode();
   
   void disableLights(RenderContext* rctx);
   void setupLights(RenderContext* rctx);
@@ -56,7 +75,7 @@ private:
   /** 
    * How is this subscene embedded in its parent?
    **/
-  Embedding do_viewport, do_projection, do_model;
+  Embedding do_viewport, do_projection, do_model, do_mouseHandlers;
   
   /**
    * This viewport on the (0,0) to (1,1) scale
@@ -64,7 +83,7 @@ private:
   Rect2d viewport;
 public:
   Subscene(Embedding in_viewport, Embedding in_projection, Embedding in_model,
-           bool in_ignoreExtent);
+           Embedding in_mouseHandlers, bool in_ignoreExtent);
   virtual ~Subscene( );
 
   bool add(SceneNode* node);
@@ -166,18 +185,24 @@ public:
   void setIgnoreExtent(int in_ignoreExtent);
   
   void setEmbedding(int which, Embedding value);  /* which is 0=viewport, 1=projection, 2=model */
-  Embedding getEmbedding(int which);
+  Embedding getEmbedding(Embedded which);
+  Subscene* getMaster(Embedded which);
   
   void setUserMatrix(double* src);
+  void setUserProjection(double* src);
   void setScale(double* src);
   void setViewport(double x, double y, double width, double height); /* Sets relative (i.e. [0,1]x[0,1]) viewport size */
   void setPosition(double* src);
   
   void getUserMatrix(double* dest);
+  void getUserProjection(double* dest);
   void getScale(double* dest);
   void getPosition(double* dest);
   
-  void setMouseListeners(unsigned int n, int* ids);
+  double* getMousePosition();
+  void clearMouseListeners();
+  void addMouseListener(Subscene* sub);
+  void deleteMouseListener(Subscene* sub);
   void getMouseListeners(unsigned int max, int* ids);
   
   float getDistance(const Vertex& v) const;
@@ -195,11 +220,10 @@ public:
   Background* get_background(); 
   
   /* This vector lists other subscenes that will be controlled
-     by mouse actions on this one.  We do it by ID rather
-     than pointer so we can detect when any are invalid.  
-     Initially only the subscene itself is in the list. */
+     by mouse actions on this one. We need to delete
+     those entries if the subscene is deleted!  */
      
-  std::vector<int> mouseListeners;
+  std::vector<Subscene*> mouseListeners;
   
   // These are set after rendering the scene
   Vec4 Zrow;
@@ -207,6 +231,38 @@ public:
   Matrix4x4 modelMatrix, projMatrix;
   Rect2 pviewport;  // viewport in pixels
     
+  /**
+   * mouse support
+   */
+  void buttonBegin(int which, int mouseX, int mouseY);
+  void buttonUpdate(int which, int mouseX, int mouseY);
+  void buttonEnd(int which);
+  
+  void wheelRotate(int dir);
+  
+  MouseModeID getMouseMode(int button);
+  void        setMouseMode(int button, MouseModeID mode);
+  WheelModeID getWheelMode();
+  void        setWheelMode(WheelModeID mode);
+
+  void        setMouseCallbacks(int button, userControlPtr begin, userControlPtr update, 
+                                userControlEndPtr end, userCleanupPtr cleanup, void** user);
+  void        getMouseCallbacks(int button, userControlPtr *begin, userControlPtr *update, 
+                                userControlEndPtr *end, userCleanupPtr *cleanup, void** user);
+  void        setWheelCallback(userWheelPtr wheel, void* user);
+  void        getWheelCallback(userWheelPtr *wheel, void** user);
+  
+  // o DRAG FEATURE: mouseSelection
+  int drag;
+  double  mousePosition[4];
+  
+  void mouseSelectionBegin(int mouseX,int mouseY);
+  void mouseSelectionUpdate(int mouseX,int mouseY);
+  void mouseSelectionEnd();
+  
+  MouseSelectionID getSelectState();
+  void setSelectState(MouseSelectionID state);
+  
 private:
     
   /**
@@ -227,6 +283,85 @@ private:
   
   bool ignoreExtent;
   bool bboxChanges;
+  
+  /**
+   * mouse support
+   */
+  
+  viewControlPtr ButtonBeginFunc[3], ButtonUpdateFunc[3];
+  viewControlEndPtr ButtonEndFunc[3];
+  viewWheelPtr WheelRotateFunc;
+  
+  viewControlPtr getButtonBeginFunc(int which);
+  viewControlPtr getButtonUpdateFunc(int which);
+  viewControlEndPtr getButtonEndFunc(int which);
+  
+  MouseModeID mouseMode[3];
+  
+  WheelModeID wheelMode;
+  
+  MouseSelectionID selectState;
+  
+  void noneBegin(int mouseX, int mouseY) {};
+  void noneUpdate(int mouseX, int mouseY)  {};
+  void noneEnd() {};
+  
+  // o DRAG FEATURE: adjustDirection
+  
+  void polarBegin(int mouseX, int mouseY);
+  void polarUpdate(int mouseX, int mouseY);
+  void polarEnd();
+  
+  void trackballBegin(int mouseX, int mouseY);
+  void trackballUpdate(int mouseX, int mouseY);
+  void trackballEnd();
+  
+  void oneAxisBegin(int mouseX, int mouseY);
+  void oneAxisUpdate(int mouseX, int mouseY);  
+  
+  void wheelRotateNone(int dir) {};
+  void wheelRotatePull(int dir);
+  void wheelRotatePush(int dir);
+  
+  PolarCoord camBase, dragBase, dragCurrent;
+  Vertex rotBase, rotCurrent, axis[3];
+  
+  
+  // o DRAG FEATURE: adjustZoom
+  
+  void adjustZoomBegin(int mouseX, int mouseY);
+  void adjustZoomUpdate(int mouseX, int mouseY);
+  void adjustZoomEnd();
+  
+  int zoomBaseY;
+  
+  // o DRAG FEATURE: adjustFOV (field of view)
+  
+  void adjustFOVBegin(int mouseX, int mouseY);
+  void adjustFOVUpdate(int mouseX, int mouseY);
+  void adjustFOVEnd();
+  
+  int fovBaseY;
+  
+  // o DRAG FEATURE: user supplied callback
+  
+  void userBegin(int mouseX, int mouseY);
+  void userUpdate(int mouseX, int mouseY);
+  void userEnd();
+
+  bool busy;
+  int activeButton;
+  
+  void* wheelData;
+  userWheelPtr wheelCallback;
+  
+  void userWheel(int dir);
+  
+  void* userData[9];
+  userControlPtr beginCallback[3], updateCallback[3];
+  userControlEndPtr endCallback[3];
+  userCleanupPtr cleanupCallback[3];
+  
 };
 
 } // namespace rgl

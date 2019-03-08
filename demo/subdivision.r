@@ -1,6 +1,6 @@
 # RGL-demo: subdivision surfaces
 # author: Daniel Adler
-# $Id: subdivision.r 568 2007-03-11 18:15:27Z dmurdoch $
+# $Id: subdivision.r 1634 2018-09-23 20:53:02Z murdoch $
 
 rgl.demo.subdivision <- function()
 {
@@ -24,10 +24,10 @@ rgl.demo.subdivision <- function()
   
   common <- c(alpha=0.5)
   
-  part(0, -5.50, color="blue"   , common )
-  part(1, -1.75, color="yellow" , common )
-  part(2,  1.75, color="red"    , common )
-  part(3,  5.50, color="green"  , common )
+  part(0, -5.50, color="blue"   )
+  part(1, -1.75, color="yellow" )
+  part(2,  1.75, color="red"    )
+  part(3,  5.50, color="green"  )
 
 }
 

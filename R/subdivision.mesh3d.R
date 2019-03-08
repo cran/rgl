@@ -5,7 +5,7 @@
 # using addition operations and homogenous coordinates 
 # by Daniel Adler 
 #
-# $Id: subdivision.mesh3d.R 1113 2014-07-16 13:03:01Z murdoch $
+# $Id: subdivision.mesh3d.R 1634 2018-09-23 20:53:02Z murdoch $
 # 
 
 edgemap <- function( size ) {
@@ -192,7 +192,6 @@ divide.mesh3d <- function (mesh,vb=mesh$vb, ib=mesh$ib, it=mesh$it ) {
   result$normals <- newnormals
   result$texcoords <- newtexcoords
   
-  result$primitivetype <- primout
   return ( result )
 }
 

@@ -2,7 +2,7 @@
 ## R source file
 ## This file is part of rgl
 ##
-## $Id: zzz.R 1569 2017-07-10 11:59:28Z murdoch $
+## $Id: zzz.R 1632 2018-09-21 14:02:31Z murdoch $
 ##
 
 ##
@@ -77,9 +77,10 @@
   if (!ret) {
     warning("'rgl_init' failed, running with rgl.useNULL = TRUE", call. = FALSE)
     options(rgl.useNULL = TRUE)
-    rgl.quit()
     rgl.init(initValue, TRUE)	
   }
+  
+  registerInputHandler("shinyPar3d", convertShinyPar3d)
   
 }
 

@@ -2,7 +2,7 @@
 ## R source file
 ## This file is part of rgl
 ##
-## $Id: scene.R 1517 2016-09-19 20:12:25Z murdoch $
+## $Id: scene.R 1666 2019-02-16 15:24:57Z murdoch $
 ##
 
 ##
@@ -112,7 +112,7 @@ rgl.attrib.count <- function( id, attrib )
 rgl.attrib.ncol.values <- c(vertices=3, normals=3, colors=4, texcoords=2, dim=2,
             texts=1, cex=1, adj=2, radii=1, centers=3, ids=1,
 	    usermatrix=4, types=1, flags=1, offsets=1,
-	    family=1, font=1)
+	    family=1, font=1, pos=1)
 
 rgl.attrib.info <- function( id = rgl.ids("all", 0)$id, attribs = NULL, showAll = FALSE) {
   ncol <- rgl.attrib.ncol.values
@@ -183,7 +183,8 @@ rgl.attrib <- function( id, attrib, first=1,
                            "flag",	     # flags
 			   "offset",         # offsets
   			   "family",         # family
-  			   "font"            # font
+  			   "font",            # font
+			     "pos"              # pos
                            )[[attrib]]
   if (attrib == 14 && count)
     if (id %in% rgl.ids("lights", subscene = 0)$id)
@@ -323,7 +324,7 @@ rgl.bbox <- function(
   ddata <- as.numeric(c(xunit, yunit, zunit, marklen, expand))
 
   ret <- .C( rgl_bbox,
-    success = FALSE,
+    success = as.integer(FALSE),
     idata,
     ddata,
     as.numeric(xat),
@@ -705,23 +706,28 @@ rgl.abclines <- function(x, y=NULL, z=NULL, a, b=NULL, c=NULL, ...)
 ## add texts
 ##
 
-rgl.texts <- function(x, y=NULL, z=NULL, text, adj = 0.5, justify, family=par3d("family"), 
-                      font=par3d("font"), cex=par3d("cex"), useFreeType=par3d("useFreeType"), ... )
+rgl.texts <- function(x, y=NULL, z=NULL, text, adj = 0.5, pos = NULL, offset = 0.5, 
+                      family=par3d("family"), font=par3d("font"), 
+                      cex=par3d("cex"), useFreeType=par3d("useFreeType"), ... )
 {
   rgl.material( ... )
 
-  if (!missing(justify)) {
-     warning("'justify' is deprecated: please use 'adj' instead")
-     if (!missing(adj)) {
-        warning("'adj' and 'justify' both specified: 'justify' ignored")
-     } else adj <- switch(justify,left=0,center=0.5,right=1)
+  vertex  <- rgl.vertex(x,y,z)
+  nvertex <- rgl.nvertex(vertex)
+  
+  if (!is.null(pos)) {
+    npos <- length(pos)
+    stopifnot(all(pos %in% 1:4))
+    stopifnot(length(offset) == 1)
+    adj <- offset
+  } else {
+    pos <- 0
+    npos <- 1
   }
   if (length(adj) == 0) adj = c(0.5, 0.5)
   if (length(adj) == 1) adj = c(adj, 0.5)
   if (length(adj) > 2) warning("Only the first two entries of 'adj' are used")
   
-  vertex  <- rgl.vertex(x,y,z)
-  nvertex <- rgl.nvertex(vertex)
   if (!length(text)) {
     if (nvertex)
       warning("No text to plot")
@@ -751,6 +757,8 @@ rgl.texts <- function(x, y=NULL, z=NULL, text, adj = 0.5, justify, family=par3d(
     as.integer(font),
     as.numeric(cex),
     as.integer(useFreeType),
+    as.integer(npos),
+    as.integer(pos),
     NAOK=TRUE
   )
   
@@ -852,9 +860,11 @@ msCHANGING <- 2
 msDONE     <- 3
 msABORT    <- 4
 
-rgl.selectstate <- function()
+rgl.selectstate <- function(dev = rgl.cur(), subscene = currentSubscene3d(dev))
 {
 	ret <- .C( rgl_selectstate,
+    	as.integer(dev),
+    	as.integer(subscene),
     	success = FALSE,
     	state = as.integer(0),
     	mouseposition = double(4)
@@ -866,21 +876,22 @@ rgl.selectstate <- function()
 }
 
 
-rgl.select <- function(button = c("left", "middle", "right"))
+rgl.select <- function(button = c("left", "middle", "right"), 
+                       dev = rgl.cur(), subscene = currentSubscene3d(dev))
 {
 	if (rgl.useNULL())
 	  return(NULL)
 	button <- match.arg(button)
 	
-	newhandler <- par3d("mouseMode")
+	newhandler <- par3d("mouseMode", dev = dev, subscene = subscene)
 	newhandler[button] <- "selecting"
-	oldhandler <- par3d(mouseMode = newhandler)
-	on.exit(par3d(mouseMode = oldhandler))
+	oldhandler <- par3d(mouseMode = newhandler, dev = dev, subscene = subscene)
+	on.exit(par3d(mouseMode = oldhandler, dev = dev, subscene = subscene))
 	
-	while ((result <- rgl.selectstate())$state < msDONE)
+	while ((result <- rgl.selectstate(dev = dev, subscene = subscene))$state < msDONE)
 		Sys.sleep(0.1)
 	
-	rgl.setselectstate("none")
+	rgl.setselectstate("none", dev = dev, subscene = subscene)
 	
 	if (result$state == msDONE)
 	    return(result$mouseposition)
@@ -888,12 +899,15 @@ rgl.select <- function(button = c("left", "middle", "right"))
 	    return(NULL)
 }
 
-rgl.setselectstate <- function(state = "current")
+rgl.setselectstate <- function(state = "current", 
+                               dev = rgl.cur(), subscene = currentSubscene3d(dev))
 {
 	state = rgl.enum(state, current=0, none = 1, middle = 2, done = 3, abort = 4)
 	idata <- as.integer(c(state))
 	
 	  ret <- .C( rgl_setselectstate, 
+	    as.integer(dev),
+	    as.integer(subscene),
 	    success = FALSE,
 	    state = idata
 	  )
@@ -904,15 +918,16 @@ rgl.setselectstate <- function(state = "current")
 	c("none", "middle", "done", "abort")[ret$state]
 }
 
-rgl.projection <- function()
+rgl.projection <- function(dev = rgl.cur(), subscene = currentSubscene3d(dev))
 {
-    list(model = par3d("modelMatrix"),
-    	 proj = par3d("projMatrix"),
-    	 view = par3d("viewport"))
+    list(model = par3d("modelMatrix", dev = dev, subscene = subscene),
+    	 proj = par3d("projMatrix", dev = dev, subscene = subscene),
+    	 view = par3d("viewport", dev = dev, subscene = subscene))
 }   
      
-rgl.select3d <- function(button = c("left", "middle", "right")) {
-  rect <- rgl.select(button = button)
+rgl.select3d <- function(button = c("left", "middle", "right"), 
+                         dev = rgl.cur(), subscene = currentSubscene3d(dev)) {
+  rect <- rgl.select(button = button, dev = dev, subscene = subscene)
   if (is.null(rect)) return(NULL)
   
   llx <- rect[1]
@@ -930,7 +945,8 @@ rgl.select3d <- function(button = c("left", "middle", "right")) {
   	lly <- ury
   	ury <- temp
   }
-  proj <- rgl.projection()
+  proj <- rgl.projection(dev = dev, subscene = subscene)
+  proj$view["x"] <- proj$view["y"] <- 0
   function(x,y=NULL,z=NULL) {
     pixel <- rgl.user2window(x,y,z,projection=proj)
     x <- pixel[,1]

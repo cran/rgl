@@ -1,6 +1,6 @@
 #
 # R3D rendering functions - rgl implementation
-# $Id: r3d.rgl.R 1526 2016-12-06 13:27:29Z murdoch $
+# $Id: r3d.rgl.R 1667 2019-02-16 20:57:21Z murdoch $
 # 
 
 # Node Management
@@ -40,7 +40,8 @@ pop3d       <- function(...) {.check3d(); rgl.pop(...)}
     "lwd", "fog", "point_antialias", "line_antialias",
     "texture", "textype", "texmipmap",
     "texminfilter", "texmagfilter", "texenvmap",
-    "depth_mask", "depth_test", "isTransparent")
+    "depth_mask", "depth_test", "isTransparent",
+    "polygon_offset")
 
 .material3d.readOnly <- "isTransparent"
 
@@ -60,7 +61,19 @@ pop3d       <- function(...) {.check3d(); rgl.pop(...)}
    f(...)
 } 
      
-     
+# This one just gets the material args
+# If warn is TRUE, give a warning instead of ignoring extras.
+
+.getMaterialArgs <- function(..., material = list(), warn = FALSE) {
+  fullyNamed <- as.list(match.call(rgl.material, 
+                           as.call(c(list(as.name("rgl.material"),
+                                        ...), material))))[-1]
+  good <- names(fullyNamed) %in% .material3d
+  if (warn && !all(good))
+    warning("Argument(s) ", paste(names(fullyNamed)[!good], collapse = ", "), " not matched.")
+  fullyNamed[good]
+}
+
 material3d  <- function (...)
 {
     args <- list(...)
@@ -166,14 +179,16 @@ quads3d     <- function(x,y=NULL,z=NULL,...) {
 }
 
 text3d      <- function(x, y = NULL, z = NULL,
-			texts, adj = 0.5, justify, 
+			texts, adj = 0.5, pos = NULL, offset = 0.5,
 			usePlotmath = is.language(texts), ...) {
   if (usePlotmath) 
-    return(plotmath3d(x = x, y = y, z = z, text = texts, adj = adj, ...))
+    return(plotmath3d(x = x, y = y, z = z, text = texts, adj = adj, 
+                      pos = pos, offset = offset, ...))
   .check3d(); save <- material3d(); on.exit(material3d(save))
   new <- .fixMaterialArgs(..., Params = save)
-  if (!missing(justify)) new <- c(list(justify=justify), new)
-  do.call("rgl.texts", c(list(x=x,y=y,z=z,text=texts,adj=adj),new))
+  do.call("rgl.texts", c(list(x = x, y = y, z = z, text = texts, 
+                              adj = adj, pos=pos,
+                              offset = offset), new))
 }
 texts3d	    <- text3d
 
@@ -254,7 +269,7 @@ particles3d <- function(x,y=NULL,z=NULL,radius=1,...) sprites3d(
 # r3d default settings for new windows
 
 r3dDefaults <- list(userMatrix = rotationMatrix(290*pi/180, 1, 0, 0),
-		  mouseMode = c("trackball", "zoom", "fov"),
+		  mouseMode = c("trackball", "zoom", "fov", "pull"),
 		  FOV = 30,
 		  bg = list(color="white"),
 		  family = "sans",

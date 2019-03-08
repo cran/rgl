@@ -4,7 +4,7 @@
 // C++ header file
 // This file is part of RGL
 //
-// $Id: scene.h 1561 2017-03-21 20:49:34Z murdoch $
+// $Id: scene.h 1661 2019-02-09 21:30:30Z murdoch $
 
 #include <vector>
 #include "types.h"
@@ -148,6 +148,7 @@ private:
   std::vector<SceneNode*> nodes;
 
   void deleteAll(std::vector<SceneNode*> list);
+  void removeReferences(SceneNode* node);
 
 };
 

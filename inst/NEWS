@@ -496,7 +496,7 @@ v0.93.952
 
 v0.93.960
   - writeWebGL now forces the position attribute to location 0, a
-    recommended optimization strategy.  The colour attribute is
+    recommended optimization strategy.  The color attribute is
     forced to location 1.
   - we now check for invalid characters when drawing text using bitmapped
     fonts (bug 4787)
@@ -870,7 +870,7 @@ base graphics.
     Line endings and joins are rounded, not squared as in OpenGL.
   - The 65535 vertex limit has been removed (at least in browsers
     that support big indices).
-  - The requirement that colours being controlled by an ageControl or vertexControl
+  - The requirement that colors being controlled by an ageControl or vertexControl
     be duplicated in the original has been removed.
   - axes3d("bbox") didn't send parameters to bbox3d().
   - Fixed examples for snapshot3d() and writeASY() so that they don't
@@ -894,7 +894,7 @@ base graphics.
   - Sphere rendering within R sometimes showed strange
     artifacts.
     
-0.99.16
+0.99.17
   - Minor fixups to the vignettes.
   - Now uses the manipulateWidget::combineWidgets function
     when putting multiple objects into a pipe.
@@ -909,3 +909,58 @@ base graphics.
     the rglwidget() that it is controlling (likely due to a 
     typo somewhere), it now throws an alert message.
     
+0.100.18
+  - Added check for "highp" support to fragment shader in rglwidget.
+  - Added shinyGetPar3d() and shinySetPar3d() functions for Shiny
+    interaction.
+  - Updated text3d() and related functions:  dropped deprecated
+    argument "justify", added "pos" and "offset" like base graphics
+    text().
+  - Added thigmophobe3d() function to place labels away from
+    other points using plotrix::thigmophobe().
+  - Fixed texture bug introduced in fix in 0.99.16.
+  - The persp3d.deldir method didn't display labels properly.
+  - When the X11 initialization failed, rgl messed up the S3
+    methods system.  (Reported by Gregory Jefferis.)
+  - Improved support of mesh3d objects:  added print methods,
+    added meshColor argument to wire3d() and shade3d() to control how
+    colors are interpreted, added "rgl.meshColorWarning"
+    option to control warnings about these changes.
+  - Added arc3d() function to draw spherical arcs
+  - Added "polygon_offset" material property, to allow lines to be drawn
+    on surfaces.
+  - Added plot3d(), persp3d() and as.mesh3d() methods for
+    "triSht" and "tri" classes (produced by interp and tripack
+    packages.)
+  - The plot3d.mesh3d() method now has the same default
+    for "aspect" as the default method.
+  - Probably due to a compiler change, rgl.bbox() was 
+    returning 0/1 instead of the id of the axes.
+  - pch3d() was failing in rglwidget() for some shapes.
+    (Reported by Luca Scrucca.)
+  - pch3d() now allows separate "color" and "bg" specifications
+    for each point.  In addition, the default for the "lit"
+    material property is now FALSE, so by default filled
+    symbols will match the requested colour regardless of 
+    lighting.
+  - par3d(mouseMode = "none") was not implemented properly,
+    so appeared to be a no-op.
+  - plot3d() methods for objects of class "formula" and "lm"
+    and a persp3d() method for objects of class "formula"
+    have been added.  (A bug in the implementation of
+    as.mesh3d.deldir() was found and fixed during the 
+    latter addition.)
+  - as.mesh3d(), plot3d() and persp3d() methods for "ashape3d"
+    objects from the alphashape3d package have been added.
+  - The mouse mode (trackball, zoom, etc.) can now be applied
+    separately to each individual subscene in a scene.
+    (By default the mode is inherited from the root subscene.)
+  - Added par3d("userProjection"), to allow the user to supply
+    a change to the projection after all other display calculations 
+    have been done.
+  - Added par3d("activeSubscene"), to allow mouse callback
+    functions to determine which subscene was clicked.
+  - Selection functions did not work well with subscenes.
+  - Deleting an object that has been added as a 3D sprite
+    caused rgl to crash.
+  - A number of memory bugs found by rchk have been fixed.

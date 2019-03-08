@@ -1,10 +1,11 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: scene.cpp 1561 2017-03-21 20:49:34Z murdoch $
+// $Id: scene.cpp 1668 2019-02-18 14:21:20Z murdoch $
 
 #include "gl2ps.h"
 #include "scene.h"
+#include "SpriteSet.h"
 #include "rglmath.h"
 #include "render.h"
 #include "geom.h"
@@ -24,7 +25,7 @@ using namespace rgl;
 ObjID SceneNode::nextID = 1;
 
 Scene::Scene()
-: rootSubscene(EMBED_REPLACE, EMBED_REPLACE, EMBED_REPLACE, false),
+: rootSubscene(EMBED_REPLACE, EMBED_REPLACE, EMBED_REPLACE, EMBED_REPLACE, false),
   doIgnoreExtent(false)
 {
   nodes.reserve(6);
@@ -106,6 +107,8 @@ bool Scene::pop(TypeID type, int id)
     if (node == &rootSubscene) 
       return true;
     hide((*iter)->getObjID());
+    // Rprintf("removing references to %d\n", id);
+    removeReferences(*iter); /* Might be in mouseListeners */
     nodes.erase(iter);
     delete node;
 
@@ -141,6 +144,46 @@ void Scene::hide(int id)
             break;
           default: error("hiding type %d not implemented", type);
         }
+      }
+    }
+  }
+}
+
+void Scene::removeReferences(SceneNode* node) {
+  int id = node->getObjID(), type = node->getTypeID();
+  // Rprintf("node id = %d type = %u\n", id, node);
+  for (std::vector<SceneNode*>::iterator iter = nodes.begin(); iter != nodes.end(); ++iter) {
+    int itertype = (*iter)->getTypeID();
+    // Rprintf("itertype = %u\n", itertype);
+    if (itertype == SUBSCENE) {
+      Subscene* subscene = (Subscene*)*iter;
+      switch (type) {
+      case SUBSCENE:
+        subscene->deleteMouseListener((Subscene*)node);
+        setCurrentSubscene(subscene->hideSubscene(id, getCurrentSubscene() ) );
+        break;
+      case SHAPE:
+        subscene->hideShape(id);
+        break;
+      case LIGHT:
+        subscene->hideLight(id);
+        break;
+      case BACKGROUND:
+        subscene->hideBackground(id);
+        break;
+      case USERVIEWPOINT:
+      case MODELVIEWPOINT:
+        subscene->hideViewpoint(id);
+        break;
+      }
+    } else if (itertype == SHAPE) {
+      char buffer[20];
+      buffer[19] = 0;
+      (*iter)->getTypeName(buffer, 20);
+      if (!strcmp(buffer, "sprites")) {
+        // Rprintf("removing from sprites\n");
+        SpriteSet* sprite = (SpriteSet*)*iter;
+        sprite->remove_shape(id);
       }
     }
   }
