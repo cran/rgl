@@ -15,6 +15,7 @@ SphereSet::SphereSet(Material& in_material, int in_ncenter, double* in_center, i
  : Shape(in_material, in_ignoreExtent, SHAPE, true), 
    center(in_ncenter, in_center), 
    radius(in_nradius, in_radius),
+   lastdrawn(-1),
    lastendcap(true)
 {
   material.colorPerVertex(false);

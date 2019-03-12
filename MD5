@@ -1,5 +1,5 @@
 e73499cb89e0d6e97b8ba271c46739fd *COPYING
-c02fd132758a7cd7134fe4510cd577a1 *DESCRIPTION
+8842574d75aff07cd50d914c0550b4f2 *DESCRIPTION
 c7a0907c48009c53c3f3e62186116b32 *NAMESPACE
 8d6709606696359548d94a4bf71ce78d *R/Sweave_knitr.R
 3c20a30ef6a398649341d9b1f227cb7d *R/addNormals.mesh3d.R
@@ -80,19 +80,19 @@ df244a7d325a77c36f2312f2fde095f2 *demo/shapes3d.R
 a8cbd8dd339ba65adf23a165a8dfeef6 *demo/simpleShinyRgl.R
 866ebfda71509e83a98a7a034e004269 *demo/stereo.R
 c19c31ef34d40d4c41c7bc0caf112054 *demo/subdivision.r
-0476d7b2b6452b6316e44ebc857c69ca *inst/NEWS
+596d12e78991a9e0697116f6e28d20c4 *inst/NEWS
 8c5d291e3f47c3395fff092f09f599b9 *inst/WebGL/template.html
 5bac46c36b13eac1302260ee06b16c0f *inst/demodata/population.dat
 5544dce93555cfaced50ee41283e9e58 *inst/demodata/region.dat
 466888b2baf565e5f4fead5a98bbbee7 *inst/doc/WebGL.R
 7bf4c0cb3a8f66ebf6335e04f5a21d4d *inst/doc/WebGL.Rmd
-bf712cc3811433b7e8190c01ff5faa1d *inst/doc/WebGL.html
+550d41904c055944c32a5b88cc22464e *inst/doc/WebGL.html
 975c5cb8a92968f780d33de734d7fbc7 *inst/doc/legacyWebGL.R
 ab830fea771ea15dd6687b7c5f9f655c *inst/doc/legacyWebGL.Rmd
-fe1a0426c5a019fc83899683cda2e7a3 *inst/doc/legacyWebGL.html
+ccfcbad454590cbb3deffeb66b117c24 *inst/doc/legacyWebGL.html
 50c5f1367fc2f207aa59c7b5523c5704 *inst/doc/rgl.R
 c54a03f6dd7e548c7c52511d1fb4740d *inst/doc/rgl.Rmd
-b923c2fad7b877bc6753e7f05fa7b256 *inst/doc/rgl.html
+f2d0ca915a104377c4a338c95c1effa1 *inst/doc/rgl.html
 b4ef592c88333c7c509dd74fcd1912d9 *inst/fonts/FreeMono.ttf
 867469f13ff81dec9adf2ae2f6ea2899 *inst/fonts/FreeSans.ttf
 dc0004a804503e126bc99998c7a1c677 *inst/fonts/FreeSerif.ttf
@@ -255,7 +255,7 @@ d7c94d6f91b685b66f6c8a8f0d07cbce *src/Shape.cpp
 950926361ccd090317fffa6dfee40ecd *src/Shape.h
 f3747a908762d82d661d5a0763cd6691 *src/SphereMesh.cpp
 89d265b652286745456a86979b4aba9a *src/SphereMesh.h
-6190f6bc32da04e5f8841d29ace1e9b2 *src/SphereSet.cpp
+37ecee6be260ef25e6621298960b18b7 *src/SphereSet.cpp
 a12c4e2f7bfd3a9ecae816c8ae41a8fa *src/SphereSet.h
 4edefd006312b1f5e683a7114e287a80 *src/SpriteSet.cpp
 dbce32392dea327d9093ea622dd2bc93 *src/SpriteSet.h
@@ -263,7 +263,7 @@ dbce32392dea327d9093ea622dd2bc93 *src/SpriteSet.h
 e9a31e14589146f498de32e1d7e1a706 *src/String.h
 008d462c17fdb089f4ee25d0790529ef *src/Surface.cpp
 230ecf15f274784204529487720e5451 *src/Surface.h
-8fc60e9c8bd472b7b6129010c0ac5f6d *src/TextSet.cpp
+838c4d9579b67728bd339a96dc6d8908 *src/TextSet.cpp
 e97ef3d84175284df5356155fee73b2e *src/TextSet.h
 3edabc59652f715da748cc16eb58f92e *src/Texture.cpp
 57491612dd6fd9fd94519e1598a226b0 *src/Texture.h
@@ -417,7 +417,7 @@ f86f0aba5a78f960896f74e7ea58bf25 *src/rglview.cpp
 d907d0f446f8121a01b33f750138d84a *src/scene.h
 1d5d3cc76b12eab1f7be77c4e9564a39 *src/select.cpp
 f3fb1125c8e91830a0447f265c0d33e4 *src/select.h
-2cf300c14454cdfe9fb27a92fbd3459a *src/subscene.cpp
+8f5ddc15b75db73a7e3284125143dda3 *src/subscene.cpp
 7cfa67317c7580aa1890254221cfd2e3 *src/subscene.h
 b1c1e5e8d4dc94c9f6e3967575fab332 *src/types.h
 54ee84077be4682054b5e17097af5cb7 *src/win32gui.cpp
