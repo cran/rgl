@@ -1,7 +1,6 @@
 \name{mesh3d}
 \alias{shape3d}
 \alias{mesh3d}
-\alias{as.mesh3d}
 \alias{qmesh3d}
 \alias{tmesh3d}
 \alias{dot3d}
@@ -30,7 +29,6 @@
          normals = NULL, texcoords = NULL)
   tmesh3d(vertices, indices, homogeneous = TRUE, material = NULL, 
          normals = NULL, texcoords = NULL)
-  as.mesh3d(x, ...)
   
   cube3d(trans = identityMatrix(), ...)  
   tetrahedron3d(trans = identityMatrix(), ...)  
@@ -49,8 +47,7 @@
   \method{shade3d}{mesh3d}(x, override = TRUE, meshColor = c("vertices", "faces", "legacy"), ...)
 }
 \arguments{
-  \item{x}{a \code{mesh3d} object (class \code{qmesh3d} or \code{tmesh3d}), or for \code{as.mesh3d} an object
-  with a method defined.}
+  \item{x}{a \code{mesh3d} object (class \code{qmesh3d} or \code{tmesh3d}).}
   \item{vertices}{3- or 4-component vector of coordinates}
   \item{indices}{4-component vector of vertex indices}
   \item{homogeneous}{logical indicating if homogeneous (four component) coordinates are used.}
@@ -68,9 +65,6 @@
   of vertex coordinates together with a matrix of indices indicating which vertex is
   part of which face.  Such objects may have  triangular faces,
   planar quadrilateral faces, or both.
-  
-  The \code{as.mesh3d} function is generic; currently
-the only method defined is \code{\link{as.mesh3d.deldir}}.
 
   The sample objects optionally take a matrix transformation \code{trans} as 
   an argument.  This transformation is applied to all vertices of the default shape.

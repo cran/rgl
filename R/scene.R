@@ -2,7 +2,7 @@
 ## R source file
 ## This file is part of rgl
 ##
-## $Id: scene.R 1666 2019-02-16 15:24:57Z murdoch $
+## $Id: scene.R 1687 2019-06-27 20:29:45Z murdoch $
 ##
 
 ##
@@ -193,9 +193,12 @@ rgl.attrib <- function( id, attrib, first=1,
       rownames(result) <- c("sphere", "linear_fog", "exp_fog", "exp2_fog")[first:last]
     else if (id %in% rgl.ids("bboxdeco", subscene = 0)$id)
       rownames(result) <- "draw_front"[first:last]
-    else if (id %in% rgl.ids("shapes", subscene = 0)$id)
-      rownames(result) <- c("ignoreExtent", "fixedSize")[first:last]
- 
+    else if (id %in% (ids <- rgl.ids("shapes", subscene = 0))$id) {
+      type <- ids$type[ids$id == id]
+      rownames(result) <- c("ignoreExtent", 
+                            if (type == "surface") "flipped"
+                            else "fixedSize")[first:last]
+    }
   result
 }
 

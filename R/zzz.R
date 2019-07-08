@@ -2,7 +2,7 @@
 ## R source file
 ## This file is part of rgl
 ##
-## $Id: zzz.R 1681 2019-06-25 19:19:12Z murdoch $
+## $Id: zzz.R 1683 2019-06-25 19:48:55Z murdoch $
 ##
 
 ##
@@ -25,7 +25,9 @@
   unixos <- "none"
   
   if ( .Platform$OS.type == "unix" ) {
-    unixos <- system("uname",intern=TRUE)
+    unixos <- system("uname", intern=TRUE)
+    if (!length(unixos))
+      unixos <- "unknown"
     if ( unixos == "Darwin" ) {
           
       # For MacOS X we have to remove /usr/X11R6/lib from the DYLD_LIBRARY_PATH

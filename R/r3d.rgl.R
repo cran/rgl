@@ -1,6 +1,6 @@
 #
 # R3D rendering functions - rgl implementation
-# $Id: r3d.rgl.R 1681 2019-06-25 19:19:12Z murdoch $
+# $Id: r3d.rgl.R 1683 2019-06-25 19:48:55Z murdoch $
 # 
 
 # Node Management
@@ -292,6 +292,10 @@ open3d <- function(..., params = getr3dDefaults(),
     	params$material <- do.call(.fixMaterialArgs, c(args$material, Params=list(params$material)))
     	args$material <- NULL
     }
+    
+    if (length(args) && (is.null(names(args)) 
+                      || any(nchar(names(args)) == 0)))
+      stop("open3d parameters must be named")
     
     params[names(args)] <- args
         
