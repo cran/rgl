@@ -1,7 +1,7 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: rglview.cpp 1669 2019-03-05 16:28:50Z murdoch $
+// $Id: rglview.cpp 1724 2020-02-07 15:15:57Z murdoch $
 
 
 
@@ -201,11 +201,14 @@ void RGLView::mouseMove(int mouseX, int mouseY)
   }
 }
 
-void RGLView::wheelRotate(int dir)
+void RGLView::wheelRotate(int dir, int mouseX, int mouseY)
 {
   Subscene* subscene = NULL;
-  if (activeSubscene) 
-    subscene = scene->getSubscene(activeSubscene);
+  ModelViewpoint* modelviewpoint = scene->getCurrentSubscene()->getModelViewpoint();
+  if ( modelviewpoint->isInteractive() ) {
+    translateCoords(&mouseX, &mouseY);
+    subscene = scene->whichSubscene(mouseX, mouseY);
+  }
   if (!subscene)
     subscene = scene->getCurrentSubscene();  
   subscene->wheelRotate(dir);
@@ -235,12 +238,13 @@ bool RGLView::snapshot(PixmapFileFormatID formatID, const char* filename)
     Pixmap snapshot;
    
     if (snapshot.init(RGB24, width, height, 8)) {
+      paint();
       if ( windowImpl->beginGL() ) {
-        // read front buffer
+        // read back buffer
 
         glPushAttrib(GL_PIXEL_MODE_BIT);
 
-        glReadBuffer(GL_FRONT);
+        glReadBuffer(GL_BACK);
         glPixelStorei(GL_PACK_ALIGNMENT, 1);
         glReadPixels(0,0,width,height,GL_RGB, GL_UNSIGNED_BYTE, (GLvoid*) snapshot.data);
 
@@ -263,7 +267,8 @@ bool RGLView::pixels( int* ll, int* size, int component, double* result )
 {
   bool success = false;
   GLenum format[] = {GL_RED, GL_GREEN, GL_BLUE, GL_ALPHA, 
-                      GL_DEPTH_COMPONENT, GL_LUMINANCE};   
+                      GL_DEPTH_COMPONENT, GL_LUMINANCE}; 
+  paint();
   if ( windowImpl->beginGL() ) {
     /*
      * Some OSX systems appear to have a glReadPixels 
@@ -281,7 +286,7 @@ bool RGLView::pixels( int* ll, int* size, int component, double* result )
 
     glPushAttrib(GL_PIXEL_MODE_BIT);
  
-    glReadBuffer(GL_FRONT);
+    glReadBuffer(GL_BACK);
     glPixelStorei(GL_PACK_ALIGNMENT, 1);
     
     if (bycolumn) {
@@ -507,7 +512,7 @@ bool RGLView::postscript(int formatID, const char* filename, bool drawText)
 void RGLView::setMouseListeners(Subscene* sub, unsigned int n, int* ids)
 {
   sub->clearMouseListeners();
-  for (int i=0; i<n; i++) {
+  for (unsigned int i=0; i<n; i++) {
     Subscene* subscene = scene->getSubscene(ids[i]);
     if (subscene)
       sub->addMouseListener(subscene);

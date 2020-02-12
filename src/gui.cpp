@@ -1,7 +1,7 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: gui.cpp 1137 2014-09-24 19:03:24Z murdoch $
+// $Id: gui.cpp 1700 2019-10-30 14:48:57Z murdoch $
 // ---------------------------------------------------------------------------
 #include "gui.h"
 #include "lib.h"
@@ -129,7 +129,7 @@ void View::mouseMove(int mouseX, int mouseY)
 {
 }
 // ---------------------------------------------------------------------------
-void View::wheelRotate(int direction)
+void View::wheelRotate(int direction, int mouseX, int mouseY)
 {
 }
 // ---------------------------------------------------------------------------
@@ -270,10 +270,10 @@ void Window::keyPress(int code)
     child->keyPress(code);
 }
 // ---------------------------------------------------------------------------
-void Window::wheelRotate(int dir)
+void Window::wheelRotate(int dir, int mouseX, int mouseY)
 {
   if (child)
-    child->wheelRotate(dir);
+    child->wheelRotate(dir, mouseX, mouseY);
 }
 // ---------------------------------------------------------------------------
 void Window::on_close()

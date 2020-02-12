@@ -1,29 +1,29 @@
-## ----setup, echo=FALSE, results="asis"-----------------------------------
+## ----setup, echo=FALSE, results="asis"----------------------------------------
 source("setup.R")
 set.seed(123)
 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 library(rgl)
 plotids <- with(iris, plot3d(Sepal.Length, Sepal.Width, Petal.Length, 
                   type="s", col=as.numeric(Species)))
 rglwidget(elementId = "plot3drgl")
 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 toggleWidget(sceneId = "plot3drgl", ids = plotids["data"], label = "Data")
 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 names(plotids)
 unclass(plotids)
 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 rglwidget() %>%
 toggleWidget(ids = plotids["data"], label = "Data")
 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 toggleWidget(NA, ids = plotids["data"], label = "Data") %>%
 rglwidget(controllers = .) 
 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 clear3d() # Remove the earlier display
 
 setosa <- with(subset(iris, Species == "setosa"), 
@@ -41,13 +41,13 @@ virginica <- with(subset(iris, Species == "virginica"),
 aspect3d(1,1,1)
 axesid <- decorate3d()
 rglwidget() %>%
-toggleWidget(NA, ids = setosa) %>%
+toggleWidget(ids = setosa) %>%
 toggleWidget(ids = versicolor) %>%
 toggleWidget(ids = virginica) %>%
 toggleWidget(ids = axesid) %>% 
 asRow(last = 4)
 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 rglwidget() %>%
 playwidget(start = 0, stop = 3, interval = 1,
 	   subsetControl(1, subsets = list(
@@ -57,7 +57,7 @@ playwidget(start = 0, stop = 3, interval = 1,
 	   			 All = c(setosa, versicolor, virginica)
 	   			 )))
 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 M <- r3dDefaults$userMatrix
 fn <- par3dinterp(time = (0:2)*0.75, userMatrix = list(M,
                                       rotate3d(M, pi/2, 1, 0, 0),
@@ -66,7 +66,7 @@ rglwidget() %>%
 playwidget(par3dinterpControl(fn, 0, 3, steps=15),
  	   step = 0.01, loop = TRUE, rate = 0.5)
 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 setosavals <- subset(iris, Species == "setosa")
 which <- which.min(setosavals$Sepal.Width)
 init <- setosavals$Sepal.Length[which]
@@ -79,7 +79,7 @@ playwidget(
                 vertices = which, objid = setosa),
 	step = 0.01)
 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 time <- 0:500
 xyz <- cbind(cos(time/20), sin(time/10), time)
 lineid <- plot3d(xyz, type="l", col = "black")["data"]
@@ -95,17 +95,14 @@ playwidget(list(
                  "Reset", "Slider", "Label"),
   loop = TRUE)
 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 ids <- with(iris, plot3d(Sepal.Length, Sepal.Width, Petal.Length, 
                   type="s", col=as.numeric(Species)))
 par3d(mouseMode = "selecting")
 rglwidget(shared = rglShared(ids["data"])) %>% 
 rglMouse()
 
-## ----eval = FALSE--------------------------------------------------------
-#  devtools::install_github("dmurdoch/manipulateWidget@forRGL")
-
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 library(crosstalk)
 sd <- SharedData$new(mtcars)
 ids <- plot3d(sd$origData(), col = mtcars$cyl, type = "s")
@@ -117,12 +114,12 @@ asRow("Mouse mode: ", rglMouse(getWidgetId(.)),
 		                "Cylinders", sd, ~ cyl, inline = TRUE),
       last = 4, colsize = c(1,2,1,2), height = 60)
 
-## ----plot3d2-------------------------------------------------------------
+## ----plot3d2------------------------------------------------------------------
 plotids <- with(iris, plot3d(Sepal.Length, Sepal.Width, Petal.Length, 
                   type="s", col=as.numeric(Species)))
 subid <- currentSubscene3d()
 rglwidget(elementId="plot3drgl2")
 
-## ----echo=FALSE, results="asis"------------------------------------------
+## ----echo=FALSE, results="asis"-----------------------------------------------
 writeIndex(cols = 5)
 

@@ -6,7 +6,7 @@
 ##      version of autoconf
 ##
 ##
-## $Id: configure.ac 1617 2018-03-13 13:38:11Z murdoch $
+## $Id: configure.ac 1715 2020-01-29 20:02:05Z murdoch $
 ##
 
 AC_PREREQ(2.50)
@@ -19,7 +19,6 @@ AC_CONFIG_AUX_DIR(src/build/autoconf)
 ## pick up compiler as will be used by R CMD INSTALL/SHLIB
 if test -n "${R_HOME}"; then
   CC=`${R_HOME}/bin/R CMD config CC`
-  CPP=`${R_HOME}/bin/R CMD config CPP`
   CFLAGS=`${R_HOME}/bin/R CMD config CFLAGS`
 fi
 
@@ -186,17 +185,18 @@ if test "x$enable_ftgl" != "xno"; then
   fi
   ## new pkg-config bit
   AC_CHECK_PROG([HAVE_PKG_CONFIG],[pkg-config],[yes],[no])
-  if test "x$HAVE_PKG_CONFIG" = "xyes"; then
+  if test "x$HAVE_PKG_CONFIG" = "xyes" -a "x`pkg-config freetype2 --cflags`" != "x"; then
     CPPFLAGS="${CPPFLAGS} -DHAVE_FREETYPE -Iext/ftgl `pkg-config freetype2 --cflags`"
     LIBS="${LIBS} `pkg-config freetype2 --libs`"
     AC_MSG_NOTICE([using Freetype and FTGL])
-  fi
-  if test "x$HAVE_PKG_CONFIG" != "xyes"; then
+  else
     AC_CHECK_PROG([HAVE_FREETYPE_CONFIG],[freetype-config],[yes],[no])
     if test "x$HAVE_FREETYPE_CONFIG" = "xyes"; then
       CPPFLAGS="${CPPFLAGS} -DHAVE_FREETYPE -Iext/ftgl `freetype-config --cflags`"
       LIBS="${LIBS} `freetype-config --libs`"
       AC_MSG_NOTICE([using Freetype and FTGL])
+    else
+      AC_MSG_NOTICE([compiling without FTGL support])
     fi
   fi
 else

@@ -3,7 +3,7 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: win32gui.cpp 1115 2014-07-18 13:51:22Z murdoch $
+// $Id: win32gui.cpp 1700 2019-10-30 14:48:57Z murdoch $
 
 #include "win32gui.h"
 
@@ -580,7 +580,7 @@ LRESULT Win32WindowImpl::processMessage(HWND hwnd, UINT message, WPARAM wParam, 
     case WM_MOUSEWHEEL:
       {
         int dir = ( (short) HIWORD(wParam)  > 0 ) ?  GUI_WheelForward : GUI_WheelBackward;
-        ( (captureView) ? captureView : window ) -> wheelRotate(dir);
+        ( (captureView) ? captureView : window ) -> wheelRotate(dir, (short) LOWORD(lParam), (short) HIWORD(lParam) );
         break;
       }
 #endif

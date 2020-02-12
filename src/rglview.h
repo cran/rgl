@@ -4,7 +4,7 @@
 // C++ header file
 // This file is part of RGL
 //
-// $Id: rglview.h 1665 2019-02-16 14:50:38Z murdoch $
+// $Id: rglview.h 1700 2019-10-30 14:48:57Z murdoch $
 
 
 #include "scene.h"
@@ -30,7 +30,7 @@ public:
   void buttonPress(int button, int mouseX, int mouseY);
   void buttonRelease(int button, int mouseX, int mouseY);
   void mouseMove(int mouseX, int mouseY);
-  void wheelRotate(int dir);
+  void wheelRotate(int dir, int mouseX, int mouseY);
   void captureLost();
   void keyPress(int code);
   Scene* getScene();

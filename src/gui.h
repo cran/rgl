@@ -4,7 +4,7 @@
 // C++ header file
 // This file is part of RGL
 //
-// $Id: gui.h 1137 2014-09-24 19:03:24Z murdoch $
+// $Id: gui.h 1700 2019-10-30 14:48:57Z murdoch $
 // ---------------------------------------------------------------------------
 #include "types.h"
 #include "glgui.h"
@@ -143,7 +143,7 @@ public:
   virtual void keyRelease(int code);
   virtual void buttonPress(int button, int mouseX, int mouseY);
   virtual void buttonRelease(int button, int mouseX, int mouseY);
-  virtual void wheelRotate(int direction);
+  virtual void wheelRotate(int direction, int mouseX, int mouseY);
   virtual void mouseMove(int mouseX, int mouseY);
   virtual void captureLost();
 
@@ -198,7 +198,7 @@ public:
   void buttonRelease(int button, int mouseX, int mouseY);
   void mouseMove(int mouseX, int mouseY);
   void keyPress(int code);
-  void wheelRotate(int dir);
+  void wheelRotate(int dir, int mouseX, int mouseY);
 
   void bringToTop(int stay);
   void setWindowRect(int left, int top, int right, int bottom);

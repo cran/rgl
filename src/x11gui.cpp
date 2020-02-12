@@ -4,7 +4,7 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: x11gui.cpp 1669 2019-03-05 16:28:50Z murdoch $
+// $Id: x11gui.cpp 1700 2019-10-30 14:48:57Z murdoch $
 
 // Uncomment for verbose output on stderr:
 // #define RGL_X11_DEBUG
@@ -240,11 +240,11 @@ void X11WindowImpl::processEvent(XEvent& ev)
           break;
         case 4:
           if (window)
-            window->wheelRotate( GUI_WheelForward );
+            window->wheelRotate( GUI_WheelForward, ev.xbutton.x, ev.xbutton.y );
           break;
         case 5:
           if (window)
-            window->wheelRotate( GUI_WheelBackward );
+            window->wheelRotate( GUI_WheelBackward, ev.xbutton.x, ev.xbutton.y  );
           break;
       }
       break;

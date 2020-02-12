@@ -1,14 +1,14 @@
-## ----setup, echo=FALSE, results="asis"-----------------------------------
+## ----setup, echo=FALSE, results="asis"----------------------------------------
 source("setup.R")
 knitr::opts_chunk$set(rgl.newwindow = TRUE)
 set.seed(123)
 
-## ----echo=1--------------------------------------------------------------
+## ----echo=1-------------------------------------------------------------------
 with(iris, plot3d(Sepal.Length, Sepal.Width, Petal.Length, 
                   type="s", col=as.numeric(Species)))
 rglwidget()
 
-## ----persp3d, webgl=TRUE, fig.height=3, fig.width=6----------------------
+## ----persp3d, webgl=TRUE, fig.height=3, fig.width=6---------------------------
 library(MASS)
 # from the fitdistr example
 set.seed(123)
@@ -30,17 +30,27 @@ persp3d(loglik,
         xlim = xlim, ylim = ylim, zlim = zlim,
         n = 30)
 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 methods(plot3d)
 methods(persp3d)
 
-## ----webgl=TRUE, fig.width=3, fig.height=3-------------------------------
+## ----webgl=TRUE, fig.width=3, fig.height=3------------------------------------
 triangles3d(cbind(x=rnorm(9), y=rnorm(9), z=rnorm(9)), col = "green")
 decorate3d()
 bg3d("lightgray")
 aspect3d(1,1,1)
 
-## ----results="hide",webgl=TRUE-------------------------------------------
+## -----------------------------------------------------------------------------
+filename <- tempfile(fileext = ".png")
+png(filename = filename)
+plot(rnorm(1000), rnorm(1000))
+dev.off()
+open3d()
+xyz <- cbind(c(0,1,1,0), 0, c(0,0,1,1))
+quads3d(xyz, texture = filename, texcoords = xyz[,c(1, 3)]*2, col = "white", specular = "black")
+rglwidget()
+
+## ----results="hide",webgl=TRUE------------------------------------------------
 open3d()
 cols <- rainbow(7)
 layout3d(matrix(1:16, 4,4), heights=c(1,3,1,3))
@@ -59,24 +69,24 @@ shade3d(cuboctahedron3d(col=cols[6])); next3d()
 text3d(0,0,0,"oh3d"); next3d()
 shade3d(oh3d(col=cols[7]))
 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 par3d("mouseMode")
 
-## ----echo = 2:3----------------------------------------------------------
+## ----echo = 2:3---------------------------------------------------------------
 rgl.close()
 persp3d(volcano, col = "green")
 rglwidget()
 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 lattice::wireframe(volcano, col = "green", 
 		   screen = rglToLattice())
 angles <- rglToBase()
 persp(volcano, col = "green", shade = TRUE,
       theta = angles$theta, phi = angles$phi)
 
-## ----echo=FALSE----------------------------------------------------------
+## ----echo=FALSE---------------------------------------------------------------
 setdiff(ls("package:rgl"), documentedfns)
 
-## ----echo=FALSE, results="asis"------------------------------------------
+## ----echo=FALSE, results="asis"-----------------------------------------------
 writeIndex(cols = 5)
 
