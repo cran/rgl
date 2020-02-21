@@ -2,7 +2,6 @@
 ## R source file
 ## This file is part of rgl
 ##
-## $Id: scene.R 1687 2019-06-27 20:29:45Z murdoch $
 ##
 
 ##

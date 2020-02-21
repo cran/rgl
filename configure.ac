@@ -6,7 +6,6 @@
 ##      version of autoconf
 ##
 ##
-## $Id: configure.ac 1715 2020-01-29 20:02:05Z murdoch $
 ##
 
 AC_PREREQ(2.50)

@@ -1,7 +1,6 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: scene.cpp 1697 2019-08-18 20:14:20Z murdoch $
 
 #include "gl2ps.h"
 #include "scene.h"

@@ -3,7 +3,6 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: win32gui.cpp 1700 2019-10-30 14:48:57Z murdoch $
 
 #include "win32gui.h"
 

@@ -1,9 +1,6 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: rglview.cpp 1724 2020-02-07 15:15:57Z murdoch $
-
-
 
 #ifdef __sun
 #include <locale.h>

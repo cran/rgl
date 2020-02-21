@@ -2,7 +2,6 @@
 ## R source file
 ## This file is part of rgl
 ##
-## $Id: material.R 1641 2018-10-17 18:20:08Z murdoch $
 ##
 
 ##

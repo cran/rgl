@@ -12,7 +12,7 @@
 
 <meta name="author" content="Duncan Murdoch" />
 
-<meta name="date" content="2020-02-11" />
+<meta name="date" content="2020-02-21" />
 
 <title>Legacy WebGL Methods</title>
 
@@ -6214,7 +6214,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 <h1 class="title toc-ignore">Legacy WebGL Methods</h1>
 <h4 class="author">Duncan Murdoch</h4>
-<h4 class="date">February 11, 2020</h4>
+<h4 class="date">February 21, 2020</h4>
 
 
 <div id="TOC">
@@ -10682,7 +10682,7 @@ You must enable Javascript to view this page properly.
 </p>
 <script>togglergl.start();</script>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="kw">toggleButton</span>(sphereid, <span class="dt">label =</span> <span class="st">&quot;setosa&quot;</span>, <span class="dt">prefixes =</span> <span class="st">&quot;toggle&quot;</span>, <span class="dt">subscenes =</span> subid)</a></code></pre></div>
-<button type="button" id="input130e15ec36bfc" name="input130e15ec36bfc" onclick="(function(){
+<button type="button" id="input11c501cd558fc" name="input11c501cd558fc" onclick="(function(){
   var subset = [303], i;
   if (togglergl.inSubscene(subset[0], 297)) {
     for (i=0; i&lt;subset.length; i++)
@@ -10696,7 +10696,7 @@ You must enable Javascript to view this page properly.
 setosa
 </button>
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="kw">toggleButton</span>(sphereid<span class="op">+</span><span class="dv">1</span>, <span class="dt">label =</span> <span class="st">&quot;versicolor&quot;</span>, <span class="dt">prefixes =</span> <span class="st">&quot;toggle&quot;</span>, <span class="dt">subscenes =</span> subid)</a></code></pre></div>
-<button type="button" id="input130e16fe69dfe" name="input130e16fe69dfe" onclick="(function(){
+<button type="button" id="input11c507ac5172d" name="input11c507ac5172d" onclick="(function(){
   var subset = [304], i;
   if (togglergl.inSubscene(subset[0], 297)) {
     for (i=0; i&lt;subset.length; i++)
@@ -10710,7 +10710,7 @@ setosa
 versicolor
 </button>
 <div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="kw">toggleButton</span>(sphereid<span class="op">+</span><span class="dv">2</span>, <span class="dt">label =</span> <span class="st">&quot;virginica&quot;</span>, <span class="dt">prefixes =</span> <span class="st">&quot;toggle&quot;</span>, <span class="dt">subscenes =</span> subid)</a></code></pre></div>
-<button type="button" id="input130e1d8ec817" name="input130e1d8ec817" onclick="(function(){
+<button type="button" id="input11c502174ca53" name="input11c502174ca53" onclick="(function(){
   var subset = [305], i;
   if (togglergl.inSubscene(subset[0], 297)) {
     for (i=0; i&lt;subset.length; i++)
@@ -10725,7 +10725,7 @@ virginica
 </button>
 <p>Note that we need to use <code>results=&quot;asis&quot;</code> for the button code.<br />
 Normally we would also use <code>echo=FALSE</code>, though I didn’t do so above; then the buttons will end up side-by-side. We also add another button to toggle the axes:</p>
-<button type="button" id="input130e151c21d9e" name="input130e151c21d9e" onclick="(function(){
+<button type="button" id="input11c504a91de17" name="input11c504a91de17" onclick="(function(){
   var subset = [303], i;
   if (togglergl.inSubscene(subset[0], 297)) {
     for (i=0; i&lt;subset.length; i++)
@@ -10738,7 +10738,7 @@ Normally we would also use <code>echo=FALSE</code>, though I didn’t do so abov
 })()">
 setosa
 </button>
-<button type="button" id="input130e11f269a01" name="input130e11f269a01" onclick="(function(){
+<button type="button" id="input11c502e8bde40" name="input11c502e8bde40" onclick="(function(){
   var subset = [304], i;
   if (togglergl.inSubscene(subset[0], 297)) {
     for (i=0; i&lt;subset.length; i++)
@@ -10751,7 +10751,7 @@ setosa
 })()">
 versicolor
 </button>
-<button type="button" id="input130e11f48c7a1" name="input130e11f48c7a1" onclick="(function(){
+<button type="button" id="input11c5060ac539f" name="input11c5060ac539f" onclick="(function(){
   var subset = [305], i;
   if (togglergl.inSubscene(subset[0], 297)) {
     for (i=0; i&lt;subset.length; i++)
@@ -10764,7 +10764,7 @@ versicolor
 })()">
 virginica
 </button>
-<button type="button" id="input130e1632a2b12" name="input130e1632a2b12" onclick="(function(){
+<button type="button" id="input11c5051a61d4e" name="input11c5051a61d4e" onclick="(function(){
   var subset = [306,307,308,309], i;
   if (togglergl.inSubscene(subset[0], 297)) {
     for (i=0; i&lt;subset.length; i++)
@@ -10791,13 +10791,13 @@ axes
 <a class="sourceLine" id="cb12-4" data-line-number="4">                  <span class="dt">all =</span> sphereid <span class="op">+</span><span class="st"> </span><span class="dv">0</span><span class="op">:</span><span class="dv">2</span>),</a>
 <a class="sourceLine" id="cb12-5" data-line-number="5">             <span class="dt">prefixes =</span> <span class="st">&quot;slider&quot;</span>, <span class="dt">subscenes =</span> subid,</a>
 <a class="sourceLine" id="cb12-6" data-line-number="6">             <span class="dt">init =</span> <span class="dv">3</span>)</a></code></pre></div>
-<script>sliderrgl.input130e1387a86c2 = function(value){
+<script>sliderrgl.input11c5041f2fed8 = function(value){
   if (typeof sliderrgl.drawScene === "undefined")
     return;
-  var busy = (typeof sliderrgl.input130e1387a86c2.busy !== "undefined"),
+  var busy = (typeof sliderrgl.input11c5041f2fed8.busy !== "undefined"),
       lvalue, labels;
   try {
-    sliderrgl.input130e1387a86c2.busy = value;
+    sliderrgl.input11c5041f2fed8.busy = value;
     if (busy) return;
     do {
        (function(value) {
@@ -10815,18 +10815,18 @@ axes
        sliderrgl.drawScene();
        lvalue = Math.round((value - 0)/1);
        labels = ['setosa','versicolor','virginica','all']; 
-  label = document.getElementById('input130e1387a86c2text');
+  label = document.getElementById('input11c5041f2fed8text');
   if (label !== null) label.value = labels[lvalue];
-     } while (sliderrgl.input130e1387a86c2.busy !== value);
+     } while (sliderrgl.input11c5041f2fed8.busy !== value);
   }
   finally {
     if (!busy)
-      sliderrgl.input130e1387a86c2.busy = undefined;
+      sliderrgl.input11c5041f2fed8.busy = undefined;
   }
 };
-sliderrgl.input130e1387a86c2(3);</script>
-<input type="range" min="0" max="3" step="1" value="3" id="input130e1387a86c2" name="input130e1387a86c2" oninput="sliderrgl.input130e1387a86c2(this.valueAsNumber)">
-<output id="input130e1387a86c2text" for="input130e1387a86c2">
+sliderrgl.input11c5041f2fed8(3);</script>
+<input type="range" min="0" max="3" step="1" value="3" id="input11c5041f2fed8" name="input11c5041f2fed8" oninput="sliderrgl.input11c5041f2fed8(this.valueAsNumber)">
+<output id="input11c5041f2fed8text" for="input11c5041f2fed8">
 all
 </output>
 <p>There are several other functions to generate the Javascript code for controls. <a name="par3dinterpSetter"><a href="../../rgl/help/par3dinterpSetter"><code>par3dinterpSetter</code></a></a> generates a function that approximates the result of <a href="#par3dinterp"><code>par3dinterp</code></a>. <a name="propertySetter"><a href="../../rgl/help/propertySetter"><code>propertySetter</code></a></a> is a more general function to set the value of properties of the scene. Both generate Javascript functions, but not the controls to use them; for that, use <a name="propertySlider"><a href="../../rgl/help/propertySlider"><code>propertySlider</code></a></a> or your own custom code.</p>
@@ -10855,13 +10855,13 @@ You must enable Javascript to view this page properly.
 <a class="sourceLine" id="cb13-6" data-line-number="6">                       <span class="dt">prefix =</span> <span class="st">&quot;userMatrix&quot;</span>, </a>
 <a class="sourceLine" id="cb13-7" data-line-number="7">                       <span class="dt">subscene =</span> subid),</a>
 <a class="sourceLine" id="cb13-8" data-line-number="8">           <span class="dt">step =</span> <span class="fl">0.01</span>)</a></code></pre></div>
-<script>userMatrixrgl.input130e1577c9b84 = function(value){
+<script>userMatrixrgl.input11c5072c752ca = function(value){
   if (typeof userMatrixrgl.drawScene === "undefined")
     return;
-  var busy = (typeof userMatrixrgl.input130e1577c9b84.busy !== "undefined"),
+  var busy = (typeof userMatrixrgl.input11c5072c752ca.busy !== "undefined"),
       lvalue, labels;
   try {
-    userMatrixrgl.input130e1577c9b84.busy = value;
+    userMatrixrgl.input11c5072c752ca.busy = value;
     if (busy) return;
     do {
        (function(value){
@@ -10906,18 +10906,18 @@ You must enable Javascript to view this page properly.
        userMatrixrgl.drawScene();
        lvalue = Math.round((value - 0)/0.01);
        labels = ['0','0.01','0.02','0.03','0.04','0.05','0.0600000000000001','0.07','0.08','0.09','0.1','0.11','0.12','0.13','0.14','0.15','0.16','0.17','0.18','0.19','0.2','0.21','0.22','0.23','0.24','0.25','0.26','0.27','0.28','0.29','0.3','0.31','0.32','0.33','0.34','0.35','0.36','0.37','0.38','0.39','0.4','0.41','0.42','0.43','0.44','0.45','0.46','0.47','0.48','0.49','0.5','0.51','0.52','0.53','0.54','0.55','0.56','0.57','0.58','0.59','0.6','0.61','0.62','0.63','0.64','0.65','0.66','0.67','0.68','0.69','0.7','0.71','0.72','0.73','0.74','0.75','0.76','0.77','0.78','0.79','0.8','0.81','0.82','0.83','0.84','0.85','0.86','0.87','0.88','0.89','0.9','0.91','0.92','0.93','0.94','0.95','0.96','0.97','0.98','0.99','1','1.01','1.02','1.03','1.04','1.05','1.06','1.07','1.08','1.09','1.1','1.11','1.12','1.13','1.14','1.15','1.16','1.17','1.18','1.19','1.2','1.21','1.22','1.23','1.24','1.25','1.26','1.27','1.28','1.29','1.3','1.31','1.32','1.33','1.34','1.35','1.36','1.37','1.38','1.39','1.4','1.41','1.42','1.43','1.44','1.45','1.46','1.47','1.48','1.49','1.5']; 
-  label = document.getElementById('input130e1577c9b84text');
+  label = document.getElementById('input11c5072c752catext');
   if (label !== null) label.value = labels[lvalue];
-     } while (userMatrixrgl.input130e1577c9b84.busy !== value);
+     } while (userMatrixrgl.input11c5072c752ca.busy !== value);
   }
   finally {
     if (!busy)
-      userMatrixrgl.input130e1577c9b84.busy = undefined;
+      userMatrixrgl.input11c5072c752ca.busy = undefined;
   }
 };
-userMatrixrgl.input130e1577c9b84(0);</script>
-<input type="range" min="0" max="1.5" step="0.01" value="0" id="input130e1577c9b84" name="input130e1577c9b84" oninput="userMatrixrgl.input130e1577c9b84(this.valueAsNumber)">
-<output id="input130e1577c9b84text" for="input130e1577c9b84">
+userMatrixrgl.input11c5072c752ca(0);</script>
+<input type="range" min="0" max="1.5" step="0.01" value="0" id="input11c5072c752ca" name="input11c5072c752ca" oninput="userMatrixrgl.input11c5072c752ca(this.valueAsNumber)">
+<output id="input11c5072c752catext" for="input11c5072c752ca">
 0
 </output>
 <p>Some things to note: The generated Javascript slider has 150 increments, so that motion appears smooth. However, storing 150 <code>userMatrix</code> values would take up a lot of space, so we use interpolation in the Javascript code. However, the Javascript code can only do linear interpolation, not the more complex spline-based SO(3) interpolation done by <a href="#par3dinterp"><code>par3dinterp</code></a>. Because of this, we need to output 15 steps from <a href="#par3dinterpSetter"><code>par3dinterpSetter</code></a> so that the distortions of linear interpolation are not visible.</p>
@@ -10948,13 +10948,13 @@ You must enable Javascript to view this page properly.
 <a class="sourceLine" id="cb14-7" data-line-number="7">             <span class="dt">vertices =</span> which, <span class="dt">objid =</span> sphereid, </a>
 <a class="sourceLine" id="cb14-8" data-line-number="8">             <span class="dt">prefix =</span> <span class="st">&quot;vertex&quot;</span>), </a>
 <a class="sourceLine" id="cb14-9" data-line-number="9">    <span class="dt">step=</span><span class="fl">0.01</span>)</a></code></pre></div>
-<script>vertexrgl.input130e1362fe8a4 = function(value){
+<script>vertexrgl.input11c502e0bb76b = function(value){
   if (typeof vertexrgl.drawScene === "undefined")
     return;
-  var busy = (typeof vertexrgl.input130e1362fe8a4.busy !== "undefined"),
+  var busy = (typeof vertexrgl.input11c502e0bb76b.busy !== "undefined"),
       lvalue, labels;
   try {
-    vertexrgl.input130e1362fe8a4.busy = value;
+    vertexrgl.input11c502e0bb76b.busy = value;
     if (busy) return;
     do {
        (function(value){
@@ -11003,18 +11003,18 @@ You must enable Javascript to view this page properly.
        vertexrgl.drawScene();
        lvalue = Math.round((value - 1)/0.01);
        labels = ['1','1.01','1.02','1.03','1.04','1.05','1.06','1.07','1.08','1.09','1.1','1.11','1.12','1.13','1.14','1.15','1.16','1.17','1.18','1.19','1.2','1.21','1.22','1.23','1.24','1.25','1.26','1.27','1.28','1.29','1.3','1.31','1.32','1.33','1.34','1.35','1.36','1.37','1.38','1.39','1.4','1.41','1.42','1.43','1.44','1.45','1.46','1.47','1.48','1.49','1.5','1.51','1.52','1.53','1.54','1.55','1.56','1.57','1.58','1.59','1.6','1.61','1.62','1.63','1.64','1.65','1.66','1.67','1.68','1.69','1.7','1.71','1.72','1.73','1.74','1.75','1.76','1.77','1.78','1.79','1.8','1.81','1.82','1.83','1.84','1.85','1.86','1.87','1.88','1.89','1.9','1.91','1.92','1.93','1.94','1.95','1.96','1.97','1.98','1.99','2']; 
-  label = document.getElementById('input130e1362fe8a4text');
+  label = document.getElementById('input11c502e0bb76btext');
   if (label !== null) label.value = labels[lvalue];
-     } while (vertexrgl.input130e1362fe8a4.busy !== value);
+     } while (vertexrgl.input11c502e0bb76b.busy !== value);
   }
   finally {
     if (!busy)
-      vertexrgl.input130e1362fe8a4.busy = undefined;
+      vertexrgl.input11c502e0bb76b.busy = undefined;
   }
 };
-vertexrgl.input130e1362fe8a4(1);</script>
-<input type="range" min="1" max="2" step="0.01" value="1" id="input130e1362fe8a4" name="input130e1362fe8a4" oninput="vertexrgl.input130e1362fe8a4(this.valueAsNumber)">
-<output id="input130e1362fe8a4text" for="input130e1362fe8a4">
+vertexrgl.input11c502e0bb76b(1);</script>
+<input type="range" min="1" max="2" step="0.01" value="1" id="input11c502e0bb76b" name="input11c502e0bb76b" oninput="vertexrgl.input11c502e0bb76b(this.valueAsNumber)">
+<output id="input11c502e0bb76btext" for="input11c502e0bb76b">
 1
 </output>
 <p>A related function is <a name="ageSetter"><a href="../../rgl/help/ageSetter"><code>ageSetter</code></a></a>, though it uses a very different specification of the attributes. It is used when the slider controls the “age” of the scene, and attributes of vertices change with their age.</p>

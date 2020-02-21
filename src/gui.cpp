@@ -1,7 +1,6 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: gui.cpp 1700 2019-10-30 14:48:57Z murdoch $
 // ---------------------------------------------------------------------------
 #include "gui.h"
 #include "lib.h"
@@ -146,6 +145,9 @@ Window::Window(View* in_child, GUIFactory* factory)
 {
   skipRedraw = false;  
   windowImpl = factory->createWindowImpl(this);
+  if (!windowImpl) {
+    return;
+  } 
   if (child)
     child->setWindowImpl(windowImpl);
 }
@@ -195,9 +197,12 @@ void Window::getWindowRect(int *left, int *top, int *width, int *height)
   windowImpl->getWindowRect(left, top, width, height);
 }
 // ---------------------------------------------------------------------------
-void Window::setWindowRect(int left, int top, int width, int height)
+void Window::setWindowRect(int left, int top, int right, int bottom)
 {
-  windowImpl->setWindowRect(left, top, width, height);
+  right = getMax(right, left + 1);
+  bottom = getMax(bottom, top + 1);
+  resize(right-left, bottom-top); // In case message never gets sent, e.g. Xvfb
+  windowImpl->setWindowRect(left, top, right, bottom);
 }
 
 // ---------------------------------------------------------------------------

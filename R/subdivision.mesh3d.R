@@ -5,7 +5,6 @@
 # using addition operations and homogenous coordinates 
 # by Daniel Adler 
 #
-# $Id: subdivision.mesh3d.R 1634 2018-09-23 20:53:02Z murdoch $
 # 
 
 edgemap <- function( size ) {

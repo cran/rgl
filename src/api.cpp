@@ -1,7 +1,6 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: api.cpp 1668 2019-02-18 14:21:20Z murdoch $
 
 #include "lib.h"
 #include "DeviceManager.h"

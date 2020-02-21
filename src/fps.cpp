@@ -1,7 +1,6 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: fps.cpp 1625 2018-09-10 13:43:57Z murdoch $
 
 #include "fps.h"
 

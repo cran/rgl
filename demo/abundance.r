@@ -1,6 +1,5 @@
 # RGL-Demo: animal abundance
 # Authors: Oleg Nenadic, Daniel Adler
-# $Id: abundance.r 564 2007-02-22 09:56:01Z dmurdoch $
 
 rgl.demo.abundance <- function()
 {

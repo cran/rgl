@@ -1,6 +1,5 @@
 #
 # R 3d object : o3d
-# $Id: oh3d.R 394 2005-08-08 13:28:14Z dmurdoch $
 #
 
 oh3d.vb <- c(   

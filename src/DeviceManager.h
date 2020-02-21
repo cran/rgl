@@ -4,7 +4,6 @@
 // C++ header file
 // This file is part of RGL
 //
-// $Id: DeviceManager.h 1115 2014-07-18 13:51:22Z murdoch $
 
 #include "Device.h"
 
@@ -29,6 +28,7 @@ public:
   int     getCurrent();
   int     getDeviceCount();
   void   getDeviceIds(int *buffer, int bufsize);
+  bool    createTestWindow();
 protected:
   /**
    * Dispose Listener implementation

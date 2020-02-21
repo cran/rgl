@@ -3,8 +3,6 @@
 
 // C++ header
 // This file is part of rgl
-//
-// $Id: glgui.h 1625 2018-09-10 13:43:57Z murdoch $
 
 #include "opengl.h"
 #include <vector>

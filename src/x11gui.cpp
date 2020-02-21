@@ -4,7 +4,6 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: x11gui.cpp 1700 2019-10-30 14:48:57Z murdoch $
 
 // Uncomment for verbose output on stderr:
 // #define RGL_X11_DEBUG
@@ -176,7 +175,8 @@ void X11WindowImpl::destroy()
   if (xwindow != 0) 
   {
     on_shutdown();
-    XDestroyWindow(factory->xdisplay, xwindow);
+    if (factory->xdisplay)
+      XDestroyWindow(factory->xdisplay, xwindow);
     factory->flushX();
     factory->notifyDelete(xwindow); /* Why didn't this happen in the lines above, from the DestroyNotify event? */
     xwindow = 0;
@@ -322,11 +322,17 @@ void X11WindowImpl::processEvent(XEvent& ev)
   }
 }
 // ---------------------------------------------------------------------------
+static int error_code; 
+
+static int X11SaveErr(Display *dsp, XErrorEvent *event)
+{
+  error_code = event->error_code;
+  return 0;
+}
+// ---------------------------------------------------------------------------
 void X11WindowImpl::initGL()
 {  
   glxctx = glXCreateContext(factory->xdisplay, xvisualinfo, NULL, True);
-  if (!glxctx)
-    factory->throw_error("unable to create GLX Context"); 
 }
 // ---------------------------------------------------------------------------
 void X11WindowImpl::shutdownGL()
@@ -403,7 +409,8 @@ GLBitmapFont* X11WindowImpl::initGLFont()
 void X11WindowImpl::on_init()
 {
   initGL();
-  fonts[0] = initGLFont();
+  if (glxctx)
+    fonts[0] = initGLFont();
 }
 
 void X11WindowImpl::on_shutdown()
@@ -449,22 +456,6 @@ void X11GUIFactory::throw_error(const char* string)
   disconnect();
 }
 // ---------------------------------------------------------------------------
-// ---------------------------------------------------------------------------
-static int error_code; 
-
-static void ConvertError(Display *dsp)
-{
-  char buff[1000];
-  XGetErrorText(dsp, error_code, buff, 1000);
-  error("X11 protocol error: %s", buff);
-}
-
-static int X11SaveErr(Display *dsp, XErrorEvent *event)
-{
-  error_code = event->error_code;
-  return 0;
-}
-
 X11GUIFactory::X11GUIFactory(const char* displayname)
 : xdisplay(0)
 , xfont(0)
@@ -507,16 +498,14 @@ void X11GUIFactory::disconnect()
   if (xdisplay) {
     XSync(xdisplay, False);
     processEvents();
-  }
 
-  // free xfont
-  if (xfont) {
-    XUnloadFont(xdisplay, xfont->fid);
-    xfont = 0;
-  }
+    // free xfont
+    if (xfont) {
+      XUnloadFont(xdisplay, xfont->fid);
+      xfont = 0;
+    }
   
-  // disconnect from X server
-  if (xdisplay) {
+    // disconnect from X server
     XCloseDisplay(xdisplay);
     xdisplay = 0;
   }
@@ -524,7 +513,8 @@ void X11GUIFactory::disconnect()
 // ---------------------------------------------------------------------------
 void X11GUIFactory::flushX()
 {
-  XSync(xdisplay, False);
+  if (xdisplay)
+    XSync(xdisplay, False);
   glXWaitX();
 }
 // ---------------------------------------------------------------------------
@@ -591,17 +581,29 @@ WindowImpl* X11GUIFactory::createWindowImpl(Window* window)
     attribList[15] = aa;
   }
 #endif
+  
+/* These codes are only used in debugging, they are never displayed. */
+#define RGL_ERROR_CODE (LastExtensionError + 1000)
 
+  /* clear old errors */
+  while ((error_code = glGetError())) { Rprintf("cleared error %d\n", error_code); };
+
+  /* Work around problems with Xvfb on MacOSX and disabled IGLX:  
+   temporarily catch protocol errors and convert
+   to R errors */
+  error_code = 0;
+  XErrorHandler old_handler = XSetErrorHandler(X11SaveErr);
+  
   xvisualinfo = glXChooseVisual( xdisplay, DefaultScreen(xdisplay), attribList );
 #ifdef GLX_SAMPLE_BUFFERS
   // Try to set up visual without MSAA if it failed
-  if (xvisualinfo == 0 && aa > 0) {
+  if (xvisualinfo == 0 && aa > 0 && !error_code) {
     attribList[12] = None;
     xvisualinfo = glXChooseVisual( xdisplay, DefaultScreen(xdisplay), attribList );
   }
 #endif
   if (xvisualinfo == 0) {
-    throw_error("no suitable visual available"); 
+    error_code = RGL_ERROR_CODE + 1;
   }
     
   // create X11 window
@@ -610,7 +612,6 @@ WindowImpl* X11GUIFactory::createWindowImpl(Window* window)
   unsigned long valuemask=CWEventMask|CWColormap|CWBorderPixel;
     
   XSetWindowAttributes attrib;
-  XErrorHandler old_handler;
   
   attrib.event_mask = 
       ButtonMotionMask 
@@ -624,42 +625,54 @@ WindowImpl* X11GUIFactory::createWindowImpl(Window* window)
     | ButtonReleaseMask;
 
 
-  ::Window xparent = RootWindow(xdisplay, DefaultScreen(xdisplay));
-
-  attrib.colormap = XCreateColormap(xdisplay, xparent, xvisualinfo->visual, AllocNone);
+  ::Window xparent = 0;
+  if (!error_code) {
+    xparent = RootWindow(xdisplay, DefaultScreen(xdisplay));
+    if (!error_code & !xparent)
+      error_code = RGL_ERROR_CODE + 2;
+  }
+  
+  if (!error_code) {
+    attrib.colormap = XCreateColormap(xdisplay, xparent, xvisualinfo->visual, AllocNone);
+    if (!error_code && !attrib.colormap)
+      error_code = RGL_ERROR_CODE + 3;
+  }
   attrib.border_pixel = 0;
   
-  /* Work around problems with Xvfb on MacOSX:  temporarily catch protocol errors and convert
-     to R errors */
-  error_code = 0;
-  old_handler = XSetErrorHandler(X11SaveErr);
   
-  ::Window xwindow = XCreateWindow(
-    xdisplay, xparent,
-    0, 0, 256, 256, 0, 
-    xvisualinfo->depth,
-    InputOutput,
-    xvisualinfo->visual, 
-    valuemask,
-    &attrib
-  );
-  XSync(xdisplay, False);
+  ::Window xwindow = 0;
+  if (!error_code) {
+    if (window)
+      window->resize(256, 256);  // This may be changed by window manager
+    xwindow = XCreateWindow(
+      xdisplay, xparent,
+      0, 0, 256, 256, 0, 
+      xvisualinfo->depth,
+      InputOutput,
+      xvisualinfo->visual, 
+      valuemask,
+      &attrib
+    );
+    if (!error_code && !xwindow)
+      error_code = RGL_ERROR_CODE + 4;
+  }
+  
+  if (!error_code)
+    XSync(xdisplay, False);
 
   /* set WM_CLASS on window */
-  XClassHint *classHint = XAllocClassHint();
-  if (classHint) {
-      classHint->res_name = const_cast<char*>("rgl");
-      classHint->res_class = const_cast<char*>("R_x11");
-      XSetClassHint(xdisplay, xwindow, classHint);
-      XFree(classHint);
+  if (!error_code) {
+    XClassHint *classHint = XAllocClassHint();
+    if (!error_code) {
+      if (classHint) {
+        classHint->res_name = const_cast<char*>("rgl");
+        classHint->res_class = const_cast<char*>("R_x11");
+        XSetClassHint(xdisplay, xwindow, classHint);
+        XFree(classHint);
+      } else
+        error_code = RGL_ERROR_CODE + 5;
+    }
   }
-
-  XSetErrorHandler(old_handler);
-  
-  if (error_code) ConvertError(xdisplay);  /* will not return */
-  
-  if (!xwindow)
-    return NULL;
 
   // set window manager protocols
 
@@ -672,20 +685,30 @@ WindowImpl* X11GUIFactory::createWindowImpl(Window* window)
     n++;
   }
   
-  if (n)
+  if (xwindow && n && !error_code)
     XSetWMProtocols(xdisplay,xwindow,proto_atoms,n);
 
   // create window implementation instance
   
-  impl = new X11WindowImpl(window, this, xwindow, xvisualinfo);
-
-  // register instance
-  
-  windowMap[xwindow] = impl;
+  if (xwindow && !error_code) {
+    impl = new X11WindowImpl(window, this, xwindow, xvisualinfo);
+    if (!error_code && !impl)
+      error_code = RGL_ERROR_CODE + 6;
+  } else {
+    impl = NULL;
+  }
   
   // flush X requests
   
   flushX();
+  
+  XSetErrorHandler(old_handler);
+
+  if (error_code) impl = NULL;
+  
+  // register instance
+  if (xwindow)
+    windowMap[xwindow] = impl;
   
   return (WindowImpl*) impl;
 }

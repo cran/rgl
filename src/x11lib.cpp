@@ -3,7 +3,6 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: x11lib.cpp 1115 2014-07-18 13:51:22Z murdoch $
 
 #include "R.h"
 #include "lib.h"

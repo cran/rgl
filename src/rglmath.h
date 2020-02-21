@@ -4,7 +4,6 @@
 // C++ header file
 // This file is part of RGL
 //
-// $Id: rglmath.h 1137 2014-09-24 19:03:24Z murdoch $
 
 #include <cmath>
 #include <cfloat>

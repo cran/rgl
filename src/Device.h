@@ -4,7 +4,6 @@
 // C++ header file
 // This file is part of RGL
 //
-// $Id: Device.h 1436 2016-01-01 15:18:43Z murdoch $
 
 #include "Disposable.h"
 #include "types.h"
@@ -40,7 +39,7 @@ public: // -- all methods are blocking until action completed
   bool clear(TypeID stackTypeID);
   int add(SceneNode* node); // -- return a unique id if successful, or zero if not
   bool pop(TypeID stackTypeID, int id);
-
+  bool hasWindow() { return window != NULL; }
   // accessor method for Scene, modeled after getBoundingBox()
   // from scene.h
   Scene* getScene() const { return scene; }

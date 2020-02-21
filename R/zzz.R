@@ -2,7 +2,6 @@
 ## R source file
 ## This file is part of rgl
 ##
-## $Id: zzz.R 1683 2019-06-25 19:48:55Z murdoch $
 ##
 
 ##
@@ -77,7 +76,7 @@
   ret <- rgl.init(initValue, onlyNULL)
   
   if (!ret) {
-    warning("'rgl_init' failed, running with rgl.useNULL = TRUE", call. = FALSE)
+    warning("'rgl.init' failed, running with 'rgl.useNULL = TRUE'.", call. = FALSE)
     options(rgl.useNULL = TRUE)
     rgl.init(initValue, TRUE)	
   }
@@ -86,8 +85,9 @@
   
 }
 
-rgl.init <- function(initValue = 0, onlyNULL = FALSE) .Call( rgl_init, 
-    initValue, onlyNULL, environment(rgl.init) )
+rgl.init <- function(initValue = 0, onlyNULL = FALSE, debug = getOption("rgl.debug", FALSE)) 
+  .Call( rgl_init, 
+    initValue, onlyNULL, environment(rgl.init), debug )
 
 ##
 ## exit-point

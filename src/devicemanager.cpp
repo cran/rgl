@@ -1,7 +1,6 @@
 // C++ source
 // This file is part of RGL.
 //
-// $Id: devicemanager.cpp 1115 2014-07-18 13:51:22Z murdoch $
 
 #include <algorithm>
 #include <cstdio>
@@ -60,8 +59,8 @@ Device* DeviceManager::getAnyDevice()
 {
   Device* pDevice = getCurrentDevice();
   if (pDevice == NULL) {
-    openDevice(useNULLDevice);
-    pDevice = getCurrentDevice();
+    if (openDevice(useNULLDevice))
+      pDevice = getCurrentDevice();
   }
   return pDevice;
 }
@@ -162,4 +161,13 @@ void DeviceManager::previousDevice()
   }
 }
 
+bool DeviceManager::createTestWindow()
+{
+  bool result = false;
+  Device* pDevice = new Device(newID, false);  
+  if ( pDevice->hasWindow() ) 
+    result = true;
+  delete pDevice;
+  return result;
+}
 

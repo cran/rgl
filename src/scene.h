@@ -3,8 +3,6 @@
 
 // C++ header file
 // This file is part of RGL
-//
-// $Id: scene.h 1661 2019-02-09 21:30:30Z murdoch $
 
 #include <vector>
 #include "types.h"

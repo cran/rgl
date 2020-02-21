@@ -3,8 +3,6 @@
 
 // C++ header file
 // This file is part of RGL
-//
-// $Id: rglview.h 1700 2019-10-30 14:48:57Z murdoch $
 
 
 #include "scene.h"

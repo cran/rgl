@@ -3,8 +3,6 @@
 
 // C++ header file
 // This file is part of RGL
-//
-// $Id: pixmap.h 1158 2014-11-11 17:27:21Z murdoch $
 
 #include <cstdio>
 #include "opengl.h"

@@ -2,7 +2,6 @@
 ## R source file
 ## This file is part of rgl
 ##
-## $Id: internal.R 1248 2015-05-18 20:33:32Z murdoch $
 ##
 
 ##

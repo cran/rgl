@@ -2,7 +2,6 @@
 ## R source file
 ## This file is part of rgl
 ##
-## $Id: device.R 1502 2016-07-11 00:30:41Z murdoch $
 ##
 
 ##

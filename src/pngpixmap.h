@@ -5,7 +5,6 @@
 // C++ header file
 // This file is part of RGL
 //
-// $Id: pngpixmap.h 1197 2014-12-20 19:07:08Z murdoch $
 
 namespace rgl {
 
