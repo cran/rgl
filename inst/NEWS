@@ -1046,3 +1046,25 @@ base graphics.
   - Added ?rgl.init help topic to describe initialization
   issues.
   - Added sanity check to setting of par3d("windowRect")
+
+0.100.54
+
+  - Fixed bug in plot3d.rglscene that caused restored subscenes to 
+    ignore the mouse.
+  - Changed rgl.attrib(id, "normals") so the normals will be returned
+    whether or not the object is lit.  (Suggestion of Tyler 
+    Morgan-Wall)
+  - The labels used in rglwidget() are now independent of set.seed(),
+    using code borrowed from Shiny for our own private RNG.
+  - getr3dDefaults() now gets values from rgl::r3dDefaults
+    if they are not present in the user's r3dDefaults list.
+  - bgplot3d() now uses the background colour from argument
+    bg.color (defaulting to the background color from
+    getr3dDefaults()) rather than always choosing white.
+  - next3d() no longer messes up when a user changes active
+    subscenes.
+  - If a sufficient version of Pandoc is not found, the 
+    vignettes will still run, but won't execute any rgl
+    code.
+  - The maintainer email address has been changed to 
+    murdoch.duncan@gmail.com.
