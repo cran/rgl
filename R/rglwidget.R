@@ -232,12 +232,20 @@ rglwidget <- local({
   reuseDF <- NULL
 
   function(x = scene3d(minimal), width = figWidth(), height = figHeight(),
-           controllers = NULL, snapshot = FALSE,
+           controllers = NULL, snapshot = !webgl,
            elementId = NULL,
            reuse = !interactive(),
            webGLoptions = list(preserveDrawingBuffer = TRUE), 
   	       shared = NULL, 
-           minimal = TRUE, ...) {
+           minimal = TRUE, 
+           webgl = !latex, latex, ...) {
+  if (missing(latex))
+    latex <- isTRUE(getOption("knitr.in.progress")) &&
+             identical(opts_knit$get("rmarkdown.pandoc.to"),
+                       "latex")
+  if (!webgl && is.logical(snapshot) && !snapshot)
+    stop("Must specify either 'snapshot' or 'webgl' or both")
+  origScene <- x
   force(shared) # It might plot something...
   	
   if (is.na(reuse))
@@ -253,18 +261,18 @@ rglwidget <- local({
   
   if (!is.list(shared))
     shared <- list(shared)
+  dependencies <- list(rglDependency, CanvasMatrixDependency)
   if (length(shared)) {
     x$crosstalk <- list(key = vector("list", length(shared)),
     		        group = character(length(shared)),
     		        id = integer(length(shared)),
     		        options = vector("list", length(shared)))
-    dependencies <- crosstalkLibs()
+    dependencies <- c(dependencies, crosstalkLibs())
   } else {
     x$crosstalk <- list(key = list(), 
     		        group = character(),
     		        id = integer(),
     		        options = list())
-    dependencies <- NULL    
   }
   	
   for (i in seq_along(shared)) {
@@ -282,7 +290,11 @@ rglwidget <- local({
   if (!is.null(height))
     height <- CSStoPixels(height)
   x = convertScene(x, width, height, snapshot = snapshot,
-                   elementId = elementId, reuse = reuseDF)
+                   elementId = elementId, reuse = reuseDF,
+                   webgl = webgl, latex = latex)
+  if (!webgl)
+    return(x)
+  
   if (!is.na(reuse))
     reuseDF <<- attr(x, "reuse")
   
@@ -302,7 +314,7 @@ rglwidget <- local({
     elementId = elementId,
     dependencies = dependencies,
     ...
-  ), rglReuse = attr(x, "reuse"))
+  ), rglReuse = attr(x, "reuse"), origScene = origScene)
   
   if (is.list(upstream$objects)) {
     do.call(combineWidgets, c(upstream$objects, 
@@ -331,7 +343,7 @@ renderRglwidget <- function(expr, env = parent.frame(), quoted = FALSE, outputAr
 }
 
 shinySetPar3d <- function(..., session,
-                          subscene = currentSubscene3d(rgl.cur())) {
+                          subscene = currentSubscene3d(cur3d())) {
   if (!requireNamespace("shiny"))
     stop("function requires shiny")
   args <- list(...)
@@ -348,7 +360,7 @@ shinySetPar3d <- function(..., session,
 }
 
 shinyGetPar3d <- function(parameters, session,
-                          subscene = currentSubscene3d(rgl.cur()),
+                          subscene = currentSubscene3d(cur3d()),
                           tag = "") {
   badargs <- parameters[!(parameters %in% .Par3d)]
   if (length(badargs))
@@ -363,3 +375,58 @@ convertShinyPar3d <- function(par3d, ...) {
     par3d$userMatrix <- matrix(unlist(par3d$userMatrix), 4,4)
   par3d
 }
+
+# Create the local dependencies
+
+makeDependency <- function(name, src, script = NULL, package,
+                           version = packageVersion(package),
+                           minifile = paste0(basename(src), ".min.js"),
+                           debugging = FALSE, ...) {
+  if (!is.null(script) &&
+      requireNamespace("js", quietly = TRUE) &&
+      packageVersion("js") >= "1.2") {
+    if (debugging) {
+      for (f in script) {
+        hints <- js::jshint(readLines(file.path(system.file(src, package = package), f)))
+        for (i in seq_len(NROW(hints)))
+          warning(f, "#", hints[i, "line"], ": ", hints[i, "reason"],
+                  call. = FALSE, immediate. = TRUE)
+      }
+    }
+    minified <- js::uglify_files(file.path(system.file(src, package = package), script))
+    writeLines(minified, file.path(system.file(src, package = package), minifile))
+    if (!debugging)
+      script <- minifile
+  }
+  htmlDependency(name = name, 
+                      src = src,
+                      package = package,
+                      version = version,
+                      script = script,
+                      ...)
+}
+
+CanvasMatrixDependency <- makeDependency("CanvasMatrix4",
+                                         src = "htmlwidgets/lib/CanvasMatrix",
+                                         script = "CanvasMatrix.src.js",
+                                         package = "rgl",
+                                         debugging = nchar(Sys.getenv("RGL_DEBUGGING", "")) > 0)
+
+rglDependency <- makeDependency("rglwidgetClass", 
+                      src = "htmlwidgets/lib/rglClass",
+                      script = c("rglClass.src.js",
+                                 "utils.src.js",
+                                 "subscenes.src.js",
+                                 "shaders.src.js",
+                                 "textures.src.js",
+                                 "projection.src.js",
+                                 "mouse.src.js",
+                                 "init.src.js",
+                                 "pieces.src.js",
+                                 "draw.src.js",
+                                 "controls.src.js",
+                                 "selection.src.js",
+                                 "rglTimer.src.js"),
+                      stylesheet = "rgl.css",
+                      package = "rgl",
+                      debugging = nchar(Sys.getenv("RGL_DEBUGGING", "")) > 0)

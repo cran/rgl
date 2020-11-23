@@ -4,17 +4,24 @@ author: "Duncan Murdoch"
 date: "`r format(Sys.time(), '%B %d, %Y')`"
 output:
   rmarkdown::html_vignette:
-    toc: yes
-    fig_width: 5
     fig_height: 5
+    fig_width: 5
+    toc: yes
+  pdf_document:
+    fig_height: 5
+    fig_width: 5
+    toc: yes
+  html_document:
+    df_print: paged
+    toc: yes
 vignette: >
-  %\VignetteIndexEntry{rgl Overview} 
+  %\VignetteIndexEntry{rgl Overview}
   %\VignetteEngine{knitr::rmarkdown}
 ---
 
 ```{r setup, echo=FALSE, results="asis"}
 source("setup.R")
-knitr::opts_chunk$set(rgl.newwindow = TRUE)
+setupKnitr(autoprint = TRUE)
 set.seed(123)
 ```
 
@@ -42,7 +49,7 @@ within the R help system.
 
 The document includes WebGL figures.  To view these, you must have
 Javascript and WebGL enabled in your browser.  Some older browsers
-may not support this -- see http://get.webgl.org for tests
+may not support this -- see https://get.webgl.org for tests
 and links to a discussion.
 
 
@@ -54,12 +61,13 @@ plots points within an rgl window.  It is similar to the classic
 but works in 3 dimensions.
 
 For example
-```{r echo=1}
+```{r}
 with(iris, plot3d(Sepal.Length, Sepal.Width, Petal.Length, 
                   type="s", col=as.numeric(Species)))
-rglwidget()
 ```
-can be used to plot three columns of the `iris` data.  
+
+\noindent
+can be used to plot three columns of the `iris` data.
 Allowed plot types include `"p", "l", "h", "s"`,
 meaning points, lines, segments from z=0, and spheres.  There's
 a lot of flexibility in specifying the coordinates; the 
@@ -88,7 +96,7 @@ for details.  For example, the `MASS` package estimates
 Gamma parameters using maximum likelihood in a 
 `r linkfn("fitdistr", text="?MASS::fitdistr", pkg="MASS")` example.
 Here we show the log likelihood surface. 
-```{r persp3d, webgl=TRUE, fig.height=3, fig.width=6}
+```{r persp3d, fig.height=3, fig.width=6, fig.keep="last"}
 library(MASS)
 # from the fitdistr example
 set.seed(123)
@@ -192,7 +200,7 @@ Function                             | Description
 `r indexfns("thigmophobe3d")`:       | choose label positions to avoid overlap
 
 For example, to plot three random triangles, one could use
-```{r webgl=TRUE, fig.width=3, fig.height=3}
+```{r fig.width=3, fig.height=3}
 triangles3d(cbind(x=rnorm(9), y=rnorm(9), z=rnorm(9)), col = "green")
 decorate3d()
 bg3d("lightgray")
@@ -306,7 +314,6 @@ dev.off()
 open3d()
 xyz <- cbind(c(0,1,1,0), 0, c(0,0,1,1))
 quads3d(xyz, texture = filename, texcoords = xyz[,c(1, 3)]*2, col = "white", specular = "black")
-rglwidget()
 ```
 
 Some other notes:
@@ -388,8 +395,7 @@ Function                             | Description
 `r indexfns(c("tetrahedron3d", "cube3d", "octahedron3d", "dodecahedron3d", "icosahedron3d"))`: | Platonic solids
 `r indexfns(c("cuboctahedron3d", "oh3d"))`:             | other solids
 
-```{r results="hide",webgl=TRUE}
-open3d()
+```{r}
 cols <- rainbow(7)
 layout3d(matrix(1:16, 4,4), heights=c(1,3,1,3))
 text3d(0,0,0,"tetrahedron3d"); next3d()
@@ -469,16 +475,30 @@ ib           | (optional) A 4 by q matrix of vertex indices.  Each column is a q
 material     | (optional) A list of material properties.
 normals      | (optional) A matrix of the same shape as vb, containing normal vectors at each vertex.
 texcoords    | (optional) A 2 by n matrix of texture coordinates corresponding to each vertex.
+values       | (optional) A vector of length n holding values at each vertex
+
+
+### Contouring shapes
+
+These functions compute and plot contours of functions
+on surfaces, or clip objects along a contour of a function.
+
+Function                         | Description
+-------------------------------- | -----------
+`r indexfns("contourLines3d")`:  | draw contour lines on surface
+`r indexfns("filledContour3d")`: | fill between contours on surface
+`r indexfns("clipMesh3d")`:      | clip mesh object using curved boundary
+`r indexfns("clipObj3d")`:       | clip general object using curved boundary
 
 ### Manipulating shapes
 
-The final set of functions manipulate and modify mesh objects:
+These functions manipulate and modify mesh objects:
 
 Function                             | Description
 ------------------------------------ | -----------
 `r indexfns("addNormals")`: | add normal vectors to make a shape look smooth
 `r indexfns("subdivision3d")`: | add extra vertices to make it look even smoother
-`r indexfns("clipMesh3d")`: | clip mesh object using curved boundary
+`r indexfns("merge.mesh3d", backticked("merge"))`: | merge mesh objects
 
 The individual steps in `r linkfn("subdivision3d")` are also available:
 `r indexfns(c("deform.mesh3d", "divide.mesh3d", "normalize.mesh3d"))`. These
@@ -508,7 +528,133 @@ Function                           | Description
 `r indexfns(c("addToSubscene3d", "delFromSubscene3d"))`: | Add objects to a subscene, or delete them
 `r indexfns("gc3d")`:              | Do "garbage collection":  delete objects that are not displayed in any subscene
 
+## Documents with `rgl` Scenes
 
+The `rgl` package can produce output that can be embedded
+in other documents.  The recommended way to do this has changed several
+times over the years.  We will start with the current
+recommendation, then list older methods.
+
+### The recommended method
+
+Currently the best way to embed an `rgl` scene in a document
+is to produce the document in HTML using R Markdown.  Early in
+the document, you should have code like this in one of the
+setup code chunks:
+
+````markdown
+`r ''````{r echo=FALSE, include=FALSE}
+library(rgl)
+setupKnitr(autoprint = TRUE)
+```
+````
+
+The call to `setupKnitr()` will install a number of hooks
+and set options in `knitr` so that `rgl` code is handled properly.
+The `autoprint = TRUE` argument makes `rgl` act in the document
+almost the same way it would act in the console, or the way 
+base graphics are handled by `knitr`:  If you print the value
+of high level `rgl` functions, a plot will be inserted into the
+output, but maybe only after low level modifications to it are
+complete.  For example, this code block prints both
+triangles and spheres in a single plot at the end:
+
+```{r}
+xyz <- matrix(rnorm(27), ncol = 3)
+triangles3d(xyz, col = rainbow(9))
+spheres3d(xyz, col = rainbow(9), radius = 0.1)
+```
+
+There are a few differences if you have a complicated situation:
+
+  -  The mechanism depends on the result of the `rgl` function
+  calls being automatically printed.
+  If the calls are in a loop or other code block where automatic
+  printing doesn't happen, you'll need some trickery to get 
+  things to print.  For example, this will print three plots:
+  
+```{r eval = FALSE}
+plots <- NULL
+for (i in 1:3) {
+  plot3d(rnorm(10), rnorm(10), rnorm(10))
+  plots <- htmltools::tagList(plots, rglwidget())
+  close3d()
+}
+plots
+```
+
+  - It also depends on the fact that `rgl` functions return
+  results using `lowlevel()` or `highlevel()` to mark which
+  kind of plot they are.  If you are using a function from
+  another package to produce the plot, you may need to insert
+  an explicit call to one of those to get it to print.  Use `lowlevel()` if the function just modifies an existing plot, 
+  `highlevel()` if it starts a new one.  For example,
+  
+```{r eval = FALSE}
+foreignHigh()   # Produces a high level plot, but doesn't return
+                # an appropriate value
+highlevel()
+foreignLow()    # Modifies the previous plot
+lowlevel()
+```  
+
+This should display the output at the end of the code chunk, when
+modifications are assumed complete.
+
+### Producing PDF output
+
+While some PDF previewers support interactive 3D graphics,
+most don't.  To produce a screenshot of an `rgl` scene in an R Markdown
+document with PDF output, simply follow the directions given
+above.  The auto-printing will detect PDF output and use
+`rgl.snapshot` to produce a PNG file to insert.  (See below
+if you want to insert a different format of graphic.)
+
+If you really need interactive output, see the 
+`r linkfn("writeASY")` function.
+
+### Manual insertion of plots
+
+You may not want to use the `setupKnitr(autoprint = TRUE)`
+method described above.  It is very new, and may still have
+bugs; you may have an older document and not want to edit it
+to work that way.
+
+In this case, you can insert plots manually.  Use setup
+code
+
+````markdown
+`r ''````{r echo=FALSE, include=FALSE}
+library(rgl)
+setupKnitr()
+```
+````
+
+and call `rglwidget()` at top level whenever you want to 
+insert a plot.
+
+There are a couple of other differences in default behaviour if
+you are not using `autoprint`:
+
+ - By default, each code chunk continues the `rgl` scene from
+earlier chunks.  You'll need an explicit `r linkfn("open3d")`
+call to get a clean window.
+
+ - Also by default, the `rgl` window is not closed at the end of
+the chunk.  This probably doesn't matter, but you may find
+you run out of memory if your scenes are really big.
+
+### Older methods
+
+The original way to insert an `rgl` scene in a document was to use
+the `r indexfns("writeWebGL")` function to write HTML code to insert in a document. 
+Later, `Sweave` and `knitr` hooks were added.  These are no longer maintained, and it is recommended that
+you update old documents to use the newer methods.  See
+the `r linkfn("writeWebGL")`, `r linkfn("rgl.Sweave")` and `r linkfn("hook_rgl")` help
+topics for details on these if you must use them.  If you are
+reading documents that suggest using those methods, let the
+author know they need updating!
+  
 ## Utility Functions
 
 
@@ -597,7 +743,7 @@ Function    | Description
 ----------- | -------------
 `r indexfns("scene3d")`:    | Save a scene to an R variable, which can be saved and reloaded
 `r indexfns("rglwidget")`: | Prints as HTML and Javascript to display a scene in a web browser.  (See also [User Interaction in WebGL](WebGL.html).)
-`r indexfns("writeWebGL")`: | Deprecated.
+`r linkfn("writeWebGL")`: | Deprecated.
 `r indexfns("writeASY")`:   | Write files for Asymptote
 `r indexfns("writePLY")`:   | Write PLY files (commonly used in 3D printing)
 `r indexfns(c("readOBJ", "writeOBJ"))`:   | Read or write OBJ files (commonly used in 3D graphics)
@@ -627,7 +773,7 @@ There are two ways in which `rgl` scenes are normally
 displayed within R.  The older one is in a dedicated
 window.  In Unix-alikes this is an X11 window;  it is
 a native window in Microsoft Windows.  On MacOS, the
-XQuartz system (see http://xquartz.org) needs to be
+XQuartz system (see https://www.xquartz.org) needs to be
 installed to support this.
 
 To suppress this display, set `options(rgl.useNULL = TRUE)` before opening a new `rgl` window.  See
@@ -643,7 +789,8 @@ when printed.
 
 ### Working with WebGL scenes
 
-There are currently two schemes for exporting a scene to a web page.
+You should use the following scheme for exporting a scene to a web page.  There's also an older scheme, which is no longer 
+supported.
 
 The recommended approach works with the `htmlwidgets` framework
 (see http://www.htmlwidgets.org/).  In an R Markdown document
@@ -652,7 +799,7 @@ in `knitr`, use the
 chunk option `webgl=TRUE`; we recommend the explicit use of
 `rglwidget`.)  This approach also
 allows display of `rgl` scenes in
-[RStudio](https://www.rstudio.com).  Besides 
+[RStudio](https://rstudio.com).  Besides 
 `rgl` scenes, various controls for them can
 be displayed, and there are a few utility functions
 that can be useful:
@@ -660,7 +807,7 @@ that can be useful:
 Function                             | Description
 ------------------------------------ | -------------
 `r indexfns("propertyControl")`:       | set individual properties
-`r indexfns("clipplaneControl")`:       |  control a clippling plane
+`r indexfns("clipplaneControl")`:       |  control a clipping plane
 `r indexfns("subsetControl")`:       | control which objects are displayed
 `r indexfns("ageControl")`:       | "age" vertices of an object
 `r indexfns("vertexControl")`:       | control properties of vertices
@@ -687,43 +834,45 @@ printing.  Finally, the experimental function
 `r indexfns("setUserShaders")` allows you to
 use hand-written shaders in WebGL.
 
-The older approach uses the `writeWebGL` function to export a scene 
+The older approach uses the `r linkfn("writeWebGL")` function to export a scene 
 to HTML and Javascript code.  
-The functions below write HTML and Javascript for working with the 
-exported scene.  
-
-Function                             | Description
------------------------------------- | -------------
-`r indexfns("propertySlider")`:       | insert a slider to make changes to a scene
-`r indexfns("clipplaneSlider")`:      | insert a slider to control a clipping plane
-`r indexfns("subsetSlider")`:         | insert a slider to control which objects are displayed
-`r indexfns("toggleButton")`:         | insert a button to toggle some items
-`r indexfns("propertySetter")`:       | function to modify properties
-`r indexfns("subsetSetter")`:         | function to choose subsets
-`r indexfns("ageSetter")`:            | function to "age" vertices
-`r indexfns("par3dinterpSetter")`:    | function like `r linkfn("par3dinterp")`
-`r indexfns("vertexSetter")`:         | function to modify individual vertices
-`r indexfns("matrixSetter")`:         | function to modify matrices
+These functions write HTML and Javascript for working with the 
+exported scene:  `r indexfns("propertySlider")`,
+`r indexfns("clipplaneSlider")`, `r indexfns("subsetSlider")`,
+`r indexfns("toggleButton")`, `r indexfns("propertySetter")`,
+`r indexfns("subsetSetter")`, `r indexfns("ageSetter")`, 
+`r indexfns("par3dinterpSetter")`, 
+`r indexfns("vertexSetter")`, `r indexfns("matrixSetter")`.
+Use the newer functions instead.
 
 ### Working with the scene
 
 `rgl` maintains internal structures for all the scenes it displays.
 The following functions allow users to find information about them
-and manipulate them.
+and manipulate them.  In cases where there are both `*3d`
+and `rgl.*` versions of functions, most users should use
+the `*3d` version:  the `rgl.*` functions are more primitive
+and are mainly intended for internal use.
 
 Function                             | Description
 ------------------------------------ | -----------
 `r indexfns("open3d")`:               | open a new window
-`r indexfns("rgl.close")`:            | close the current window
-`r indexfns("rgl.bringtotop")`:       | bring the current window to the top
-`r indexfns("rgl.cur")`:              | id of the active device
-`r indexfns("rgl.dev.list")`:         | ids of all active devices
-`r indexfns("rgl.set")`:              | set a particular device to be active
-`r indexfns("rgl.ids")`:              | ids and types of all current objects
-`r indexfns(c("rgl.attrib", "rgl.attrib.info", "rgl.attrib.count"))`: | attributes of objects in the scene
+`r indexfns(c("close3d", "rgl.close"))`:              | close the current window
+`r indexfns(c("cur3d", "rgl.cur"))`:                | id of the active device
+`r indexfns(c("set3d", "rgl.set"))`:                | set a particular device to be active
 `r indexfns(c("pop3d", "rgl.pop"))`:     | delete an object from the scene
 `r indexfns(c("clear3d", "rgl.clear"))`:            | delete all objects of certain classes
-`r indexfns("rgl.projection")`:        | return information about the current projection
+`r indexfns(c("ids3d", "rgl.ids"))`:              | ids and types of all current objects
+
+These functions are mainly intended for programming, and 
+have no corresponding `*3d` counterparts:
+
+Function | Description
+------------- | -----------
+`r indexfns("rgl.bringtotop")`: | bring the current window to the top
+`r indexfns("rgl.dev.list")`:   | ids of all active devices
+`r indexfns(c("rgl.attrib", "rgl.attrib.info", "rgl.attrib.count"))`: | attributes of objects in the scene
+`r indexfns("rgl.projection")`: | return information about the current projection
 `r indexfns(c("rgl.user2window", "rgl.window2user"))`: | convert between coordinates in the current projection
 
 The `r indexfns("as.triangles3d")` generic function is intended to 
@@ -768,9 +917,8 @@ The `r indexfns("rglToLattice")` and `r indexfns("rglToBase")` functions support
 
 For example, we first display the volcano data in `rgl`:
 ```{r echo = 2:3}
-rgl.close()
+close3d()
 persp3d(volcano, col = "green")
-rglwidget()
 ```
 This display is interactive, but we can reproduce the initial view using the
 `lattice` `r linkfn("wireframe", pkg = "lattice")` or base graphics `r linkfn("persp", pkg = "graphics")` functions:
@@ -784,6 +932,25 @@ persp(volcano, col = "green", shade = TRUE,
 
 Note that the `orientlib` package must be 
 available for these functions to work.
+
+### Working with Javascript
+
+The WebGL displays created using `r linkfn("rglwidget")`
+rely on a large body of Javascript code included in this
+package.  To help in development of this code, the
+`r indexfns("makeDependency")` function was written.
+It may be useful in other packages that include Javascript.
+
+### Other functions
+
+This section is for miscellaneous functions that don't
+fall in any of the other categories in this document.
+
+The `r indexfns("setGraphicsDelay")` function is designed
+to work around what appears to be a bug on MacOS:  if
+a standard plot window is opened too quickly after an `rgl`
+window, R can crash.  This function inserts a one second 
+delay when it appears to be needed.
 
 ## Warning:  Work in Progress!
 

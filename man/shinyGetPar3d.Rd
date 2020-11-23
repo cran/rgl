@@ -10,8 +10,8 @@ settings that may have been modified by user interaction in the browser.
 
 }
 \usage{
-shinyGetPar3d(parameters, session, subscene = currentSubscene3d(rgl.cur()), tag = "")
-shinySetPar3d(..., session, subscene = currentSubscene3d(rgl.cur()))
+shinyGetPar3d(parameters, session, subscene = currentSubscene3d(cur3d()), tag = "")
+shinySetPar3d(..., session, subscene = currentSubscene3d(cur3d()))
 }
 \arguments{
   \item{parameters}{
@@ -94,7 +94,7 @@ if (interactive()) {
       # i.e. whenever a response to the request above is
       # received.
       output$rglPlot <- renderRglwidget({
-        if (length(rgl.dev.list())) rgl.close()
+        if (length(rgl.dev.list())) close3d()
         col <- sample(colors(), 1)
         plot3d(xyz, col = col, type = "s", main = col)
         par3d(userMatrix = input$par3d$userMatrix)

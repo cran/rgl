@@ -4,7 +4,7 @@
 
 # Node Management
 
-getr3dDefaults <- function() {
+getr3dDefaults <- function(class = NULL, value = NULL) {
   result <- r3dDefaults
   if (exists("r3dDefaults", envir = globalenv())) {
     user <- get("r3dDefaults", envir=.GlobalEnv)
@@ -15,6 +15,10 @@ getr3dDefaults <- function() {
         result[[n]] <- user[[n]]
     }
   }
+  if (!is.null(class))
+    result <- result[[class]]
+  if (!is.null(result) && !is.null(value))
+    result <- result[[value]]
   result
 }
 
@@ -39,8 +43,6 @@ clear3d     <- function(type = c("shapes", "bboxdeco", "material"),
     	do.call("bg3d", as.list(defaults$bg))
     }
 }
-
-pop3d       <- function(...) {.check3d(); rgl.pop(...)}
 
 # Environment
 
@@ -113,7 +115,7 @@ material3d  <- function (...)
 
 bg3d        <- function(...) {
   .check3d(); save <- material3d(); on.exit(material3d(save))
-  bgid <- rgl.ids("background")$id
+  bgid <- ids3d("background")$id
   if (length(bgid) && nrow(flags <- rgl.attrib(bgid[1], "flags"))) {
     sphere <- flags["sphere", 1]
     fogtype <- if (flags["linear_fog", 1]) "linear"
@@ -291,12 +293,12 @@ particles3d <- function(x,y=NULL,z=NULL,radius=1,...) sprites3d(
 r3dDefaults <- list(userMatrix = rotationMatrix(290*pi/180, 1, 0, 0),
 		  mouseMode = c("trackball", "zoom", "fov", "pull"),
 		  FOV = 30,
-		  bg = list(color="white"),
+		  bg = list(color="white",fogtype = "none"),
 		  family = "sans",
-		  material = list(color="black", fog=FALSE))
+		  material = list(color="black", fog = TRUE))
 
 open3d <- function(..., params = getr3dDefaults(), 
-                   useNULL = rgl.useNULL()	)
+                   useNULL = rgl.useNULL(), silent = FALSE	)
 {
     args <- list(...)
     if (!is.null(args$antialias) 
@@ -328,12 +330,57 @@ open3d <- function(..., params = getr3dDefaults(),
     }
  
     do.call("par3d", params)   
-    return(rgl.cur())
+    if (silent)
+      invisible(cur3d())
+    else
+      cur3d()
+}
+
+close3d <- function(dev = cur3d(), silent = TRUE) {
+  for (d in dev[dev != 0]) {
+    set3d(d, silent = silent)
+    rgl.close()
+    if (!silent)
+      message("Closed device ", d)
+  }
+  invisible(cur3d())
+}
+
+cur3d <- rgl.cur
+
+set3d <- function(dev, silent = FALSE) {
+  prev <- cur3d()
+  rgl.set(dev, silent = silent)
+  prev
 }
 
 .check3d <- function() {
-    if (result<-rgl.cur()) return(result)
+    if (result<-cur3d()) return(result)
     else return(open3d())
 }
 
-snapshot3d <- function(...) rgl.snapshot(...)
+snapshot3d <- function(filename, ..., scene, width = NULL, height = NULL) { 
+  if (!missing(scene)) {
+    if (inherits(scene, "rglWebGL")) {
+      snapshot <- scene$x$snapshot
+      if (!is.null(snapshot) && is.null(width) && is.null(height))
+        return(saveURI(snapshot, filename))
+      else
+        scene <- attr(scene, "origScene")
+    }
+    saveopts <- options(rgl.useNULL = FALSE)
+    on.exit(options(saveopts))
+    plot3d(scene) # calls open3d internally
+    on.exit(close3d(), add = TRUE)
+  }
+  if (!is.null(width) || !is.null(height)) {
+    saverect <- rect <- par3d("windowRect")
+    on.exit(par3d(windowRect = saverect), add = TRUE, after = FALSE)
+    if (!is.null(width))
+      rect[3] <- rect[1] + width
+    if (!is.null(height))
+      rect[4] <- rect[2] + height
+    par3d(windowRect = rect)
+  }
+  rgl.snapshot(filename, ...)
+}

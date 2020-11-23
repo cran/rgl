@@ -9,14 +9,14 @@
 }
 \usage{
 rgl.setMouseCallbacks(button, begin = NULL, update = NULL, end = NULL, 
-                      dev = rgl.cur(), subscene = currentSubscene3d(dev))
+                      dev = cur3d(), subscene = currentSubscene3d(dev))
 rgl.getMouseCallbacks(button, 
-                      dev = rgl.cur(), subscene = currentSubscene3d(dev))
+                      dev = cur3d(), subscene = currentSubscene3d(dev))
 
 rgl.setWheelCallback(rotate, 
-                      dev = rgl.cur(), subscene = currentSubscene3d(dev))
+                      dev = cur3d(), subscene = currentSubscene3d(dev))
 
-rgl.getWheelCallback(dev = rgl.cur(), subscene = currentSubscene3d(dev))
+rgl.getWheelCallback(dev = cur3d(), subscene = currentSubscene3d(dev))
 
 }
 \arguments{
@@ -54,7 +54,7 @@ The \code{rgl.getWheelCallback} returns the callback function or \code{NULL}.
 \seealso{ \code{\link{par3d}} to set built-in handlers }
 \examples{
 
- pan3d <- function(button, dev = rgl.cur(), subscene = currentSubscene3d(dev)) {
+ pan3d <- function(button, dev = cur3d(), subscene = currentSubscene3d(dev)) {
    start <- list()
    
    begin <- function(x, y) {
@@ -79,6 +79,7 @@ The \code{rgl.getWheelCallback} returns the callback function or \code{NULL}.
    cat("Callbacks set on button", button, "of rgl device", dev, "in subscene", subscene, "\n")
  }
  shade3d(icosahedron3d(), col = "yellow")
+ # This only works in the internal display...
  pan3d(1)
 }
 \keyword{ dynamic }

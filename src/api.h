@@ -66,14 +66,14 @@ void rgl_light    (int* successptr, int* idata, double* ddata );
 
 void rgl_viewpoint(int* successptr, int* idata, double* ddata);
 
-void rgl_bg       (int* successptr, int* idata);
+void rgl_bg       (int* successptr, int* idata, double* fogScale);
 void rgl_bbox     (int* successptr, int* idata, double* ddata, double* xat, char** xtext, double* yat, char** ytext, double* zat, char** ztext);
 
 void rgl_primitive(int* successptr, int* idata, double* vertex, double* normals, double* texcoords);
 void rgl_texts    (int* successptr, int* idata, double* adj, char** text, double* vertex,
                                  int* nfonts, char** family, int* style, double* cex, int* useFreeType,
                                  int* npos, int* pos);
-void rgl_spheres  (int* successptr, int* idata, double* vertex, double* radius);
+void rgl_spheres  (int* successptr, int* idata, double* vertex, double* radius, int* fastTransparency);
 void rgl_planes   (int* successptr, int* idata, double* normals, double* offsets);
 void rgl_clipplanes(int* successptr, int* idata, double* normals, double* offsets);
 void rgl_abclines (int* successptr, int* idata, double* bases, double* directions);

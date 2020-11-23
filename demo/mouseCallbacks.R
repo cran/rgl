@@ -12,21 +12,21 @@ angle <- function(a,b) {
  
 clamp <- function(x, min, max)  pmin(pmax(x, min), max)
 
-mouseNone <- function(button = 1, dev = rgl.cur() ) {
+mouseNone <- function(button = 1, dev = cur3d() ) {
 
-    cur <- rgl.cur()
+    cur <- cur3d()
     
     for (i in dev) {
-        rgl.set(i, TRUE)
+        set3d(i, TRUE)
         rgl.setMouseCallbacks(button, begin = NULL, update = NULL, end = NULL, dev = dev)
     }
-    rgl.set(cur)
+    set3d(cur)
 }
 
-mouseTrackball <- function(button = 1, dev = rgl.cur() ) {
+mouseTrackball <- function(button = 1, dev = cur3d() ) {
     width <- height <- rotBase <- NULL
     userMatrix <- list()
-    cur <- rgl.cur()
+    cur <- cur3d()
     
     screenToVector <- function(x, y) {
       radius <- max(width, height)/2
@@ -48,12 +48,12 @@ mouseTrackball <- function(button = 1, dev = rgl.cur() ) {
         vp <- par3d("viewport")
         width <<- vp[3]
         height <<- vp[4]
-        cur <<- rgl.cur()
+        cur <<- cur3d()
         for (i in dev) {
-            if (inherits(try(rgl.set(i, TRUE)), "try-error")) dev <<- dev[dev != i]
+            if (inherits(try(set3d(i, TRUE)), "try-error")) dev <<- dev[dev != i]
             else userMatrix[[i]] <<- par3d("userMatrix")
         }
-        rgl.set(cur, TRUE)
+        set3d(cur, TRUE)
         rotBase <<- screenToVector(x, height - y)
     }
     
@@ -63,36 +63,36 @@ mouseTrackball <- function(button = 1, dev = rgl.cur() ) {
         axis <- xprod(rotBase, rotCurrent)
         mouseMatrix <- rotationMatrix(angle, axis[1], axis[2], axis[3])
         for (i in dev) {
-            if (inherits(try(rgl.set(i, TRUE)), "try-error")) dev <<- dev[dev != i]
+            if (inherits(try(set3d(i, TRUE)), "try-error")) dev <<- dev[dev != i]
             else par3d(userMatrix = mouseMatrix %*% userMatrix[[i]])
         }
-        rgl.set(cur, TRUE)
+        set3d(cur, TRUE)
     }
     
     for (i in dev) {
-        rgl.set(i, TRUE)
+        set3d(i, TRUE)
         rgl.setMouseCallbacks(button, begin = trackballBegin, update = trackballUpdate, end = NULL,
                               dev = dev)
     }
-    rgl.set(cur, TRUE)
+    set3d(cur, TRUE)
 }
 
-mouseXAxis<- function(button = 1, dev = rgl.cur() , left=TRUE) {
+mouseXAxis<- function(button = 1, dev = cur3d() , left=TRUE) {
     mouseOneAxis(button, dev, axis=c(1,0,0), left=left) 
 }
 
-mouseYAxis<- function(button = 1, dev = rgl.cur(), left = TRUE ) {
+mouseYAxis<- function(button = 1, dev = cur3d(), left = TRUE ) {
     mouseOneAxis(button, dev, axis=c(0,1,0), left=left) 
 }
 
-mouseZAxis<- function(button = 1, dev = rgl.cur(), left=TRUE) {
+mouseZAxis<- function(button = 1, dev = cur3d(), left=TRUE) {
     mouseOneAxis(button, dev, axis=c(0,0,1), left=left) 
 }
 
-mouseOneAxis <- function(button = 1, dev = rgl.cur(), axis = c(1,0,0), left = TRUE ) {
+mouseOneAxis <- function(button = 1, dev = cur3d(), axis = c(1,0,0), left = TRUE ) {
     width <- height <- rotBase <- NULL
     userMatrix <- list()
-    cur <- rgl.cur()
+    cur <- cur3d()
     
     screenToVector <- function(x, y) {
       radius <- max(width, height)/2
@@ -114,12 +114,12 @@ mouseOneAxis <- function(button = 1, dev = rgl.cur(), axis = c(1,0,0), left = TR
         vp <- par3d("viewport")
         width <<- vp[3]
         height <<- vp[4]
-        cur <<- rgl.cur()
+        cur <<- cur3d()
         for (i in dev) {
-            if (inherits(try(rgl.set(i, TRUE)), "try-error")) dev <<- dev[dev != i]
+            if (inherits(try(set3d(i, TRUE)), "try-error")) dev <<- dev[dev != i]
             else userMatrix[[i]] <<- par3d("userMatrix")
         }
-        rgl.set(cur, TRUE)
+        set3d(cur, TRUE)
         rotBase <<- screenToVector(x, height/2)
     }
     
@@ -128,7 +128,7 @@ mouseOneAxis <- function(button = 1, dev = rgl.cur(), axis = c(1,0,0), left = TR
         angle <- rotCurrent[1] - rotBase[1]
         mouseMatrix <- rotationMatrix(angle, axis[1], axis[2], axis[3])
         for (i in dev) {
-            if (inherits(try(rgl.set(i, TRUE)), "try-error")) dev <<- dev[dev != i]
+            if (inherits(try(set3d(i, TRUE)), "try-error")) dev <<- dev[dev != i]
             else {
 		if (left)
 		    par3d(userMatrix = mouseMatrix %*% userMatrix[[i]])
@@ -136,17 +136,17 @@ mouseOneAxis <- function(button = 1, dev = rgl.cur(), axis = c(1,0,0), left = TR
 		    par3d(userMatrix = userMatrix[[i]] %*% mouseMatrix)
 	    }
         }
-        rgl.set(cur, TRUE)
+        set3d(cur, TRUE)
     }
     
     for (i in dev) {
-        rgl.set(i, TRUE)
+        set3d(i, TRUE)
         rgl.setMouseCallbacks(button, begin = oneAxisBegin, update = oneAxisUpdate, end = NULL, dev = dev)
     }
-    rgl.set(cur, TRUE)
+    set3d(cur, TRUE)
 }
 
-mousePolar <- function(button = 1, dev = rgl.cur()) {
+mousePolar <- function(button = 1, dev = cur3d()) {
    
     screenToPolar <- function(x,y) {
     	r <- min(width, height)/2
@@ -155,7 +155,7 @@ mousePolar <- function(button = 1, dev = rgl.cur()) {
     	return( asin( c(dx, -dy)/r ) )
     }
 
-    cur <- rgl.cur()
+    cur <- cur3d()
     width <- height <- dragBase <- dragCurrent <- NULL
     camBase <- list()
     
@@ -164,9 +164,9 @@ mousePolar <- function(button = 1, dev = rgl.cur()) {
         width <<- vp[3]
         height <<- vp[4]
         dragBase <<- screenToPolar(x, y)
-    	cur <<- rgl.cur()
+    	cur <<- cur3d()
     	for (i in dev) {
-	    if (inherits(try(rgl.set(i, TRUE)), "try-error")) dev <<- dev[dev != i]
+	    if (inherits(try(set3d(i, TRUE)), "try-error")) dev <<- dev[dev != i]
             else {
 		m <- par3d("userMatrix")
 		svd <- svd(m[1:3, 1:3])
@@ -179,13 +179,13 @@ mousePolar <- function(button = 1, dev = rgl.cur()) {
 		camBase[[i]] <<- c(theta, phi)
 	    }
 	}
-        rgl.set(cur, TRUE)
+        set3d(cur, TRUE)
     }   
     
     polarUpdate <- function(x,y) {
         dragCurrent <<- screenToPolar(x, y)        
         for (i in dev) {
-            if (inherits(try(rgl.set(i, TRUE)), "try-error")) dev <<- dev[dev != i]
+            if (inherits(try(set3d(i, TRUE)), "try-error")) dev <<- dev[dev != i]
             else {
 		newpos <- camBase[[i]] - ( dragCurrent - dragBase )
 		newpos[2] <- clamp(newpos[2], -pi/2, pi/2)
@@ -193,20 +193,20 @@ mousePolar <- function(button = 1, dev = rgl.cur()) {
 		par3d(userMatrix = mouseMatrix) 
 	    }
         }
-        rgl.set(cur, TRUE)
+        set3d(cur, TRUE)
     }
     
     for (i in dev) {
-	rgl.set(i, TRUE)
+	set3d(i, TRUE)
 	rgl.setMouseCallbacks(button, begin = polarBegin, update = polarUpdate, end = NULL, dev = dev)
     }
-    rgl.set(cur, TRUE)
+    set3d(cur, TRUE)
 }
 
 # Set background colour based on x,y position in the window
 
-mouseBG <- function(button = 1, dev = rgl.cur(), init = "white", rate = cbind(c(1,0,1),c(0,1,1)), space = c("rgb", "hsv")) {
-    cur <- rgl.cur()
+mouseBG <- function(button = 1, dev = cur3d(), init = "white", rate = cbind(c(1,0,1),c(0,1,1)), space = c("rgb", "hsv")) {
+    cur <- cur3d()
     space <- match.arg(space)
     init <- col2rgb(init)/255
     if (space == "hsv")
@@ -232,10 +232,10 @@ mouseBG <- function(button = 1, dev = rgl.cur(), init = "white", rate = cbind(c(
         else
             color <- hsv(x,y,z)
         for (i in dev) {
-            if (inherits(try(rgl.set(i, TRUE)), "try-error")) dev <<- dev[dev != i]
+            if (inherits(try(set3d(i, TRUE)), "try-error")) dev <<- dev[dev != i]
             else bg3d(color=color)  
         }
-        rgl.set(cur, TRUE)
+        set3d(cur, TRUE)
     }
     
     bgEnd <- function() {
@@ -243,16 +243,16 @@ mouseBG <- function(button = 1, dev = rgl.cur(), init = "white", rate = cbind(c(
     }
     
     for (i in dev) {
-        rgl.set(i, TRUE)
+        set3d(i, TRUE)
         rgl.setMouseCallbacks(button, begin = bgBegin, update = bgUpdate, end = bgEnd, dev = dev)
     }
-    rgl.set(cur, TRUE)
+    set3d(cur, TRUE)
 }
 
 # Set time using an arbitrary par3dinterp function
 
-mouseInterp <- function(button = 1, dev = rgl.cur(), fn, init = 0, range = NULL, direction=c(1,0)) {
-    cur <- rgl.cur()
+mouseInterp <- function(button = 1, dev = cur3d(), fn, init = 0, range = NULL, direction=c(1,0)) {
+    cur <- cur3d()
     time <- init
     x0 <- width <- height <- NULL
     
@@ -267,10 +267,10 @@ mouseInterp <- function(button = 1, dev = rgl.cur(), fn, init = 0, range = NULL,
         time <<- init + (sum(direction*c(x,y)) - x0)/width
         if (!is.null(range)) time <<- clamp(time, range[1], range[2])
         for (i in dev) {
-            if (inherits(try(rgl.set(i, TRUE)), "try-error")) dev <<- dev[dev != i]
+            if (inherits(try(set3d(i, TRUE)), "try-error")) dev <<- dev[dev != i]
             else par3d(fn(time))
         }
-        rgl.set(cur, TRUE)
+        set3d(cur, TRUE)
     }
     
     interpEnd <- function() {
@@ -278,27 +278,27 @@ mouseInterp <- function(button = 1, dev = rgl.cur(), fn, init = 0, range = NULL,
     }
     
     for (i in dev) {
-        rgl.set(i, TRUE)
+        set3d(i, TRUE)
         rgl.setMouseCallbacks(button, begin = interpBegin, update = interpUpdate, end = interpEnd, dev = dev)
     }
-    rgl.set(cur, TRUE)
+    set3d(cur, TRUE)
 }
 
-mouseZoom <- function(button = 1, dev = rgl.cur()) 
+mouseZoom <- function(button = 1, dev = cur3d()) 
     mouseInterp(button,dev=dev,fn=par3dinterp(times=c(-4,4)/4, zoom=c(10^(-4),10^4),method="linear"),
                       init=log10(par3d("zoom"))/4,range=c(-4,4)/4,direction=c(0,-1))
  
-mouseFOV <- function(button = 1, dev = rgl.cur())
+mouseFOV <- function(button = 1, dev = cur3d())
     mouseInterp(button,dev=dev,fn=par3dinterp(times=c(1,179)/180, FOV=c(1,179),method="linear"), 
                       init=par3d("FOV")/180, range = c(1,179)/180, direction=c(0,1))
                       
 # Synchronize mouse control of two windows for stereo view
 example(surface3d, echo = FALSE)
 par3d(windowRect= c(0,32,512,544), userMatrix = rotationMatrix(5*pi/180, 0,1,0) %*% par3d("userMatrix") )
-w1 <- rgl.cur()
+w1 <- cur3d()
 example(surface3d, echo = FALSE)
 par3d(windowRect = c(512,32,1024,544))
-w2 <- rgl.cur()
+w2 <- cur3d()
 mouseTrackball(dev=c(w1,w2))
 mouseZoom(2,dev=c(w1,w2))
 mouseFOV(3,dev=c(w1,w2))

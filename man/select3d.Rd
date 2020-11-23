@@ -8,7 +8,7 @@
 }
 \usage{
 rgl.select3d(button = c("left", "middle", "right"),
-             dev = rgl.cur(), subscene = currentSubscene3d(dev))
+             dev = cur3d(), subscene = currentSubscene3d(dev))
 select3d(...)
 }
 \arguments{
@@ -51,7 +51,7 @@ if (interactive()) {
  f <- select3d()
  if (!is.null(f)) {
    keep <- f(x, y, z)
-   rgl.pop()
+   pop3d()
    points3d(x[keep], y[keep], z[keep], color = 'red')
    points3d(x[!keep], y[!keep], z[!keep])
  }

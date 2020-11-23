@@ -40,7 +40,7 @@ texture file.
 Other than saving the code
 to recreate a scene, saving the result of \code{scene3d} to 
 a file will allow it to be reproduced later most accurately.  In roughly decreasing order of fidelity,
-\code{\link{writeWebGL}}, \code{\link{writePLY}}, \code{\link{writeOBJ}} and \code{\link{writeSTL}}
+\code{\link{writeWebGL}} (now obsolete), \code{\link{writePLY}}, \code{\link{writeOBJ}} and \code{\link{writeSTL}}
 write the scene to a file in formats readable by other software.
 
 If \code{minimal = TRUE} (the default), then attributes of objects
@@ -90,7 +90,7 @@ object that was printed.
 Duncan Murdoch
 }
 \seealso{
-\code{\link{writeWebGL}}, \code{\link{writePLY}}, \code{\link{writeOBJ}} and \code{\link{writeSTL}}
+\code{\link{rglwidget}}, \code{\link{writePLY}}, \code{\link{writeOBJ}} and \code{\link{writeSTL}}
 write the scene to a file in various formats.
 }
 \examples{

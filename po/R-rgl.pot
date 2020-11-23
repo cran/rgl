@@ -190,7 +190,7 @@ msgstr ""
 msgid "'rgl_clear' failed"
 msgstr ""
 
-msgid "'rgl.pop' failed for id %d"
+msgid "'pop3d' failed for id %d"
 msgstr ""
 
 msgid "'rgl_viewpoint' failed"

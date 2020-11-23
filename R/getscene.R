@@ -38,6 +38,10 @@ scene3d <- function(minimal = TRUE) {
           result$ignoreExtent <- flags["ignoreExtent", 1]
     	if ("fixedSize" %in% rownames(flags))
     	  result$fixedSize <- flags["fixedSize", 1]
+    	if ("fastTransparency" %in% rownames(flags))
+    	  result$fastTransparency <- flags["fastTransparency", 1]
+    	if ("flipped" %in% rownames(flags))
+    	  result$flipped <- flags["flipped", 1]
     }
     if (!is.null(result$ids)) {
       objlist <- vector("list", nrow(result$ids))
@@ -52,6 +56,7 @@ scene3d <- function(minimal = TRUE) {
                         else if (flags["exp_fog", 1]) "exp"
 			else if (flags["exp2_fog", 1]) "exp2"
 			else "none"
+      result$fogscale <- rgl.attrib(id, "fogscale")
     } else if (type == "bboxdeco") {
       flags <- rgl.attrib(id, "flags")
       result$draw_front <- flags["draw_front", 1]
@@ -71,10 +76,10 @@ scene3d <- function(minimal = TRUE) {
 
     result$embeddings <- subsceneInfo()$embeddings
     
-    objs <- rgl.ids(c("background", "bboxdeco", "shapes", "lights"))
+    objs <- ids3d(c("background", "bboxdeco", "shapes", "lights"))
     result$objects <- objs$id
   
-    if (nrow(obj <- rgl.ids("subscene", subscene = id))) {
+    if (nrow(obj <- ids3d("subscene", subscene = id))) {
       subscenes <- vector("list", nrow(obj))
       ids <- obj$id
       for (i in seq_len(nrow(obj)))
@@ -90,7 +95,7 @@ scene3d <- function(minimal = TRUE) {
   
   result$rootSubscene <- getSubscene(rootSubscene())
   
-  objs <- rgl.ids(c("shapes", "lights", "background", "bboxdeco"), subscene=0)  
+  objs <- ids3d(c("shapes", "lights", "background", "bboxdeco"), subscene=0)  
   objlist <- vector("list", nrow(objs))
   ids <- objs$id
   types <- as.character(objs$type)
@@ -217,7 +222,9 @@ plot3d.rglsubscene <- function(x, objects, root = TRUE, ...) {
 			    model = x$embeddings["model"],
 			    newviewport = x$par3d$viewport,
 			    copyLights = FALSE)
-			    
+			   
+  if (!is.null(x$par3d$scale))
+    par3d(scale = x$par3d$scale)
   listeners <- list(x$par3d$listeners) # list contains old ids
   names(listeners) <- subscene         # names are new ids
     
@@ -402,4 +409,8 @@ plot3d.rglbackground <- function(x, ...) {
   }
   args <- c(list(sphere = x$sphere, fogtype = x$fogtype), mat)
   do.call("bg3d", args)
+}
+
+plot3d.rglWebGL <- function(x, ...) {
+  plot3d(attr(x, "origScene"), ...)
 }

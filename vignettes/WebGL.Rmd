@@ -1,5 +1,5 @@
 ---
-title: "User Interaction in WebGL"
+title: "User Interaction in WebGL (updated)"
 author: "Duncan Murdoch"
 date: "`r format(Sys.time(), '%B %d, %Y')`"
 output:
@@ -15,6 +15,7 @@ vignette: >
 
 ```{r setup, echo=FALSE, results="asis"}
 source("setup.R")
+setupKnitr(autoprint = FALSE)
 set.seed(123)
 ```
 
@@ -33,11 +34,8 @@ is a limited amount of discussion of other methods.
 There are two ways to embed an `rgl` scene in the document.  The recommended one is to call `r linkfn("rglwidget")` to produce a "widget" which can
 be embedded into your document by printing it.
 
-The older method is described in the [Legacy WebGL Methods](legacyWebGL.html) document.  It is 
-likely to be supported for some time, but is
-not recommended for new projects, as
-the widget method is easier for
-me to maintain.
+Older methods (e.g. `writeWebGL`) used before `rgl` version
+0.102.0 are no longer supported.
 
 I have conducted experiments on a
 third method.  This is intended to be similar to the way 
@@ -50,7 +48,7 @@ change in the future.
 ## Browser support
 
 Most browsers now support WebGL, but in some browsers it may be disabled by
-default.  See http://get.webgl.org for help on a number of
+default.  See https://get.webgl.org for help on a number of
 different browsers.  
 
 ## Examples
@@ -315,7 +313,7 @@ the display arrangements.
 
 ## Integration with `crosstalk`
 
-The [`crosstalk`](https://rstudio.github.io/crosstalk) package allows
+The [`crosstalk`](https://rstudio.github.io/crosstalk/) package allows
 widgets to communicate with each other.  Currently it supports selection
 and filtering of observations.
 

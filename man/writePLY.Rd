@@ -45,7 +45,7 @@ Whether to output vertex color information.
 Whether to output vertex normals for smooth shading.
 }
   \item{ids}{
-The identifiers (from \code{\link{rgl.ids}}) of the
+The identifiers (from \code{\link{ids3d}}) of the
 objects to write.  If \code{NULL}, try to write everything.
 }
 
@@ -55,7 +55,7 @@ The current implementation only outputs triangles, quads, planes, spheres,
 points, line segments, line strips and surfaces.
 
 The defaults for \code{pointsAsEdges} and \code{linesAsEdges} have been
-chosen because Blender (\url{http://www.blender.org}) does not import
+chosen because Blender (\url{https://www.blender.org}) does not import
 lines, only polygons.  If you are exporting to other software you
 may want to change them.
 
@@ -71,7 +71,7 @@ Invisibly returns the name of the connection to which the
 data was written.
 }
 \references{
-The file format was found on \url{http://www.mathworks.com} on November 10, 2012
+The file format was found on \url{https://www.mathworks.com} on November 10, 2012
 at a URL that no longer exists; currently the
 format is described at \url{https://www.mathworks.com/help/vision/ug/the-ply-format.html}.
 }
@@ -80,7 +80,7 @@ Duncan Murdoch
 }
 \seealso{
 \code{\link{scene3d}} saves a copy of a scene to an R variable;
-\code{\link{writeWebGL}}, \code{\link{writeASY}}, \code{\link{writeOBJ}} and \code{\link{writeSTL}}
+\code{\link{rglwidget}}, \code{\link{writeASY}}, \code{\link{writeOBJ}} and \code{\link{writeSTL}}
 write the scene to a file in various other formats.
 }
 \examples{

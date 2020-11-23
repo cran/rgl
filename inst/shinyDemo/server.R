@@ -29,7 +29,7 @@ f3 <- function(x) -f(x[1], x[2], x[3])
 
 g(20,3)
 surface <- scene3d()
-rgl.close()
+close3d()
 
 neldermead <- function(x, f) {
   n <- nrow(x)
@@ -111,19 +111,19 @@ setStartPoint <- function() {
 shinyServer(function(input, output, session) {
 
   plot3d(surface)
-  dev <- rgl.cur()
+  dev <- cur3d()
   save <- options(rgl.inShiny = TRUE)
   on.exit(options(save))
 
   session$onSessionEnded(function() {
-    rgl.set(dev)
-    rgl.close()
+    set3d(dev)
+    close3d()
   })
 
   path <- reactiveValues(subsets = setStartPoint())
 
   observeEvent(input$newStart, {
-    rgl.set(dev)
+    set3d(dev)
 
     deletes <- unique(unlist(path$subsets))
 

@@ -42,7 +42,7 @@ A mesh shape to use for points.  It is scaled by the \code{pointRadius}.
 Lines are rendered as cylinders with this many sides.
 }
   \item{ids}{
-The identifiers (from \code{\link{rgl.ids}}) of the
+The identifiers (from \code{\link{ids3d}}) of the
 objects to write.  If \code{NULL}, try to write everything.
 }
 }
@@ -77,7 +77,7 @@ Duncan Murdoch
 }
 \seealso{
 \code{\link{scene3d}} saves a copy of a scene to an R variable;
-\code{\link{writeWebGL}}, \code{\link{writeASY}}, \code{\link{writePLY}}, \code{\link{writeOBJ}} and \code{\link{writeSTL}}
+\code{\link{rglwidget}}, \code{\link{writeASY}}, \code{\link{writePLY}}, \code{\link{writeOBJ}} and \code{\link{writeSTL}}
 write the scene to a file in various other formats.
 }
 \examples{

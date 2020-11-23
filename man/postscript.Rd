@@ -23,7 +23,7 @@ See the reference for full details.
 }
 \references{
 GL2PS: an OpenGL to PostScript printing library by Christophe Geuzaine,
-\url{https://www.geuz.org/gl2ps/}, version 1.4.0.
+\url{http://www.geuz.org/gl2ps/}, version 1.4.0.
 }
 \author{ Christophe Geuzaine / Albrecht Gebhardt }
 \examples{
@@ -38,7 +38,7 @@ title3d("Using LaTeX text", col = 'red', line = 3)
 rgl.postscript("persp3da.ps", "ps", drawText = FALSE)
 rgl.postscript("persp3da.pdf", "pdf", drawText = FALSE)
 rgl.postscript("persp3da.tex", "tex")
-rgl.pop()
+pop3d()
 title3d("Using ps/pdf text", col = 'red', line = 3)
 rgl.postscript("persp3db.ps", "ps")
 rgl.postscript("persp3db.pdf", "pdf")

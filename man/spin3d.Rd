@@ -7,7 +7,7 @@ spin an rgl scene at a fixed rate.
 }
 \usage{
 spin3d(axis = c(0, 0, 1), rpm = 5,
-       dev = rgl.cur(), subscene = par3d("listeners", dev = dev))
+       dev = cur3d(), subscene = par3d("listeners", dev = dev))
 }
 \arguments{
   \item{axis}{ The desired axis of rotation }
@@ -52,7 +52,7 @@ f <- function(time) {
     par3d(skipRedraw = TRUE) # stops intermediate redraws
     on.exit(par3d(skipRedraw = FALSE)) # redraw at the end
 
-    rgl.pop(id = spriteid) # delete the old sprite
+    pop3d(id = spriteid) # delete the old sprite
     cubeid <- shade3d(cube3d(), col = "red")
     spriteid <<- sprites3d(0:1, 0:1, 0:1, shape = cubeid,
                    userMatrix = spin2(time, 

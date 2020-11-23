@@ -2,9 +2,16 @@ dirname <- tempfile()
 dir.create(dirname)
 olddir <- setwd(dirname)
 
+show <- c() # list topics to show only those
+skip <- c("rgl-package", "shinyGetPar3d", "tkpar3dsave", "tkrgl",
+          "tkspin3d", "tkspinControl") # Ones to skip
+
 library(tools)
 db <- Rd_db("rgl")
 names <- names(db)
+if (length(show))
+  names <- names[sub("[.]Rd$", "", names) %in% show]
+
 Rmdnames <- sub("[.]Rd$", ".Rmd", names)
 htmlnames <- sub("[.]Rd$", ".html", names)
 
@@ -59,21 +66,39 @@ RdTags <- function (Rd)
     x <- .Rd_drop_comments(x)
     recurse <- function(e) {
         if (is.list(e)) {
-            unlist(lapply(e[is.na(match(RdTags(e), c("\\donttest", "\\dontrun")))], 
+            unlist(lapply(e[is.na(match(RdTags(e), c(#"\\donttest",
+                                                     "\\dontrun")))], 
                 recurse))
         }
         else e
     }
     .Rd_deparse(recurse(x), tag = FALSE)
 }
+
+writeIndex <- function(names, htmlnames, cols = 4) {
+  result <- character()
+  if (!is.null(text)) {
+    o <- order(names)
+    names <- names[o]
+    htmlnames <- htmlnames[o]
+    entries <- paste0("[", names, "](", htmlnames, ")")
+    len <- length(entries)
+    padding <- ((len + cols - 1) %/% cols) * cols - len
+    if (padding)
+      entries <- c(entries, rep("", length.out=padding))
+    result <- c(result, '\n<div class="nostripes">\n')
+    result <- c(result, knitr::kable(matrix(entries, ncol=cols), format="markdown",
+                                     col.names = rep(" ", cols)))
+    result <- c(result, "</div>\n")
+  }
+}
+
 library(rgl)
-options(rgl.useNULL = TRUE, rgl.printRglwidget = TRUE)
+saveopts <- options(rgl.useNULL = TRUE)
 prevlink <- "[Prev](index.html)"
 indexlink <- "[Index](index.html)"
 
-skip <- c("rgl-package", "shinyGetPar3d")
-
-for (i in seq_along(db)) {
+for (i in seq_along(names)) {
   Rmd <- file(Rmdnames[i], open = "wt")
   nextlink <- if (i < length(htmlnames)) paste0("[Next](", htmlnames[i+1], ")") else ""
   writeLines(c('---', paste0('title: ', names[i]), 
@@ -83,8 +108,16 @@ for (i in seq_along(db)) {
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 initialWd <- getwd()
-options(rgl.useNULL = TRUE, rgl.printRglwidget = TRUE)
+saveopts <- options()
+options(rgl.useNULL = TRUE)
 library(rgl)
+setupKnitr(autoprint = TRUE)
+example <- function(...) {
+  saveopts <- options(rgl.printRglwidget = FALSE)
+  on.exit(options(saveopts))
+  utils::example(...)
+  lowlevel(numeric())
+}
 options(ask = FALSE, examples.ask = FALSE, device.ask.default = FALSE)
 ```
 '), Rmd)
@@ -96,37 +129,43 @@ options(ask = FALSE, examples.ask = FALSE, device.ask.default = FALSE)
   else
     writeLines('```{r}', Rmd)
   
-  code <- .Rd_get_example_code(db[[i]])
-  writeLines(code, Rmd)
+  code <- .Rd_get_example_code(db[[names[i]]])
+  if (length(code))
+    writeLines(code, Rmd)
+  else
+    writeLines("# No example code", Rmd)
   writeLines(
 '```
 ```{r echo=FALSE,include=FALSE}
 setwd(initialWd)
-while(length(rgl.dev.list())) rgl.close()
+while(length(rgl.dev.list())) close3d()
+rm(examples)
+options(saveopts)
 ```
 ', Rmd)
   writeLines(paste(prevlink, nextlink, indexlink), Rmd)
   close(Rmd)
   prevlink <- paste0("[Prev](", htmlnames[i], ")")
   rmarkdown::render(Rmdnames[i])
-  while(length(rgl.dev.list())) rgl.close()
+  while(length(rgl.dev.list())) close3d()
+  environment(rglwidget)$reuseDF <- NULL
 }
 
 indexname <- "index.Rmd"
 index <- file(indexname, open = "wt")
-writeLines(
+writeLines(c(
 '---
 title: "rgl Examples"
 author: "Duncan Murdoch"
 output: html_document
 ---
 	
-These files show all examples from every help file
+These files show examples from almost every help file
 in `rgl`.  
-
-', index)
-writeLines(paste0("[", names, "](", htmlnames, ")  "), index)
+',
+writeIndex(names, htmlnames)), index)
 close(index)
 
 browseURL(rmarkdown::render(indexname))
+options(saveopts)
 setwd(olddir)

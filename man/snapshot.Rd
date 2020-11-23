@@ -7,13 +7,17 @@
 }
 \usage{
 rgl.snapshot( filename, fmt = "png", top = TRUE )
-snapshot3d( ... )
+snapshot3d( filename, ..., scene, width = NULL, height = NULL)
 }
 \arguments{
   \item{filename}{full path to filename.}
   \item{fmt}{image export format, currently supported: png }
   \item{top}{whether to call \code{\link{rgl.bringtotop}}}
   \item{...}{arguments to pass to \code{rgl.snapshot} }
+  \item{scene}{an optional result of \code{\link{scene3d}} 
+    or \code{\link{rglwidget}} to plot}
+  \item{width, height}{optional specifications of output
+    size in pixels}
 }
 \details{
 Animations can be created in a loop modifying the scene and saving 
@@ -27,6 +31,12 @@ will include content from other windows if they cover the active rgl
 window.  Setting \code{top = TRUE} (the default) will use 
 \code{\link{rgl.bringtotop}} before the snapshot
 to avoid this.  
+
+There are likely limits to how large \code{width} and
+\code{height} can be set based on the display hardware; if these
+are exceeded the results are undefined.  A typical result
+is that the snapshot will still be made but at a smaller
+size.
 }
 \seealso{\code{\link{movie3d}}, \code{\link{rgl.viewpoint}}}
 
@@ -40,13 +50,13 @@ to avoid this.
 
 shade3d(oh3d(), color = "red")
 rgl.bringtotop()
-rgl.viewpoint(0, 20)
+view3d(0, 20)
 
 olddir <- setwd(tempdir())
 for (i in 1:45) {
-  rgl.viewpoint(i, 20)
+  view3d(i, 20)
   filename <- paste("pic", formatC(i, digits = 1, flag = "0"), ".png", sep = "")
-  rgl.snapshot(filename)
+  snapshot3d(filename)
 }
 ## Now run ImageMagick in tempdir().  Use 'convert' instead of 'magick'
 ## if you have an older version of ImageMagick:

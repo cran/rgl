@@ -1,7 +1,8 @@
 
 convertScene <- function(x = scene3d(minimal), width = NULL, height = NULL, reuse = NULL,
                          snapshot = FALSE, elementId = NULL,
-                         minimal = TRUE) {
+                         minimal = TRUE, webgl = TRUE,
+                         latex = FALSE) {
   
   # Lots of utility functions and constants defined first; execution starts way down there...
   
@@ -85,28 +86,15 @@ convertScene <- function(x = scene3d(minimal), width = NULL, height = NULL, reus
     }
     result$rootSubscene <<- recurse(result$rootSubscene)
     
-    snapshotimg <- NULL
-    snapshotfile <- NULL
-    if (is.logical(snapshot) && snapshot) {
-      snapshotfile <- tempfile(fileext = ".png")
-      on.exit(unlink(snapshotfile))
-      snapshot3d(snapshotfile)
-    } else if (is.character(snapshot) && substr(snapshot, 1, 5) != "data:") {
-      snapshotfile <- snapshot
-    } else if (is.character(snapshot))
-      snapshotimg <- snapshot
-    if (!is.null(snapshotfile))
-      snapshotimg <- image_uri(snapshotfile)
-    if (!is.null(snapshotimg))
-      result$snapshot <<- snapshotimg
+    showSnapshot()
   }
   
   flagnames <- c("is_lit", "is_smooth", "has_texture",
            "depth_sort", "fixed_quads", "is_transparent",
-           "is_lines", "sprites_3d", "sprite_3d",
+           "is_lines", "sprites_3d", 
            "is_subscene", "is_clipplanes",
            "fixed_size", "is_points", "is_twosided",
-           "fat_lines", "is_brush")
+           "fat_lines", "is_brush", "has_fog")
   
   getFlags <- function(id) {
     
@@ -146,12 +134,13 @@ convertScene <- function(x = scene3d(minimal), width = NULL, height = NULL, reus
     result["fixed_quads"] <- type %in% c("text", "sprites") && !sprites_3d
     result["is_lines"]    <- type %in% c("lines", "linestrip", "abclines")
     result["is_points"]   <- type == "points" || "points" %in% c(mat$front, mat$back)
-    result["is_twosided"] <- type %in% c("quads", "surface", "triangles") && 
+    result["is_twosided"] <- type %in% c("quads", "surface", "triangles", "spheres") && 
       length(unique(c(mat$front, mat$back))) > 1
     result["fixed_size"]  <- type == "text" || isTRUE(obj$fixedSize)
     result["fat_lines"]   <- mat$lwd != 1 && (result["is_lines"] || 
                   "lines" %in% unlist(mat[c("front", "back")]))
     result["is_brush"] <- !is.na(brushId) && id == brushId
+    result["has_fog"] <- mat$fog
     result
   }
   
@@ -288,6 +277,28 @@ convertScene <- function(x = scene3d(minimal), width = NULL, height = NULL, reus
     lastID <<- tempID
   }
   
+  showSnapshot <- function() {
+    snapshotimg <- NULL
+    snapshotfile <- NULL
+    if (is.logical(snapshot) && snapshot) {
+      snapshotfile <- tempfile(fileext = ".png")
+      if (!latex)
+        on.exit(unlink(snapshotfile))
+      snapshot3d(snapshotfile, scene = x, width = width, height = height)
+    } else if (is.character(snapshot) && substr(snapshot, 1, 5) != "data:") {
+      snapshotfile <- snapshot
+    } else if (is.character(snapshot))
+      snapshotimg <- snapshot
+    if (!is.null(snapshotfile))
+      snapshotimg <- image_uri(snapshotfile)
+    if (!is.null(snapshotimg))
+      result$snapshot <<- snapshotimg
+    if (latex && !is.null(snapshotfile))
+      include_graphics(snapshotfile)
+    else if (!is.null(snapshotimg))
+      browsable(img(src = snapshotimg))
+  }
+  
   knowntypes <- c("points", "linestrip", "lines", "triangles", "quads",
       "surface", "text", "abclines", "planes", "spheres",
       "sprites", "clipplanes", "light", "background", "bboxdeco",
@@ -295,7 +306,12 @@ convertScene <- function(x = scene3d(minimal), width = NULL, height = NULL, reus
   
   #  Execution starts here!
   
+  result <- NULL
+  
   # Do a few checks first
+
+  if (!webgl)
+    return(showSnapshot())
   
   if (is.null(elementId))
     elementId <- ""
@@ -311,14 +327,6 @@ convertScene <- function(x = scene3d(minimal), width = NULL, height = NULL, reus
     reuseDF$id         <- as.numeric(reuseDF$id)
     reuseDF$elementId  <- as.character(reuseDF$elementId)
     reuseDF$texture    <- as.character(reuseDF$texture)
-  }
-  
-  if (is.logical(snapshot) && snapshot) {
-    if (rgl.useNULL()) {
-      warning("Can't take snapshot with NULL rgl device")
-      snapshot <- FALSE
-    } else if (!missing(x))
-      warning("Will take snapshot of current scene which may differ from x.")
   }
   
   if (is.list(x$rootSubscene))
@@ -346,8 +354,6 @@ convertScene <- function(x = scene3d(minimal), width = NULL, height = NULL, reus
   
   shared <- x$crosstalk$id
   
-  result <- NULL
-  
   initResult()
   
   result$width <- width
@@ -358,7 +364,7 @@ convertScene <- function(x = scene3d(minimal), width = NULL, height = NULL, reus
   
   if (any(types == "bboxdeco")) {
     saveNULL <- options(rgl.useNULL = TRUE)
-    dev <- rgl.cur()
+    dev <- cur3d()
     open3d()
     ids <- convertBBoxes(result$rootSubscene)
     origIds <- attr(ids, "origIds")
@@ -373,23 +379,23 @@ convertScene <- function(x = scene3d(minimal), width = NULL, height = NULL, reus
     for (id in unique(origIds))
       result$objects[[as.character(id)]]$newIds <- as.numeric(ids[origIds == id])
     types <- vapply(result$objects, function(x) x$type, character(1))
-    rgl.close()
+    close3d()
     if (dev)
-      rgl.set(dev)
+      set3d(dev)
     options(saveNULL)
   }
   
   if (length(shared)) {
     saveNULL <- options(rgl.useNULL = TRUE)
-    dev <- rgl.cur()
+    dev <- cur3d()
     open3d()
     result$brushId <- brushId <- createBrush()
     brush <- as.character(result$brushId)
     scene <- scene3d(minimal)
     result$objects[[brush]] <- scene$objects[[brush]]
-    rgl.close()
+    close3d()
     if (dev)
-      rgl.set(dev)
+      set3d(dev)
     options(saveNULL)
   } else
     brushId <- NA
@@ -428,12 +434,6 @@ convertScene <- function(x = scene3d(minimal), width = NULL, height = NULL, reus
     obj <- getObj(cids[i])
     if (obj$type == "sprites" && flags[i, "sprites_3d"]) {
       obj$objects <- NULL
-      for (j in seq_along(obj$ids)) {
-        objid <- as.character(obj$ids[j])
-        k <- which(objid == cids)
-        flags[k, "sprite_3d"] <- TRUE
-        nflags[k] <- numericFlags(flags[k,])
-      }
     }
   }
   for (i in seq_along(ids)) {
@@ -466,6 +466,8 @@ convertScene <- function(x = scene3d(minimal), width = NULL, height = NULL, reus
       obj$par3d$viewport$width <- obj$par3d$viewport$width/fullviewport$width
       obj$par3d$viewport$y <- obj$par3d$viewport$y/fullviewport$height
       obj$par3d$viewport$height <- obj$par3d$viewport$height/fullviewport$height
+      if ("user" %in% obj$par3d$mouseMode)
+        warning("User defined mouse callbacks not supported in rglwidget", call.=FALSE)
     }
     if (obj$type == "planes" && nrow(obj$vertices) > 3) {
       obj$vertices = obj$vertices[1:3,] # These will be redone
@@ -482,23 +484,31 @@ convertScene <- function(x = scene3d(minimal), width = NULL, height = NULL, reus
     # Make model sphere
     segments <- 16
     sections <- 16
-    iy <- 0:sections
+    # indices wrap around; write a function to do that
+    mod1 <- function(x) (x - 1) %% (segments*(sections - 1)) + 1
+    iy <- 1:(sections-1) # Leave off the poles; add them at the end
     fy <- iy/sections
     phi <- fy - 0.5
-    ix <- 0:segments
+    ix <- 0:(segments-1)
     fx <- ix/segments
     theta <- 2*fx
     qx <- as.numeric(outer(phi, theta, function(phi, theta) sinpi(theta)*cospi(phi)))
     qy <- as.numeric(outer(phi, theta, function(phi, theta) sinpi(phi)))
     qz <- as.numeric(outer(phi, theta, function(phi, theta) cospi(theta)*cospi(phi)))
-    inds <- rep(seq_len(sections), segments) + (sections + 1)*rep(seq_len(segments)-1, each = sections)
-    x <- tmesh3d(vertices = rbind(qx, qy, qz, 1), 
-           texcoords = cbind(rep(fx, each = sections+1),
-                 rep(fy, segments+1)),
-           indices = cbind(rbind(inds, inds + sections + 1, 
-                     inds + sections + 2),
-               rbind(inds, inds + sections + 2, 
-                     inds + 1)))
+    poles <- c(length(qx) + 1, length(qx) + 2) 
+    inds <- rep(seq_len(sections - 2), segments) + (sections - 1)*rep(seq_len(segments)-1, each = sections - 2) 
+    inds <- cbind(mod1(rbind(inds, inds + sections - 1, 
+                inds + sections)),
+          mod1(rbind(inds, inds + sections, 
+                inds + 1)),
+          rbind(poles[1], mod1(seq_len(segments)*(sections - 1) + 1),
+                mod1(seq_len(segments)*(sections - 1) - sections + 2)),
+          rbind(poles[2], mod1(seq_len(segments)*(sections - 1)),
+                mod1(seq_len(segments)*(sections - 1) + sections - 1)))
+    x <- tmesh3d(vertices = rbind(c(qx,0,0), c(qy,-1,1), c(qz,0,0), 1), 
+           texcoords = cbind(c(rep(fx, each = sections-1),0,0),
+                 c(rep(fy, segments), 0,1)),
+           indices = inds)
     x$it <- x$it - 1
     x$vb <- x$vb[1:3,]
     result$sphereVerts <- x

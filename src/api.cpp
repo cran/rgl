@@ -387,7 +387,7 @@ void rgl::rgl_text_attrib(int* id, int* attrib, int* first, int* count, char** r
 //
 
 
-void rgl::rgl_bg(int* successptr, int* idata)
+void rgl::rgl_bg(int* successptr, int* idata, double* fogScale)
 {
   int success = RGL_FAIL;
 
@@ -397,7 +397,7 @@ void rgl::rgl_bg(int* successptr, int* idata)
 
     bool sphere    = as_bool( idata[0] );
     int  fogtype   = idata[1];
-    Background* bg = new Background(currentMaterial, sphere, fogtype);
+    Background* bg = new Background(currentMaterial, sphere, fogtype, fogScale[0]);
     success = as_success( device->add( bg ) );
     SceneNode*  quad = bg->getQuad();
     if (quad) {
@@ -597,7 +597,8 @@ void rgl::rgl_surface(int* successptr, int* idata, double* x, double* z, double*
   *successptr = success;
 }
 
-void rgl::rgl_spheres(int* successptr, int* idata, double* vertex, double* radius)
+void rgl::rgl_spheres(int* successptr, int* idata, double* vertex, double* radius,
+                      int* fastTransparency)
 {
   int success = RGL_FAIL;
 
@@ -609,7 +610,7 @@ void rgl::rgl_spheres(int* successptr, int* idata, double* vertex, double* radiu
     int nradius = idata[1];
 
     success = as_success( device->add( new SphereSet(currentMaterial, nvertex, vertex, nradius, radius,
-    						     device->getIgnoreExtent()) ) );
+    						     device->getIgnoreExtent(), *fastTransparency != 0) ) );
     CHECKGLERROR;
   }
 

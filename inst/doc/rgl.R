@@ -1,14 +1,13 @@
 ## ----setup, echo=FALSE, results="asis"----------------------------------------
 source("setup.R")
-knitr::opts_chunk$set(rgl.newwindow = TRUE)
+setupKnitr(autoprint = TRUE)
 set.seed(123)
 
-## ----echo=1-------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 with(iris, plot3d(Sepal.Length, Sepal.Width, Petal.Length, 
                   type="s", col=as.numeric(Species)))
-rglwidget()
 
-## ----persp3d, webgl=TRUE, fig.height=3, fig.width=6---------------------------
+## ----persp3d, fig.height=3, fig.width=6, fig.keep="last"----------------------
 library(MASS)
 # from the fitdistr example
 set.seed(123)
@@ -34,7 +33,7 @@ persp3d(loglik,
 methods(plot3d)
 methods(persp3d)
 
-## ----webgl=TRUE, fig.width=3, fig.height=3------------------------------------
+## ----fig.width=3, fig.height=3------------------------------------------------
 triangles3d(cbind(x=rnorm(9), y=rnorm(9), z=rnorm(9)), col = "green")
 decorate3d()
 bg3d("lightgray")
@@ -48,10 +47,8 @@ dev.off()
 open3d()
 xyz <- cbind(c(0,1,1,0), 0, c(0,0,1,1))
 quads3d(xyz, texture = filename, texcoords = xyz[,c(1, 3)]*2, col = "white", specular = "black")
-rglwidget()
 
-## ----results="hide",webgl=TRUE------------------------------------------------
-open3d()
+## -----------------------------------------------------------------------------
 cols <- rainbow(7)
 layout3d(matrix(1:16, 4,4), heights=c(1,3,1,3))
 text3d(0,0,0,"tetrahedron3d"); next3d()
@@ -70,12 +67,32 @@ text3d(0,0,0,"oh3d"); next3d()
 shade3d(oh3d(col=cols[7]))
 
 ## -----------------------------------------------------------------------------
+xyz <- matrix(rnorm(27), ncol = 3)
+triangles3d(xyz, col = rainbow(9))
+spheres3d(xyz, col = rainbow(9), radius = 0.1)
+
+## ----eval = FALSE-------------------------------------------------------------
+#  plots <- NULL
+#  for (i in 1:3) {
+#    plot3d(rnorm(10), rnorm(10), rnorm(10))
+#    plots <- htmltools::tagList(plots, rglwidget())
+#    close3d()
+#  }
+#  plots
+
+## ----eval = FALSE-------------------------------------------------------------
+#  foreignHigh()   # Produces a high level plot, but doesn't return
+#                  # an appropriate value
+#  highlevel()
+#  foreignLow()    # Modifies the previous plot
+#  lowlevel()
+
+## -----------------------------------------------------------------------------
 par3d("mouseMode")
 
 ## ----echo = 2:3---------------------------------------------------------------
-rgl.close()
+close3d()
 persp3d(volcano, col = "green")
-rglwidget()
 
 ## -----------------------------------------------------------------------------
 lattice::wireframe(volcano, col = "green", 

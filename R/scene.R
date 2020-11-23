@@ -36,8 +36,8 @@ rgl.clear <- function( type = "shapes", subscene = 0 )
       idata
     )$success
   } else {
-    sceneids <- rgl.ids(type=type, subscene = 0)$id
-    thisids <- rgl.ids(type=type, subscene = subscene)$id
+    sceneids <- ids3d(type=type, subscene = 0)$id
+    thisids <- ids3d(type=type, subscene = subscene)$id
     if (length(thisids)) {
       delFromSubscene3d(ids = thisids, subscene = subscene)
       gc3d(protect = setdiff(sceneids, thisids))
@@ -63,7 +63,7 @@ rgl.clear <- function( type = "shapes", subscene = 0 )
 ##
 ##
 
-rgl.pop <- function( type = "shapes", id = 0)
+pop3d <- rgl.pop <- function( type = "shapes", id = 0)
 {
   type <- rgl.enum.nodetype(type)
   save <- par3d(skipRedraw = TRUE)
@@ -82,7 +82,7 @@ rgl.pop <- function( type = "shapes", id = 0)
   lowlevel()
 }
 
-rgl.ids <- function( type = "shapes", subscene = NA )
+ids3d <- rgl.ids <- function( type = "shapes", subscene = NA )
 {
   type <- c(rgl.enum.nodetype(type), 0)
   if (is.na(subscene)) 
@@ -111,9 +111,9 @@ rgl.attrib.count <- function( id, attrib )
 rgl.attrib.ncol.values <- c(vertices=3, normals=3, colors=4, texcoords=2, dim=2,
             texts=1, cex=1, adj=2, radii=1, centers=3, ids=1,
 	    usermatrix=4, types=1, flags=1, offsets=1,
-	    family=1, font=1, pos=1)
+	    family=1, font=1, pos=1, fogscale=1)
 
-rgl.attrib.info <- function( id = rgl.ids("all", 0)$id, attribs = NULL, showAll = FALSE) {
+rgl.attrib.info <- function( id = ids3d("all", 0)$id, attribs = NULL, showAll = FALSE) {
   ncol <- rgl.attrib.ncol.values
   if (is.null(attribs))
     attribs <- names(ncol)
@@ -182,20 +182,22 @@ rgl.attrib <- function( id, attrib, first=1,
                            "flag",	     # flags
 			   "offset",         # offsets
   			   "family",         # family
-  			   "font",            # font
-			     "pos"              # pos
+  			   "font",           # font
+			   "pos",            # pos
+			   "fogscale"        # fogscale
                            )[[attrib]]
-  if (attrib == 14 && count)
-    if (id %in% rgl.ids("lights", subscene = 0)$id)
+  if (attrib == 14 && count) # flags
+    if (id %in% ids3d("lights", subscene = 0)$id)
       rownames(result) <- c("viewpoint", "finite")[first:last]
-    else if (id %in% rgl.ids("background", subscene = 0)$id)
+    else if (id %in% ids3d("background", subscene = 0)$id)
       rownames(result) <- c("sphere", "linear_fog", "exp_fog", "exp2_fog")[first:last]
-    else if (id %in% rgl.ids("bboxdeco", subscene = 0)$id)
+    else if (id %in% ids3d("bboxdeco", subscene = 0)$id)
       rownames(result) <- "draw_front"[first:last]
-    else if (id %in% (ids <- rgl.ids("shapes", subscene = 0))$id) {
+    else if (id %in% (ids <- ids3d("shapes", subscene = 0))$id) {
       type <- ids$type[ids$id == id]
       rownames(result) <- c("ignoreExtent", 
                             if (type == "surface") "flipped"
+                            else if (type == "spheres") "fastTransparency"
                             else "fixedSize")[first:last]
     }
   result
@@ -242,17 +244,22 @@ rgl.viewpoint <- function( theta = 0.0, phi = 15.0, fov = 60.0, zoom = 1.0, scal
 ##
 ##
 
-rgl.bg <- function(sphere=FALSE, fogtype="none", color=c("black","white"), back="lines", ... )
+rgl.bg <- function(sphere=FALSE, fogtype="none", color=c("black","white"), back="lines", 
+                   fogScale = 1, ... )
 {
   rgl.material( color=color, back=back, ... )
 
   fogtype <- rgl.enum.fogtype(fogtype)
 
   idata   <- as.integer(c(sphere,fogtype))
+  
+  fogScale <- as.numeric(fogScale)
+  stopifnot(length(fogScale) == 1, fogScale > 0)
 
   ret <- .C( rgl_bg, 
     success = as.integer(FALSE),
-    idata
+    idata,
+    fogScale
   )
 
   if (! ret$success)
@@ -589,7 +596,7 @@ rgl.surface <- function( x, z, y, coords=1:3,  ..., normal_x=NULL, normal_y=NULL
 ## add spheres
 ##
 
-rgl.spheres <- function( x, y=NULL, z=NULL, radius=1.0,...)
+rgl.spheres <- function( x, y=NULL, z=NULL, radius=1.0, fastTransparency = TRUE, ...)
 {
   rgl.material(...)
 
@@ -606,6 +613,7 @@ rgl.spheres <- function( x, y=NULL, z=NULL, radius=1.0,...)
     idata,
     as.numeric(vertex),    
     as.numeric(radius),
+    as.integer(fastTransparency),
     NAOK=TRUE
   )
 
@@ -862,7 +870,7 @@ msCHANGING <- 2
 msDONE     <- 3
 msABORT    <- 4
 
-rgl.selectstate <- function(dev = rgl.cur(), subscene = currentSubscene3d(dev))
+rgl.selectstate <- function(dev = cur3d(), subscene = currentSubscene3d(dev))
 {
 	ret <- .C( rgl_selectstate,
     	as.integer(dev),
@@ -879,7 +887,7 @@ rgl.selectstate <- function(dev = rgl.cur(), subscene = currentSubscene3d(dev))
 
 
 rgl.select <- function(button = c("left", "middle", "right"), 
-                       dev = rgl.cur(), subscene = currentSubscene3d(dev))
+                       dev = cur3d(), subscene = currentSubscene3d(dev))
 {
 	if (rgl.useNULL())
 	  return(NULL)
@@ -902,7 +910,7 @@ rgl.select <- function(button = c("left", "middle", "right"),
 }
 
 rgl.setselectstate <- function(state = "current", 
-                               dev = rgl.cur(), subscene = currentSubscene3d(dev))
+                               dev = cur3d(), subscene = currentSubscene3d(dev))
 {
 	state = rgl.enum(state, current=0, none = 1, middle = 2, done = 3, abort = 4)
 	idata <- as.integer(c(state))
@@ -920,7 +928,7 @@ rgl.setselectstate <- function(state = "current",
 	c("none", "middle", "done", "abort")[ret$state]
 }
 
-rgl.projection <- function(dev = rgl.cur(), subscene = currentSubscene3d(dev))
+rgl.projection <- function(dev = cur3d(), subscene = currentSubscene3d(dev))
 {
     list(model = par3d("modelMatrix", dev = dev, subscene = subscene),
     	 proj = par3d("projMatrix", dev = dev, subscene = subscene),
@@ -928,7 +936,7 @@ rgl.projection <- function(dev = rgl.cur(), subscene = currentSubscene3d(dev))
 }   
      
 rgl.select3d <- function(button = c("left", "middle", "right"), 
-                         dev = rgl.cur(), subscene = currentSubscene3d(dev)) {
+                         dev = cur3d(), subscene = currentSubscene3d(dev)) {
   rect <- rgl.select(button = button, dev = dev, subscene = subscene)
   if (is.null(rect)) return(NULL)
   

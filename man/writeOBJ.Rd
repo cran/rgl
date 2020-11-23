@@ -48,7 +48,7 @@ Whether to mark each RGL object as a separate object in the file.
 Whether to output texture coordinates.
 }
   \item{ids}{
-The identifiers (from \code{\link{rgl.ids}}) of the
+The identifiers (from \code{\link{ids3d}}) of the
 objects to write.  If \code{NULL}, try to write everything.
 }
 
@@ -74,7 +74,7 @@ specify it in the \code{material} argument, e.g.
 multiple textures.
 
 The defaults for \code{pointsAsPoints} and \code{linesAsLines} have been
-chosen because Blender (\url{http://www.blender.org}) does not import
+chosen because Blender (\url{https://www.blender.org}) does not import
 points or lines, only polygons.  If you are exporting to other software you
 may want to change them.
 
@@ -102,7 +102,7 @@ on November 11, 2012.
 Duncan Murdoch
 }
 \seealso{
-\code{\link{scene3d}} saves a copy of a scene to an R variable; \code{\link{writeWebGL}}, \code{\link{writeASY}},
+\code{\link{scene3d}} saves a copy of a scene to an R variable; \code{\link{rglwidget}}, \code{\link{writeASY}},
 \code{\link{writePLY}} and \code{\link{writeSTL}}
 write the scene to a file in various other formats.
 }

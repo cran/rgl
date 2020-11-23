@@ -1,5 +1,5 @@
 
-tkspinControl <- function(base, dev = rgl.cur(), continue=FALSE,
+tkspinControl <- function(base, dev = cur3d(), continue=FALSE,
                           speed=30, scale=100, ...){
   
   if (!requireNamespace("tcltk"))
@@ -7,11 +7,11 @@ tkspinControl <- function(base, dev = rgl.cur(), continue=FALSE,
   
   slider <- tcltk::tclVar(speed)
   getZooms <- function() {
-    old <- rgl.cur()
-    on.exit(rgl.set(old))
+    old <- cur3d()
+    on.exit(set3d(old))
     result <- numeric(max(dev))
     for (device in dev) {
-      rgl.set(device)
+      set3d(device)
       result[device] <- par3d("zoom")
     }
     result
@@ -53,14 +53,14 @@ tkspinControl <- function(base, dev = rgl.cur(), continue=FALSE,
   }	
   
   rotate <- function(){
-    old <- rgl.cur()
-    on.exit(rgl.set(old))	
+    old <- cur3d()
+    on.exit(set3d(old))	
     if (buttonPress) {
       if ((currentTime <- proc.time()[3]) > lastTime) {
         timeDiff <<- currentTime - lastTime
         lastTime <<- currentTime
         for (device in dev) {
-          rgl.set(device)
+          set3d(device)
           if (direction == "up")
             rotateUp()
           if (direction == "left")
@@ -131,20 +131,20 @@ tkspinControl <- function(base, dev = rgl.cur(), continue=FALSE,
   
   
   resetAxis <- function(...){
-    old <- rgl.cur()
-    on.exit(rgl.set(old))
+    old <- cur3d()
+    on.exit(set3d(old))
     for (device in dev) {
-      rgl.set(device)
+      set3d(device)
       par3d(userMatrix = diag(4))
     }
   }
   
   setScale <- function(...){
-    old <- rgl.cur()
-    on.exit(rgl.set(old))		    
+    old <- cur3d()
+    on.exit(set3d(old))		    
     scale <- as.numeric(tcltk::tclObj(scale))
     for (device in dev) {
-      rgl.set(device)
+      set3d(device)
       par3d(zoom = 10^((scale - 100)/50)*zooms[device])
     }
   }
@@ -210,7 +210,7 @@ tkspinControl <- function(base, dev = rgl.cur(), continue=FALSE,
 }
 
 
-tkspin3d <- function(dev = rgl.cur(), ...){
+tkspin3d <- function(dev = cur3d(), ...){
   
   if (!requireNamespace("tcltk"))
     stop("This function requires 'tcltk'.")

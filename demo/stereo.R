@@ -1,15 +1,15 @@
 randomDot <- function(left, right, rightOffset=c(200, 0), n=3000, ...) {
-  old <- rgl.cur()
-  on.exit(rgl.set(old))  
+  old <- cur3d()
+  on.exit(set3d(old))  
   force(left)
   force(right)
-  rgl.set(left)
+  set3d(left)
   leftViewport <- par3d("viewport")
   leftSize <- leftViewport[3:4]
   leftProj <- rgl.projection()
   leftDepth <- rgl.pixels("depth")  
   leftUR <- leftViewport[1:2] + leftSize - 1
-  rgl.set(right)
+  set3d(right)
   rightViewport <- par3d("viewport")
   rightSize <- rightViewport[3:4]
   rightProj <- rgl.projection()
@@ -106,17 +106,17 @@ randomDot <- function(left, right, rightOffset=c(200, 0), n=3000, ...) {
                                                 #red                   #cyan 
 anaglyph <- function(left, right, leftColor = c(1,0,0), rightColor = c(0,1,1),
                      dimens = dim(leftPixels)) {
-  old <- rgl.cur()
-  on.exit(rgl.set(old))  
+  old <- cur3d()
+  on.exit(set3d(old))  
   force(left)
   force(right)
 
-  rgl.set(left)
+  set3d(left)
   vp <- par3d("viewport")
   leftPixels <- rgl.pixels(viewport=vp)
   leftPixels <- t((leftPixels[,,1]+leftPixels[,,2]+leftPixels[,,3])/3)
   leftPixels <- leftPixels[rev(seq_len(dimens[1])), seq_len(dimens[2])]
-  rgl.set(right)
+  set3d(right)
   rightPixels <- rgl.pixels(viewport=vp)
   rightPixels <- t((rightPixels[,,1]+rightPixels[,,2]+rightPixels[,,3])/3)
   rightPixels <- rightPixels[rev(seq_len(dimens[1])), seq_len(dimens[2])]
@@ -142,12 +142,12 @@ if (!rgl.useNULL()) {
 # Reverse the two arguments for the cross-eyed view.
 
   dev.new(width=9, height=7)
-  randomDot(rgl.cur()-1, rgl.cur())
+  randomDot(cur3d()-1, cur3d())
 
 # A red-cyan anaglyph (for 3D glasses).  Use optional args to anaglyph for other glasses.
 
   dev.new()
-  anaglyph(rgl.cur()-1, rgl.cur())
+  anaglyph(cur3d()-1, cur3d())
   
 } else
   cat("Can't read pixels from a NULL device\n")

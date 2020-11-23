@@ -1068,3 +1068,81 @@ base graphics.
     code.
   - The maintainer email address has been changed to 
     murdoch.duncan@gmail.com.
+    
+0.101.2
+  - The build files have been updated to work with Rtools40
+    on Windows.
+  - rgl.snapshot and rgl.postscript could crash if a zero
+    length filename was passed to them.
+  - rglwidget() now saves a copy of the original scene,
+    so it can be reconstructed or modified later.
+    
+0.102.29
+  - More deprecation of older writeWebGL style controls.
+  - Add extra knitr hooks, so support for rgl should be
+    very similar to support for standard graphics output.
+  - Major rewrite of the WebGL code so that transparency
+    is handled better in rglwidget().  It has also been
+    split into multiple files which are joined with 
+    "minification" on installation.
+  - Added utility function makeDependency() to support 
+    Javascript library in source.
+  - WebGL code now supports fog in scenes.  The default
+    r3dDefaults now sets material$fog to TRUE, and bg$fog to
+    "none".  (In rgl, fog must be set *both* in the background
+    and in the object to display.)
+    The formula used in WebGL is slightly different than in the 
+    internal R display.) 
+  - getr3dDefaults now has two optional arguments to specify
+    what to retrieve, e.g. getr3dDefaults("material", "color")
+    to retrieve r3dDefaults$material$color, with NULL 
+    if either part is missing.
+  - A bug in the initial color of a mesh object has been fixed.
+  - A bug in translating mouse coordinates (reported on 
+    StackOverflow by Richard Morey) when an rgl widget is
+    included in a Gitbook has been fixed. 
+  - Modified writeASY() for compatibility with Asymptote
+    2.65.  (Reported by Pavel Stříž.)
+  - Added fogScale parameter to bg3d() and rgl.bg() to
+    allow increased or decreased fog.
+  - Added fastTransparency parameter to spheres3d() and
+    rgl.spheres(), to allow them to be drawn more quickly
+    when transparency is used.
+  - "mesh3d"" methods for shade3d, wire3d, and dots3d
+    have been rewritten to share code, allowing meshes
+    to have different front and back material properties.
+  - New functions cur3d(), set3d(), close3d() and ids3d() have been 
+    added.  Generally, users should use these rather than
+    rgl.cur(), rgl.set(), rgl.close() and rgl.ids().
+  - pop3d() has been modified slightly so that it no
+    longer opens a new window if none is already present
+  - snapshot3d() now has optional width and height parameters for the saved snapshot.
+  - the cursor now reflects the mouse mode in rglwidget()
+    displays.
+  - added setGraphicsDelay() function to work around bug
+    in MacOS Catalina XQuartz.
+  - Made various improvements to reduce notes and warnings
+    during install, including suppressing deprecated OpenGL
+    warnings on MacOS.
+  - Texture coordinates in mesh objects now act the same
+    as colors with respect to the meshColors variable.
+  - Some declarations in WebGL made assumptions that were
+    not valid on mobile devices.
+  - Touch events are now supported in WebGL.
+  - Added "snapshot" knitr option to use when autoprinting.
+  - Added defaults to snapshot3d(width = NULL, height = NULL).
+  - Added as.mesh3d.rglobject method.
+  - Added clip_to_density argument to plot3d.lm() method.
+  - The "depth_mask" material property was being ignored
+    in rglwidget().
+  - Added clipObj3d(), contourLines3d() and filledContour3d() functions.
+  - Modified clipMesh3d() function to make it more consistent
+    with the above three functions.  The main incompatibility
+    with the version in 0.100.26 is that only vertex
+    coordinates are now passed to the clipping function.
+
+0.103.5:
+  - Add merge() method for "mesh3d" objects, and use it in
+    filledContour3d().
+  - Fixed some memory leaks found by valgrind, and problems seen
+    on systems with no functional Asymptote or Pandoc.
