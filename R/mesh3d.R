@@ -186,8 +186,6 @@ as.mesh3d.tri <- function(x, z, col = "gray",
 dot3d.mesh3d <- function(x, ..., front = "points", back = "points")
   shade3d.mesh3d(x, ..., front = front, back = back)
 
-dot3d.qmesh3d <- dot3d.mesh3d   # for back-compatibility
-
 wire3d.mesh3d <- function(x, ..., front = "lines", back = "lines")
   shade3d.mesh3d(x, ..., front = front, back = back)
 
@@ -196,7 +194,7 @@ allowedMeshColor <- function(meshColor, modes) {
     (modes[1] == modes[2] && modes[1] == "lines")
 }
 
-shade3d.mesh3d <- function ( x, override = TRUE, 
+shade3d.mesh3d <- function( x, override = TRUE, 
                              meshColor = c("vertices", "edges", "faces", "legacy"), 
                              texcoords = NULL, 
                              ...,
@@ -325,12 +323,12 @@ shade3d.mesh3d <- function ( x, override = TRUE,
 
 # transformation support
 
-translate3d.mesh3d <- function ( obj, x, y, z, ... ) {
+translate3d.mesh3d <- function( obj, x, y, z, ... ) {
   obj$vb <- t(translate3d(t(obj$vb), x, y, z))
   return(obj)                            
 }  
 
-rotate3d.mesh3d <- function ( obj,angle,x,y,z,matrix, ... ) {
+rotate3d.mesh3d <- function( obj,angle,x,y,z,matrix, ... ) {
   obj$vb <- t(rotate3d(t(obj$vb), angle, x, y, z, matrix))
   if ( !is.null(obj$normals) ) {
     if ( missing(matrix) ) 
@@ -345,7 +343,7 @@ rotate3d.mesh3d <- function ( obj,angle,x,y,z,matrix, ... ) {
   return(obj)                            
 }  
 
-scale3d.mesh3d <- function ( obj, x, y, z, ... ) {
+scale3d.mesh3d <- function( obj, x, y, z, ... ) {
   obj$vb <- t(scale3d(t(obj$vb), x, y, z))
   if ( !is.null(obj$normals) ) {
     obj$normals <- scale3d(t(obj$normals), 1/x, 1/y, 1/z)
@@ -355,11 +353,6 @@ scale3d.mesh3d <- function ( obj, x, y, z, ... ) {
   }
   return(obj)
 }
-
-# for back-compatibility
-translate3d.qmesh3d <- translate3d.mesh3d
-rotate3d.qmesh3d <- rotate3d.mesh3d
-scale3d.qmesh3d <- scale3d.mesh3d
 
 # for debugging
 showNormals <- function(obj, scale = 1) {

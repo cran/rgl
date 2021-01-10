@@ -81,6 +81,7 @@ void TextSet::drawBegin(RenderContext* renderContext)
 
 void TextSet::drawPrimitive(RenderContext* renderContext, int index) 
 {
+#ifndef RGL_NO_OPENGL
   GLFont* font;
 
   if (!vertexArray[index].missing()) {
@@ -96,12 +97,15 @@ void TextSet::drawPrimitive(RenderContext* renderContext, int index)
       }
     }
   }
+#endif
 }
 
 void TextSet::drawEnd(RenderContext* renderContext)
 {
+#ifndef RGL_NO_OPENGL
   material.endUse(renderContext);
   Shape::drawEnd(renderContext);
+#endif
 }
 
 int TextSet::getAttributeCount(AABox& bbox, AttribID attrib) 
@@ -109,7 +113,7 @@ int TextSet::getAttributeCount(AABox& bbox, AttribID attrib)
   switch (attrib) {
     case FAMILY: 
     case FONT:
-    case CEX: return fonts.size();
+  case CEX: return static_cast<int>(fonts.size());
     case TEXTS:
     case VERTICES: return textArray.size();
     case ADJ: return 1;
@@ -162,7 +166,7 @@ String TextSet::getTextAttribute(AABox& bbox, AttribID attrib, int index)
       return textArray[index];
     case FAMILY:
       char* family = fonts[index]->family;
-      return String(strlen(family), family);
+      return String(static_cast<int>(strlen(family)), family);
     }
   }
   return Shape::getTextAttribute(bbox, attrib, index);

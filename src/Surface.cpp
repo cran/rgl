@@ -77,8 +77,8 @@ Surface::Surface(Material& in_material, int in_nx, int in_nz, double* in_x, doub
           texCoordArray[iy].s = ((float)ix)/((float)(nx-1));
           texCoordArray[iy].t = 1.0f - ((float)iz)/((float)(nz-1));
         } else {
-          texCoordArray[iy].s = in_texture_s[iy];
-          texCoordArray[iy].t = in_texture_t[iy];
+          texCoordArray[iy].s = static_cast<float>(in_texture_s[iy]);
+          texCoordArray[iy].t = static_cast<float>(in_texture_t[iy]);
         }
       }
     }
@@ -137,6 +137,7 @@ Vertex Surface::getNormal(int ix, int iz)
 
 void Surface::draw(RenderContext* renderContext)
 {
+#ifndef RGL_NO_OPENGL
   bool missing;
   drawBegin(renderContext);
 
@@ -167,6 +168,7 @@ void Surface::draw(RenderContext* renderContext)
   }
 
   drawEnd(renderContext);
+#endif
 }
 
 Vertex Surface::getCenter(int ix, int iz)
@@ -189,7 +191,7 @@ Vertex Surface::getCenter(int ix, int iz)
     accu = accu + vertexArray[(iz+1)*nx + ix+1];
     num ++;
   }
-  if (num) accu = accu * (1.0/num);
+  if (num) accu = accu * (1.0f/num);
   return accu;  
 } 
 
@@ -214,6 +216,7 @@ void Surface::drawBegin(RenderContext* renderContext)
 
 void Surface::drawPrimitive(RenderContext* renderContext, int index)
 {
+#ifndef RGL_NO_OPENGL
   int ix = index % (nx-1), iz = index / (nx-1),
       s = iz*nx + ix;
   if (!vertexArray[s].missing() &&
@@ -233,11 +236,12 @@ void Surface::drawPrimitive(RenderContext* renderContext, int index)
     }
     glEnd();
   }
+#endif
 }  
   
 void Surface::drawEnd(RenderContext* renderContext) 
 {
-
+#ifndef RGL_NO_OPENGL
   if (use_normal)
     normalArray.endUse();
     
@@ -248,7 +252,7 @@ void Surface::drawEnd(RenderContext* renderContext)
 
   material.endUse(renderContext);
   Shape::drawEnd(renderContext);
-
+#endif
 }
 
 int Surface::getAttributeCount(AABox& bbox, AttribID attrib)

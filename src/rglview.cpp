@@ -90,7 +90,8 @@ void RGLView::paint(void) {
   
   /* This doesn't do any actual plotting, but it calculates matrices etc. */
   scene->update(&renderContext);
-  
+
+#ifndef RGL_NO_OPENGL    
   /* This section does the OpenGL plotting */
   if (windowImpl->beginGL()) {
     SAVEGLERROR;  
@@ -106,6 +107,7 @@ void RGLView::paint(void) {
     
     SAVEGLERROR;
   }
+#endif
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -229,12 +231,12 @@ void RGLView::captureLost()
 bool RGLView::snapshot(PixmapFileFormatID formatID, const char* filename)
 {
   bool success = false;
-
   if ( (formatID < PIXMAP_FILEFORMAT_LAST) && (pixmapFormat[formatID])) { 
     // alloc pixmap memory
     Pixmap snapshot;
    
     if (snapshot.init(RGB24, width, height, 8)) {
+#ifndef RGL_NO_OPENGL      
       paint();
       if ( windowImpl->beginGL() ) {
         // read back buffer
@@ -249,6 +251,9 @@ bool RGLView::snapshot(PixmapFileFormatID formatID, const char* filename)
   
         windowImpl->endGL();
       } else
+#else
+      warning("this build of rgl does not support snapshots");
+#endif
         snapshot.clear();
       
       success = snapshot.save( pixmapFormat[formatID], filename );
@@ -256,13 +261,13 @@ bool RGLView::snapshot(PixmapFileFormatID formatID, const char* filename)
     } else error("unable to create pixmap");
     	
   } else error("pixmap save format not supported in this build");
-
   return success;
 }
 
 bool RGLView::pixels( int* ll, int* size, int component, double* result )
 {
   bool success = false;
+#ifndef RGL_NO_OPENGL
   GLenum format[] = {GL_RED, GL_GREEN, GL_BLUE, GL_ALPHA, 
                       GL_DEPTH_COMPONENT, GL_LUMINANCE}; 
   paint();
@@ -303,7 +308,7 @@ bool RGLView::pixels( int* ll, int* size, int component, double* result )
 
     windowImpl->endGL();
   }
-
+#endif
   return success;
 }
 
@@ -450,8 +455,8 @@ void RGLView::setPosition(double* src)
 bool RGLView::postscript(int formatID, const char* filename, bool drawText)
 {
   bool success = false;
-
-  std::FILE *fp = fopen(filename, "wb");  
+  std::FILE *fp = fopen(filename, "wb"); 
+#ifndef RGL_NO_OPENGL
   char *oldlocale = setlocale(LC_NUMERIC, "C");
   
   GLint buffsize = 0, state = GL2PS_OVERFLOW;
@@ -500,9 +505,10 @@ bool RGLView::postscript(int formatID, const char* filename, bool drawText)
     windowImpl->endGL();
   }
   setlocale(LC_NUMERIC, oldlocale);
-  
+#else
+  warning("this build of rgl does not support postscript");
+#endif  
   fclose(fp);
-
   return success;
 }
 

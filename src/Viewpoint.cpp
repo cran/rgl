@@ -128,8 +128,8 @@ void UserViewpoint::setupFrustum(RenderContext* rctx, const Sphere& viewSphere)
     frustum.zfar  -= -eye.z + frustum.distance;
     if (frustum.zfar < 0) 
       frustum.zfar = 1;	
-    if (frustum.znear < frustum.zfar/100.)  // we lose log2(100) bits of depth resolution
-      frustum.znear = frustum.zfar/100.;
+    if (frustum.znear < frustum.zfar/100.f)  // we lose log2(100) bits of depth resolution
+      frustum.znear = frustum.zfar/100.f;
     float ratio = frustum.znear/oldnear;
     frustum.left   = frustum.left*ratio   + eye.x;
     frustum.right  = frustum.right*ratio  + eye.x;
@@ -184,6 +184,7 @@ void ModelViewpoint::setupTransformation(RenderContext* rctx, Vertex center)
 
 void ModelViewpoint::updateMouseMatrix(Vec3 dragStart, Vec3 dragCurrent)
 {
+#ifndef RGL_NO_OPENGL
 	Vec3 axis = dragStart.cross(dragCurrent);
 
 	float angle = dragStart.angle(dragCurrent);
@@ -195,6 +196,7 @@ void ModelViewpoint::updateMouseMatrix(Vec3 dragStart, Vec3 dragCurrent)
 	  glRotatef((GLfloat)angle, (GLfloat)axis.x, (GLfloat)axis.y, (GLfloat)axis.z);
 	glGetDoublev(GL_MODELVIEW_MATRIX,mouseMatrix);
 	glPopMatrix();
+#endif
 }
 
 void ModelViewpoint::updateMouseMatrix(PolarCoord newpos)
@@ -208,6 +210,7 @@ void ModelViewpoint::updateMouseMatrix(PolarCoord newpos)
 
 void ModelViewpoint::mouseOneAxis(Vertex dragStart,Vertex dragCurrent,Vertex axis)
 {
+#ifndef RGL_NO_OPENGL
     float angle = math::rad2deg(dragCurrent.x-dragStart.x);
     Matrix4x4 M((double *)userMatrix);
     Vec4 v = M * Vec4(axis.x, axis.y, axis.z);
@@ -217,6 +220,7 @@ void ModelViewpoint::mouseOneAxis(Vertex dragStart,Vertex dragCurrent,Vertex axi
     glRotatef((GLfloat)angle, (GLfloat)v.x/v.w, (GLfloat)v.y/v.w, (GLfloat)v.z/v.w);
     glGetDoublev(GL_MODELVIEW_MATRIX,mouseMatrix);
     glPopMatrix();
+#endif
 }
 
 void ModelViewpoint::mergeMouseMatrix()
@@ -249,9 +253,9 @@ void ModelViewpoint::getScale(double* dest)
 
 void ModelViewpoint::setScale(double* src)
 {
-    scale.x = src[0];
-    scale.y = src[1];
-    scale.z = src[2];
+    scale.x = static_cast<float>(src[0]);
+    scale.y = static_cast<float>(src[1]);
+    scale.z = static_cast<float>(src[2]);
     scaleChanged = true;
 }
 
@@ -263,6 +267,6 @@ void ModelViewpoint::getPosition(double* dest)
 
 void ModelViewpoint::setPosition(double* src)
 {
-    position.theta = src[0];
-    position.phi = src[1];
+    position.theta = static_cast<float>(src[0]);
+    position.phi = static_cast<float>(src[1]);
 }

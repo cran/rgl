@@ -4,17 +4,14 @@ identityMatrix <- function() diag(nrow=4)
 
 scaleMatrix <- function(x,y,z) diag(c(x,y,z,1))
 
-translationMatrix <- function(x,y,z)
-{
+translationMatrix <- function(x,y,z) {
     result <- diag(4)
     result[4,1:3] <- c(x,y,z)
     result
 }
 
-rotationMatrix <- function(angle,x,y,z,matrix)
-{
-    if (missing(matrix))
-    {
+rotationMatrix <- function(angle,x,y,z,matrix) {
+    if (missing(matrix)) {
     	if (angle == 0) return(identityMatrix())
     	
         u <- c(x,y,z)/sqrt(x^2+y^2+z^2)
@@ -43,7 +40,7 @@ asHomogeneous <- function(x) {
 }
 
 asEuclidean <- function(x) {
-    if (is.matrix(x) && dim(x)[2] == 4) return(x[,1:3]/x[,4])
+    if (is.matrix(x) && dim(x)[2] == 4) return(x[, 1:3, drop = FALSE]/x[, 4])
     else if (length(x) == 4) return(c(x[1]/x[4],x[2]/x[4],x[3]/x[4]))
     else stop("'x' is not row vectors(s)")
 }
@@ -61,7 +58,7 @@ translate3d.default <- function(obj,x,y,z,...) {
     else stop("Unsupported object for translation")
 }
 	
-scale3d.default <- function(obj,x,y,z,...){
+scale3d.default <- function(obj,x,y,z,...) {
     if (is.matrix(obj)) n <- dim(obj)[1]
     else n <- 1
         

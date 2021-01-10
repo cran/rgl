@@ -297,7 +297,7 @@ int Subscene::getAttributeCount(AABox& bbox, AttribID attrib)
 {
   switch (attrib) {
     case IDS:	   
-    case TYPES:    return shapes.size();
+    case TYPES:    return (int)shapes.size();
   }
   return SceneNode::getAttributeCount(bbox, attrib);
 }
@@ -328,7 +328,7 @@ String Subscene::getTextAttribute(AABox& bbox, AttribID attrib, int index)
   if (index < n && attrib == TYPES) {
     char* buffer = R_alloc(20, 1);    
     shapes[index]->getTypeName(buffer, 20);
-    return String(strlen(buffer), buffer);
+    return String(static_cast<int>(strlen(buffer)), buffer);
   } else
     return SceneNode::getTextAttribute(bbox, attrib, index);
 }
@@ -591,6 +591,7 @@ void Subscene::update(RenderContext* renderContext)
 
 void Subscene::render(RenderContext* renderContext, bool opaquePass)
 {
+#ifndef RGL_NO_OPENGL  
   renderContext->subscene = this;
   
   glViewport(pviewport.x, pviewport.y, pviewport.width, pviewport.height);
@@ -723,6 +724,7 @@ void Subscene::render(RenderContext* renderContext, bool opaquePass)
     SELECT select;
     select.render(mousePosition);
   }
+#endif
 }
 
 void Subscene::calcDataBBox()
@@ -781,15 +783,15 @@ void Subscene::setupViewport(RenderContext* rctx)
 {
   Rect2 rect(0,0,0,0);
   if (do_viewport == EMBED_REPLACE) {
-    rect.x = rctx->rect.x + viewport.x*rctx->rect.width;
-    rect.y = rctx->rect.y + viewport.y*rctx->rect.height;
-    rect.width = rctx->rect.width*viewport.width;
-    rect.height = rctx->rect.height*viewport.height;
+    rect.x = static_cast<int>(rctx->rect.x + viewport.x*rctx->rect.width);
+    rect.y = static_cast<int>(rctx->rect.y + viewport.y*rctx->rect.height);
+    rect.width = static_cast<int>(rctx->rect.width*viewport.width);
+    rect.height = static_cast<int>(rctx->rect.height*viewport.height);
   } else {
-    rect.x = parent->pviewport.x + viewport.x*parent->pviewport.width;
-    rect.y = parent->pviewport.y + viewport.y*parent->pviewport.height;
-    rect.width = parent->pviewport.width*viewport.width;
-    rect.height = parent->pviewport.height*viewport.height;
+    rect.x = static_cast<int>(parent->pviewport.x + viewport.x*parent->pviewport.width);
+    rect.y = static_cast<int>(parent->pviewport.y + viewport.y*parent->pviewport.height);
+    rect.width = static_cast<int>(parent->pviewport.width*viewport.width);
+    rect.height = static_cast<int>(parent->pviewport.height*viewport.height);
   }
   pviewport = rect;
 }
@@ -833,13 +835,15 @@ void Subscene::disableLights(RenderContext* rctx)
   //
   // disable lights; setup will enable them
   //
-
+#ifndef RGL_NO_OPENGL
   for (int i=0;i<8;i++)
     glDisable(GL_LIGHT0 + i);  
+#endif
 }  
 
 void Subscene::setupLights(RenderContext* rctx) 
 {  
+#ifndef RGL_NO_OPENGL
   int nlights = 0;
   bool anyviewpoint = false;
   std::vector<Light*>::const_iterator iter;
@@ -877,7 +881,7 @@ void Subscene::setupLights(RenderContext* rctx)
     glPopMatrix();
   }
   SAVEGLERROR;
-
+#endif
 }
 
 void Subscene::renderUnsorted(RenderContext* renderContext)
@@ -1058,7 +1062,7 @@ void Subscene::deleteMouseListener(Subscene* sub)
   }
 }
 
-void Subscene::getMouseListeners(unsigned int max, int* ids)
+void Subscene::getMouseListeners(size_t max, int* ids)
 {
   max = max > mouseListeners.size() ? mouseListeners.size() : max;  
   for (unsigned int i = 0; i < max; i++)

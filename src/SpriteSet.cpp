@@ -33,7 +33,7 @@ SpriteSet::SpriteSet(Material& in_material, int in_nvertex, double* in_vertex, i
       userMatrix[i] = *(in_userMatrix++);
   }
   for(int i=0;i<vertex.size();i++)
-    boundingBox += Sphere( vertex.get(i), size.getRecycled(i)/1.414 );
+    boundingBox += Sphere( vertex.get(i), static_cast<float>(size.getRecycled(i)/1.414) );
 }
 
 SpriteSet::~SpriteSet()
@@ -53,6 +53,7 @@ Vertex SpriteSet::getPrimitiveCenter(int index)
 
 void SpriteSet::drawBegin(RenderContext* renderContext)
 {
+#ifndef RGL_NO_OPENGL
   double mdata[16] = { 0 }, pdata[16] = { 0 };
   
   Shape::drawBegin(renderContext);
@@ -81,10 +82,12 @@ void SpriteSet::drawBegin(RenderContext* renderContext)
     glNormal3f(0.0f,0.0f,1.0f);
     material.beginUse(renderContext);
   }
+#endif
 }
 
 void SpriteSet::drawPrimitive(RenderContext* renderContext, int index)
 {
+#ifndef RGL_NO_OPENGL
   Vertex& o = vertex.get(index);
   float   s = size.getRecycled(index);
   if (o.missing() || ISNAN(s)) return;
@@ -140,10 +143,12 @@ void SpriteSet::drawPrimitive(RenderContext* renderContext, int index)
   
     glEnd();
   }
+#endif
 }
   
 void SpriteSet::drawEnd(RenderContext* renderContext)
 {
+#ifndef RGL_NO_OPENGL
   if (fixedSize) {
     glMatrixMode(GL_PROJECTION);
     glPopMatrix();
@@ -154,6 +159,7 @@ void SpriteSet::drawEnd(RenderContext* renderContext)
   if (!shapes.size())
     material.endUse(renderContext);
   Shape::drawEnd(renderContext);
+#endif
 }
 
 void SpriteSet::render(RenderContext* renderContext)
@@ -167,7 +173,7 @@ int SpriteSet::getAttributeCount(AABox& bbox, AttribID attrib)
     case VERTICES: return vertex.size();
     case RADII:    return size.size();
     case IDS:	   
-    case TYPES:    return shapes.size();
+    case TYPES:    return static_cast<int>(shapes.size());
     case USERMATRIX: {
       if (!shapes.size()) return 0;
       else return 4;
@@ -229,7 +235,7 @@ String SpriteSet::getTextAttribute(AABox& bbox, AttribID attrib, int index)
   if (index < n && attrib == TYPES) {
     char* buffer = R_alloc(20, 1);    
     scene->get_shape(shapes[index])->getTypeName(buffer, 20);
-    return String(strlen(buffer), buffer);
+    return String(static_cast<int>(strlen(buffer)), buffer);
   } else
     return Shape::getTextAttribute(bbox, attrib, index);
 }

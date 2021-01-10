@@ -7,7 +7,8 @@
     rglwidgetClass.prototype.getPieces = function(context, objid, subid, obj) {
       var n = obj.centers.length,
           depth,
-          result = new Array(n);
+          result = new Array(n),
+          z, w, i;
       context = context.slice();
           
       for(i=0; i<n; i++) {
@@ -29,15 +30,15 @@
       return result;    
     };
     
-    rglwidgetClass.prototype.getSpherePieces = function(context, objid, subid, obj, fastTransparency)
+    rglwidgetClass.prototype.getSpherePieces = function(context, subid, obj)
     {
-      if (fastTransparency)
+      if (obj.fastTransparency) 
         if (subid === 0) // Only compute pieces once
-          return this.getPieces(context, objid, -1, this.getObj(objid));
-        else 
+          return this.getPieces(context, obj.id, -1, obj);
+        else
           return [];
       else
-        return this.getPieces(context, objid, subid, obj);
+        return this.getPieces(context, obj.id, subid, this.sphere);
     };
     
     rglwidgetClass.prototype.mergePieces = function(pieces) {

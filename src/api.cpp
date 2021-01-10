@@ -397,7 +397,7 @@ void rgl::rgl_bg(int* successptr, int* idata, double* fogScale)
 
     bool sphere    = as_bool( idata[0] );
     int  fogtype   = idata[1];
-    Background* bg = new Background(currentMaterial, sphere, fogtype, fogScale[0]);
+    Background* bg = new Background(currentMaterial, sphere, fogtype, static_cast<float>(fogScale[0]));
     success = as_success( device->add( bg ) );
     SceneNode*  quad = bg->getQuad();
     if (quad) {
@@ -443,7 +443,9 @@ void rgl::rgl_light ( int* successptr, int* idata, double* ddata )
 
     float theta         = (float) ddata[0];
     float phi           = (float) ddata[1];
-    Vertex finposition   = Vertex( ddata[2], ddata[3], ddata[4] );
+    Vertex finposition   = Vertex( static_cast<float>(ddata[2]), 
+                                   static_cast<float>(ddata[3]), 
+                                   static_cast<float>(ddata[4]) );
 
     success = as_success( device->add( new Light( PolarCoord(theta, phi), finposition, (bool) viewpoint_rel, (bool) finite_pos, ambient, diffuse, specular ) ) );
     CHECKGLERROR;
@@ -465,7 +467,9 @@ void rgl::rgl_viewpoint(int* successptr, int* idata, double* ddata)
     float phi	      = static_cast<float>( ddata[1] );
     float fov         = static_cast<float>( ddata[2] );
     float zoom        = static_cast<float>( ddata[3] );
-    Vertex scale      = Vertex( ddata[4], ddata[5], ddata[6] );
+    Vertex scale      = Vertex( static_cast<float>(ddata[4]), 
+                                static_cast<float>(ddata[5]), 
+                                static_cast<float>(ddata[6]) );
     
     int   interactive = idata[0];
     int   polar       = idata[1];
@@ -804,7 +808,7 @@ void rgl::rgl_getsubscenechildcount(int* id, int* n)
     RGLView* rglview = device->getRGLView();
     Scene* scene = rglview->getScene();
     Subscene* subscene = scene->getSubscene(*id);
-    *n = subscene ? subscene->getChildCount() : 0;
+    *n = subscene ? static_cast<int>(subscene->getChildCount()) : 0;
   } else
     *n = 0;
 } 
@@ -818,7 +822,7 @@ void rgl::rgl_getsubscenechildren(int* id, int* children)
     Scene* scene = rglview->getScene();
     const Subscene* subscene = scene->getSubscene(*id);
     if (subscene) {
-      for (int i = 0; i < subscene->getChildCount(); i++) {
+      for (size_t i = 0; i < subscene->getChildCount(); i++) {
         Subscene* child = subscene->getChild(i);
         children[i] = child ? child->getObjID() : 0;
       }
@@ -1066,7 +1070,7 @@ void rgl::rgl_getmaterial(int *successptr, int *id, int* idata, char** cdata, do
                                (unsigned int*) (idata + 8),
                                (unsigned int*) (idata + 9),
                                (bool*) (idata + 20),
-                               strlen(cdata[0]),
+                               static_cast<int>(strlen(cdata[0])),
                                cdata[0] );
   } else {
     idata[6] = (int)mat->textype;
@@ -1213,60 +1217,6 @@ void rgl::rgl_pixels(int* successptr, int* ll, int* size, int* component, double
     
   }
   
-  *successptr = success;
-}
-
-void rgl::rgl_user2window(int* successptr, int* idata, double* point, double* pixel, double* model, double* proj, int* view)
-{
-  int success = RGL_FAIL;
-  GLdouble* vertex = pixel;
-  int columns = idata[0];
-  GLint viewport[4];
-
-  Device* device;
-
-  if (deviceManager && (device = deviceManager->getAnyDevice())) {
-  
-    for (int i=0; i<4; i++) viewport[i] = view[i];
-    for (int i=0; i<columns; i++) {
-	    gluProject(point[0],point[1],point[2],model,proj,viewport,
-	    vertex,vertex+1,vertex+2);
-	    vertex[0] /= view[2];
-	    vertex[1] /= view[3];
-	    point += 3;
-	    vertex += 3;
-    }
-    success = RGL_SUCCESS;
-    CHECKGLERROR;
-  }
-
-  *successptr = success;
-}
-
-void rgl::rgl_window2user(int* successptr, int* idata, double* point, double* pixel, double* model, double* proj, int* view)
-{
-  int success = RGL_FAIL;
-  GLdouble* vertex = point;
-  int columns = idata[0];
-  GLint viewport[4];
-
-  Device* device;
-
-  if (deviceManager && (device = deviceManager->getAnyDevice())) {
-  
-    for (int i=0; i<4; i++) viewport[i] = view[i];
-    for (int i=0; i<columns; i++) {
-	    pixel[0] *= view[2];
-	    pixel[1] *= view[3];
-	    gluUnProject(pixel[0],pixel[1],pixel[2],model,proj,viewport,
-	    vertex,vertex+1,vertex+2);
-	    pixel += 3;
-	    vertex += 3;
-    }
-    success = RGL_SUCCESS;
-    CHECKGLERROR;
-  }
-
   *successptr = success;
 }
 

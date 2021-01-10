@@ -10,7 +10,8 @@ using namespace rgl;
 
 void SELECT::render(double* position)
 {
-  double llx, lly, urx, ury;
+#ifndef RGL_NO_OPENGL  
+  GLdouble llx, lly, urx, ury;
   llx = *position;
   lly = *(position+1);
   urx = *(position+2);
@@ -26,9 +27,10 @@ void SELECT::render(double* position)
   glLineWidth(2.0);
 
   glBegin(GL_LINE_LOOP);
-  	glVertex2f(llx, lly);
-  	glVertex2f(llx,	ury);
-  	glVertex2f(urx, ury);
-  	glVertex2f(urx, lly);
+  	glVertex2d(llx, lly);
+  	glVertex2d(llx,	ury);
+  	glVertex2d(urx, ury);
+  	glVertex2d(urx, lly);
   glEnd();
+#endif
 }

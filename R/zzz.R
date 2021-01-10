@@ -12,37 +12,38 @@
 ## entry-point
 ##
 ##
-
-.onLoad <- function(lib, pkg)
-{
+  
+.onLoad <- function(lib, pkg) {
   # OS-specific 
   initValue <- 0  
   
   dynlib <- "rgl"
   
-  onlyNULL <- rgl.useNULL()
-  unixos <- "none"
+  onlyNULL <- noOpenGL || rgl.useNULL()
   
-  if ( .Platform$OS.type == "unix" ) {
+  unixos <- "none"
+  if (.Platform$OS.type == "unix") {
     unixos <- system("uname", intern=TRUE)
     if (!length(unixos))
-      unixos <- "unknown"
-    if ( unixos == "Darwin" ) {
-          
-      # For MacOS X we have to remove /usr/X11R6/lib from the DYLD_LIBRARY_PATH
-      # because it would override Apple's OpenGL framework
-      Sys.setenv("DYLD_LIBRARY_PATH"=gsub("/usr/X11R6/lib","",Sys.getenv("DYLD_LIBRARY_PATH")))
-      X11 <- nchar(Sys.getenv("DISPLAY", "")) > 0 || nchar(Sys.which("Xorg")) > 0
-      if (!X11) 
-      	stop("X11 not found; XQuartz (from www.xquartz.org) is required to run rgl.",
-      	     call. = FALSE)
-    }
+      unixos <- "unknown"    
   }
+  
+  if ( !noOpenGL && unixos == "Darwin" ) {
+    
+    # For MacOS X we have to remove /usr/X11R6/lib from the DYLD_LIBRARY_PATH
+    # because it would override Apple's OpenGL framework
+    Sys.setenv("DYLD_LIBRARY_PATH"=gsub("/usr/X11R6/lib","",Sys.getenv("DYLD_LIBRARY_PATH")))
+    X11 <- nchar(Sys.getenv("DISPLAY", "")) > 0 || nchar(Sys.which("Xorg")) > 0
+    if (!X11) 
+      stop("X11 not found; XQuartz (from www.xquartz.org) is required to run rgl.",
+           call. = FALSE)
+  }
+  
   dll <- try(library.dynam(dynlib, pkg, lib))
   if (inherits(dll, "try-error"))
     stop(paste("\tLoading rgl's DLL failed.", 
     	       if (unixos == "Darwin") 
-    	         "\n\tOn MacOS, rgl depends on XQuartz, which you can download from xquartz.org."),
+    	         "\n\tThis build of rgl depends on XQuartz, which you can download from xquartz.org."),
          call. = FALSE)
 
   routines <- getDLLRegisteredRoutines(dynlib, addNames = FALSE)
@@ -51,10 +52,10 @@
     lapply(routines[[i]],
       function(sym) assign(sym$name, sym, envir = ns))
       
-  if ( .Platform$OS.type == "windows" && !onlyNULL) {
-    frame <- getWindowsHandle("Frame")    
+  if ( !noOpenGL && .Platform$OS.type == "windows" && !onlyNULL) {
+    frame <- getWindowsHandle("Frame")  # nolint 
     ## getWindowsHandle was numeric pre-2.6.0 
-    if ( !is.null(frame) ) initValue <- getWindowsHandle("Console")
+    if ( !is.null(frame) ) initValue <- getWindowsHandle("Console") # nolint
   } 
  
   if (onlyNULL) {
@@ -80,6 +81,7 @@
     setGraphicsDelay(unixos = unixos)
   
   registerInputHandler("shinyPar3d", convertShinyPar3d)
+  registerInputHandler("shinyMouse3d", convertShinyMouse3d)
   
 }
 
@@ -129,15 +131,21 @@ rgl.init <- function(initValue = 0, onlyNULL = FALSE, debug = getOption("rgl.deb
   .Call( rgl_init, 
     initValue, onlyNULL, environment(rgl.init), debug )
 
+.onAttach <- function(libname, pkgname) {
+  if (noOpenGL)
+    packageStartupMessage(
+      "This build of rgl does not include OpenGL functions.  Use
+ rglwidget() to display results, e.g. via options(rgl.printRglwidget = TRUE).")
+}
+
 ##
 ## exit-point
 ##
 ##
 
-.onUnload <- function(libpath)
-{ 
+.onUnload <- function(libpath) {
   # shutdown
   
-  ret <- .C( rgl_quit, success=FALSE )
+  .C( rgl_quit, success=FALSE )
   
 }

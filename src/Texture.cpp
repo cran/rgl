@@ -71,9 +71,11 @@ Texture::Texture(
 
 Texture::~Texture()
 {
+#ifndef RGL_NO_OPENGL
   if (texName) {
     glDeleteTextures(1, &texName);
   }
+#endif
   if (pixmap)
     delete pixmap;
   if (filename)
@@ -121,6 +123,7 @@ void Texture::getParameters(Type *out_type, bool *out_mipmap,
 }
 
 #ifndef MODERN_OPENGL
+#ifndef RGL_NO_OPENGL
 static unsigned int texsize(unsigned int s)
 {
   return 1U << msb(s-1);
@@ -137,9 +140,11 @@ static void printGluErrorMessage(GLint error)
   printMessage(buf);
 }
 #endif
+#endif
 
 void Texture::init(RenderContext* renderContext)
 {
+#ifndef RGL_NO_OPENGL
   glGenTextures(1, &texName);
   glBindTexture(GL_TEXTURE_2D, texName);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
@@ -251,12 +256,16 @@ void Texture::init(RenderContext* renderContext)
     glEnable(GL_TEXTURE_GEN_S);
     glEnable(GL_TEXTURE_GEN_T);
   }
-  delete pixmap;
-  pixmap = NULL;
+#endif
+  if (pixmap) {
+    delete pixmap;
+    pixmap = NULL;
+  }
 }
 
 void Texture::beginUse(RenderContext* renderContext)
 {
+#ifndef RGL_NO_OPENGL
   if (!texName) {
     init(renderContext);
   }
@@ -271,11 +280,14 @@ void Texture::beginUse(RenderContext* renderContext)
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
   }
+#endif
 }
 
 void Texture::endUse(RenderContext* renderContext)
 {
+#ifndef RGL_NO_OPENGL
   glPopAttrib();
+#endif
 }
 
 

@@ -15,7 +15,7 @@ using namespace rgl;
 Material Background::defaultMaterial( Color(0.3f,0.3f,0.3f), Color(1.0f,0.0f,0.0f) );
 
 Background::Background(Material& in_material, bool in_sphere, int in_fogtype,
-                       double in_fogScale)
+                       float in_fogScale)
 : Shape(in_material, true, BACKGROUND), sphere(in_sphere), fogtype(in_fogtype),
   fogScale(in_fogScale), quad(NULL)
 {
@@ -79,6 +79,7 @@ GLbitfield Background::getClearFlags(RenderContext* renderContext)
 
 void Background::render(RenderContext* renderContext)
 {
+#ifndef RGL_NO_OPENGL
   Subscene* subscene = renderContext->subscene;
   UserViewpoint* userviewpoint = subscene->getUserViewpoint();
   
@@ -125,12 +126,12 @@ void Background::render(RenderContext* renderContext)
     float hlen, znear;
     
     if (fov > 0.0) {
-      float rad = math::deg2rad(fov/2.0f);
+      double rad = math::deg2rad(fov/2.0f);
 
-      hlen  = math::sin(rad) * math::cos(math::deg2rad(45.0));
-      znear = hlen / math::tan(rad);
+      hlen  = static_cast<float>(math::sin(rad) * math::cos(math::deg2rad(45.0)));
+      znear = hlen / static_cast<float>(math::tan(rad));
     } else {
-      hlen = math::cos(math::deg2rad(45.0));
+      hlen = static_cast<float>(math::cos(math::deg2rad(45.0)));
       znear = hlen;
     }
     
@@ -191,11 +192,12 @@ void Background::render(RenderContext* renderContext)
     glMatrixMode(GL_MODELVIEW);
     glPopMatrix();
   }
-    
+#endif    
 }
 
 void Background::drawPrimitive(RenderContext* renderContext, int index)
 {
+#ifndef RGL_NO_OPENGL  
   glPushAttrib(GL_ENABLE_BIT);
 
   material.beginUse(renderContext);
@@ -210,6 +212,7 @@ void Background::drawPrimitive(RenderContext* renderContext, int index)
   material.endUse(renderContext);
 
   glPopAttrib();
+#endif
 }
 
 int Background::getAttributeCount(AABox& bbox, AttribID attrib) 
@@ -245,7 +248,7 @@ void Background::getAttribute(AABox& bbox, AttribID attrib, int first, int count
     case FOGSCALE:
       if (first <= 0)
         *result++ = fogScale;
-        return;
+      return;
     case IDS:
       if (quad)
       	*result++ = quad->getObjID();
@@ -261,7 +264,7 @@ String Background::getTextAttribute(AABox& bbox, AttribID attrib, int index)
   if (index < n && attrib == TYPES) {
     char* buffer = R_alloc(20, 1);    
     quad->getTypeName(buffer, 20);
-    return String(strlen(buffer), buffer);
+    return String(static_cast<int>(strlen(buffer)), buffer);
   } else
     return Shape::getTextAttribute(bbox, attrib, index);
 }

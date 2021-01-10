@@ -34,7 +34,7 @@ struct AxisInfo {
             Vertex& marklen, String& string);
             
   int getNticks(float low, float high);
-  float getTick(float low, float high, int index);
+  double getTick(float low, float high, int index); /* double since it might be NA_REAL */
 
   int    mode;
   int    nticks;
@@ -63,7 +63,9 @@ private:
   AxisInfo xaxis, yaxis, zaxis;
   float marklen_value;
   bool  marklen_fract;
+#ifndef RGL_NO_OPENGL
   float expand;
+#endif
   bool  draw_front;
 
   static Material defaultMaterial;

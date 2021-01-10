@@ -82,7 +82,7 @@ resolveHeight <- function(x, inViewer = TRUE, default = 40) {
   else
     refsize <- DEFAULT_HEIGHT
   result <- x$height
-  if (is.null(result) && !is.null(policy <- x$sizingPolicy)) { 
+  if (is.null(result) && !is.null(policy <- x$sizingPolicy)) {
     if (inViewer) {
       viewer <- policy$viewer
       if (isTRUE(viewer$fill))
@@ -139,9 +139,6 @@ getHeights <- function(objects, defaultHeight = 40) {
 
 processUpstream <- function(upstream, elementId = NULL, playerId = NULL) {
   rowsizes <- getHeights(upstream)
-  
-  prevRglWidget <- NULL
-  players <- character()
   
   if (inherits(upstream, "combineWidgets")) 
     upstream <- upstream$widgets
@@ -238,7 +235,8 @@ rglwidget <- local({
            webGLoptions = list(preserveDrawingBuffer = TRUE), 
   	       shared = NULL, 
            minimal = TRUE, 
-           webgl = !latex, latex, ...) {
+           webgl = !latex, latex, 
+           shinyBrush = NULL, ...) {
   if (missing(latex))
     latex <- isTRUE(getOption("knitr.in.progress")) &&
              identical(opts_knit$get("rmarkdown.pandoc.to"),
@@ -253,9 +251,20 @@ rglwidget <- local({
   else if (!reuse)
     reuseDF <<- NULL
 
-  if (is.null(elementId) && (!inShiny() || !is.null(controllers)))
+  if (is.null(elementId) && 
+      (!inShiny() || # If in Shiny, all of the classes below need the ID
+       inherits(controllers, c("combineWidgets", "shiny.tag", "htmlwidget"))))
     elementId <- newElementId("rgl")
 
+  if (!is.null(shinyBrush)) {
+    if (!is.character(shinyBrush) || length(shinyBrush) != 1)
+      stop("'shinyBrush' must be a single character value")
+    if (!inShiny())
+      warning("'shinySelectionInput' is only used in Shiny")
+    else
+      x$selectionInput <- shinyBrush
+  }
+  
   if (!inherits(x, "rglscene"))
     stop("First argument should be an rgl scene.")
   
@@ -289,7 +298,7 @@ rglwidget <- local({
     width <- CSStoPixels(width)
   if (!is.null(height))
     height <- CSStoPixels(height)
-  x = convertScene(x, width, height, snapshot = snapshot,
+  x <- convertScene(x, width, height, snapshot = snapshot,
                    elementId = elementId, reuse = reuseDF,
                    webgl = webgl, latex = latex)
   if (!webgl)
@@ -328,7 +337,7 @@ rglwidget <- local({
 #' Widget output function for use in Shiny
 #'
 #' @export
-rglwidgetOutput <- function(outputId, width = '512px', height = '512px'){
+rglwidgetOutput <- function(outputId, width = '512px', height = '512px') {
   shinyWidgetOutput(outputId, 'rglWebGL', width, height, package = 'rgl')
 }
 
@@ -336,7 +345,7 @@ rglwidgetOutput <- function(outputId, width = '512px', height = '512px'){
 #'
 #' @export
 renderRglwidget <- function(expr, env = parent.frame(), quoted = FALSE, outputArgs = list()) {
-  if (!quoted) { expr <- substitute(expr) } # force quoted
+  if (!quoted) expr <- substitute(expr)  # force quoted
   markRenderFunction(rglwidgetOutput,
                      shinyRenderWidget(expr, rglwidgetOutput, env, quoted = TRUE),
   		     outputArgs = outputArgs)
@@ -371,9 +380,47 @@ shinyGetPar3d <- function(parameters, session,
 }
 
 convertShinyPar3d <- function(par3d, ...) {
-  if (!is.null(par3d$userMatrix))
-    par3d$userMatrix <- matrix(unlist(par3d$userMatrix), 4,4)
+  for (parm in c("modelMatrix", "projMatrix", "userMatrix", "userProjection"))
+    if (!is.null(par3d[[parm]]))
+      par3d[[parm]] <- matrix(unlist(par3d[[parm]]), 4, 4)
+  for (parm in c("mouseMode", "observer", "scale", "viewport", "bbox", "windowRect"))
+    if (!is.null(par3d[[parm]]))
+      par3d[[parm]] <- unlist(par3d[[parm]])
   par3d
+}
+
+shinyResetBrush <- function(session, brush) {
+  session$sendCustomMessage("resetBrush", brush)
+}
+
+convertShinyMouse3d <- function(mouse3d, ...) {
+  for (parm in c("model", "proj")) 
+    if (!is.null(mouse3d[[parm]]))
+      mouse3d[[parm]] <- matrix(unlist(mouse3d[[parm]]), 4, 4)
+    
+  if (length(unlist(mouse3d$view)) == 4) 
+    mouse3d$view <- structure(unlist(mouse3d$view),
+                              names = c("x", "y", "width", "height"))
+  if (all(c("p1", "p2") %in% names(mouse3d$region)))
+    mouse3d$region <- with(mouse3d$region,
+                           c(x1 = (p1$x + 1)/2,
+                             y1 = (p1$y + 1)/2,
+                             x2 = (p2$x + 1)/2,
+                             y2 = (p2$y + 1)/2))
+  structure(mouse3d, class = "rglMouseSelection")
+}
+
+print.rglMouseSelection <- function(x, verbose = FALSE, ...) {
+  if (!is.null(x$region)) {
+    cat("Mouse selection:\n")
+    if (verbose) {
+      cat("p1=[", x$region[1], ",", x$region[2], 
+        "] p2=[", x$region[3], ",", x$region[4],"]\n")
+      cat("Projection data included: ", !is.null(x$model) && !is.null(x$proj) && !is.null(x$view), "\n")
+    }
+  } else
+    cat("Inactive mouse selection.\n")
+  invisible(x)
 }
 
 # Create the local dependencies
@@ -387,7 +434,15 @@ makeDependency <- function(name, src, script = NULL, package,
       packageVersion("js") >= "1.2") {
     if (debugging) {
       for (f in script) {
-        hints <- js::jshint(readLines(file.path(system.file(src, package = package), f)))
+        hints <- js::jshint(readLines(file.path(system.file(src, package = package), f)),
+                            undef = TRUE, bitwise = TRUE, eqeqeq = TRUE,
+                            latedef = TRUE, browser = TRUE, devel = TRUE,
+                            globals = list(CanvasMatrix4 = FALSE, 
+                                           WebGLFloatArray = FALSE,
+                                           rglwidgetClass = FALSE,
+                                           rgltimerClass = FALSE,
+                                           Shiny = FALSE
+                                           ))
         for (i in seq_len(NROW(hints)))
           warning(f, "#", hints[i, "line"], ": ", hints[i, "reason"],
                   call. = FALSE, immediate. = TRUE)
