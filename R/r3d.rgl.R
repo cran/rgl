@@ -364,8 +364,39 @@ set3d <- function(dev, silent = FALSE) {
     else return(open3d())
 }
 
-snapshot3d <- function(filename, ..., scene, width = NULL, height = NULL) {
-  if (!missing(scene)) {
+requireWebshot2 <- function() {
+  suppressMessages(res <- requireNamespace("webshot2", quietly = TRUE))
+  res
+}
+
+snapshot3d <- function(filename = tempfile(fileext = ".png"), 
+                       ..., scene, width = NULL, height = NULL,
+                       webshot = TRUE) {
+  force(filename)
+  
+  if (webshot && !requireWebshot2()) {
+    warning("webshot = TRUE requires the webshot2 package; using rgl.snapshot() instead")
+    webshot <- FALSE
+  }
+  saveopts <- options(rgl.useNULL = webshot)
+  on.exit(options(saveopts))
+  
+    # The logic here is a little convoluted:
+  # scene  resize  webshot getscene1 plot resize getscene2
+  # no     no      no      
+  # no     no      yes         X
+  # no     yes     no                       X
+  # no     yes     yes         X      X     X      X                 
+  # yes    no      no                 X
+  # yes    no      yes     
+  # yes    yes     no                 X     X
+  # yes    yes     yes                X     X      X
+  
+    
+  resize <- !is.null(width) || !is.null(height)
+  havescene <- !missing(scene)
+  
+  if (havescene) {
     if (inherits(scene, "rglWebGL")) {
       snapshot <- scene$x$snapshot
       if (!is.null(snapshot) && is.null(width) && is.null(height))
@@ -373,19 +404,43 @@ snapshot3d <- function(filename, ..., scene, width = NULL, height = NULL) {
       else
         scene <- attr(scene, "origScene")
     }
-    saveopts <- options(rgl.useNULL = FALSE)
-    on.exit(options(saveopts))
-    plot3d(scene) # calls open3d internally
+  }
+  if (!havescene && webshot)
+    scene <- scene3d()
+  
+  if ((!havescene && resize && webshot)
+      || (havescene && (resize || !webshot))) {
+    open3d()
+    plot3d(scene)
     on.exit(close3d(), add = TRUE)
   }
-  if (!is.null(width) || !is.null(height)) {
+  if (resize) {
     saverect <- rect <- par3d("windowRect")
-    on.exit(par3d(windowRect = saverect), add = TRUE, after = FALSE)
+    on.exit(par3d(windowRect = saverect), add = TRUE)
     if (!is.null(width))
       rect[3] <- rect[1] + width
     if (!is.null(height))
       rect[4] <- rect[2] + height
     par3d(windowRect = rect)
   }
-  rgl.snapshot(filename, ...)
+  if (webshot) {
+    if (resize)
+      scene <- scene3d()
+    rect <- par3d("windowRect")
+    f1 <- tempfile(fileext = ".html")
+    on.exit(unlink(f1), add = TRUE)
+    width <- rect[3] - rect[1]
+    height <- rect[4] - rect[2]
+    saveWidget(rglwidget(scene,
+                         elementId = "webshot",
+                         width = width,
+                         height = height,
+                         webgl = TRUE), 
+               f1)
+    capture.output(webshot2::webshot(f1, file = filename, selector = "#webshot",
+                        vwidth = width + 100, vheight = height, ...),
+                   type = "message")
+    invisible(filename)
+  } else
+    rgl.snapshot(filename, ...)
 }

@@ -14,12 +14,25 @@
 ##
   
 .onLoad <- function(lib, pkg) {
+  getDir <- function(useNULL) {
+    dir <- if (useNULL) "useNULL" else "libs"
+    if (nchar(.Platform$r_arch))
+      dir <- paste0(dir, "/", .Platform$r_arch)
+    dir
+  }
+    
+  getDynlib <- function(dir)
+    system.file(paste0(dir, "/rgl", .Platform$dynlib.ext), 
+                package = pkg, lib.loc = lib,
+                mustWork = TRUE)
+  
   # OS-specific 
   initValue <- 0  
   
-  dynlib <- "rgl"
-  
   onlyNULL <- noOpenGL || rgl.useNULL()
+  
+  useNULL <- onlyNULL && !noOpenGL && .Platform$OS.type != "windows"
+  dir <- getDir(useNULL)
   
   unixos <- "none"
   if (.Platform$OS.type == "unix") {
@@ -28,24 +41,23 @@
       unixos <- "unknown"    
   }
   
-  if ( !noOpenGL && unixos == "Darwin" ) {
-    
-    # For MacOS X we have to remove /usr/X11R6/lib from the DYLD_LIBRARY_PATH
-    # because it would override Apple's OpenGL framework
-    Sys.setenv("DYLD_LIBRARY_PATH"=gsub("/usr/X11R6/lib","",Sys.getenv("DYLD_LIBRARY_PATH")))
-    X11 <- nchar(Sys.getenv("DISPLAY", "")) > 0 || nchar(Sys.which("Xorg")) > 0
-    if (!X11) 
-      stop("X11 not found; XQuartz (from www.xquartz.org) is required to run rgl.",
-           call. = FALSE)
-  }
-  
-  dll <- try(library.dynam(dynlib, pkg, lib))
-  if (inherits(dll, "try-error"))
-    stop(paste("\tLoading rgl's DLL failed.", 
-    	       if (unixos == "Darwin") 
-    	         "\n\tThis build of rgl depends on XQuartz, which you can download from xquartz.org."),
+  dll <- try(dyn.load(dynlib <- getDynlib(dir)))
+  if (inherits(dll, "try-error")) {
+    warning(paste("\tLoading rgl's DLL failed.", 
+    	       if (unixos == "Darwin" && !onlyNULL) {
+    	         paste("\n\tThis build of rgl depends on XQuartz, which failed to load.\n",
+    	           "See the discussion in https://stackoverflow.com/a/66127391/2554330")
+             }),
          call. = FALSE)
-
+    if (!onlyNULL) {
+      dir <- getDir(TRUE)
+      warning("Trying without OpenGL...", call. = FALSE)
+      noOpenGL <<- TRUE
+      dll <- try(dyn.load(dynlib <- getDynlib(dir)))
+    }
+    if (inherits(dll, "try-error"))
+      stop("Loading failed.")
+  }
   routines <- getDLLRegisteredRoutines(dynlib, addNames = FALSE)
   ns <- asNamespace(pkg)
   for(i in 1:4)

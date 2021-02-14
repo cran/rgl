@@ -105,5 +105,5 @@ persp(volcano, col = "green", shade = TRUE,
 setdiff(ls("package:rgl"), documentedfns)
 
 ## ----echo=FALSE, results="asis"-----------------------------------------------
-writeIndex(cols = 5)
+writeIndex(cols = if (knitr::is_html_output()) 5 else 4)
 

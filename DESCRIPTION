@@ -1,12 +1,12 @@
 Package: rgl
-Version: 0.104.16
+Version: 0.105.12
 Title: 3D Visualization Using OpenGL
 Author: Daniel Adler <dadler@uni-goettingen.de>, Duncan Murdoch <murdoch.duncan@gmail.com>, and others (see README)
 Maintainer: Duncan Murdoch <murdoch.duncan@gmail.com>
-Depends: R (>= 3.2.0)
+Depends: R (>= 3.3.0)
 Suggests: MASS, rmarkdown, deldir, orientlib, lattice, misc3d,
         rstudioapi, magick, plotrix (>= 3.7-3), tripack, interp,
-        alphashape3d, tcltk, js (>= 1.2), akima
+        alphashape3d, tcltk, js (>= 1.2), akima, webshot2
 Imports: graphics, grDevices, stats, utils, htmlwidgets, htmltools,
         knitr, jsonlite (>= 0.9.20), shiny, magrittr, crosstalk,
         manipulateWidget (>= 0.9.0)
@@ -16,13 +16,14 @@ Description: Provides medium to high level functions for 3D interactive graphics
     may be on screen using OpenGL, or to various standard 3D file formats including
     WebGL, PLY, OBJ, STL as well as 2D image formats, including PNG, Postscript, SVG, PGF.
 License: GPL
-URL: https://r-forge.r-project.org/projects/rgl/
+URL: https://github.com/dmurdoch/rgl
 SystemRequirements: OpenGL, GLU Library, XQuartz (on OSX), zlib
         (optional), libpng (>=1.2.9, optional), FreeType (optional),
         pandoc (>=1.14, needed for vignettes)
-BugReports: https://r-forge.r-project.org/projects/rgl/
+BugReports: https://github.com/dmurdoch/rgl/issues
 VignetteBuilder: knitr
+Additional_repositories: https://dmurdoch.github.io/drat
 NeedsCompilation: yes
-Packaged: 2021-01-09 01:07:36 UTC; murdoch
+Packaged: 2021-02-14 20:46:05 UTC; murdoch
 Repository: CRAN
-Date/Publication: 2021-01-10 17:10:13 UTC
+Date/Publication: 2021-02-14 22:50:03 UTC
