@@ -4,7 +4,7 @@
      */
     rglwidgetClass.prototype.initGL0 = function() {
       if (!window.WebGLRenderingContext){
-        alert("Your browser does not support WebGL. See http://get.webgl.org");
+        this.alertOnce("Your browser does not support WebGL. See http://get.webgl.org");
         return;
       }
     };
@@ -14,7 +14,7 @@
      * @returns { Object } the WebGL context
      */
     rglwidgetClass.prototype.initGL = function() {
-      var self = this;
+      var self = this, success = false;
       if (this.gl) {
       	if (!this.drawing && this.gl.isContextLost())
           this.restartCanvas();
@@ -28,6 +28,9 @@
         this.onContextLost, false);
       this.gl = this.canvas.getContext("webgl", this.webGLoptions) ||
                this.canvas.getContext("experimental-webgl", this.webGLoptions);
+      success = !!(this.gl && this.gl instanceof WebGLRenderingContext);
+      if (!success)
+        this.alertOnce("Your browser does not support WebGL. See http://get.webgl.org"); 
       this.index_uint = this.gl.getExtension("OES_element_index_uint");
       var save = this.startDrawing();
       Object.keys(this.scene.objects).forEach(function(key){
@@ -231,7 +234,7 @@
           fat_lines = this.isSet(flags, this.f_fat_lines),
           has_texture = this.isSet(flags, this.f_has_texture),
           fixed_quads = this.isSet(flags, this.f_fixed_quads),
-          is_transparent = obj.is_transparent,
+          is_transparent = this.isSet(flags, this.f_is_transparent),
           depth_sort = this.isSet(flags, this.f_depth_sort),
           sprites_3d = this.isSet(flags, this.f_sprites_3d),
           fixed_size = this.isSet(flags, this.f_fixed_size),
@@ -252,6 +255,7 @@
     obj.initialized = true;
 
     obj.someHidden = false; // used in selection
+    obj.is_transparent = is_transparent;
     
     if (type === "bboxdeco" || type === "subscene")
       return;
@@ -762,7 +766,7 @@
       for (i = 0; i < f.length; i++)
         alias[i] = [];
       for (i = 0; i < f.length - 1; i++) {
-      	if (type !== "linestrip" && i % 2 !== 1)
+      	if (type !== "linestrip" && i % 2 === 1)
       	  continue;
       	k = ++last;
       	vnew[k] = vnew[f[i]].slice();

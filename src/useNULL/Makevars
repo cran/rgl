@@ -10,4 +10,3 @@ PKG_CFLAGS=$(C_VISIBILITY)
 PKG_CPPFLAGS= -DHAVE_PNG_H -I/usr/local/Cellar/libpng/1.6.37/include/libpng16 -DRGL_NO_OPENGL
 PKG_LIBS= -L/usr/local/Cellar/libpng/1.6.37/lib -lpng16
 
-OBJECTS=$(SHLIB)
