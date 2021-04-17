@@ -1,10 +1,23 @@
-#
-# triangle mesh object
-#
+ensureMatrix <- function(x, nrow) {
+  if (!is.matrix(x))
+    x <- matrix(x, nrow = nrow)
+  x
+}
 
-tmesh3d <- function( vertices, indices, homogeneous=TRUE, material=NULL, normals=NULL,
-                     texcoords=NULL,
-                     meshColor = c("vertices", "edges", "faces", "legacy")) {
+mesh3d <- function( x, y = NULL, z = NULL, vertices, 
+                    material = NULL,
+                    normals = NULL, texcoords = NULL,
+                    points = NULL, segments = NULL,
+                    triangles = NULL, quads = NULL,
+                    meshColor = c("vertices", "edges", "faces", "legacy")) {
+  
+  if (missing(vertices)) {
+    xyz <- xyz.coords(x, y, z, recycle=TRUE)
+    vertices <- rbind(xyz$x, xyz$y, xyz$z, 1) 
+  } else vertices <- asHomogeneous2(vertices)
+  
+  # Remove dimnames
+  dimnames(vertices) <- NULL
 
   if (missing(meshColor) 
       && !is.null(material) 
@@ -12,45 +25,97 @@ tmesh3d <- function( vertices, indices, homogeneous=TRUE, material=NULL, normals
     meshColor <- material$meshColor
     material$meshColor <- NULL
   }
+  
   meshColor <- match.arg(meshColor)
-  if (missing(texcoords)
+  
+  if (is.null(texcoords)
       && !is.null(material)
       && !is.null(material$texcoords)) {
     texcoords <- material$texcoords
     material$texcoords <- NULL
   }
-  if (homogeneous == TRUE)
-    vrows <- 4
-  else
-    vrows <- 3
   
-  nvertex <- length(vertices)/vrows
+  nvertex <- ncol(vertices)
+  
   if ( !is.null(normals) ) {
     normals <- xyz.coords(normals, recycle=TRUE)
-    x <- rep(normals$x, len=nvertex)
-    y <- rep(normals$y, len=nvertex)
-    z <- rep(normals$z, len=nvertex)
-    normals <- rgl.vertex(x,y,z)
+    x <- rep(normals$x, len = nvertex)
+    y <- rep(normals$y, len = nvertex)
+    z <- rep(normals$z, len = nvertex)
+    normals <- rgl.vertex(x, y, z)
   }
+  
   if ( !is.null(texcoords) ) {
-    texcoords <- xy.coords(texcoords, recycle=TRUE)
-    x <- rep(texcoords$x, len=nvertex)
-    y <- rep(texcoords$y, len=nvertex)
-    texcoords <- rbind(x,y)
+    texcoords <- xy.coords(texcoords, recycle = TRUE)
+    x <- rep(texcoords$x, len = nvertex)
+    y <- rep(texcoords$y, len = nvertex)
+    texcoords <- rbind(x, y)
   }
+  
   object <- list(
-    vb=matrix(vertices,nrow=vrows),
-    it=matrix(indices,nrow=3),
-    material=.getMaterialArgs(material = material),
-    normals=normals,
-    texcoords=texcoords,
-    meshColor = meshColor
+    vb = vertices,
+    material = .getMaterialArgs(material = material),
+    normals = normals,
+    texcoords = texcoords
   ) 
   
-  if (!homogeneous) object$vb <- rbind(object$vb, 1)
+  if (!is.null(points))    object$ip <- ensureMatrix(points, 1)
+  if (!is.null(segments))  object$is <- ensureMatrix(segments, 2)
+  if (!is.null(triangles)) object$it <- ensureMatrix(triangles, 3)
+  if (!is.null(quads))     object$ib <- ensureMatrix(quads, 4)
+
+  register_compare_proxy()
   
   class(object) <- c("mesh3d", "shape3d")
-  return( object )
+  object
+}
+
+register_compare_proxy <- local({
+  registered <- FALSE
+  function() {
+    if (!registered &&
+        isNamespaceLoaded("waldo")) {
+      registerS3method("compare_proxy", "mesh3d", 
+                       compare_proxy.mesh3d, 
+                       envir = asNamespace("waldo"))
+      registered <<- TRUE
+    }
+  }
+})
+
+compare_proxy.mesh3d <- function(x) {
+  for (n in names(x)) # Some elements are NULL, some are not there
+    if (is.null(x[[n]])) x[[n]] <- NULL
+  if (is.null(x$material) ||
+      length(x$material$color) < 2)
+    x$meshColor <- NULL  # It doesn't matter.
+  for (n in c("ip", "is", "it", "ib"))
+    if (!is.null(x[[n]]))
+      x[[n]] <- as.numeric(x[[n]])
+  x$primitivetype <- NULL # Not used since before 0.100.x
+  x[sort(names(x))]
+}
+
+#
+# triangle mesh object
+#
+
+tmesh3d <- function( vertices, indices, homogeneous=TRUE, material=NULL, normals=NULL,
+                     texcoords = NULL,
+                     meshColor = c("vertices", "edges", "faces", "legacy")) {
+  
+  if (missing(meshColor) && !is.null(material$meshColor))
+    meshColor <- material$meshColor
+  meshColor <- match.arg(meshColor)
+  if (is.null(dim(vertices)))
+    vertices <- matrix(vertices, nrow = if (homogeneous) 4 else 3)
+  
+  # For back-compatibility:
+  colnames(indices) <- NULL   
+  
+  mesh3d(vertices = vertices, triangles = indices,
+         material = material, normals = normals, texcoords = texcoords,
+         meshColor = meshColor)
 }
 
 #
@@ -60,51 +125,20 @@ tmesh3d <- function( vertices, indices, homogeneous=TRUE, material=NULL, normals
 qmesh3d <- function( vertices, indices, homogeneous=TRUE, material=NULL, normals=NULL,
                      texcoords=NULL,
                      meshColor = c("vertices", "edges", "faces", "legacy")) {
-
-  if (missing(meshColor) 
-      && !is.null(material) 
-      && !is.null(material$meshColor)) {
+  
+  if (missing(meshColor) && !is.null(material$meshColor))
     meshColor <- material$meshColor
-    material$meshColor <- NULL
-  }  
   meshColor <- match.arg(meshColor)
-  if (missing(texcoords)
-      && !is.null(material)
-      && !is.null(material$texcoords)) {
-    texcoords <- material$texcoords
-    material$texcoords <- NULL
-  }  
-  if (homogeneous == TRUE)
-    vrows <- 4
-  else
-    vrows <- 3    
-  nvertex <- length(vertices)/vrows
-  if ( !is.null(normals) ) {
-    normals <- xyz.coords(normals, recycle=TRUE)
-    x <- rep(normals$x, len=nvertex)
-    y <- rep(normals$y, len=nvertex)
-    z <- rep(normals$z, len=nvertex)
-    normals <- rgl.vertex(x,y,z)
-  }
-  if ( !is.null(texcoords) ) {
-    texcoords <- xy.coords(texcoords, recycle=TRUE)
-    x <- rep(texcoords$x, len=nvertex)
-    y <- rep(texcoords$y, len=nvertex)
-    texcoords <- rbind(x,y)
-  }  
-  object <- list(
-    vb=matrix(vertices,nrow=vrows),
-    ib=matrix(indices,nrow=4),
-    material=.getMaterialArgs(material = material),
-    normals=normals,
-    texcoords=texcoords,
-    meshColor = meshColor
-  ) 
   
-  if (!homogeneous) object$vb <- rbind(object$vb, 1)
+  if (is.null(dim(vertices)))
+    vertices <- matrix(vertices, nrow = if (homogeneous) 4 else 3)
   
-  class(object) <- c("mesh3d", "shape3d")
-  return( object )
+  # For back-compatibility
+  colnames(indices) <- NULL   
+  
+  mesh3d(vertices = vertices, quads = indices,
+         material = material, normals = normals, texcoords = texcoords,
+         meshColor = meshColor)
 }
 
 as.mesh3d <- function(x, ...) UseMethod("as.mesh3d")
@@ -112,7 +146,7 @@ as.mesh3d <- function(x, ...) UseMethod("as.mesh3d")
 as.mesh3d.deldir <- function(x, col = "gray", coords = c("x", "y", "z"), 
 			     smooth = TRUE, normals = NULL, texcoords = NULL,
 			     ...) {
-  if (!requireNamespace("deldir"))
+  if (!requireNamespace("deldir", quietly = TRUE))
     stop("The ", sQuote("deldir"), " package is required.")
   if (!identical(sort(coords), c("x", "y", "z")))
     stop(sQuote("coords"), " should be a permutation of c('x', 'y', 'z')")
@@ -132,7 +166,7 @@ as.mesh3d.deldir <- function(x, col = "gray", coords = c("x", "y", "z"),
     texcoords <- texcoords[triangs$ptNum, ]
   material <- .getMaterialArgs(...)
   material$color <- col
-  result <- tmesh3d(points, triangs$ptNum, homogeneous = FALSE,
+  result <- mesh3d(vertices = asHomogeneous2(points), triangles = triangs$ptNum,
   	  normals = normals, texcoords = texcoords,
   	  material = material)
   if (smooth)
@@ -173,7 +207,7 @@ as.mesh3d.tri <- function(x, z, col = "gray",
     texcoords <- texcoords[triangs, ]
   material <- .getMaterialArgs(...)
   material$color <- col
-  result <- tmesh3d(points, triangs, homogeneous = FALSE,
+  result <- mesh3d(vertices = asHomogeneous2(points), triangles = triangs,
                     normals = normals, texcoords = texcoords,
                     material = material)
   if (smooth)
@@ -222,6 +256,10 @@ shade3d.mesh3d <- function( x, override = TRUE,
     if (!is.null(x$texcoords))
       texcoords <- t(x$texcoords)
   }
+  normals <- x$normals
+  if (!is.null(normals))
+    normals <- t(normals)
+  
   modes <- c(front, back)
   if (!allowedMeshColor(meshColor, modes))
     stop("'meshColor = ", meshColor, "' not supported.")
@@ -232,92 +270,98 @@ shade3d.mesh3d <- function( x, override = TRUE,
     if (is.null(material$alpha))
       material$alpha <- material3d("alpha")
   }
+  
+  vertices <- t(asEuclidean2(x$vb))
+  
   result <- integer(0)
-  ntriangles <- 0
-  if (!is.null(x$it)) {
-    if (meshColor == "edges")
-      x$it <- x$it[c(1,2,2,3,3,1),]
-    ntriangles <- ncol(x$it)
-    args <- c(list(x = x$vb[1,x$it]/x$vb[4,x$it],
-                   y = x$vb[2,x$it]/x$vb[4,x$it],
-                   z = x$vb[3,x$it]/x$vb[4,x$it]), 
-                   material)
-    if (!is.null(x$normals) && is.null(args$normals)) 
-      args <- c(args, list(normals = t(x$normals[,x$it])))
-    if (meshColor != "legacy") {
-      if (length(unique(args$color)) > 1) {
-        if (!xHasColor && !hasMeshColor && getOption("rgl.meshColorWarning", FALSE))
-          warning("Default coloring for meshes changed in rgl 0.100.1")
-        args$color <- switch(meshColor,
-          vertices = rep_len(args$color, ncol(x$vb))[x$it],
-          faces = rep(args$color, each = 3)
-        )
-      }
-      if (length(unique(args$alpha)) > 1)
-        args$alpha <- switch(meshColor,
-          vertices = rep_len(args$alpha, ncol(x$vb))[x$it],
-          faces = rep(args$alpha, each = 3)
-        )
-      if (!is.null(texcoords)) {
-        indices <- seq_len(nrow(texcoords))
-        indices <- switch(meshColor,
-          vertices = rep_len(indices, ncol(x$vb))[x$it],
-          faces = rep(indices, each = 3)
-        )
-        args$texcoords <- texcoords[indices,]
-      }
-    }
-    if (meshColor == "edges") 
-      fn <- segments3d
-    else
-      fn <- triangles3d
-    result <- c(triangles = do.call(fn, args = args ))
+  prev <- 0
+  
+  doVertices <- function(vals, inds, setPrev) {
+    inds <- as.numeric(inds)
+    if (length(unique(vals)) > 1) {
+      vals <- rep_len(vals, max(inds))
+      vals[inds]
+    } else
+      vals
   }
-  if (!is.null(x$ib)) {
-    if (meshColor == "edges")
-      x$ib <- x$ib[c(1,2,2,3,3,4,4,1),]
-    args <- c(list(x = x$vb[1,x$ib]/x$vb[4,x$ib],
-                   y = x$vb[2,x$ib]/x$vb[4,x$ib],
-                   z = x$vb[3,x$ib]/x$vb[4,x$ib]), 
-                   material)
-    if (!is.null(x$normals) && is.null(args$normals)) 
-      args <- c(args, list(normals = t(x$normals[,x$ib])))
-    if (!is.null(x$texcoords) && is.null(args$texcoords))
-      args <- c(args, list(texcoords = t(x$texcoords[,x$ib])))
-    if (meshColor != "legacy") {
-      if (length(unique(args$color)) > 1) {
-        nquads <- ncol(x$ib)
-        args$color <- switch(meshColor,
-          vertices = rep_len(args$color, ncol(x$vb))[x$ib],
-          faces = {
-            temp <- rep_len(args$color, ntriangles + nquads)
-            rep(temp[ntriangles + seq_len(nquads)], each = 4)
-          })
-        args$alpha <- switch(meshColor,
-          vertices = rep_len(args$alpha, ncol(x$vb))[x$ib],
-          faces = {
-            temp <- rep_len(args$alpha, ntriangles + nquads)
-            rep(temp[ntriangles + seq_len(nquads)], each = 4)
-          })
-      }
-      if (!is.null(texcoords)) {
-        nquads <- ncol(x$ib)
-        indices <- seq_len(nrow(texcoords))
-        indices <- switch(meshColor,
-                        vertices = rep_len(indices, ncol(x$vb))[x$ib],
-                        faces = {
-                          temp <- rep_len(indices, ntriangles + nquads)
-                          rep(temp[ntriangles + seq_len(nquads)], each = 4)
-                        })
-        args$texcoords <- texcoords[indices,]
-      }
-    }
-    if (meshColor == "edges")
+  doLegacy <- function(vals, inds, setPrev) {
+    inds <- as.numeric(inds) + prev
+    if (setPrev)
+      prev <<- prev + length(inds)
+    if (length(unique(vals)) > 1)
+      vals <- rep_len(vals, length(inds))
+    vals
+  }
+  doFaces <- function(vals, inds, setPrev) {
+    if (!is.matrix(inds))
+      inds <- matrix(inds, nrow = 1)
+    inds <- inds + prev
+    if (setPrev)
+      prev <<- prev + ncol(inds)
+    vals <- rep_len(vals, ncol(inds))
+    rep(vals, each = nrow(inds))
+  }
+  doEdges <- function(vals, inds, setPrev) {
+    if (!is.matrix(inds)) 
+      inds <- matrix(inds, nrow = 1)
+    inds <- inds + prev
+    if (setPrev)
+      prev <<- prev + length(inds)
+    newlen <- ncol(inds)
+    if (nrow(inds) > 1)
+      newlen <- newlen * nrow(inds) / 2
+    vals <- rep_len(vals, newlen)
+    if (nrow(inds) > 1)
+      vals <- rep(vals, each = 2)
+    vals
+  }
+  getArgs <- function(inds) {
+    args <- c(list(x = vertices[as.numeric(inds),]), material)
+    if (!is.null(texcoords))
+      args$texcoords <- cbind(repfn(texcoords[,1], inds, FALSE),
+                              repfn(texcoords[,2], inds, FALSE))
+    if (!is.null(normals))
+      args$normals <- normals[as.numeric(inds),]
+    args$color <- repfn(args$color, inds, FALSE)
+    args$alpha <- repfn(args$alpha, inds, TRUE)
+    args
+  }
+  
+  repfn <- switch(meshColor, 
+                  vertices = doVertices,
+                  legacy = doLegacy,
+                  faces = doFaces,
+                  doLegacy)  
+  if (!is.null(x$ip)) {
+    args <- getArgs(x$ip)
+    result <- c(result, points = do.call(points3d, args = args ))
+  }
+  
+  if (!is.null(x$is)) {
+    args <- getArgs(x$is)
+    result <- c(result, segments = do.call(segments3d, args = args ))
+  }
+  
+  if (!is.null(x$it)) {
+    if (meshColor == "edges") {
+      x$it <- x$it[c(1,2,2,3,3,1),]
       fn <- segments3d
-    else
+    } else
+      fn <- triangles3d
+    args <- getArgs(x$it)
+    result <- c(result, triangles = do.call(fn, args = args ))
+  }
+
+  if (!is.null(x$ib)) {
+    if (meshColor == "edges") {
+      x$ib <- x$ib[c(1,2,2,3,3,4,4,1),]
+      fn <- segments3d
+    } else
       fn <- quads3d
+    args <- getArgs(x$ib)
     result <- c(result, quads = do.call(fn, args = args ))
   }
+  
   lowlevel(result)
 }
 
@@ -374,24 +418,24 @@ showNormals <- function(obj, scale = 1) {
 
 print.mesh3d <- function(x, prefix = "", ...) {
   cat(prefix, " mesh3d object with ", ncol(x$vb), " vertices, ", 
-      if (is.null(x$it)) 0 else ncol(x$it), " triangles and ",
-      if (is.null(x$ib)) 0 else ncol(x$ib), " quads.\n", sep = "")
+      paste(c(
+        if (!is.null(x$ip)) paste(length(x$ip), "points"),
+        if (!is.null(x$is)) paste(ncol(x$is), "segments"),
+        if (!is.null(x$it))  paste(ncol(x$it), "triangles"),
+        if (!is.null(x$ib))  paste(ncol(x$ib), "quads")), collapse = ", "),
+      ".\n", sep = "")
+}
+
+match_names <- function(x, reference) {
+  if (!is.null(x))
+    structure(x[names(reference)], class = class(x))
 }
 
 # Compare old and new meshes
 all.equal.mesh3d <- function(target, current, ...) {
-  mcs <- c(target$meshColor, current$meshColor)
-  target$meshColor <- NULL
-  current$meshColor <- NULL
-  result <- all.equal.list(target, current, ...)
-  if (isTRUE(result)) 
-    result <- character()
-  mctest <- is.null(mcs) ||
-            (length(mcs) == 1 && mcs == "vertices") ||
-            (length(mcs) == 2 && mcs[1] == mcs[2])
-  if (!mctest)
-    result <- c(result, "meshColor difference")
-  if (!length(result))
-    result <- TRUE
-  result
+  if (inherits(current, "mesh3d"))
+    all.equal(compare_proxy.mesh3d(target), 
+              compare_proxy.mesh3d(current), ...)
+  else
+    "'current' is not a mesh3d object"
 }
