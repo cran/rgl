@@ -3,7 +3,7 @@
 
 # RGL - 3D visualization device system for R using OpenGL
 
-![](man/figures/README/polyhedra-rgl-1.png)<!-- -->
+![](man/figures/READMEpolyhedra-1-rgl.png)<!-- -->
 
 ## INTRODUCTION
 
@@ -16,7 +16,11 @@ produces the input file, and the browser shows the images.
 
 ## WEBSITE
 
-An experimental `pkgdown` website is here:
+A `pkgdown` website is here:
+
+<https://dmurdoch.github.io/rgl/>
+
+The unreleased development version website is here:
 
 <https://dmurdoch.github.io/rgl/dev/>
 
@@ -28,6 +32,32 @@ graphics.
 The currently active development site is here:
 
 <https://github.com/dmurdoch/rgl>
+
+## NOTE ABOUT DEVEL VERSIONS
+
+`rgl` can make use of development versions of some packages: `webshot2`,
+`chromote`, `pkgdown`, `downlit`. Though it doesn’t require any of
+these, they each provide some nice features:
+
+-   `webshot2` and `chromote` support good quality PNG snapshots of
+    `rgl` scenes, even on servers that don’t have a graphics display.
+-   Devel versions of `pkgdown` and `downlit` support inclusion of `rgl`
+    graphics in example code in automatically built package websites.
+    (There’s also a devel version of `htmlwidgets` for other dynamic web
+    packages like `plotly`, `leaflet`, etc.)
+
+Unfortunately, being development versions, these packages sometimes
+introduce bugs that break `rgl` usage. Currently (June 15, 2021) the
+main branches of `webshot2`, `chromote` and `downlit` are fine, but
+`pkgdown` needs fixes, and I recommend the following code to install
+them:
+
+``` r
+remotes::install_github(c("rstudio/webshot2",
+                          "rstudio/chromote",
+                          "r-lib/downlit",
+                          "dmurdoch/pkgdown@issue1689"))
+```
 
 ## INSTALLATION
 
@@ -103,9 +133,9 @@ yum install mesa-libGL-devel mesa-libGLU-devel libpng-devel
 
 **macOS:**  
 Install XQuartz.  
-`rgl` should work with either XQuartz 2.7.11 or 2.8.0, but it will
-probably need rebuilding if the XQuartz version changes. XQuartz
-normally needs re-installation whenever the macOS version changes.
+`rgl` should work with XQuartz 2.7.11 or newer, but it will probably
+need rebuilding if the XQuartz version changes. XQuartz normally needs
+re-installation whenever the macOS version changes.
 
 **Windows:**  
 Windows normally includes OpenGL support, but to get the appropriate
@@ -129,7 +159,7 @@ Binary builds of `rgl` are available for some platforms on CRAN.
 For source builds, install the prerequisites as described above,
 download the tarball and at the command line run
 
-    R CMD INSTALL rgl_0.106.4.tar.gz
+    R CMD INSTALL rgl_0.107.5.tar.gz
 
 (with the appropriate version of the tarball). The build uses an
 `autoconf` configure script; to see the options, expand the tarball and
@@ -145,13 +175,21 @@ to install from CRAN, or
 
 to install the development version from Github.
 
+Sometimes binary development versions are available for Windows and
+macOS using
+
+    install.packages("rgl", repos = "https://dmurdoch.github.io/drat",
+                     type = "binary")
+
+but these are not always kept up to date.
+
 ## BUILDING WITHOUT OPENGL
 
 As of version 0.104.1, it is possible to build the package without
 OpenGL support on Unix-alikes (including macOS) with the configure
 option –disable-opengl For example,
 
-    R CMD INSTALL --configure-args="--disable-opengl" rgl_0.106.4.tar.gz 
+    R CMD INSTALL --configure-args="--disable-opengl" rgl_0.107.5.tar.gz 
 
 On Windows, OpenGL support cannot currently be disabled.
 
@@ -182,4 +220,5 @@ Yohann Demont for Shiny code, suggestions, and testing.
 Joshua Ulrich for a lot of help with the Github migration.  
 Xavier Fernandez i Marin for help debugging the build.  
 George Helffrich for draping code.  
-Ivan Krylov for window\_group code in X11.
+Ivan Krylov for window\_group code in X11.  
+Michael Sumner for as.mesh3d.default enhancement.

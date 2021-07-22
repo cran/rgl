@@ -1,18 +1,73 @@
 
-# rgl  0.106.8
+# rgl  0.107.10
+
+## Major changes
+
+* Added `expect_known_scene()` function to work with 
+  `testthat`.
+* Added some `testthat` tests.
+* Prepend a 5th entry to `par3d("mouseMode")`, corresponding
+  to actions to take when no button is pressed.
+* Allowed any of the mouse modes to be applied to 
+the mouse wheel.
+* Added the `setUserCallbacks()` function to allow
+user-specified mouse callbacks in WebGL code.
+* Added Javascript code for support of movable 
+  axis labels in `bboxdeco` objects.
+* Most drawing functions can now draw in the margins
+  using new material properties `margin` and `floating`,
+  with objects that move as the bounding box changes.
+  See `?mtext3d` for details.
+* The `mtext3d()` argument order has changed.
+* Added the `setAxisCallbacks()` function to allow
+user-specified axis drawing routines.
+* Exposed (and generalized) the `as.tmesh3d()` function.
 
 ## Minor changes
 
-* Support for FreeType has been dropped in the experimental
-  Windows Unicode (UCRT) build.
-  
+* The `shiny` and `manipulateWidget` packages have been changed from imports
+  that are always loaded to suggested packages that
+  will only be loaded if needed.  This will reduce the 
+  "footprint" of `rgl` for users who don't use them.
+* The NULL device can now specify `par3d("useFreeType")`
+  and the result is saved.
+* Code to work with pre-1.33 versions of `knitr` has now
+  been removed.
+* Added documentation of Javascript to web page.
+* The handling of the `RGL_DEBUGGING` environment variable
+  has changed:  now it must look like `TRUE` to trigger
+  Javascript debugging mode.
+* Argument `webshot = TRUE` has been added to `movie3d` (issue #113).
+* The assert() macro is now always defined.
+* In Windows, the `WM_PAINT` handler should be more tolerant
+  of code called while painting.
+* `as.mesh3d.default()` can create segments.  (Contributed
+  by Michael Sumner.)
+* `compare_proxy.mesh3d()` has been modified to be
+  compatible with both current and upcoming versions of
+  `waldo`.
+
+## Bug fixes
+
+* The bug workaround in 0.105.22 for issue #27 triggered a bug
+  in RStudio, resulting in two RStudio processes showing up
+  when `rgl` was loaded.  The workaround is now skipped when
+  RStudio is detected.  Use `options(startQuartz = TRUE)`
+  in RStudio before loading `rgl` to run it,
+  or `options(startQuartz = FALSE)` to suppress it.
+* In some cases, snapshots in `rmarkdown` documents
+  were produced at the wrong size.
+* Controls failed to modify sphere colors (e.g. as in `example(playwidget)`, issue #102)
+
+# rgl  0.106.8
+
 ## Bug fixes 
 
 * Some of the changes related to avoiding `testthat` errors
   in other files accidentally introduced a new error 
   in coloring meshes in `rgl`:  now fixed.
-* readOBJ() was broken by the 0.106.x changes.
-* merge.mesh3d() failed for meshes containing points or
+* `readOBJ()` was broken by the 0.106.x changes.
+* `merge.mesh3d()` failed for meshes containing points or
   segments.
   
 # rgl  0.106.6

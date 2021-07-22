@@ -12,7 +12,6 @@ setupKnitr(autoprint = TRUE)
 ## ----eval=FALSE---------------------------------------------------------------
 #  remotes::install_github(c("r-lib/downlit",
 #                            "r-lib/pkgdown",
-#                            "dmurdoch/rgl",
 #                            "dmurdoch/htmlwidgets@rglpatch"))
 
 ## ----eval=FALSE---------------------------------------------------------------

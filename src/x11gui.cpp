@@ -44,6 +44,7 @@ public:
   void swap();
   void captureMouse(View* captureview);
   void releaseMouse();
+  void watchMouse(bool withoutButton);
   GLFont* getFont(const char* family, int style, double cex, 
                   bool useFreeType);
 
@@ -212,6 +213,27 @@ void X11WindowImpl::captureMouse(View* captureview)
 void X11WindowImpl::releaseMouse()
 {
 }
+// ---------------------------------------------------------------------------
+void X11WindowImpl::watchMouse(bool withoutButton)
+{
+  unsigned long valuemask=CWEventMask;
+  
+  XSetWindowAttributes attrib;
+  
+  attrib.event_mask = 
+    (withoutButton ? PointerMotionMask : ButtonMotionMask) 
+    | PointerMotionHintMask
+    | VisibilityChangeMask 
+    | ExposureMask
+    | StructureNotifyMask 
+    | ButtonPressMask 
+    | KeyPressMask
+    | KeyReleaseMask
+    | ButtonReleaseMask;
+  XChangeWindowAttributes(factory->xdisplay, xwindow, valuemask, &attrib);
+  factory->flushX();
+}
+
 // ---------------------------------------------------------------------------
 void X11WindowImpl::processEvent(XEvent& ev)
 {
@@ -384,7 +406,10 @@ GLFont* X11WindowImpl::getFont(const char* family, int style, double cex,
   else if (cex != fonts.back()->cex) warning("\"%s\" family only supports cex = %g",
   					fonts.back()->family, fonts.back()->cex);
   else if (useFreeType) warning("FreeType font not available");
-  return fonts.back();
+  if (useFreeType)
+    return fonts.back();
+  else
+    return fonts[0];
 }
 
 GLBitmapFont* X11WindowImpl::initGLFont()
@@ -630,7 +655,7 @@ WindowImpl* X11GUIFactory::createWindowImpl(Window* window)
   XSetWindowAttributes attrib;
   
   attrib.event_mask = 
-      ButtonMotionMask 
+      PointerMotionMask 
     | PointerMotionHintMask
     | VisibilityChangeMask 
     | ExposureMask
@@ -640,11 +665,10 @@ WindowImpl* X11GUIFactory::createWindowImpl(Window* window)
     | KeyReleaseMask
     | ButtonReleaseMask;
 
-
   ::Window xparent = 0;
   if (!error_code) {
     xparent = RootWindow(xdisplay, DefaultScreen(xdisplay));
-    if (!error_code & !xparent)
+    if (!error_code && !xparent)
       error_code = RGL_ERROR_CODE + 2;
   }
   

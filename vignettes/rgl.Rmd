@@ -206,6 +206,7 @@ Function                             | Description
 `r indexfns("legend3d")`:            | set a legend for the scene
 `r indexfns("grid3d")`:              | add a reference grid to a graph
 `r indexfns("thigmophobe3d")`:       | choose label positions to avoid overlap
+`r indexfns("setAxisCallbacks")`:    | set user-defined axis annotations
 
 For example, to plot three random triangles, one could use
 ```{r fig.width=3, fig.height=3}
@@ -223,7 +224,9 @@ functions
 You should avoid using these functions, which do not
 work well with the higher level `*3d` functions.  See the 
 `r linkfn("r3d", text="?r3d", pkg="rgl")` help
-topic for details.
+topic for details.  The functions 
+`r indexfns(c("rgl.setAxisCallback", "rgl.getAxisCallback"))`
+provide low-level support for `r linkfn("setAxisCallbacks")`.
 
 ## Controlling the Look of the Scene
 
@@ -279,7 +282,7 @@ lwd       | 1       | width of lines in pixels
 
 Other properties include 
 "texmipmap", "texmagfilter", "texminfilter", "texenvmap", "fog", 
-"point\_antialias", "line\_antialias", "depth\_mask", "depth\_test" and "polygon_offset"; 
+"point\_antialias", "line\_antialias", "depth\_mask", "depth\_test", "polygon_offset", "margin" and "floating"; 
 see `r linkfn("material3d", "the help page", pkg = "rgl")` for details.
 
 There is also an `r indexfns("rgl.material")` function that works
@@ -477,6 +480,9 @@ to construct a mesh from a matrix of vertices; it can use
 `r indexfns("mergeVertices")` (which can also be used on its own)
 to merge repeated vertices within the matrix, allowing 
 `r linkfn("addNormals")` to be used to give a smooth appearance.
+
+The `r indexfns("as.tmesh3d")` generic is a variation that
+guarantees the resulting object will have no quad entries.
 
 Functions `r indexfns(c("tmesh3d","qmesh3d"))` are now obsolete;
 use `r linkfn("mesh3d")` instead.
@@ -696,10 +702,12 @@ par3d("mouseMode")
 ```
 The labels `c("left", "right", "middle")` refer to the buttons on
 a three button mouse, or simulations of them on other mice.  `"wheel"` 
-refers to the mouse wheel.
+refers to the mouse wheel, and `"none"` refers to
+actions that take place when the mouse is moved
+without pressing any button.
 
 The button actions generally correspond to click and drag operations.
-Possible values for `r indexfns("mouseMode", '<code>"mouseMode"</code>')` for buttons or the wheel are as follows:
+Possible values for `r indexfns("mouseMode", '<code>"mouseMode"</code>')` for the mouse pointer or wheel are as follows:
 
 Mode           | Description
 -------------- | ---------
@@ -712,7 +720,7 @@ Mode           | Description
 `"fov"`        | The mouse affects perspective by changing the field of view
 `"pull"`       | Rotating the mouse wheel towards the user "pulls the scene closer"
 `"push"`       | The same rotation "pushes the scene away"
-`"user"`       | A user action set by `r indexfns(c("rgl.setMouseCallbacks", "rgl.setWheelCallback"))`.  Use `r indexfns("rgl.getMouseCallbacks")` and `r indexfns("rgl.getWheelCallback")` to retrieve
+`"user"`       | A user action set by `r indexfns(c("setUserCallbacks", "rgl.setMouseCallbacks", "rgl.setWheelCallback"))`.  Use `r indexfns("rgl.getMouseCallbacks")` and `r indexfns("rgl.getWheelCallback")` to retrieve.
 
 The following functions make use of the mouse for selection within a 
 scene.
@@ -986,6 +994,18 @@ The ["Using RGL in pkgdown web sites"](pkgdown.html) vignette
 describes how to use `rgl` in a `pkgdown` web site.  The
 utility function `r indexfns("in_pkgdown_example")` can be used
 to detect that `pkgdown` is being used.
+
+### Working with `testthat`
+
+The `testthat` package is widely used for unit tests
+in packages.  Such tests are hard to write with `rgl`,
+because the output is visual and interactive rather than
+a simple value.  The `r indexfns("expect_known_scene")`,
+`r indexfns("compare_proxy.mesh3d")` and 
+`r indexfns("all.equal.mesh3d")` functions help with
+this by removing system-dependent features of `rgl`
+output.
+
 
 ### Working with Javascript
 

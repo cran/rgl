@@ -33,6 +33,7 @@ public:
   void destroy() { if (window) window->notifyDestroy(); };
   void captureMouse(View* pView) {};
   void releaseMouse() {};
+  void watchMouse(bool withoutButton) {};
   GLFont* getFont(const char* family, int style, double cex, 
                   bool useFreeType);
   int getAntialias() { return 8; }
@@ -58,7 +59,7 @@ NULLWindowImpl::NULLWindowImpl(Window* in_window)
 : WindowImpl(in_window)
 {
   setWindowRect(0, 0, 256, 256);
-  fonts[0] = new NULLFont("sans", 1, 1.0);
+  fonts[0] = new NULLFont("sans", 1, 1.0, true);
 }
 
 NULLWindowImpl::~NULLWindowImpl()
@@ -92,7 +93,7 @@ GLFont* NULLWindowImpl::getFont(const char* family, int style, double cex,
      && fonts[i]->useFreeType == useFreeType)
       return fonts[i];
   }
-  GLFont* font = new NULLFont(family, style, cex);
+  GLFont* font = new NULLFont(family, style, cex, useFreeType);
   fonts.push_back(font);
   return font;
 }

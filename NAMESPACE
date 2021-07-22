@@ -1,6 +1,6 @@
 export(.check3d, 
   abclines3d, addNormals, addToSubscene3d, arc3d,
-  arrow3d, as.mesh3d, as.triangles3d, asRow,
+  arrow3d, as.mesh3d, as.tmesh3d, as.triangles3d, asRow,
   ageSetter, asEuclidean, asEuclidean2, asHomogeneous, asHomogeneous2,
   aspect3d, axes3d, axis3d, box3d,
   bbox3d, bg3d, bgplot3d, 
@@ -9,7 +9,8 @@ export(.check3d,
   contourLines3d,
 	cube3d, cuboctahedron3d, cur3d, 
   currentSubscene3d, cylinder3d,
-  decorate3d, deform.mesh3d, delFromSubscene3d, divide.mesh3d, dodecahedron3d, dot3d, drape3d, ellipse3d, extrude3d,
+  decorate3d, deform.mesh3d, delFromSubscene3d, divide.mesh3d, dodecahedron3d, dot3d, drape3d, ellipse3d, 
+  expect_known_scene, extrude3d,
 	facing3d, figWidth, figHeight, filledContour3d,
 	gc3d, getr3dDefaults, getWidgetId, GramSchmidt, grid3d, 
 	highlevel, hook_rgl, hook_webgl,
@@ -23,7 +24,7 @@ export(.check3d,
   play3d, plot3d, plotmath3d, points3d, 
 	polygon3d, pop3d, projectDown, propertySetter, propertySlider,
 	qmesh3d, quads3d, readOBJ, readSTL, rgl.abclines, rgl.bbox, rgl.bg, rgl.bringtotop, rgl.clear,
-	rgl.getMouseCallbacks, rgl.getWheelCallback,
+	rgl.getAxisCallback, rgl.getMouseCallbacks, rgl.getWheelCallback, 
 	rgl.close, rgl.cur, rgl.ids, rgl.init, rgl.light, rgl.lines, rgl.linestrips,
 	rgl.clipplanes, rgl.material, rgl.open, rgl.pixels, rgl.planes, rgl.points, rgl.pop, rgl.postscript,
 	rgl.primitive, rgl.projection, rgl.quads, rgl.quit, rgl.Sweave, rgl.Sweave.off,
@@ -35,8 +36,9 @@ export(.check3d,
   r3dDefaults, rotate3d, rotationMatrix,
 	scale3d, scaleMatrix, scene3d, segments3d, 
 	select3d, selectionFunction3d, selectpoints3d,
-	rgl.setMouseCallbacks, rgl.setWheelCallback, set3d, 
-	setGraphicsDelay, setupKnitr, setUserShaders, shade3d, shadow3d,
+	rgl.setAxisCallback, rgl.setMouseCallbacks, rgl.setWheelCallback,
+  set3d, setAxisCallbacks, setGraphicsDelay, setupKnitr, 
+  setUserCallbacks, setUserShaders, shade3d, shadow3d,
 	shapelist3d, shinyGetPar3d, shinySetPar3d, shinyResetBrush, 
 	show2d, snapshot3d, 
 	spheres3d, spin3d, sprites3d, subdivision3d, 
@@ -72,6 +74,7 @@ export(.check3d,
  S3method(plot3d, mesh3d)
  
  S3method(all.equal, mesh3d)
+ S3method(all.equal, rglscene)
  
  S3method(as.mesh3d, deldir)
  S3method(as.mesh3d, tri)
@@ -80,6 +83,9 @@ export(.check3d,
  S3method(as.mesh3d, rglId)
  S3method(as.mesh3d, rglobject)
  S3method(as.mesh3d, default)
+ 
+ S3method(as.tmesh3d, mesh3d)
+ S3method(as.tmesh3d, default)
  
  S3method(as.triangles3d, mesh3d)
  S3method(as.triangles3d, rglId)
@@ -140,6 +146,9 @@ export(.check3d,
  S3method(filledContour3d, rglId)
  S3method(filledContour3d, mesh3d)
  
+ S3method(sew, rglRecordedplot)
+ S3method(is_low_change, rglRecordedplot)
+ 
  if(.Platform$OS.type == "windows") {
    importFrom(utils, getWindowsHandle)
  }
@@ -168,10 +177,9 @@ importFrom(htmltools, css, HTML, htmlDependency, img,
            includeScript, tags, tagAppendAttributes,
 	   tagHasAttribute, tagList, browsable, resolveDependencies)
 importFrom(jsonlite, toJSON, base64_dec)
-importFrom(knitr, asis_output, fig_path, hook_plot_custom, image_uri, include_graphics, knit_hooks, 
-           knit_meta_add, knit_print, opts_current, opts_hooks, opts_knit)
-importFrom(shiny, getDefaultReactiveDomain, markRenderFunction, 
-					 registerInputHandler, removeInputHandler)
+importFrom(knitr, asis_output, fig_path, hook_plot_custom, image_uri, include_graphics, 
+					 is_low_change, knit_hooks, 
+           knit_meta_add, knit_print, opts_current, opts_hooks, opts_knit, 
+					 pandoc_to, sew)
 importFrom(magrittr, "%>%")
-importFrom(manipulateWidget, combineWidgets)
 importFrom(stats, coef, predict, residuals)

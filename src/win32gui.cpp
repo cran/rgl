@@ -96,6 +96,7 @@ public:
   void destroy();
   void captureMouse(View* pView);
   void releaseMouse();
+  void watchMouse(bool withoutButton) {};
   GLFont* getFont(const char* family, int style, double cex, 
                   bool useFreeType);
 
@@ -523,7 +524,7 @@ LRESULT Win32WindowImpl::processMessage(HWND hwnd, UINT message, WPARAM wParam, 
         autoUpdate = false;
       }
       break;
-    case WM_PAINT: // Warning:  don't put Rprintf calls in paint/render/draw methods, or you get a permanent loop!
+    case WM_PAINT: // Fixed now?  don't put Rprintf calls in paint/render/draw methods, or you get a permanent loop!
       if (!painting) {
         painting = true;
         if (refreshMenu) {
@@ -535,9 +536,9 @@ LRESULT Win32WindowImpl::processMessage(HWND hwnd, UINT message, WPARAM wParam, 
           window->paint();
           swap();
         }  
-        ValidateRect(hwnd, NULL);
         painting = false;
       }
+      ValidateRect(hwnd, NULL);
       break;
     case WM_SIZE:
       window->resize(LOWORD(lParam), HIWORD(lParam));

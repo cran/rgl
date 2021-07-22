@@ -67,6 +67,7 @@ public:
   virtual void setTitle(const char* title) = 0;
   virtual void setWindowRect(int left, int top, int right, int bottom) = 0;
   virtual void getWindowRect(int *in_left, int *in_top, int *in_right, int *in_bottom) = 0;
+  virtual int  setSkipRedraw(int in_skipRedraw);
   virtual void show(void) = 0;
   virtual void hide(void) = 0;
   virtual void update(void) = 0;
@@ -80,6 +81,7 @@ public:
   virtual void swap(void) = 0;
   virtual void captureMouse(View* captureView) = 0;
   virtual void releaseMouse(void) = 0;
+  virtual void watchMouse(bool withoutButton) = 0;
   virtual GLFont* getFont(const char* family, int style, double cex, 
                           bool useFreeType) = 0;
   void getFonts(FontArray& outfonts, int nfonts, char** family, int* style, double* cex, 
@@ -176,7 +178,7 @@ public:
   void setVisibility(bool state);
   void update(void);
   int getSkipRedraw(void);
-  void setSkipRedraw(int in_skipRedraw);
+  void setSkipRedraw(int in_skipRedraw, int doUpdate = 1);
 
 /**
  * Close the window. 
