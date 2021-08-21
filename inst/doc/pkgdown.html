@@ -158,9 +158,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="installing-the-changes" class="section level2">
 <h2>Installing the changes</h2>
 <p>Installing the changes is fairly easy. Make sure you have the <a href="https://remotes.r-lib.org/">remotes</a> package installed, then run</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>remotes<span class="sc">::</span><span class="fu">install_github</span>(<span class="fu">c</span>(<span class="st">&quot;r-lib/downlit&quot;</span>,</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>                          <span class="st">&quot;r-lib/pkgdown&quot;</span>,</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>                          <span class="st">&quot;dmurdoch/htmlwidgets@rglpatch&quot;</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>remotes<span class="sc">::</span><span class="fu">install_github</span>(<span class="fu">c</span>(<span class="st">&quot;rstudio/webshot2&quot;</span>,</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>                          <span class="st">&quot;rstudio/chromote&quot;</span>,</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>                          <span class="st">&quot;r-lib/downlit&quot;</span>,</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>                          <span class="st">&quot;dmurdoch/pkgdown@issue1689&quot;</span>,</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>                          <span class="st">&quot;dmurdoch/htmlwidgets@rglpatch&quot;</span>))</span></code></pre></div>
+<p>(Note: this isn’t the latest devel version of <code>pkgdown</code>; as of July 28, 2021 it’s not working…).</p>
 <p>With these development version packages installed, you should see RGL or <code>leaflet</code> output appear automatically in examples. The RGL output is set up to mimic what would happen in a <code>knitr</code> document that uses</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">setupKnitr</span>(<span class="at">autoprint =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
 <p>i.e. the output RGL commands will automatically be included in the display. Low-level changes will be collected into a single display:</p>

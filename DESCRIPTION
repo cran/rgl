@@ -1,5 +1,5 @@
 Package: rgl
-Version: 0.107.10
+Version: 0.107.14
 Title: 3D Visualization Using OpenGL
 Authors@R: c(person("Duncan", "Murdoch", role = c("aut", "cre"),
                      email = "murdoch.duncan@gmail.com"),
@@ -48,7 +48,7 @@ VignetteBuilder: knitr
 Biarch: true
 Additional_repositories: https://dmurdoch.github.io/drat
 NeedsCompilation: yes
-Packaged: 2021-07-21 13:32:27 UTC; murdoch
+Packaged: 2021-08-20 23:02:45 UTC; murdoch
 Author: Duncan Murdoch [aut, cre],
   Daniel Adler [aut],
   Oleg Nenadic [ctb],
@@ -72,4 +72,4 @@ Author: Duncan Murdoch [aut, cre],
   Michael Sumner [ctb]
 Maintainer: Duncan Murdoch <murdoch.duncan@gmail.com>
 Repository: CRAN
-Date/Publication: 2021-07-22 08:20:02 UTC
+Date/Publication: 2021-08-21 15:20:02 UTC

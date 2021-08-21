@@ -12,7 +12,7 @@
 
 <meta name="author" content="Duncan Murdoch" />
 
-<meta name="date" content="2021-07-21" />
+<meta name="date" content="2021-08-20" />
 
 <title>rgl Overview</title>
 
@@ -140,7 +140,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 <h1 class="title toc-ignore">rgl Overview</h1>
 <h4 class="author">Duncan Murdoch</h4>
-<h4 class="date">July 21, 2021</h4>
+<h4 class="date">August 20, 2021</h4>
 
 
 <div id="TOC">
@@ -216,24 +216,24 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h2>Introduction</h2>
 <p>The <code>rgl</code> package is used to produce interactive 3-D plots. It contains high-level graphics commands modelled loosely after classic R graphics, but working in three dimensions. It also contains low level structure inspired by (but incompatible with) the <code>grid</code> package.</p>
 <p>This document gives an overview. See the help pages for details.</p>
-<p>For installation instructions, see the <code>README</code> file in the top level directory of the source tarball rgl_0.107.10.tar.gz (or a later version).</p>
+<p>For installation instructions, see the <code>README</code> file in the top level directory of the source tarball rgl_0.107.14.tar.gz (or a later version).</p>
 <div id="about-this-document" class="section level3">
 <h3>About this document</h3>
-<p>This document was written in R Markdown, using the <code>knitr</code> package for production. It corresponds to <code>rgl</code> version 0.107.10.</p>
+<p>This document was written in R Markdown, using the <code>knitr</code> package for production. It corresponds to <code>rgl</code> version 0.107.14.</p>
 <p>Most of the highlighted function names are HTML links. The internal links should work in any browser; the links to help topics should work if you view the vignette from within the R help system.</p>
 <p>The document includes WebGL figures. To view these, you must have Javascript and WebGL enabled in your browser. Some older browsers may not support this – see <a href="https://get.webgl.org" class="uri">https://get.webgl.org</a> for tests and links to a discussion.</p>
 </div>
 </div>
 <div id="basics-and-high-level-functions" class="section level2">
 <h2>Basics and High Level Functions</h2>
-<p>The <a name="plot3d"><a href="https://dmurdoch.github.io/rgl/dev/reference/plot3d.html"><code>plot3d</code></a></a> function plots points within an RGL window. It is similar to the classic <a href="https://rdrr.io/r/graphics/plot.default.html"><code>plot</code></a> function, but works in 3 dimensions.</p>
+<p>The <a name="plot3d"><a href="https://dmurdoch.github.io/rgl/reference/plot3d.html"><code>plot3d</code></a></a> function plots points within an RGL window. It is similar to the classic <a href="https://rdrr.io/r/graphics/plot.default.html"><code>plot</code></a> function, but works in 3 dimensions.</p>
 <p>For example</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">with</span>(iris, <span class="fu">plot3d</span>(Sepal.Length, Sepal.Width, Petal.Length, </span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>                  <span class="at">type=</span><span class="st">&quot;s&quot;</span>, <span class="at">col=</span><span class="fu">as.numeric</span>(Species)))</span></code></pre></div>
 <p> can be used to plot three columns of the <code>iris</code> data. Allowed plot types include <code>&quot;p&quot;, &quot;l&quot;, &quot;h&quot;, &quot;s&quot;</code>, meaning points, lines, segments from z=0, and spheres. There’s a lot of flexibility in specifying the coordinates; the <a href="https://rdrr.io/r/grDevices/xyz.coords.html"><code>xyz.coords</code></a> function from the <code>grDevices</code> package is used for this.</p>
 <p>You can use your mouse to manipulate the plot. The default is that if you click and hold with the left mouse button, you can rotate the plot by dragging it. The right mouse button is used to resize it, and the middle button changes the perspective in the point of view.</p>
 <p>If you call <a href="#plot3d"><code>plot3d</code></a> again, it will overwrite the current plot. To open a new graphics window, use <a href="#open3d"><code>open3d</code></a>.</p>
-<p>The other high level function is <a name="persp3d"><a href="https://dmurdoch.github.io/rgl/dev/reference/persp3d.html"><code>persp3d</code></a></a> to draw surfaces. It is similar to the classic <a href="https://rdrr.io/r/graphics/persp.html"><code>persp</code></a> function, but with greater flexibility. First, any of <code>x</code>, <code>y</code> or <code>z</code> can be specified using matrices, not just <code>z</code>. This allows parametric surfaces to be plotted. An even simpler specification is possible: <code>x</code> may be a function, in which case <code>persp3d</code> will work out the grid itself. See <a href="https://dmurdoch.github.io/rgl/dev/reference/persp3d.function.html">?persp3d.function</a> for details. For example, the <code>MASS</code> package estimates Gamma parameters using maximum likelihood in a <a href="https://rdrr.io/pkg/MASS/man/fitdistr.html">?MASS::fitdistr</a> example. Here we show the log likelihood surface.</p>
+<p>The other high level function is <a name="persp3d"><a href="https://dmurdoch.github.io/rgl/reference/persp3d.html"><code>persp3d</code></a></a> to draw surfaces. It is similar to the classic <a href="https://rdrr.io/r/graphics/persp.html"><code>persp</code></a> function, but with greater flexibility. First, any of <code>x</code>, <code>y</code> or <code>z</code> can be specified using matrices, not just <code>z</code>. This allows parametric surfaces to be plotted. An even simpler specification is possible: <code>x</code> may be a function, in which case <code>persp3d</code> will work out the grid itself. See <a href="https://dmurdoch.github.io/rgl/reference/persp3d.function.html">?persp3d.function</a> for details. For example, the <code>MASS</code> package estimates Gamma parameters using maximum likelihood in a <a href="https://rdrr.io/pkg/MASS/man/fitdistr.html">?MASS::fitdistr</a> example. Here we show the log likelihood surface.</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(MASS)</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co"># from the fitdistr example</span></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
@@ -283,23 +283,23 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </thead>
 <tbody>
 <tr class="odd">
-<td><a name="points3d"><a href="https://dmurdoch.github.io/rgl/dev/reference/3dobjects.html"><code>points3d</code></a></a>:</td>
+<td><a name="points3d"><a href="https://dmurdoch.github.io/rgl/reference/3dobjects.html"><code>points3d</code></a></a>:</td>
 <td>adds points</td>
 </tr>
 <tr class="even">
-<td><a name="lines3d"><a href="https://dmurdoch.github.io/rgl/dev/reference/3dobjects.html"><code>lines3d</code></a></a>:</td>
+<td><a name="lines3d"><a href="https://dmurdoch.github.io/rgl/reference/3dobjects.html"><code>lines3d</code></a></a>:</td>
 <td>adds lines</td>
 </tr>
 <tr class="odd">
-<td><a name="segments3d"><a href="https://dmurdoch.github.io/rgl/dev/reference/3dobjects.html"><code>segments3d</code></a></a>:</td>
+<td><a name="segments3d"><a href="https://dmurdoch.github.io/rgl/reference/3dobjects.html"><code>segments3d</code></a></a>:</td>
 <td>adds line segments</td>
 </tr>
 <tr class="even">
-<td><a name="triangles3d"><a href="https://dmurdoch.github.io/rgl/dev/reference/3dobjects.html"><code>triangles3d</code></a></a>:</td>
+<td><a name="triangles3d"><a href="https://dmurdoch.github.io/rgl/reference/3dobjects.html"><code>triangles3d</code></a></a>:</td>
 <td>adds triangles</td>
 </tr>
 <tr class="odd">
-<td><a name="quads3d"><a href="https://dmurdoch.github.io/rgl/dev/reference/3dobjects.html"><code>quads3d</code></a></a>:</td>
+<td><a name="quads3d"><a href="https://dmurdoch.github.io/rgl/reference/3dobjects.html"><code>quads3d</code></a></a>:</td>
 <td>adds quadrilaterals</td>
 </tr>
 </tbody>
@@ -319,55 +319,55 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </thead>
 <tbody>
 <tr class="odd">
-<td><a name="text3d"><a href="https://dmurdoch.github.io/rgl/dev/reference/texts.html"><code>text3d</code></a></a>, <a name="texts3d"><a href="https://dmurdoch.github.io/rgl/dev/reference/texts.html"><code>texts3d</code></a></a>:</td>
+<td><a name="text3d"><a href="https://dmurdoch.github.io/rgl/reference/texts.html"><code>text3d</code></a></a>, <a name="texts3d"><a href="https://dmurdoch.github.io/rgl/reference/texts.html"><code>texts3d</code></a></a>:</td>
 <td>adds text</td>
 </tr>
 <tr class="even">
-<td><a name="abclines3d"><a href="https://dmurdoch.github.io/rgl/dev/reference/abclines.html"><code>abclines3d</code></a></a>:</td>
+<td><a name="abclines3d"><a href="https://dmurdoch.github.io/rgl/reference/abclines.html"><code>abclines3d</code></a></a>:</td>
 <td>adds straight lines to plot (like <code>abline</code>)</td>
 </tr>
 <tr class="odd">
-<td><a name="arc3d"><a href="https://dmurdoch.github.io/rgl/dev/reference/arc3d.html"><code>arc3d</code></a></a>:</td>
+<td><a name="arc3d"><a href="https://dmurdoch.github.io/rgl/reference/arc3d.html"><code>arc3d</code></a></a>:</td>
 <td>adds spherical arcs or spirals to plot</td>
 </tr>
 <tr class="even">
-<td><a name="planes3d"><a href="https://dmurdoch.github.io/rgl/dev/reference/planes.html"><code>planes3d</code></a></a>:</td>
+<td><a name="planes3d"><a href="https://dmurdoch.github.io/rgl/reference/planes.html"><code>planes3d</code></a></a>:</td>
 <td>adds planes to plot</td>
 </tr>
 <tr class="odd">
-<td><a name="clipplanes3d"><a href="https://dmurdoch.github.io/rgl/dev/reference/planes.html"><code>clipplanes3d</code></a></a>:</td>
+<td><a name="clipplanes3d"><a href="https://dmurdoch.github.io/rgl/reference/planes.html"><code>clipplanes3d</code></a></a>:</td>
 <td>add clipping planes to plot</td>
 </tr>
 <tr class="even">
-<td><a name="sprites3d"><a href="https://dmurdoch.github.io/rgl/dev/reference/sprites.html"><code>sprites3d</code></a></a>, <a name="particles3d"><a href="https://dmurdoch.github.io/rgl/dev/reference/sprites.html"><code>particles3d</code></a></a>:</td>
+<td><a name="sprites3d"><a href="https://dmurdoch.github.io/rgl/reference/sprites.html"><code>sprites3d</code></a></a>, <a name="particles3d"><a href="https://dmurdoch.github.io/rgl/reference/sprites.html"><code>particles3d</code></a></a>:</td>
 <td>add sprites (fixed shapes or images) to plot</td>
 </tr>
 <tr class="odd">
-<td><a name="spheres3d"><a href="https://dmurdoch.github.io/rgl/dev/reference/spheres.html"><code>spheres3d</code></a></a>:</td>
+<td><a name="spheres3d"><a href="https://dmurdoch.github.io/rgl/reference/spheres.html"><code>spheres3d</code></a></a>:</td>
 <td>adds spheres</td>
 </tr>
 <tr class="even">
-<td><a name="surface3d"><a href="https://dmurdoch.github.io/rgl/dev/reference/surface3d.html"><code>surface3d</code></a></a>, <a name="terrain3d"><a href="https://dmurdoch.github.io/rgl/dev/reference/surface3d.html"><code>terrain3d</code></a></a>:</td>
+<td><a name="surface3d"><a href="https://dmurdoch.github.io/rgl/reference/surface3d.html"><code>surface3d</code></a></a>, <a name="terrain3d"><a href="https://dmurdoch.github.io/rgl/reference/surface3d.html"><code>terrain3d</code></a></a>:</td>
 <td>a surface (as used in <a href="#persp3d"><code>persp3d</code></a>)</td>
 </tr>
 <tr class="odd">
-<td><a name="drape3d"><a href="https://dmurdoch.github.io/rgl/dev/reference/drape3d.html"><code>drape3d</code></a></a>:</td>
+<td><a name="drape3d"><a href="https://dmurdoch.github.io/rgl/reference/drape3d.html"><code>drape3d</code></a></a>:</td>
 <td>drapes lines on a surface or object(s)</td>
 </tr>
 <tr class="even">
-<td><a name="shadow3d"><a href="https://dmurdoch.github.io/rgl/dev/reference/shadow3d.html"><code>shadow3d</code></a></a>:</td>
+<td><a name="shadow3d"><a href="https://dmurdoch.github.io/rgl/reference/shadow3d.html"><code>shadow3d</code></a></a>:</td>
 <td>projects mesh onto a surface</td>
 </tr>
 <tr class="odd">
-<td><a name="arrow3d"><a href="https://dmurdoch.github.io/rgl/dev/reference/arrow3d.html"><code>arrow3d</code></a></a>:</td>
+<td><a name="arrow3d"><a href="https://dmurdoch.github.io/rgl/reference/arrow3d.html"><code>arrow3d</code></a></a>:</td>
 <td>add an arrow to a scene</td>
 </tr>
 <tr class="even">
-<td><a name="pch3d"><a href="https://dmurdoch.github.io/rgl/dev/reference/pch3d.html"><code>pch3d</code></a></a>:</td>
+<td><a name="pch3d"><a href="https://dmurdoch.github.io/rgl/reference/pch3d.html"><code>pch3d</code></a></a>:</td>
 <td>draw base-style plotting symbols</td>
 </tr>
 <tr class="odd">
-<td><a name="plotmath3d"><a href="https://dmurdoch.github.io/rgl/dev/reference/plotmath3d.html"><code>plotmath3d</code></a></a>:</td>
+<td><a name="plotmath3d"><a href="https://dmurdoch.github.io/rgl/reference/plotmath3d.html"><code>plotmath3d</code></a></a>:</td>
 <td>used by <a href="#text3d"><code>text3d</code></a> for math text</td>
 </tr>
 </tbody>
@@ -385,51 +385,51 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </thead>
 <tbody>
 <tr class="odd">
-<td><a name="axes3d"><a href="https://dmurdoch.github.io/rgl/dev/reference/axes3d.html"><code>axes3d</code></a></a>, <a name="axis3d"><a href="https://dmurdoch.github.io/rgl/dev/reference/axes3d.html"><code>axis3d</code></a></a>:</td>
+<td><a name="axes3d"><a href="https://dmurdoch.github.io/rgl/reference/axes3d.html"><code>axes3d</code></a></a>, <a name="axis3d"><a href="https://dmurdoch.github.io/rgl/reference/axes3d.html"><code>axis3d</code></a></a>:</td>
 <td>add axes to plot</td>
 </tr>
 <tr class="even">
-<td><a name="box3d"><a href="https://dmurdoch.github.io/rgl/dev/reference/axes3d.html"><code>box3d</code></a></a>, <a name="bbox3d"><a href="https://dmurdoch.github.io/rgl/dev/reference/axes3d.html"><code>bbox3d</code></a></a>:</td>
+<td><a name="box3d"><a href="https://dmurdoch.github.io/rgl/reference/axes3d.html"><code>box3d</code></a></a>, <a name="bbox3d"><a href="https://dmurdoch.github.io/rgl/reference/axes3d.html"><code>bbox3d</code></a></a>:</td>
 <td>add box around plot</td>
 </tr>
 <tr class="odd">
-<td><a name="title3d"><a href="https://dmurdoch.github.io/rgl/dev/reference/axes3d.html"><code>title3d</code></a></a>:</td>
+<td><a name="title3d"><a href="https://dmurdoch.github.io/rgl/reference/axes3d.html"><code>title3d</code></a></a>:</td>
 <td>add title to plot</td>
 </tr>
 <tr class="even">
-<td><a name="mtext3d"><a href="https://dmurdoch.github.io/rgl/dev/reference/axes3d.html"><code>mtext3d</code></a></a>:</td>
+<td><a name="mtext3d"><a href="https://dmurdoch.github.io/rgl/reference/axes3d.html"><code>mtext3d</code></a></a>:</td>
 <td>add marginal text to plot</td>
 </tr>
 <tr class="odd">
-<td><a name="decorate3d"><a href="https://dmurdoch.github.io/rgl/dev/reference/decorate3d.html"><code>decorate3d</code></a></a>:</td>
+<td><a name="decorate3d"><a href="https://dmurdoch.github.io/rgl/reference/decorate3d.html"><code>decorate3d</code></a></a>:</td>
 <td>add multiple “decorations” (scales, etc.) to plot</td>
 </tr>
 <tr class="even">
-<td><a name="aspect3d"><a href="https://dmurdoch.github.io/rgl/dev/reference/aspect3d.html"><code>aspect3d</code></a></a>:</td>
+<td><a name="aspect3d"><a href="https://dmurdoch.github.io/rgl/reference/aspect3d.html"><code>aspect3d</code></a></a>:</td>
 <td>set the aspect ratios for the plot</td>
 </tr>
 <tr class="odd">
-<td><a name="bg3d"><a href="https://dmurdoch.github.io/rgl/dev/reference/bg.html"><code>bg3d</code></a></a>, <a name="bgplot3d"><a href="https://dmurdoch.github.io/rgl/dev/reference/bg.html"><code>bgplot3d</code></a></a>:</td>
+<td><a name="bg3d"><a href="https://dmurdoch.github.io/rgl/reference/bg.html"><code>bg3d</code></a></a>, <a name="bgplot3d"><a href="https://dmurdoch.github.io/rgl/reference/bg.html"><code>bgplot3d</code></a></a>:</td>
 <td>set the background of the scene</td>
 </tr>
 <tr class="even">
-<td><a name="show2d"><a href="https://dmurdoch.github.io/rgl/dev/reference/show2d.html"><code>show2d</code></a></a>:</td>
+<td><a name="show2d"><a href="https://dmurdoch.github.io/rgl/reference/show2d.html"><code>show2d</code></a></a>:</td>
 <td>show a 2D plot or image in a 3D scene</td>
 </tr>
 <tr class="odd">
-<td><a name="legend3d"><a href="https://dmurdoch.github.io/rgl/dev/reference/bgplot3d.html"><code>legend3d</code></a></a>:</td>
+<td><a name="legend3d"><a href="https://dmurdoch.github.io/rgl/reference/bgplot3d.html"><code>legend3d</code></a></a>:</td>
 <td>set a legend for the scene</td>
 </tr>
 <tr class="even">
-<td><a name="grid3d"><a href="https://dmurdoch.github.io/rgl/dev/reference/grid3d.html"><code>grid3d</code></a></a>:</td>
+<td><a name="grid3d"><a href="https://dmurdoch.github.io/rgl/reference/grid3d.html"><code>grid3d</code></a></a>:</td>
 <td>add a reference grid to a graph</td>
 </tr>
 <tr class="odd">
-<td><a name="thigmophobe3d"><a href="https://dmurdoch.github.io/rgl/dev/reference/thigmophobe3d.html"><code>thigmophobe3d</code></a></a>:</td>
+<td><a name="thigmophobe3d"><a href="https://dmurdoch.github.io/rgl/reference/thigmophobe3d.html"><code>thigmophobe3d</code></a></a>:</td>
 <td>choose label positions to avoid overlap</td>
 </tr>
 <tr class="even">
-<td><a name="setAxisCallbacks"><a href="https://dmurdoch.github.io/rgl/dev/reference/setAxisCallbacks.html"><code>setAxisCallbacks</code></a></a>:</td>
+<td><a name="setAxisCallbacks"><a href="https://dmurdoch.github.io/rgl/reference/setAxisCallbacks.html"><code>setAxisCallbacks</code></a></a>:</td>
 <td>set user-defined axis annotations</td>
 </tr>
 </tbody>
@@ -439,8 +439,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">decorate3d</span>()</span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="fu">bg3d</span>(<span class="st">&quot;lightgray&quot;</span>)</span>
 <span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="fu">aspect3d</span>(<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">1</span>)</span></code></pre></div>
-<p>Besides the <code>*3d</code> functions mentioned above, there are even lower-level functions <a name="rgl.primitive"><a href="https://dmurdoch.github.io/rgl/dev/reference/primitive.html"><code>rgl.primitive</code></a></a>, <a name="rgl.points"><a href="https://dmurdoch.github.io/rgl/dev/reference/primitive.html"><code>rgl.points</code></a></a>, <a name="rgl.linestrips"><a href="https://dmurdoch.github.io/rgl/dev/reference/primitive.html"><code>rgl.linestrips</code></a></a>, <a name="rgl.lines"><a href="https://dmurdoch.github.io/rgl/dev/reference/primitive.html"><code>rgl.lines</code></a></a>, <a name="rgl.triangles"><a href="https://dmurdoch.github.io/rgl/dev/reference/primitive.html"><code>rgl.triangles</code></a></a>, <a name="rgl.quads"><a href="https://dmurdoch.github.io/rgl/dev/reference/primitive.html"><code>rgl.quads</code></a></a>, <a name="rgl.texts"><a href="https://dmurdoch.github.io/rgl/dev/reference/primitive.html"><code>rgl.texts</code></a></a>, <a name="rgl.abclines"><a href="https://dmurdoch.github.io/rgl/dev/reference/primitive.html"><code>rgl.abclines</code></a></a>, <a name="rgl.planes"><a href="https://dmurdoch.github.io/rgl/dev/reference/primitive.html"><code>rgl.planes</code></a></a>, <a name="rgl.bg"><a href="https://dmurdoch.github.io/rgl/dev/reference/primitive.html"><code>rgl.bg</code></a></a>, <a name="rgl.clipplanes"><a href="https://dmurdoch.github.io/rgl/dev/reference/primitive.html"><code>rgl.clipplanes</code></a></a>, <a name="rgl.bbox"><a href="https://dmurdoch.github.io/rgl/dev/reference/primitive.html"><code>rgl.bbox</code></a></a>, <a name="rgl.spheres"><a href="https://dmurdoch.github.io/rgl/dev/reference/primitive.html"><code>rgl.spheres</code></a></a>, <a name="rgl.sprites"><a href="https://dmurdoch.github.io/rgl/dev/reference/primitive.html"><code>rgl.sprites</code></a></a>, <a name="rgl.surface"><a href="https://dmurdoch.github.io/rgl/dev/reference/primitive.html"><code>rgl.surface</code></a></a>.<br />
-You should avoid using these functions, which do not work well with the higher level <code>*3d</code> functions. See the <a href="https://dmurdoch.github.io/rgl/dev/reference/r3d.html">?r3d</a> help topic for details. The functions <a name="rgl.setAxisCallback"><a href="https://dmurdoch.github.io/rgl/dev/reference/rgl.setAxisCallback.html"><code>rgl.setAxisCallback</code></a></a>, <a name="rgl.getAxisCallback"><a href="https://dmurdoch.github.io/rgl/dev/reference/rgl.setAxisCallback.html"><code>rgl.getAxisCallback</code></a></a> provide low-level support for <a href="#setAxisCallbacks"><code>setAxisCallbacks</code></a>.</p>
+<p>Besides the <code>*3d</code> functions mentioned above, there are even lower-level functions <a name="rgl.primitive"><a href="https://dmurdoch.github.io/rgl/reference/primitive.html"><code>rgl.primitive</code></a></a>, <a name="rgl.points"><a href="https://dmurdoch.github.io/rgl/reference/primitive.html"><code>rgl.points</code></a></a>, <a name="rgl.linestrips"><a href="https://dmurdoch.github.io/rgl/reference/primitive.html"><code>rgl.linestrips</code></a></a>, <a name="rgl.lines"><a href="https://dmurdoch.github.io/rgl/reference/primitive.html"><code>rgl.lines</code></a></a>, <a name="rgl.triangles"><a href="https://dmurdoch.github.io/rgl/reference/primitive.html"><code>rgl.triangles</code></a></a>, <a name="rgl.quads"><a href="https://dmurdoch.github.io/rgl/reference/primitive.html"><code>rgl.quads</code></a></a>, <a name="rgl.texts"><a href="https://dmurdoch.github.io/rgl/reference/primitive.html"><code>rgl.texts</code></a></a>, <a name="rgl.abclines"><a href="https://dmurdoch.github.io/rgl/reference/primitive.html"><code>rgl.abclines</code></a></a>, <a name="rgl.planes"><a href="https://dmurdoch.github.io/rgl/reference/primitive.html"><code>rgl.planes</code></a></a>, <a name="rgl.bg"><a href="https://dmurdoch.github.io/rgl/reference/primitive.html"><code>rgl.bg</code></a></a>, <a name="rgl.clipplanes"><a href="https://dmurdoch.github.io/rgl/reference/primitive.html"><code>rgl.clipplanes</code></a></a>, <a name="rgl.bbox"><a href="https://dmurdoch.github.io/rgl/reference/primitive.html"><code>rgl.bbox</code></a></a>, <a name="rgl.spheres"><a href="https://dmurdoch.github.io/rgl/reference/primitive.html"><code>rgl.spheres</code></a></a>, <a name="rgl.sprites"><a href="https://dmurdoch.github.io/rgl/reference/primitive.html"><code>rgl.sprites</code></a></a>, <a name="rgl.surface"><a href="https://dmurdoch.github.io/rgl/reference/primitive.html"><code>rgl.surface</code></a></a>.<br />
+You should avoid using these functions, which do not work well with the higher level <code>*3d</code> functions. See the <a href="https://dmurdoch.github.io/rgl/reference/r3d.html">?r3d</a> help topic for details. The functions <a name="rgl.setAxisCallback"><a href="https://dmurdoch.github.io/rgl/reference/rgl.setAxisCallback.html"><code>rgl.setAxisCallback</code></a></a>, <a name="rgl.getAxisCallback"><a href="https://dmurdoch.github.io/rgl/reference/rgl.setAxisCallback.html"><code>rgl.getAxisCallback</code></a></a> provide low-level support for <a href="#setAxisCallbacks"><code>setAxisCallbacks</code></a>.</p>
 </div>
 </div>
 <div id="controlling-the-look-of-the-scene" class="section level2">
@@ -448,13 +448,13 @@ You should avoid using these functions, which do not work well with the higher l
 <div id="lighting" class="section level3">
 <h3>Lighting</h3>
 <p>In most scenes, objects are “lit”, meaning that their appearance depends on their position and orientation relative to lights in the scene. The lights themselves don’t normally show up, but their effect on the objects does.</p>
-<p>Use the <a name="light3d"><a href="https://dmurdoch.github.io/rgl/dev/reference/light.html"><code>light3d</code></a></a> function to specify the position and characteristics of a light. Lights may be infinitely distant, or may be embedded within the scene. Their characteristics include <code>ambient</code>, <code>diffuse</code>, and <code>specular</code> components, all defaulting to white. The <code>ambient</code> component appears the same from any direction. The <code>diffuse</code> component depends on the angle between the surface and the light, while the <code>specular</code> component also takes the viewer’s position into account.</p>
-<p>The <a name="rgl.light"><a href="https://dmurdoch.github.io/rgl/dev/reference/light.html"><code>rgl.light</code></a></a> function is a lower-level function with different defaults; users should normally use <a href="#light3d"><code>light3d</code></a>.</p>
+<p>Use the <a name="light3d"><a href="https://dmurdoch.github.io/rgl/reference/light.html"><code>light3d</code></a></a> function to specify the position and characteristics of a light. Lights may be infinitely distant, or may be embedded within the scene. Their characteristics include <code>ambient</code>, <code>diffuse</code>, and <code>specular</code> components, all defaulting to white. The <code>ambient</code> component appears the same from any direction. The <code>diffuse</code> component depends on the angle between the surface and the light, while the <code>specular</code> component also takes the viewer’s position into account.</p>
+<p>The <a name="rgl.light"><a href="https://dmurdoch.github.io/rgl/reference/light.html"><code>rgl.light</code></a></a> function is a lower-level function with different defaults; users should normally use <a href="#light3d"><code>light3d</code></a>.</p>
 </div>
 <div id="materials" class="section level3">
 <h3>Materials</h3>
-<p>The mental model used in <code>rgl</code> is that the objects being shown in scenes are physical objects in space, with material properties that affect how light reflects from them (or is emitted by them). These are mainly controlled by the <a name="material3d"><a href="https://dmurdoch.github.io/rgl/dev/reference/material.html"><code>material3d</code></a></a> function, or by arguments to other functions that are passed to it.</p>
-<p>The material properties that can be set by calls to <code>material3d</code> are described in detail in the <a href="https://dmurdoch.github.io/rgl/dev/reference/material.html">?material3d</a> help page. Here we give an overview.</p>
+<p>The mental model used in <code>rgl</code> is that the objects being shown in scenes are physical objects in space, with material properties that affect how light reflects from them (or is emitted by them). These are mainly controlled by the <a name="material3d"><a href="https://dmurdoch.github.io/rgl/reference/material.html"><code>material3d</code></a></a> function, or by arguments to other functions that are passed to it.</p>
+<p>The material properties that can be set by calls to <code>material3d</code> are described in detail in the <a href="https://dmurdoch.github.io/rgl/reference/material.html">?material3d</a> help page. Here we give an overview.</p>
 <table>
 <colgroup>
 <col width="26%" />
@@ -531,8 +531,8 @@ You should avoid using these functions, which do not work well with the higher l
 </tr>
 </tbody>
 </table>
-<p>Other properties include “texmipmap”, “texmagfilter”, “texminfilter”, “texenvmap”, “fog”, “point_antialias”, “line_antialias”, “depth_mask”, “depth_test”, “polygon_offset”, “margin” and “floating”; see <a href="https://dmurdoch.github.io/rgl/dev/reference/material.html">the help page</a> for details.</p>
-<p>There is also an <a name="rgl.material"><a href="https://dmurdoch.github.io/rgl/dev/reference/material.html"><code>rgl.material</code></a></a> function that works at a lower level; users should normally avoid it.</p>
+<p>Other properties include “texmipmap”, “texmagfilter”, “texminfilter”, “texenvmap”, “fog”, “point_antialias”, “line_antialias”, “depth_mask”, “depth_test”, “polygon_offset”, “margin” and “floating”; see <a href="https://dmurdoch.github.io/rgl/reference/material.html">the help page</a> for details.</p>
+<p>There is also an <a name="rgl.material"><a href="https://dmurdoch.github.io/rgl/reference/material.html"><code>rgl.material</code></a></a> function that works at a lower level; users should normally avoid it.</p>
 </div>
 <div id="textures" class="section level3">
 <h3>Textures</h3>
@@ -556,7 +556,7 @@ You should avoid using these functions, which do not work well with the higher l
 <ul>
 <li>The color in the figure above was specified to be white. By default, the colors in the bitmap will modify the colour of the quad. If <code>col</code> is black (a common default), you won’t see anything.</li>
 <li>On the other hand, you usually don’t want specular reflections (which show up as glare). Setting <code>specular</code> to black prevents those.</li>
-<li>How the bitmap is handled is controlled by the material property <code>&quot;textype&quot;</code>. The default is <code>&quot;rgb&quot;</code>, which takes the red-green-blue colours from the bitmap and uses them to modify the corresponding colours in the polygon. Other possibilities for <code>&quot;textype&quot;</code> are described in <a href="https://dmurdoch.github.io/rgl/dev/reference/material.html">the material3d help page</a>.</li>
+<li>How the bitmap is handled is controlled by the material property <code>&quot;textype&quot;</code>. The default is <code>&quot;rgb&quot;</code>, which takes the red-green-blue colours from the bitmap and uses them to modify the corresponding colours in the polygon. Other possibilities for <code>&quot;textype&quot;</code> are described in <a href="https://dmurdoch.github.io/rgl/reference/material.html">the material3d help page</a>.</li>
 <li>The other <code>&quot;tex*&quot;</code> material properties control how the interpolation within the image is done.</li>
 <li>Modern <code>OpenGL</code> supports 1- and 3-dimensional textures; these are not supported in <code>rgl</code>.</li>
 </ul>
@@ -564,11 +564,11 @@ You should avoid using these functions, which do not work well with the higher l
 <div id="fonts" class="section level3">
 <h3>Fonts</h3>
 <p><code>rgl</code> uses the same ideas as base graphics for drawing text: there are font families named <code>&quot;sans&quot;</code>, <code>&quot;serif&quot;</code>, and <code>&quot;mono&quot;</code> for drawing text of those types. In <code>rgl</code>, the <code>&quot;symbol&quot;</code> family is not supported.</p>
-<p>New font families can be defined using the low-level function <a name="rglFonts"><a href="https://dmurdoch.github.io/rgl/dev/reference/rgl.texts.html"><code>rglFonts</code></a></a>, or more simply using the higher level function <a name="rglExtrafonts"><a href="https://dmurdoch.github.io/rgl/dev/reference/rglExtrafonts.html"><code>rglExtrafonts</code></a></a>. The latter function requires the <code>extrafont</code> package to be installed.</p>
+<p>New font families can be defined using the low-level function <a name="rglFonts"><a href="https://dmurdoch.github.io/rgl/reference/rgl.texts.html"><code>rglFonts</code></a></a>, or more simply using the higher level function <a name="rglExtrafonts"><a href="https://dmurdoch.github.io/rgl/reference/rglExtrafonts.html"><code>rglExtrafonts</code></a></a>. The latter function requires the <code>extrafont</code> package to be installed.</p>
 </div>
 <div id="par3d-miscellaneous-graphical-parameters" class="section level3">
 <h3>par3d: Miscellaneous graphical parameters</h3>
-<p>The <a name="par3d"><a href="https://dmurdoch.github.io/rgl/dev/reference/par3d.html"><code>par3d</code></a></a> function, modelled after the classic graphics <a href="https://rdrr.io/r/graphics/par.html"><code>par</code></a> function, sets or reads a variety of different <code>rgl</code> internal parameters. Some parameters are completely read-only; others are fixed at the time the window is opened, and others may be changed at any time.</p>
+<p>The <a name="par3d"><a href="https://dmurdoch.github.io/rgl/reference/par3d.html"><code>par3d</code></a></a> function, modelled after the classic graphics <a href="https://rdrr.io/r/graphics/par.html"><code>par</code></a> function, sets or reads a variety of different <code>rgl</code> internal parameters. Some parameters are completely read-only; others are fixed at the time the window is opened, and others may be changed at any time.</p>
 <table>
 <colgroup>
 <col width="40%" />
@@ -596,7 +596,7 @@ You should avoid using these functions, which do not work well with the higher l
 <tr class="odd">
 <td>family</td>
 <td></td>
-<td>Device-independent font family name; see <a href="https://dmurdoch.github.io/rgl/dev/reference/texts.html">?text3d</a></td>
+<td>Device-independent font family name; see <a href="https://dmurdoch.github.io/rgl/reference/texts.html">?text3d</a></td>
 </tr>
 <tr class="even">
 <td>font</td>
@@ -636,7 +636,7 @@ You should avoid using these functions, which do not work well with the higher l
 <tr class="odd">
 <td>modelMatrix</td>
 <td>read-only</td>
-<td>The OpenGL ModelView matrix; partly set by <a name="view3d"><a href="https://dmurdoch.github.io/rgl/dev/reference/viewpoint.html"><code>view3d</code></a></a> or the obsolete <a name="rgl.viewpoint"><a href="https://dmurdoch.github.io/rgl/dev/reference/viewpoint.html"><code>rgl.viewpoint</code></a></a></td>
+<td>The OpenGL ModelView matrix; partly set by <a name="view3d"><a href="https://dmurdoch.github.io/rgl/reference/viewpoint.html"><code>view3d</code></a></a> or the obsolete <a name="rgl.viewpoint"><a href="https://dmurdoch.github.io/rgl/reference/viewpoint.html"><code>rgl.viewpoint</code></a></a></td>
 </tr>
 <tr class="even">
 <td>projMatrix</td>
@@ -671,7 +671,7 @@ You should avoid using these functions, which do not work well with the higher l
 <tr class="even">
 <td>observer</td>
 <td>read-only</td>
-<td>The position of the observer; set by <a name="observer3d"><a href="https://dmurdoch.github.io/rgl/dev/reference/observer3d.html"><code>observer3d</code></a></a></td>
+<td>The position of the observer; set by <a name="observer3d"><a href="https://dmurdoch.github.io/rgl/reference/observer3d.html"><code>observer3d</code></a></a></td>
 </tr>
 <tr class="odd">
 <td>scale</td>
@@ -688,7 +688,7 @@ You should avoid using these functions, which do not work well with the higher l
 </div>
 <div id="default-settings" class="section level3">
 <h3>Default settings</h3>
-<p>The <a name="r3dDefaults"><a href="https://dmurdoch.github.io/rgl/dev/reference/open3d.html"><code>r3dDefaults</code></a></a> list and the <a name="getr3dDefaults"><a href="https://dmurdoch.github.io/rgl/dev/reference/open3d.html"><code>getr3dDefaults</code></a></a> function control defaults in new windows opened by <a href="#open3d"><code>open3d</code></a>.<br />
+<p>The <a name="r3dDefaults"><a href="https://dmurdoch.github.io/rgl/reference/open3d.html"><code>r3dDefaults</code></a></a> list and the <a name="getr3dDefaults"><a href="https://dmurdoch.github.io/rgl/reference/open3d.html"><code>getr3dDefaults</code></a></a> function control defaults in new windows opened by <a href="#open3d"><code>open3d</code></a>.<br />
 The function looks for the variable in the user’s global environment, and if not found there, finds the one in the <code>rgl</code> namespace. This allows the user to override the default settings for new windows.</p>
 <p>Once found, the <code>r3dDefaults</code> list provides initial values for <a href="#par3d"><code>par3d</code></a> parameters, as well as defaults for <a href="#material3d"><code>material3d</code></a> and <a href="#bg3d"><code>bg3d</code></a> in components <code>&quot;material&quot;</code> and <code>&quot;bg&quot;</code> respectively.</p>
 </div>
@@ -712,11 +712,11 @@ The function looks for the variable in the user’s global environment, and if n
 </thead>
 <tbody>
 <tr class="odd">
-<td><a name="tetrahedron3d"><a href="https://dmurdoch.github.io/rgl/dev/reference/cube3d.html"><code>tetrahedron3d</code></a></a>, <a name="cube3d"><a href="https://dmurdoch.github.io/rgl/dev/reference/cube3d.html"><code>cube3d</code></a></a>, <a name="octahedron3d"><a href="https://dmurdoch.github.io/rgl/dev/reference/cube3d.html"><code>octahedron3d</code></a></a>, <a name="dodecahedron3d"><a href="https://dmurdoch.github.io/rgl/dev/reference/cube3d.html"><code>dodecahedron3d</code></a></a>, <a name="icosahedron3d"><a href="https://dmurdoch.github.io/rgl/dev/reference/cube3d.html"><code>icosahedron3d</code></a></a>:</td>
+<td><a name="tetrahedron3d"><a href="https://dmurdoch.github.io/rgl/reference/cube3d.html"><code>tetrahedron3d</code></a></a>, <a name="cube3d"><a href="https://dmurdoch.github.io/rgl/reference/cube3d.html"><code>cube3d</code></a></a>, <a name="octahedron3d"><a href="https://dmurdoch.github.io/rgl/reference/cube3d.html"><code>octahedron3d</code></a></a>, <a name="dodecahedron3d"><a href="https://dmurdoch.github.io/rgl/reference/cube3d.html"><code>dodecahedron3d</code></a></a>, <a name="icosahedron3d"><a href="https://dmurdoch.github.io/rgl/reference/cube3d.html"><code>icosahedron3d</code></a></a>:</td>
 <td>Platonic solids</td>
 </tr>
 <tr class="even">
-<td><a name="cuboctahedron3d"><a href="https://dmurdoch.github.io/rgl/dev/reference/cube3d.html"><code>cuboctahedron3d</code></a></a>, <a name="oh3d"><a href="https://dmurdoch.github.io/rgl/dev/reference/cube3d.html"><code>oh3d</code></a></a>:</td>
+<td><a name="cuboctahedron3d"><a href="https://dmurdoch.github.io/rgl/reference/cube3d.html"><code>cuboctahedron3d</code></a></a>, <a name="oh3d"><a href="https://dmurdoch.github.io/rgl/reference/cube3d.html"><code>oh3d</code></a></a>:</td>
 <td>other solids</td>
 </tr>
 </tbody>
@@ -751,31 +751,31 @@ The function looks for the variable in the user’s global environment, and if n
 </thead>
 <tbody>
 <tr class="odd">
-<td><a name="cylinder3d"><a href="https://dmurdoch.github.io/rgl/dev/reference/cylinder3d.html"><code>cylinder3d</code></a></a>:</td>
+<td><a name="cylinder3d"><a href="https://dmurdoch.github.io/rgl/reference/cylinder3d.html"><code>cylinder3d</code></a></a>:</td>
 <td>generate a tube or cylinder</td>
 </tr>
 <tr class="even">
-<td><a name="polygon3d"><a href="https://dmurdoch.github.io/rgl/dev/reference/polygon3d.html"><code>polygon3d</code></a></a>:</td>
+<td><a name="polygon3d"><a href="https://dmurdoch.github.io/rgl/reference/polygon3d.html"><code>polygon3d</code></a></a>:</td>
 <td>generate a flat polygon by triangulation</td>
 </tr>
 <tr class="odd">
-<td><a name="extrude3d"><a href="https://dmurdoch.github.io/rgl/dev/reference/extrude3d.html"><code>extrude3d</code></a></a>:</td>
+<td><a name="extrude3d"><a href="https://dmurdoch.github.io/rgl/reference/extrude3d.html"><code>extrude3d</code></a></a>:</td>
 <td>generate an “extrusion” of a polygon</td>
 </tr>
 <tr class="even">
-<td><a name="turn3d"><a href="https://dmurdoch.github.io/rgl/dev/reference/turn3d.html"><code>turn3d</code></a></a>:</td>
+<td><a name="turn3d"><a href="https://dmurdoch.github.io/rgl/reference/turn3d.html"><code>turn3d</code></a></a>:</td>
 <td>generate a solid of rotation</td>
 </tr>
 <tr class="odd">
-<td><a name="ellipse3d"><a href="https://dmurdoch.github.io/rgl/dev/reference/ellipse3d.html"><code>ellipse3d</code></a></a>:</td>
+<td><a name="ellipse3d"><a href="https://dmurdoch.github.io/rgl/reference/ellipse3d.html"><code>ellipse3d</code></a></a>:</td>
 <td>generate an ellipsoid in various ways</td>
 </tr>
 <tr class="even">
-<td><a name="mesh3d"><a href="https://dmurdoch.github.io/rgl/dev/reference/mesh3d.html"><code>mesh3d</code></a></a>:</td>
+<td><a name="mesh3d"><a href="https://dmurdoch.github.io/rgl/reference/mesh3d.html"><code>mesh3d</code></a></a>:</td>
 <td>generate a shape from indexed vertices</td>
 </tr>
 <tr class="odd">
-<td><a name="shapelist3d"><a href="https://dmurdoch.github.io/rgl/dev/reference/shapelist3d.html"><code>shapelist3d</code></a></a>:</td>
+<td><a name="shapelist3d"><a href="https://dmurdoch.github.io/rgl/reference/shapelist3d.html"><code>shapelist3d</code></a></a>:</td>
 <td>generate a shape by combining other shapes</td>
 </tr>
 <tr class="even">
@@ -784,8 +784,8 @@ The function looks for the variable in the user’s global environment, and if n
 </tr>
 </tbody>
 </table>
-<p>A related function is <a name="triangulate"><a href="https://dmurdoch.github.io/rgl/dev/reference/triangulate.html"><code>triangulate</code></a></a>, which takes a two dimensional polygon and divides it up into triangles using the “ear-clipping” algorithm.</p>
-<p>The generic function <a name="as.mesh3d"><a href="https://dmurdoch.github.io/rgl/dev/reference/as.mesh3d.default.html"><code>as.mesh3d</code></a></a> is provided to allow data structures produced by other code to be converted to mesh structures. Currently the following classes are supported:</p>
+<p>A related function is <a name="triangulate"><a href="https://dmurdoch.github.io/rgl/reference/triangulate.html"><code>triangulate</code></a></a>, which takes a two dimensional polygon and divides it up into triangles using the “ear-clipping” algorithm.</p>
+<p>The generic function <a name="as.mesh3d"><a href="https://dmurdoch.github.io/rgl/reference/as.mesh3d.default.html"><code>as.mesh3d</code></a></a> is provided to allow data structures produced by other code to be converted to mesh structures. Currently the following classes are supported:</p>
 <table>
 <thead>
 <tr class="header">
@@ -822,13 +822,13 @@ The function looks for the variable in the user’s global environment, and if n
 </tr>
 </tbody>
 </table>
-<p>The default <a name="as.mesh3d.default"><a href="https://dmurdoch.github.io/rgl/dev/reference/as.mesh3d.default.html"><code>as.mesh3d.default</code></a></a> method is a simple way to construct a mesh from a matrix of vertices; it can use <a name="mergeVertices"><a href="https://dmurdoch.github.io/rgl/dev/reference/mergeVertices.html"><code>mergeVertices</code></a></a> (which can also be used on its own) to merge repeated vertices within the matrix, allowing <a href="#addNormals"><code>addNormals</code></a> to be used to give a smooth appearance.</p>
-<p>The <a name="as.tmesh3d"><a href="https://dmurdoch.github.io/rgl/dev/reference/as.tmesh3d.html"><code>as.tmesh3d</code></a></a> generic is a variation that guarantees the resulting object will have no quad entries.</p>
-<p>Functions <a name="tmesh3d"><a href="https://dmurdoch.github.io/rgl/dev/reference/mesh3d.html"><code>tmesh3d</code></a></a>, <a name="qmesh3d"><a href="https://dmurdoch.github.io/rgl/dev/reference/mesh3d.html"><code>qmesh3d</code></a></a> are now obsolete; use <a href="#mesh3d"><code>mesh3d</code></a> instead.</p>
+<p>The default <a name="as.mesh3d.default"><a href="https://dmurdoch.github.io/rgl/reference/as.mesh3d.default.html"><code>as.mesh3d.default</code></a></a> method is a simple way to construct a mesh from a matrix of vertices; it can use <a name="mergeVertices"><a href="https://dmurdoch.github.io/rgl/reference/mergeVertices.html"><code>mergeVertices</code></a></a> (which can also be used on its own) to merge repeated vertices within the matrix, allowing <a href="#addNormals"><code>addNormals</code></a> to be used to give a smooth appearance.</p>
+<p>The <a name="as.tmesh3d"><a href="https://dmurdoch.github.io/rgl/reference/as.tmesh3d.html"><code>as.tmesh3d</code></a></a> generic is a variation that guarantees the resulting object will have no quad entries.</p>
+<p>Functions <a name="tmesh3d"><a href="https://dmurdoch.github.io/rgl/reference/mesh3d.html"><code>tmesh3d</code></a></a>, <a name="qmesh3d"><a href="https://dmurdoch.github.io/rgl/reference/mesh3d.html"><code>qmesh3d</code></a></a> are now obsolete; use <a href="#mesh3d"><code>mesh3d</code></a> instead.</p>
 </div>
 <div id="the-underlying-class-structure-for-shapes" class="section level3">
 <h3>The underlying class structure for shapes</h3>
-<p><code>&quot;shape3d&quot;</code> is the basic abstract type. Objects of this class can be displayed by <a name="shade3d"><a href="https://dmurdoch.github.io/rgl/dev/reference/shade3d.html"><code>shade3d</code></a></a> (which shades faces), <a name="wire3d"><a href="https://dmurdoch.github.io/rgl/dev/reference/shade3d.html"><code>wire3d</code></a></a> (which draws edges), or <a name="dot3d"><a href="https://dmurdoch.github.io/rgl/dev/reference/shade3d.html"><code>dot3d</code></a></a> (which draws points at each vertex.)</p>
+<p><code>&quot;shape3d&quot;</code> is the basic abstract type. Objects of this class can be displayed by <a name="shade3d"><a href="https://dmurdoch.github.io/rgl/reference/shade3d.html"><code>shade3d</code></a></a> (which shades faces), <a name="wire3d"><a href="https://dmurdoch.github.io/rgl/reference/shade3d.html"><code>wire3d</code></a></a> (which draws edges), or <a name="dot3d"><a href="https://dmurdoch.github.io/rgl/reference/shade3d.html"><code>dot3d</code></a></a> (which draws points at each vertex.)</p>
 <p><code>&quot;mesh3d&quot;</code> is a descendant type. Objects of this type contain the following fields:</p>
 <table>
 <colgroup>
@@ -897,19 +897,19 @@ The function looks for the variable in the user’s global environment, and if n
 </thead>
 <tbody>
 <tr class="odd">
-<td><a name="contourLines3d"><a href="https://dmurdoch.github.io/rgl/dev/reference/contourLines3d.html"><code>contourLines3d</code></a></a>:</td>
+<td><a name="contourLines3d"><a href="https://dmurdoch.github.io/rgl/reference/contourLines3d.html"><code>contourLines3d</code></a></a>:</td>
 <td>draw contour lines on surface</td>
 </tr>
 <tr class="even">
-<td><a name="filledContour3d"><a href="https://dmurdoch.github.io/rgl/dev/reference/contourLines3d.html"><code>filledContour3d</code></a></a>:</td>
+<td><a name="filledContour3d"><a href="https://dmurdoch.github.io/rgl/reference/contourLines3d.html"><code>filledContour3d</code></a></a>:</td>
 <td>fill between contours on surface</td>
 </tr>
 <tr class="odd">
-<td><a name="clipMesh3d"><a href="https://dmurdoch.github.io/rgl/dev/reference/clipMesh3d.html"><code>clipMesh3d</code></a></a>:</td>
+<td><a name="clipMesh3d"><a href="https://dmurdoch.github.io/rgl/reference/clipMesh3d.html"><code>clipMesh3d</code></a></a>:</td>
 <td>clip mesh object using curved boundary</td>
 </tr>
 <tr class="even">
-<td><a name="clipObj3d"><a href="https://dmurdoch.github.io/rgl/dev/reference/clipMesh3d.html"><code>clipObj3d</code></a></a>:</td>
+<td><a name="clipObj3d"><a href="https://dmurdoch.github.io/rgl/reference/clipMesh3d.html"><code>clipObj3d</code></a></a>:</td>
 <td>clip general object using curved boundary</td>
 </tr>
 </tbody>
@@ -927,24 +927,24 @@ The function looks for the variable in the user’s global environment, and if n
 </thead>
 <tbody>
 <tr class="odd">
-<td><a name="addNormals"><a href="https://dmurdoch.github.io/rgl/dev/reference/addNormals.html"><code>addNormals</code></a></a>:</td>
+<td><a name="addNormals"><a href="https://dmurdoch.github.io/rgl/reference/addNormals.html"><code>addNormals</code></a></a>:</td>
 <td>add normal vectors to make a shape look smooth</td>
 </tr>
 <tr class="even">
-<td><a name="subdivision3d"><a href="https://dmurdoch.github.io/rgl/dev/reference/subdivision3d.html"><code>subdivision3d</code></a></a>:</td>
+<td><a name="subdivision3d"><a href="https://dmurdoch.github.io/rgl/reference/subdivision3d.html"><code>subdivision3d</code></a></a>:</td>
 <td>add extra vertices to make it look even smoother</td>
 </tr>
 <tr class="odd">
-<td><a name="merge.mesh3d"><a href="https://dmurdoch.github.io/rgl/dev/reference/merge.mesh3d.html"><code>merge</code></a></a>:</td>
+<td><a name="merge.mesh3d"><a href="https://dmurdoch.github.io/rgl/reference/merge.mesh3d.html"><code>merge</code></a></a>:</td>
 <td>merge mesh objects</td>
 </tr>
 <tr class="even">
-<td><a name="facing3d"><a href="https://dmurdoch.github.io/rgl/dev/reference/facing3d.html"><code>facing3d</code></a></a>:</td>
+<td><a name="facing3d"><a href="https://dmurdoch.github.io/rgl/reference/facing3d.html"><code>facing3d</code></a></a>:</td>
 <td>subset of mesh facing “up”</td>
 </tr>
 </tbody>
 </table>
-<p>The individual steps in <a href="#subdivision3d"><code>subdivision3d</code></a> are also available: <a name="deform.mesh3d"><a href="https://dmurdoch.github.io/rgl/dev/reference/subdivision3d.html"><code>deform.mesh3d</code></a></a>, <a name="divide.mesh3d"><a href="https://dmurdoch.github.io/rgl/dev/reference/subdivision3d.html"><code>divide.mesh3d</code></a></a>, <a name="normalize.mesh3d"><a href="https://dmurdoch.github.io/rgl/dev/reference/subdivision3d.html"><code>normalize.mesh3d</code></a></a>. These are mainly intended for internal use.</p>
+<p>The individual steps in <a href="#subdivision3d"><code>subdivision3d</code></a> are also available: <a name="deform.mesh3d"><a href="https://dmurdoch.github.io/rgl/reference/subdivision3d.html"><code>deform.mesh3d</code></a></a>, <a name="divide.mesh3d"><a href="https://dmurdoch.github.io/rgl/reference/subdivision3d.html"><code>divide.mesh3d</code></a></a>, <a name="normalize.mesh3d"><a href="https://dmurdoch.github.io/rgl/reference/subdivision3d.html"><code>normalize.mesh3d</code></a></a>. These are mainly intended for internal use.</p>
 </div>
 </div>
 <div id="multi-figure-layouts" class="section level2">
@@ -959,23 +959,23 @@ The function looks for the variable in the user’s global environment, and if n
 </thead>
 <tbody>
 <tr class="odd">
-<td><a name="mfrow3d"><a href="https://dmurdoch.github.io/rgl/dev/reference/mfrow3d.html"><code>mfrow3d</code></a></a>:</td>
+<td><a name="mfrow3d"><a href="https://dmurdoch.github.io/rgl/reference/mfrow3d.html"><code>mfrow3d</code></a></a>:</td>
 <td>Multiple figures (like <a href="https://rdrr.io/r/graphics/par.html">par(“mfrow”)</a></td>
 </tr>
 <tr class="even">
-<td><a name="layout3d"><a href="https://dmurdoch.github.io/rgl/dev/reference/mfrow3d.html"><code>layout3d</code></a></a>:</td>
+<td><a name="layout3d"><a href="https://dmurdoch.github.io/rgl/reference/mfrow3d.html"><code>layout3d</code></a></a>:</td>
 <td>Multiple figures (like <a href="https://rdrr.io/r/graphics/layout.html"><code>layout</code></a>)</td>
 </tr>
 <tr class="odd">
-<td><a name="next3d"><a href="https://dmurdoch.github.io/rgl/dev/reference/mfrow3d.html"><code>next3d</code></a></a>:</td>
+<td><a name="next3d"><a href="https://dmurdoch.github.io/rgl/reference/mfrow3d.html"><code>next3d</code></a></a>:</td>
 <td>Move to the next figure (like <a href="https://rdrr.io/r/graphics/frame.html"><code>plot.new</code></a> or <a href="https://rdrr.io/r/graphics/frame.html"><code>frame</code></a>)</td>
 </tr>
 <tr class="even">
-<td><a name="subsceneList"><a href="https://dmurdoch.github.io/rgl/dev/reference/mfrow3d.html"><code>subsceneList</code></a></a>:</td>
+<td><a name="subsceneList"><a href="https://dmurdoch.github.io/rgl/reference/mfrow3d.html"><code>subsceneList</code></a></a>:</td>
 <td>List all the subscenes in the current layout</td>
 </tr>
 <tr class="odd">
-<td><a name="clearSubsceneList"><a href="https://dmurdoch.github.io/rgl/dev/reference/mfrow3d.html"><code>clearSubsceneList</code></a></a>:</td>
+<td><a name="clearSubsceneList"><a href="https://dmurdoch.github.io/rgl/reference/mfrow3d.html"><code>clearSubsceneList</code></a></a>:</td>
 <td>Clear the current list and revert to the previous one</td>
 </tr>
 </tbody>
@@ -994,27 +994,27 @@ The function looks for the variable in the user’s global environment, and if n
 </thead>
 <tbody>
 <tr class="odd">
-<td><a name="newSubscene3d"><a href="https://dmurdoch.github.io/rgl/dev/reference/subscene3d.html"><code>newSubscene3d</code></a></a>:</td>
+<td><a name="newSubscene3d"><a href="https://dmurdoch.github.io/rgl/reference/subscene3d.html"><code>newSubscene3d</code></a></a>:</td>
 <td>Create a new subscene, with fine control over what is inherited from the parent</td>
 </tr>
 <tr class="even">
-<td><a name="currentSubscene3d"><a href="https://dmurdoch.github.io/rgl/dev/reference/subscene3d.html"><code>currentSubscene3d</code></a></a>:</td>
+<td><a name="currentSubscene3d"><a href="https://dmurdoch.github.io/rgl/reference/subscene3d.html"><code>currentSubscene3d</code></a></a>:</td>
 <td>Report on the active subscene</td>
 </tr>
 <tr class="odd">
-<td><a name="subsceneInfo"><a href="https://dmurdoch.github.io/rgl/dev/reference/subsceneInfo.html"><code>subsceneInfo</code></a></a>:</td>
+<td><a name="subsceneInfo"><a href="https://dmurdoch.github.io/rgl/reference/subsceneInfo.html"><code>subsceneInfo</code></a></a>:</td>
 <td>Get information on current subscene</td>
 </tr>
 <tr class="even">
-<td><a name="useSubscene3d"><a href="https://dmurdoch.github.io/rgl/dev/reference/subscene3d.html"><code>useSubscene3d</code></a></a>:</td>
+<td><a name="useSubscene3d"><a href="https://dmurdoch.github.io/rgl/reference/subscene3d.html"><code>useSubscene3d</code></a></a>:</td>
 <td>Make a different subscene active</td>
 </tr>
 <tr class="odd">
-<td><a name="addToSubscene3d"><a href="https://dmurdoch.github.io/rgl/dev/reference/subscene3d.html"><code>addToSubscene3d</code></a></a>, <a name="delFromSubscene3d"><a href="https://dmurdoch.github.io/rgl/dev/reference/subscene3d.html"><code>delFromSubscene3d</code></a></a>:</td>
+<td><a name="addToSubscene3d"><a href="https://dmurdoch.github.io/rgl/reference/subscene3d.html"><code>addToSubscene3d</code></a></a>, <a name="delFromSubscene3d"><a href="https://dmurdoch.github.io/rgl/reference/subscene3d.html"><code>delFromSubscene3d</code></a></a>:</td>
 <td>Add objects to a subscene, or delete them</td>
 </tr>
 <tr class="even">
-<td><a name="gc3d"><a href="https://dmurdoch.github.io/rgl/dev/reference/subscene3d.html"><code>gc3d</code></a></a>:</td>
+<td><a name="gc3d"><a href="https://dmurdoch.github.io/rgl/reference/subscene3d.html"><code>gc3d</code></a></a>:</td>
 <td>Do “garbage collection”: delete objects that are not displayed in any subscene</td>
 </tr>
 </tbody>
@@ -1077,7 +1077,7 @@ The function looks for the variable in the user’s global environment, and if n
 </div>
 <div id="older-methods" class="section level3">
 <h3>Older methods</h3>
-<p>The original way to insert an <code>rgl</code> scene in a document was to use the <a name="writeWebGL"><a href="https://dmurdoch.github.io/rgl/dev/reference/writeWebGL.html"><code>writeWebGL</code></a></a> function to write HTML code to insert in a document. Later, <code>Sweave</code> and <code>knitr</code> hooks were added. These are no longer maintained, and it is recommended that you update old documents to use the newer methods. See the <a href="#writeWebGL"><code>writeWebGL</code></a>, <a href="#rgl.Sweave"><code>rgl.Sweave</code></a> and <a href="#hook_rgl"><code>hook_rgl</code></a> help topics for details on these if you must use them. If you are reading documents that suggest using those methods, let the author know they need updating!</p>
+<p>The original way to insert an <code>rgl</code> scene in a document was to use the <a name="writeWebGL"><a href="https://dmurdoch.github.io/rgl/reference/writeWebGL.html"><code>writeWebGL</code></a></a> function to write HTML code to insert in a document. Later, <code>Sweave</code> and <code>knitr</code> hooks were added. These are no longer maintained, and it is recommended that you update old documents to use the newer methods. See the <a href="#writeWebGL"><code>writeWebGL</code></a>, <a href="#rgl.Sweave"><code>rgl.Sweave</code></a> and <a href="#hook_rgl"><code>hook_rgl</code></a> help topics for details on these if you must use them. If you are reading documents that suggest using those methods, let the author know they need updating!</p>
 </div>
 </div>
 <div id="utility-functions" class="section level2">
@@ -1140,7 +1140,7 @@ The function looks for the variable in the user’s global environment, and if n
 </tr>
 <tr class="even">
 <td><code>&quot;user&quot;</code></td>
-<td>A user action set by <a name="setUserCallbacks"><a href="https://dmurdoch.github.io/rgl/dev/reference/setUserCallbacks.html"><code>setUserCallbacks</code></a></a>, <a name="rgl.setMouseCallbacks"><a href="https://dmurdoch.github.io/rgl/dev/reference/setUserCallbacks.html"><code>rgl.setMouseCallbacks</code></a></a>, <a name="rgl.setWheelCallback"><a href="https://dmurdoch.github.io/rgl/dev/reference/setUserCallbacks.html"><code>rgl.setWheelCallback</code></a></a>. Use <a name="rgl.getMouseCallbacks"><a href="https://dmurdoch.github.io/rgl/dev/reference/callbacks.html"><code>rgl.getMouseCallbacks</code></a></a> and <a name="rgl.getWheelCallback"><a href="https://dmurdoch.github.io/rgl/dev/reference/callbacks.html"><code>rgl.getWheelCallback</code></a></a> to retrieve.</td>
+<td>A user action set by <a name="setUserCallbacks"><a href="https://dmurdoch.github.io/rgl/reference/setUserCallbacks.html"><code>setUserCallbacks</code></a></a>, <a name="rgl.setMouseCallbacks"><a href="https://dmurdoch.github.io/rgl/reference/setUserCallbacks.html"><code>rgl.setMouseCallbacks</code></a></a>, <a name="rgl.setWheelCallback"><a href="https://dmurdoch.github.io/rgl/reference/setUserCallbacks.html"><code>rgl.setWheelCallback</code></a></a>. Use <a name="rgl.getMouseCallbacks"><a href="https://dmurdoch.github.io/rgl/reference/callbacks.html"><code>rgl.getMouseCallbacks</code></a></a> and <a name="rgl.getWheelCallback"><a href="https://dmurdoch.github.io/rgl/reference/callbacks.html"><code>rgl.getWheelCallback</code></a></a> to retrieve.</td>
 </tr>
 </tbody>
 </table>
@@ -1154,21 +1154,21 @@ The function looks for the variable in the user’s global environment, and if n
 </thead>
 <tbody>
 <tr class="odd">
-<td><a name="identify3d"><a href="https://dmurdoch.github.io/rgl/dev/reference/identify3d.html"><code>identify3d</code></a></a>:</td>
+<td><a name="identify3d"><a href="https://dmurdoch.github.io/rgl/reference/identify3d.html"><code>identify3d</code></a></a>:</td>
 <td>like the classic graphics <a href="https://rdrr.io/r/graphics/identify.html"><code>identify</code></a> function</td>
 </tr>
 <tr class="even">
-<td><a name="select3d"><a href="https://dmurdoch.github.io/rgl/dev/reference/select3d.html"><code>select3d</code></a></a>:</td>
+<td><a name="select3d"><a href="https://dmurdoch.github.io/rgl/reference/select3d.html"><code>select3d</code></a></a>:</td>
 <td>returns a function that tests whether a coordinate was selected</td>
 </tr>
 <tr class="odd">
-<td><a name="selectpoints3d"><a href="https://dmurdoch.github.io/rgl/dev/reference/selectpoints3d.html"><code>selectpoints3d</code></a></a>:</td>
+<td><a name="selectpoints3d"><a href="https://dmurdoch.github.io/rgl/reference/selectpoints3d.html"><code>selectpoints3d</code></a></a>:</td>
 <td>selects from specific objects</td>
 </tr>
 </tbody>
 </table>
-<p><a name="selectionFunction3d"><a href="https://dmurdoch.github.io/rgl/dev/reference/select3d.html"><code>selectionFunction3d</code></a></a> produces the selection function from information about the projection and mouse selection region; it is used internally in the functions above.</p>
-<p>The <a name="rgl.select3d"><a href="https://dmurdoch.github.io/rgl/dev/reference/select3d.html"><code>rgl.select3d</code></a></a> function is an obsolete version of <code>select3d</code>, and <a name="rgl.select"><a href="https://dmurdoch.github.io/rgl/dev/reference/rgl.select.html"><code>rgl.select</code></a></a> is a low-level support function.</p>
+<p><a name="selectionFunction3d"><a href="https://dmurdoch.github.io/rgl/reference/select3d.html"><code>selectionFunction3d</code></a></a> produces the selection function from information about the projection and mouse selection region; it is used internally in the functions above.</p>
+<p>The <a name="rgl.select3d"><a href="https://dmurdoch.github.io/rgl/reference/select3d.html"><code>rgl.select3d</code></a></a> function is an obsolete version of <code>select3d</code>, and <a name="rgl.select"><a href="https://dmurdoch.github.io/rgl/reference/rgl.select.html"><code>rgl.select</code></a></a> is a low-level support function.</p>
 </div>
 <div id="animations" class="section level3">
 <h3>Animations</h3>
@@ -1186,15 +1186,15 @@ The function looks for the variable in the user’s global environment, and if n
 </thead>
 <tbody>
 <tr class="odd">
-<td><a name="play3d"><a href="https://dmurdoch.github.io/rgl/dev/reference/play3d.html"><code>play3d</code></a></a>:</td>
+<td><a name="play3d"><a href="https://dmurdoch.github.io/rgl/reference/play3d.html"><code>play3d</code></a></a>:</td>
 <td>Repeatedly call the update function</td>
 </tr>
 <tr class="even">
-<td><a name="spin3d"><a href="https://dmurdoch.github.io/rgl/dev/reference/spin3d.html"><code>spin3d</code></a></a>:</td>
+<td><a name="spin3d"><a href="https://dmurdoch.github.io/rgl/reference/spin3d.html"><code>spin3d</code></a></a>:</td>
 <td>Update the display by rotating at a constant rate</td>
 </tr>
 <tr class="odd">
-<td><a name="par3dinterp"><a href="https://dmurdoch.github.io/rgl/dev/reference/par3dinterp.html"><code>par3dinterp</code></a></a>:</td>
+<td><a name="par3dinterp"><a href="https://dmurdoch.github.io/rgl/reference/par3dinterp.html"><code>par3dinterp</code></a></a>:</td>
 <td>Compute new values of some <a href="#par3d"><code>par3d</code></a> parameters by interpolation over time</td>
 </tr>
 </tbody>
@@ -1214,15 +1214,15 @@ Animations are not currently supported in the HTML written by <a href="#rglwidge
 </thead>
 <tbody>
 <tr class="odd">
-<td><a name="tkspin3d"><a href="https://dmurdoch.github.io/rgl/dev/reference/tkspin3d.html"><code>tkspin3d</code></a></a>:</td>
+<td><a name="tkspin3d"><a href="https://dmurdoch.github.io/rgl/reference/tkspin3d.html"><code>tkspin3d</code></a></a>:</td>
 <td>Set up buttons in a window to control a scene</td>
 </tr>
 <tr class="even">
-<td><a name="tkspinControl"><a href="https://dmurdoch.github.io/rgl/dev/reference/tkspinControl.html"><code>tkspinControl</code></a></a>:</td>
+<td><a name="tkspinControl"><a href="https://dmurdoch.github.io/rgl/reference/tkspinControl.html"><code>tkspinControl</code></a></a>:</td>
 <td>Embed the control buttons in a separate TCL/TK frame</td>
 </tr>
 <tr class="odd">
-<td><a name="tkpar3dsave"><a href="https://dmurdoch.github.io/rgl/dev/reference/tkpar3dsave.html"><code>tkpar3dsave</code></a></a>:</td>
+<td><a name="tkpar3dsave"><a href="https://dmurdoch.github.io/rgl/reference/tkpar3dsave.html"><code>tkpar3dsave</code></a></a>:</td>
 <td>Create a dialog to interactively save mouse actions</td>
 </tr>
 </tbody>
@@ -1246,11 +1246,11 @@ Animations are not currently supported in the HTML written by <a href="#rglwidge
 </thead>
 <tbody>
 <tr class="odd">
-<td><a name="scene3d"><a href="https://dmurdoch.github.io/rgl/dev/reference/scene3d.html"><code>scene3d</code></a></a>:</td>
+<td><a name="scene3d"><a href="https://dmurdoch.github.io/rgl/reference/scene3d.html"><code>scene3d</code></a></a>:</td>
 <td>Save a scene to an R variable, which can be saved and reloaded</td>
 </tr>
 <tr class="even">
-<td><a name="rglwidget"><a href="https://dmurdoch.github.io/rgl/dev/reference/rglwidget.html"><code>rglwidget</code></a></a>:</td>
+<td><a name="rglwidget"><a href="https://dmurdoch.github.io/rgl/reference/rglwidget.html"><code>rglwidget</code></a></a>:</td>
 <td>Prints as HTML and Javascript to display a scene in a web browser. (See also <a href="WebGL.html">User Interaction in WebGL</a>.)</td>
 </tr>
 <tr class="odd">
@@ -1258,19 +1258,19 @@ Animations are not currently supported in the HTML written by <a href="#rglwidge
 <td>Deprecated.</td>
 </tr>
 <tr class="even">
-<td><a name="writeASY"><a href="https://dmurdoch.github.io/rgl/dev/reference/writeASY.html"><code>writeASY</code></a></a>:</td>
+<td><a name="writeASY"><a href="https://dmurdoch.github.io/rgl/reference/writeASY.html"><code>writeASY</code></a></a>:</td>
 <td>Write files for Asymptote</td>
 </tr>
 <tr class="odd">
-<td><a name="writePLY"><a href="https://dmurdoch.github.io/rgl/dev/reference/writePLY.html"><code>writePLY</code></a></a>:</td>
+<td><a name="writePLY"><a href="https://dmurdoch.github.io/rgl/reference/writePLY.html"><code>writePLY</code></a></a>:</td>
 <td>Write PLY files (commonly used in 3D printing)</td>
 </tr>
 <tr class="even">
-<td><a name="readOBJ"><a href="https://dmurdoch.github.io/rgl/dev/reference/writeOBJ.html"><code>readOBJ</code></a></a>, <a name="writeOBJ"><a href="https://dmurdoch.github.io/rgl/dev/reference/writeOBJ.html"><code>writeOBJ</code></a></a>:</td>
+<td><a name="readOBJ"><a href="https://dmurdoch.github.io/rgl/reference/writeOBJ.html"><code>readOBJ</code></a></a>, <a name="writeOBJ"><a href="https://dmurdoch.github.io/rgl/reference/writeOBJ.html"><code>writeOBJ</code></a></a>:</td>
 <td>Read or write OBJ files (commonly used in 3D graphics)</td>
 </tr>
 <tr class="odd">
-<td><a name="readSTL"><a href="https://dmurdoch.github.io/rgl/dev/reference/readSTL.html"><code>readSTL</code></a></a>, <a name="writeSTL"><a href="https://dmurdoch.github.io/rgl/dev/reference/readSTL.html"><code>writeSTL</code></a></a>:</td>
+<td><a name="readSTL"><a href="https://dmurdoch.github.io/rgl/reference/readSTL.html"><code>readSTL</code></a></a>, <a name="writeSTL"><a href="https://dmurdoch.github.io/rgl/reference/readSTL.html"><code>writeSTL</code></a></a>:</td>
 <td>Read or write STL files (also common in 3D printing)</td>
 </tr>
 </tbody>
@@ -1289,41 +1289,41 @@ Animations are not currently supported in the HTML written by <a href="#rglwidge
 </thead>
 <tbody>
 <tr class="odd">
-<td><a name="snapshot3d"><a href="https://dmurdoch.github.io/rgl/dev/reference/snapshot.html"><code>snapshot3d</code></a></a>:</td>
+<td><a name="snapshot3d"><a href="https://dmurdoch.github.io/rgl/reference/snapshot.html"><code>snapshot3d</code></a></a>:</td>
 <td>Save a PNG file bitmap of the scene</td>
 </tr>
 <tr class="even">
-<td><a name="rgl.postscript"><a href="https://dmurdoch.github.io/rgl/dev/reference/postscript.html"><code>rgl.postscript</code></a></a>:</td>
+<td><a name="rgl.postscript"><a href="https://dmurdoch.github.io/rgl/reference/postscript.html"><code>rgl.postscript</code></a></a>:</td>
 <td>Save a Postscript, LaTeX, PDF, SVG or PGF vector rendering of the scene</td>
 </tr>
 <tr class="odd">
-<td><a name="movie3d"><a href="https://dmurdoch.github.io/rgl/dev/reference/play3d.html"><code>movie3d</code></a></a>:</td>
+<td><a name="movie3d"><a href="https://dmurdoch.github.io/rgl/reference/play3d.html"><code>movie3d</code></a></a>:</td>
 <td>Save a series of bitmaps to be assembled into a movie</td>
 </tr>
 <tr class="even">
-<td><a name="rgl.pixels"><a href="https://dmurdoch.github.io/rgl/dev/reference/rgl.pixels.html"><code>rgl.pixels</code></a></a>:</td>
+<td><a name="rgl.pixels"><a href="https://dmurdoch.github.io/rgl/reference/rgl.pixels.html"><code>rgl.pixels</code></a></a>:</td>
 <td>Obtain pixel-level information about the scene in an R variable</td>
 </tr>
 <tr class="odd">
-<td><a name="rgl.Sweave"><a href="https://dmurdoch.github.io/rgl/dev/reference/rgl.Sweave.html"><code>rgl.Sweave</code></a></a>:</td>
+<td><a name="rgl.Sweave"><a href="https://dmurdoch.github.io/rgl/reference/rgl.Sweave.html"><code>rgl.Sweave</code></a></a>:</td>
 <td>Driver function for inserting a snapshot into a Sweave document.</td>
 </tr>
 <tr class="even">
-<td><a name="hook_rgl"><a href="https://dmurdoch.github.io/rgl/dev/reference/setupKnitr.html"><code>hook_rgl</code></a></a>, <a name="hook_webgl"><a href="https://dmurdoch.github.io/rgl/dev/reference/setupKnitr.html"><code>hook_webgl</code></a></a>:</td>
+<td><a name="hook_rgl"><a href="https://dmurdoch.github.io/rgl/reference/setupKnitr.html"><code>hook_rgl</code></a></a>, <a name="hook_webgl"><a href="https://dmurdoch.github.io/rgl/reference/setupKnitr.html"><code>hook_webgl</code></a></a>:</td>
 <td><code>knitr</code> hook functions for inserting images into a document.</td>
 </tr>
 <tr class="odd">
-<td><a name="setupKnitr"><a href="https://dmurdoch.github.io/rgl/dev/reference/setupKnitr.html"><code>setupKnitr</code></a></a>:</td>
+<td><a name="setupKnitr"><a href="https://dmurdoch.github.io/rgl/reference/setupKnitr.html"><code>setupKnitr</code></a></a>:</td>
 <td>Function to set up <code>knitr</code> hooks</td>
 </tr>
 </tbody>
 </table>
-<p>The <a name="rgl.snapshot"><a href="https://dmurdoch.github.io/rgl/dev/reference/snapshot.html"><code>rgl.snapshot</code></a></a> function is a low level version of <code>snapshot3d()</code>; it requires that the <code>rgl</code> display be onscreen and copies from there. <code>snapshot3d()</code> tries to use the <code>webshot2</code> package so it will work even with no display. The functions <a name="rgl.Sweave.off"><a href="https://dmurdoch.github.io/rgl/dev/reference/rgl.Sweave.html"><code>rgl.Sweave.off</code></a></a>, <a name="Sweave.snapshot"><a href="https://dmurdoch.github.io/rgl/dev/reference/rgl.Sweave.html"><code>Sweave.snapshot</code></a></a> are involved in Sweave processing and not normally called by users.</p>
+<p>The <a name="rgl.snapshot"><a href="https://dmurdoch.github.io/rgl/reference/snapshot.html"><code>rgl.snapshot</code></a></a> function is a low level version of <code>snapshot3d()</code>; it requires that the <code>rgl</code> display be onscreen and copies from there. <code>snapshot3d()</code> tries to use the <code>webshot2</code> package so it will work even with no display. The functions <a name="rgl.Sweave.off"><a href="https://dmurdoch.github.io/rgl/reference/rgl.Sweave.html"><code>rgl.Sweave.off</code></a></a>, <a name="Sweave.snapshot"><a href="https://dmurdoch.github.io/rgl/reference/rgl.Sweave.html"><code>Sweave.snapshot</code></a></a> are involved in Sweave processing and not normally called by users.</p>
 </div>
 <div id="default-display" class="section level3">
 <h3>Default display</h3>
 <p>There are two ways in which <code>rgl</code> scenes are normally displayed within R. The older one is in a dedicated window. In Unix-alikes this is an X11 window; it is a native window in Microsoft Windows. On macOS, the XQuartz system (see <a href="https://www.xquartz.org" class="uri">https://www.xquartz.org</a>) needs to be installed to support this.</p>
-<p>To suppress this display, set <code>options(rgl.useNULL = TRUE)</code> before opening a new <code>rgl</code> window. See the help page for the <a name="rgl.useNULL"><a href="https://dmurdoch.github.io/rgl/dev/reference/rgl.useNULL.html"><code>rgl.useNULL</code></a></a> function for how to set this before starting R.</p>
+<p>To suppress this display, set <code>options(rgl.useNULL = TRUE)</code> before opening a new <code>rgl</code> window. See the help page for the <a name="rgl.useNULL"><a href="https://dmurdoch.github.io/rgl/reference/rgl.useNULL.html"><code>rgl.useNULL</code></a></a> function for how to set this before starting R.</p>
 <p>The newer way to display a scene is by using WebGL in a browser window or in the Viewer pane in RStudio. To select this, set <code>options(rgl.printRglwidget = TRUE)</code>. Each operation that would change the scene will return a value which triggers a new WebGL display when printed.</p>
 </div>
 <div id="working-with-webgl-scenes" class="section level3">
@@ -1339,59 +1339,59 @@ Animations are not currently supported in the HTML written by <a href="#rglwidge
 </thead>
 <tbody>
 <tr class="odd">
-<td><a name="propertyControl"><a href="https://dmurdoch.github.io/rgl/dev/reference/propertyControl.html"><code>propertyControl</code></a></a>:</td>
+<td><a name="propertyControl"><a href="https://dmurdoch.github.io/rgl/reference/propertyControl.html"><code>propertyControl</code></a></a>:</td>
 <td>set individual properties</td>
 </tr>
 <tr class="even">
-<td><a name="clipplaneControl"><a href="https://dmurdoch.github.io/rgl/dev/reference/clipplaneControl.html"><code>clipplaneControl</code></a></a>:</td>
+<td><a name="clipplaneControl"><a href="https://dmurdoch.github.io/rgl/reference/clipplaneControl.html"><code>clipplaneControl</code></a></a>:</td>
 <td>control a clipping plane</td>
 </tr>
 <tr class="odd">
-<td><a name="subsetControl"><a href="https://dmurdoch.github.io/rgl/dev/reference/propertyControl.html"><code>subsetControl</code></a></a>:</td>
+<td><a name="subsetControl"><a href="https://dmurdoch.github.io/rgl/reference/propertyControl.html"><code>subsetControl</code></a></a>:</td>
 <td>control which objects are displayed</td>
 </tr>
 <tr class="even">
-<td><a name="ageControl"><a href="https://dmurdoch.github.io/rgl/dev/reference/ageControl.html"><code>ageControl</code></a></a>:</td>
+<td><a name="ageControl"><a href="https://dmurdoch.github.io/rgl/reference/ageControl.html"><code>ageControl</code></a></a>:</td>
 <td>“age” vertices of an object</td>
 </tr>
 <tr class="odd">
-<td><a name="vertexControl"><a href="https://dmurdoch.github.io/rgl/dev/reference/vertexControl.html"><code>vertexControl</code></a></a>:</td>
+<td><a name="vertexControl"><a href="https://dmurdoch.github.io/rgl/reference/vertexControl.html"><code>vertexControl</code></a></a>:</td>
 <td>control properties of vertices</td>
 </tr>
 <tr class="even">
-<td><a name="par3dinterpControl"><a href="https://dmurdoch.github.io/rgl/dev/reference/par3dinterpControl.html"><code>par3dinterpControl</code></a></a>:</td>
+<td><a name="par3dinterpControl"><a href="https://dmurdoch.github.io/rgl/reference/par3dinterpControl.html"><code>par3dinterpControl</code></a></a>:</td>
 <td>WebGL control like <a href="#par3dinterp"><code>par3dinterp</code></a></td>
 </tr>
 <tr class="odd">
-<td><a name="playwidget"><a href="https://dmurdoch.github.io/rgl/dev/reference/playwidget.html"><code>playwidget</code></a></a>:</td>
+<td><a name="playwidget"><a href="https://dmurdoch.github.io/rgl/reference/playwidget.html"><code>playwidget</code></a></a>:</td>
 <td>display and automate controls</td>
 </tr>
 <tr class="even">
-<td><a name="toggleWidget"><a href="https://dmurdoch.github.io/rgl/dev/reference/toggleWidget.html"><code>toggleWidget</code></a></a>:</td>
+<td><a name="toggleWidget"><a href="https://dmurdoch.github.io/rgl/reference/toggleWidget.html"><code>toggleWidget</code></a></a>:</td>
 <td>display a button to toggle some items</td>
 </tr>
 <tr class="odd">
-<td><a name="pipe"><a href="https://dmurdoch.github.io/rgl/dev/reference/import.html">%&gt;%</a></a>:</td>
+<td><a name="pipe"><a href="https://dmurdoch.github.io/rgl/reference/import.html">%&gt;%</a></a>:</td>
 <td><code>magrittr</code> pipe</td>
 </tr>
 <tr class="even">
-<td><a name="figHeight"><a href="https://dmurdoch.github.io/rgl/dev/reference/figWidth.html"><code>figHeight</code></a></a>, <a name="figWidth"><a href="https://dmurdoch.github.io/rgl/dev/reference/figWidth.html"><code>figWidth</code></a></a>:</td>
+<td><a name="figHeight"><a href="https://dmurdoch.github.io/rgl/reference/figWidth.html"><code>figHeight</code></a></a>, <a name="figWidth"><a href="https://dmurdoch.github.io/rgl/reference/figWidth.html"><code>figWidth</code></a></a>:</td>
 <td>Dimensions of figures in R Markdown document</td>
 </tr>
 <tr class="odd">
-<td><a name="rglShared"><a href="https://dmurdoch.github.io/rgl/dev/reference/rglShared.html"><code>rglShared</code></a></a>:</td>
+<td><a name="rglShared"><a href="https://dmurdoch.github.io/rgl/reference/rglShared.html"><code>rglShared</code></a></a>:</td>
 <td>share data using <code>crosstalk</code> package</td>
 </tr>
 <tr class="even">
-<td><a name="rglMouse"><a href="https://dmurdoch.github.io/rgl/dev/reference/rglMouse.html"><code>rglMouse</code></a></a>:</td>
+<td><a name="rglMouse"><a href="https://dmurdoch.github.io/rgl/reference/rglMouse.html"><code>rglMouse</code></a></a>:</td>
 <td>change mouse mode in RGL scene</td>
 </tr>
 <tr class="odd">
-<td><a name="asRow"><a href="https://dmurdoch.github.io/rgl/dev/reference/asRow.html"><code>asRow</code></a></a>:</td>
+<td><a name="asRow"><a href="https://dmurdoch.github.io/rgl/reference/asRow.html"><code>asRow</code></a></a>:</td>
 <td>arrange multiple objects in an HTML display</td>
 </tr>
 <tr class="even">
-<td><a name="getWidgetId"><a href="https://dmurdoch.github.io/rgl/dev/reference/asRow.html"><code>getWidgetId</code></a></a>:</td>
+<td><a name="getWidgetId"><a href="https://dmurdoch.github.io/rgl/reference/asRow.html"><code>getWidgetId</code></a></a>:</td>
 <td>get the <code>elementId</code> from a widget</td>
 </tr>
 </tbody>
@@ -1406,23 +1406,23 @@ Animations are not currently supported in the HTML written by <a href="#rglwidge
 </thead>
 <tbody>
 <tr class="odd">
-<td><a name="sceneChange"><a href="https://dmurdoch.github.io/rgl/dev/reference/sceneChange.html"><code>sceneChange</code></a></a>:</td>
+<td><a name="sceneChange"><a href="https://dmurdoch.github.io/rgl/reference/sceneChange.html"><code>sceneChange</code></a></a>:</td>
 <td>used in <code>Shiny</code> for large scene changes</td>
 </tr>
 <tr class="even">
-<td><a name="shinyGetPar3d"><a href="https://dmurdoch.github.io/rgl/dev/reference/shinyGetPar3d.html"><code>shinyGetPar3d</code></a></a>, <a name="shinySetPar3d"><a href="https://dmurdoch.github.io/rgl/dev/reference/shinyGetPar3d.html"><code>shinySetPar3d</code></a></a>:</td>
+<td><a name="shinyGetPar3d"><a href="https://dmurdoch.github.io/rgl/reference/shinyGetPar3d.html"><code>shinyGetPar3d</code></a></a>, <a name="shinySetPar3d"><a href="https://dmurdoch.github.io/rgl/reference/shinyGetPar3d.html"><code>shinySetPar3d</code></a></a>:</td>
 <td>get or set <a href="#par3d"><code>par3d</code></a> values from Shiny</td>
 </tr>
 <tr class="odd">
-<td><a name="shinyResetBrush"><a href="https://dmurdoch.github.io/rgl/dev/reference/shinyGetPar3d.html"><code>shinyResetBrush</code></a></a>:</td>
+<td><a name="shinyResetBrush"><a href="https://dmurdoch.github.io/rgl/reference/shinyGetPar3d.html"><code>shinyResetBrush</code></a></a>:</td>
 <td>reset the mouse brush in Shiny</td>
 </tr>
 </tbody>
 </table>
 <p>The <a href="#selectionFunction3d"><code>selectionFunction3d</code></a> function is also likely to be involved in mouse interactions when using Shiny.</p>
-<p>Some functions are mainly for internal use: <a name="elementId2Prefix"><a href="https://dmurdoch.github.io/rgl/dev/reference/elementId2Prefix.html"><code>elementId2Prefix</code></a></a>, <a name="playwidgetOutput"><a href="https://dmurdoch.github.io/rgl/dev/reference/elementId2Prefix.html"><code>playwidgetOutput</code></a></a>, <a name="renderPlaywidget"><a href="https://dmurdoch.github.io/rgl/dev/reference/elementId2Prefix.html"><code>renderPlaywidget</code></a></a>, <a name="rglwidgetOutput"><a href="https://dmurdoch.github.io/rgl/dev/reference/elementId2Prefix.html"><code>rglwidgetOutput</code></a></a>, <a name="renderRglwidget"><a href="https://dmurdoch.github.io/rgl/dev/reference/elementId2Prefix.html"><code>renderRglwidget</code></a></a>, <a name="registerSceneChange"><a href="https://dmurdoch.github.io/rgl/dev/reference/elementId2Prefix.html"><code>registerSceneChange</code></a></a>. More details are given in the vignette <a href="WebGL.html">User Interaction in WebGL</a>. The functions <a name="lowlevel"><a href="https://dmurdoch.github.io/rgl/dev/reference/rglIds.html"><code>lowlevel</code></a></a>, <a name="highlevel"><a href="https://dmurdoch.github.io/rgl/dev/reference/rglIds.html"><code>highlevel</code></a></a>, <a name="rglId"><a href="https://dmurdoch.github.io/rgl/dev/reference/rglIds.html"><code>rglId</code></a></a> are also for internal use, marking function results for automatic printing. Finally, the experimental function <a name="setUserShaders"><a href="https://dmurdoch.github.io/rgl/dev/reference/setUserShaders.html"><code>setUserShaders</code></a></a> allows you to use hand-written shaders in WebGL.</p>
+<p>Some functions are mainly for internal use: <a name="elementId2Prefix"><a href="https://dmurdoch.github.io/rgl/reference/elementId2Prefix.html"><code>elementId2Prefix</code></a></a>, <a name="playwidgetOutput"><a href="https://dmurdoch.github.io/rgl/reference/elementId2Prefix.html"><code>playwidgetOutput</code></a></a>, <a name="renderPlaywidget"><a href="https://dmurdoch.github.io/rgl/reference/elementId2Prefix.html"><code>renderPlaywidget</code></a></a>, <a name="rglwidgetOutput"><a href="https://dmurdoch.github.io/rgl/reference/elementId2Prefix.html"><code>rglwidgetOutput</code></a></a>, <a name="renderRglwidget"><a href="https://dmurdoch.github.io/rgl/reference/elementId2Prefix.html"><code>renderRglwidget</code></a></a>, <a name="registerSceneChange"><a href="https://dmurdoch.github.io/rgl/reference/elementId2Prefix.html"><code>registerSceneChange</code></a></a>. More details are given in the vignette <a href="WebGL.html">User Interaction in WebGL</a>. The functions <a name="lowlevel"><a href="https://dmurdoch.github.io/rgl/reference/rglIds.html"><code>lowlevel</code></a></a>, <a name="highlevel"><a href="https://dmurdoch.github.io/rgl/reference/rglIds.html"><code>highlevel</code></a></a>, <a name="rglId"><a href="https://dmurdoch.github.io/rgl/reference/rglIds.html"><code>rglId</code></a></a> are also for internal use, marking function results for automatic printing. Finally, the experimental function <a name="setUserShaders"><a href="https://dmurdoch.github.io/rgl/reference/setUserShaders.html"><code>setUserShaders</code></a></a> allows you to use hand-written shaders in WebGL.</p>
 <p>The older approach uses the <a href="#writeWebGL"><code>writeWebGL</code></a> function to export a scene to HTML and Javascript code.<br />
-These functions write HTML and Javascript for working with the exported scene: <a name="propertySlider"><a href="https://dmurdoch.github.io/rgl/dev/reference/propertySetter.html"><code>propertySlider</code></a></a>, <a name="clipplaneSlider"><a href="https://dmurdoch.github.io/rgl/dev/reference/webGLcontrols.html"><code>clipplaneSlider</code></a></a>, <a name="subsetSlider"><a href="https://dmurdoch.github.io/rgl/dev/reference/webGLcontrols.html"><code>subsetSlider</code></a></a>, <a name="toggleButton"><a href="https://dmurdoch.github.io/rgl/dev/reference/webGLcontrols.html"><code>toggleButton</code></a></a>, <a name="propertySetter"><a href="https://dmurdoch.github.io/rgl/dev/reference/propertySetter.html"><code>propertySetter</code></a></a>, <a name="subsetSetter"><a href="https://dmurdoch.github.io/rgl/dev/reference/webGLcontrols.html"><code>subsetSetter</code></a></a>, <a name="ageSetter"><a href="https://dmurdoch.github.io/rgl/dev/reference/ageSetter.html"><code>ageSetter</code></a></a>, <a name="par3dinterpSetter"><a href="https://dmurdoch.github.io/rgl/dev/reference/propertySetter.html"><code>par3dinterpSetter</code></a></a>, <a name="vertexSetter"><a href="https://dmurdoch.github.io/rgl/dev/reference/propertySetter.html"><code>vertexSetter</code></a></a>, <a name="matrixSetter"><a href="https://dmurdoch.github.io/rgl/dev/reference/propertySetter.html"><code>matrixSetter</code></a></a>. Use the newer functions instead.</p>
+These functions write HTML and Javascript for working with the exported scene: <a name="propertySlider"><a href="https://dmurdoch.github.io/rgl/reference/propertySetter.html"><code>propertySlider</code></a></a>, <a name="clipplaneSlider"><a href="https://dmurdoch.github.io/rgl/reference/webGLcontrols.html"><code>clipplaneSlider</code></a></a>, <a name="subsetSlider"><a href="https://dmurdoch.github.io/rgl/reference/webGLcontrols.html"><code>subsetSlider</code></a></a>, <a name="toggleButton"><a href="https://dmurdoch.github.io/rgl/reference/webGLcontrols.html"><code>toggleButton</code></a></a>, <a name="propertySetter"><a href="https://dmurdoch.github.io/rgl/reference/propertySetter.html"><code>propertySetter</code></a></a>, <a name="subsetSetter"><a href="https://dmurdoch.github.io/rgl/reference/webGLcontrols.html"><code>subsetSetter</code></a></a>, <a name="ageSetter"><a href="https://dmurdoch.github.io/rgl/reference/ageSetter.html"><code>ageSetter</code></a></a>, <a name="par3dinterpSetter"><a href="https://dmurdoch.github.io/rgl/reference/propertySetter.html"><code>par3dinterpSetter</code></a></a>, <a name="vertexSetter"><a href="https://dmurdoch.github.io/rgl/reference/propertySetter.html"><code>vertexSetter</code></a></a>, <a name="matrixSetter"><a href="https://dmurdoch.github.io/rgl/reference/propertySetter.html"><code>matrixSetter</code></a></a>. Use the newer functions instead.</p>
 </div>
 <div id="working-with-the-scene" class="section level3">
 <h3>Working with the scene</h3>
@@ -1436,31 +1436,31 @@ These functions write HTML and Javascript for working with the exported scene: <
 </thead>
 <tbody>
 <tr class="odd">
-<td><a name="open3d"><a href="https://dmurdoch.github.io/rgl/dev/reference/open3d.html"><code>open3d</code></a></a>:</td>
+<td><a name="open3d"><a href="https://dmurdoch.github.io/rgl/reference/open3d.html"><code>open3d</code></a></a>:</td>
 <td>open a new window</td>
 </tr>
 <tr class="even">
-<td><a name="close3d"><a href="https://dmurdoch.github.io/rgl/dev/reference/open3d.html"><code>close3d</code></a></a>, <a name="rgl.close"><a href="https://dmurdoch.github.io/rgl/dev/reference/open3d.html"><code>rgl.close</code></a></a>:</td>
+<td><a name="close3d"><a href="https://dmurdoch.github.io/rgl/reference/open3d.html"><code>close3d</code></a></a>, <a name="rgl.close"><a href="https://dmurdoch.github.io/rgl/reference/open3d.html"><code>rgl.close</code></a></a>:</td>
 <td>close the current window</td>
 </tr>
 <tr class="odd">
-<td><a name="cur3d"><a href="https://dmurdoch.github.io/rgl/dev/reference/open3d.html"><code>cur3d</code></a></a>, <a name="rgl.cur"><a href="https://dmurdoch.github.io/rgl/dev/reference/open3d.html"><code>rgl.cur</code></a></a>:</td>
+<td><a name="cur3d"><a href="https://dmurdoch.github.io/rgl/reference/open3d.html"><code>cur3d</code></a></a>, <a name="rgl.cur"><a href="https://dmurdoch.github.io/rgl/reference/open3d.html"><code>rgl.cur</code></a></a>:</td>
 <td>id of the active device</td>
 </tr>
 <tr class="even">
-<td><a name="set3d"><a href="https://dmurdoch.github.io/rgl/dev/reference/open3d.html"><code>set3d</code></a></a>, <a name="rgl.set"><a href="https://dmurdoch.github.io/rgl/dev/reference/open3d.html"><code>rgl.set</code></a></a>:</td>
+<td><a name="set3d"><a href="https://dmurdoch.github.io/rgl/reference/open3d.html"><code>set3d</code></a></a>, <a name="rgl.set"><a href="https://dmurdoch.github.io/rgl/reference/open3d.html"><code>rgl.set</code></a></a>:</td>
 <td>set a particular device to be active</td>
 </tr>
 <tr class="odd">
-<td><a name="pop3d"><a href="https://dmurdoch.github.io/rgl/dev/reference/scene.html"><code>pop3d</code></a></a>, <a name="rgl.pop"><a href="https://dmurdoch.github.io/rgl/dev/reference/scene.html"><code>rgl.pop</code></a></a>:</td>
+<td><a name="pop3d"><a href="https://dmurdoch.github.io/rgl/reference/scene.html"><code>pop3d</code></a></a>, <a name="rgl.pop"><a href="https://dmurdoch.github.io/rgl/reference/scene.html"><code>rgl.pop</code></a></a>:</td>
 <td>delete an object from the scene</td>
 </tr>
 <tr class="even">
-<td><a name="clear3d"><a href="https://dmurdoch.github.io/rgl/dev/reference/scene.html"><code>clear3d</code></a></a>, <a name="rgl.clear"><a href="https://dmurdoch.github.io/rgl/dev/reference/scene.html"><code>rgl.clear</code></a></a>:</td>
+<td><a name="clear3d"><a href="https://dmurdoch.github.io/rgl/reference/scene.html"><code>clear3d</code></a></a>, <a name="rgl.clear"><a href="https://dmurdoch.github.io/rgl/reference/scene.html"><code>rgl.clear</code></a></a>:</td>
 <td>delete all objects of certain classes</td>
 </tr>
 <tr class="odd">
-<td><a name="ids3d"><a href="https://dmurdoch.github.io/rgl/dev/reference/scene.html"><code>ids3d</code></a></a>, <a name="rgl.ids"><a href="https://dmurdoch.github.io/rgl/dev/reference/scene.html"><code>rgl.ids</code></a></a>:</td>
+<td><a name="ids3d"><a href="https://dmurdoch.github.io/rgl/reference/scene.html"><code>ids3d</code></a></a>, <a name="rgl.ids"><a href="https://dmurdoch.github.io/rgl/reference/scene.html"><code>rgl.ids</code></a></a>:</td>
 <td>ids and types of all current objects</td>
 </tr>
 </tbody>
@@ -1479,29 +1479,29 @@ These functions write HTML and Javascript for working with the exported scene: <
 </thead>
 <tbody>
 <tr class="odd">
-<td><a name="rgl.bringtotop"><a href="https://dmurdoch.github.io/rgl/dev/reference/rgl.bringtotop.html"><code>rgl.bringtotop</code></a></a>:</td>
+<td><a name="rgl.bringtotop"><a href="https://dmurdoch.github.io/rgl/reference/rgl.bringtotop.html"><code>rgl.bringtotop</code></a></a>:</td>
 <td>bring the current window to the top</td>
 </tr>
 <tr class="even">
-<td><a name="rgl.dev.list"><a href="https://dmurdoch.github.io/rgl/dev/reference/rgl.open.html"><code>rgl.dev.list</code></a></a>:</td>
+<td><a name="rgl.dev.list"><a href="https://dmurdoch.github.io/rgl/reference/rgl.open.html"><code>rgl.dev.list</code></a></a>:</td>
 <td>ids of all active devices</td>
 </tr>
 <tr class="odd">
-<td><a name="rgl.attrib"><a href="https://dmurdoch.github.io/rgl/dev/reference/attributes.html"><code>rgl.attrib</code></a></a>, <a name="rgl.attrib.info"><a href="https://dmurdoch.github.io/rgl/dev/reference/attributes.html"><code>rgl.attrib.info</code></a></a>, <a name="rgl.attrib.count"><a href="https://dmurdoch.github.io/rgl/dev/reference/attributes.html"><code>rgl.attrib.count</code></a></a>:</td>
+<td><a name="rgl.attrib"><a href="https://dmurdoch.github.io/rgl/reference/attributes.html"><code>rgl.attrib</code></a></a>, <a name="rgl.attrib.info"><a href="https://dmurdoch.github.io/rgl/reference/attributes.html"><code>rgl.attrib.info</code></a></a>, <a name="rgl.attrib.count"><a href="https://dmurdoch.github.io/rgl/reference/attributes.html"><code>rgl.attrib.count</code></a></a>:</td>
 <td>attributes of objects in the scene</td>
 </tr>
 <tr class="even">
-<td><a name="rgl.projection"><a href="https://dmurdoch.github.io/rgl/dev/reference/rgl.user2window.html"><code>rgl.projection</code></a></a>:</td>
+<td><a name="rgl.projection"><a href="https://dmurdoch.github.io/rgl/reference/rgl.user2window.html"><code>rgl.projection</code></a></a>:</td>
 <td>return information about the current projection</td>
 </tr>
 <tr class="odd">
-<td><a name="rgl.user2window"><a href="https://dmurdoch.github.io/rgl/dev/reference/rgl.user2window.html"><code>rgl.user2window</code></a></a>, <a name="rgl.window2user"><a href="https://dmurdoch.github.io/rgl/dev/reference/rgl.user2window.html"><code>rgl.window2user</code></a></a>:</td>
+<td><a name="rgl.user2window"><a href="https://dmurdoch.github.io/rgl/reference/rgl.user2window.html"><code>rgl.user2window</code></a></a>, <a name="rgl.window2user"><a href="https://dmurdoch.github.io/rgl/reference/rgl.user2window.html"><code>rgl.window2user</code></a></a>:</td>
 <td>convert between coordinates in the current projection</td>
 </tr>
 </tbody>
 </table>
-<p>The <a name="as.triangles3d"><a href="https://dmurdoch.github.io/rgl/dev/reference/as.triangles3d.html"><code>as.triangles3d</code></a></a> generic function is intended to extract coordinates in a form suitable for passing to <a href="#triangles3d"><code>triangles3d</code></a>. Currently a method is provided for <a href="#rglId"><code>rglId</code></a> objects.</p>
-<p>In addition to these, there are some other related functions which should rarely be called by users: <a name="rgl.init"><a href="https://dmurdoch.github.io/rgl/dev/reference/rgl.init.html"><code>rgl.init</code></a></a>, <a name="rgl.open"><a href="https://dmurdoch.github.io/rgl/dev/reference/rgl.init.html"><code>rgl.open</code></a></a>, <a name="rgl.quit"><a href="https://dmurdoch.github.io/rgl/dev/reference/rgl.init.html"><code>rgl.quit</code></a></a>.</p>
+<p>The <a name="as.triangles3d"><a href="https://dmurdoch.github.io/rgl/reference/as.triangles3d.html"><code>as.triangles3d</code></a></a> generic function is intended to extract coordinates in a form suitable for passing to <a href="#triangles3d"><code>triangles3d</code></a>. Currently a method is provided for <a href="#rglId"><code>rglId</code></a> objects.</p>
+<p>In addition to these, there are some other related functions which should rarely be called by users: <a name="rgl.init"><a href="https://dmurdoch.github.io/rgl/reference/rgl.init.html"><code>rgl.init</code></a></a>, <a name="rgl.open"><a href="https://dmurdoch.github.io/rgl/reference/rgl.init.html"><code>rgl.open</code></a></a>, <a name="rgl.quit"><a href="https://dmurdoch.github.io/rgl/reference/rgl.init.html"><code>rgl.quit</code></a></a>.</p>
 </div>
 <div id="working-with-3-d-vectors" class="section level3">
 <h3>Working with 3-D vectors</h3>
@@ -1520,40 +1520,40 @@ These functions write HTML and Javascript for working with the exported scene: <
 </thead>
 <tbody>
 <tr class="odd">
-<td><a name="asEuclidean"><a href="https://dmurdoch.github.io/rgl/dev/reference/matrices.html"><code>asEuclidean</code></a></a>, <a name="asHomogeneous"><a href="https://dmurdoch.github.io/rgl/dev/reference/matrices.html"><code>asHomogeneous</code></a></a>:</td>
+<td><a name="asEuclidean"><a href="https://dmurdoch.github.io/rgl/reference/matrices.html"><code>asEuclidean</code></a></a>, <a name="asHomogeneous"><a href="https://dmurdoch.github.io/rgl/reference/matrices.html"><code>asHomogeneous</code></a></a>:</td>
 <td>convert between homogeneous and Euclidean coordinates when x, y and z are columns</td>
 </tr>
 <tr class="even">
-<td><a name="asEuclidean2"><a href="https://dmurdoch.github.io/rgl/dev/reference/matrices.html"><code>asEuclidean2</code></a></a>, <a name="asHomogeneous2"><a href="https://dmurdoch.github.io/rgl/dev/reference/matrices.html"><code>asHomogeneous2</code></a></a>:</td>
+<td><a name="asEuclidean2"><a href="https://dmurdoch.github.io/rgl/reference/matrices.html"><code>asEuclidean2</code></a></a>, <a name="asHomogeneous2"><a href="https://dmurdoch.github.io/rgl/reference/matrices.html"><code>asHomogeneous2</code></a></a>:</td>
 <td>convert when x, y and z are rows</td>
 </tr>
 <tr class="odd">
-<td><a name="rotate3d"><a href="https://dmurdoch.github.io/rgl/dev/reference/matrices.html"><code>rotate3d</code></a></a>, <a name="scale3d"><a href="https://dmurdoch.github.io/rgl/dev/reference/matrices.html"><code>scale3d</code></a></a>, <a name="translate3d"><a href="https://dmurdoch.github.io/rgl/dev/reference/matrices.html"><code>translate3d</code></a></a>:</td>
+<td><a name="rotate3d"><a href="https://dmurdoch.github.io/rgl/reference/matrices.html"><code>rotate3d</code></a></a>, <a name="scale3d"><a href="https://dmurdoch.github.io/rgl/reference/matrices.html"><code>scale3d</code></a></a>, <a name="translate3d"><a href="https://dmurdoch.github.io/rgl/reference/matrices.html"><code>translate3d</code></a></a>:</td>
 <td>apply a transformation</td>
 </tr>
 <tr class="even">
-<td><a name="transform3d"><a href="https://dmurdoch.github.io/rgl/dev/reference/matrices.html"><code>transform3d</code></a></a>:</td>
+<td><a name="transform3d"><a href="https://dmurdoch.github.io/rgl/reference/matrices.html"><code>transform3d</code></a></a>:</td>
 <td>apply a general transformation</td>
 </tr>
 <tr class="odd">
-<td><a name="rotationMatrix"><a href="https://dmurdoch.github.io/rgl/dev/reference/matrices.html"><code>rotationMatrix</code></a></a>, <a name="scaleMatrix"><a href="https://dmurdoch.github.io/rgl/dev/reference/matrices.html"><code>scaleMatrix</code></a></a>, <a name="translationMatrix"><a href="https://dmurdoch.github.io/rgl/dev/reference/matrices.html"><code>translationMatrix</code></a></a>:</td>
+<td><a name="rotationMatrix"><a href="https://dmurdoch.github.io/rgl/reference/matrices.html"><code>rotationMatrix</code></a></a>, <a name="scaleMatrix"><a href="https://dmurdoch.github.io/rgl/reference/matrices.html"><code>scaleMatrix</code></a></a>, <a name="translationMatrix"><a href="https://dmurdoch.github.io/rgl/reference/matrices.html"><code>translationMatrix</code></a></a>:</td>
 <td>compute the transformation matrix</td>
 </tr>
 <tr class="even">
-<td><a name="identityMatrix"><a href="https://dmurdoch.github.io/rgl/dev/reference/matrices.html"><code>identityMatrix</code></a></a>:</td>
+<td><a name="identityMatrix"><a href="https://dmurdoch.github.io/rgl/reference/matrices.html"><code>identityMatrix</code></a></a>:</td>
 <td>return a 4 x 4 identity matrix</td>
 </tr>
 <tr class="odd">
-<td><a name="projectDown"><a href="https://dmurdoch.github.io/rgl/dev/reference/facing3d.html"><code>projectDown</code></a></a>:</td>
+<td><a name="projectDown"><a href="https://dmurdoch.github.io/rgl/reference/facing3d.html"><code>projectDown</code></a></a>:</td>
 <td>a 3D to 2D projection down a vector</td>
 </tr>
 </tbody>
 </table>
-<p>There is also a function <a name="GramSchmidt"><a href="https://dmurdoch.github.io/rgl/dev/reference/GramSchmidt.html"><code>GramSchmidt</code></a></a>, mainly for internal use: it does a Gram-Schmidt orthogonalization of a 3x3 matrix, with some specializations for its use in <a href="#cylinder3d"><code>cylinder3d</code></a>.</p>
+<p>There is also a function <a name="GramSchmidt"><a href="https://dmurdoch.github.io/rgl/reference/GramSchmidt.html"><code>GramSchmidt</code></a></a>, mainly for internal use: it does a Gram-Schmidt orthogonalization of a 3x3 matrix, with some specializations for its use in <a href="#cylinder3d"><code>cylinder3d</code></a>.</p>
 </div>
 <div id="working-with-other-packages" class="section level3">
 <h3>Working with other packages</h3>
-<p>Sometimes it may be convenient to interactively rotate a scene to a particular view, then display it in <code>lattice</code> or base graphics. The <a name="rglToLattice"><a href="https://dmurdoch.github.io/rgl/dev/reference/rglToLattice.html"><code>rglToLattice</code></a></a> and <a name="rglToBase"><a href="https://dmurdoch.github.io/rgl/dev/reference/rglToLattice.html"><code>rglToBase</code></a></a> functions support this.</p>
+<p>Sometimes it may be convenient to interactively rotate a scene to a particular view, then display it in <code>lattice</code> or base graphics. The <a name="rglToLattice"><a href="https://dmurdoch.github.io/rgl/reference/rglToLattice.html"><code>rglToLattice</code></a></a> and <a name="rglToBase"><a href="https://dmurdoch.github.io/rgl/reference/rglToLattice.html"><code>rglToBase</code></a></a> functions support this.</p>
 <p>For example, we first display the volcano data in <code>rgl</code>:</p>
 <div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">persp3d</span>(volcano, <span class="at">col =</span> <span class="st">&quot;green&quot;</span>)</span></code></pre></div>
 <p>This display is interactive, but we can reproduce the initial view using the <code>lattice</code> <a href="https://rdrr.io/pkg/lattice/man/cloud.html"><code>wireframe</code></a> or base graphics <a href="https://rdrr.io/r/graphics/persp.html"><code>persp</code></a> functions:</p>
@@ -1568,20 +1568,20 @@ These functions write HTML and Javascript for working with the exported scene: <
 </div>
 <div id="creating-pkgdown-websites" class="section level3">
 <h3>Creating <code>pkgdown</code> websites</h3>
-<p>The <a href="pkgdown.html">“Using RGL in pkgdown web sites”</a> vignette describes how to use <code>rgl</code> in a <code>pkgdown</code> web site. The utility function <a name="in_pkgdown_example"><a href="https://dmurdoch.github.io/rgl/dev/reference/in_pkgdown_example.html"><code>in_pkgdown_example</code></a></a> can be used to detect that <code>pkgdown</code> is being used.</p>
+<p>The <a href="pkgdown.html">“Using RGL in pkgdown web sites”</a> vignette describes how to use <code>rgl</code> in a <code>pkgdown</code> web site. The utility function <a name="in_pkgdown_example"><a href="https://dmurdoch.github.io/rgl/reference/in_pkgdown_example.html"><code>in_pkgdown_example</code></a></a> can be used to detect that <code>pkgdown</code> is being used.</p>
 </div>
 <div id="working-with-testthat" class="section level3">
 <h3>Working with <code>testthat</code></h3>
-<p>The <code>testthat</code> package is widely used for unit tests in packages. Such tests are hard to write with <code>rgl</code>, because the output is visual and interactive rather than a simple value. The <a name="expect_known_scene"><a href="https://dmurdoch.github.io/rgl/dev/reference/expect_known_scene.html"><code>expect_known_scene</code></a></a>, <a name="compare_proxy.mesh3d"><a href="https://dmurdoch.github.io/rgl/dev/reference/all.equal.mesh3d.html"><code>compare_proxy.mesh3d</code></a></a> and <a name="all.equal.mesh3d"><a href="https://dmurdoch.github.io/rgl/dev/reference/all.equal.mesh3d.html"><code>all.equal.mesh3d</code></a></a> functions help with this by removing system-dependent features of <code>rgl</code> output.</p>
+<p>The <code>testthat</code> package is widely used for unit tests in packages. Such tests are hard to write with <code>rgl</code>, because the output is visual and interactive rather than a simple value. The <a name="expect_known_scene"><a href="https://dmurdoch.github.io/rgl/reference/expect_known_scene.html"><code>expect_known_scene</code></a></a>, <a name="compare_proxy.mesh3d"><a href="https://dmurdoch.github.io/rgl/reference/all.equal.mesh3d.html"><code>compare_proxy.mesh3d</code></a></a> and <a name="all.equal.mesh3d"><a href="https://dmurdoch.github.io/rgl/reference/all.equal.mesh3d.html"><code>all.equal.mesh3d</code></a></a> functions help with this by removing system-dependent features of <code>rgl</code> output.</p>
 </div>
 <div id="working-with-javascript" class="section level3">
 <h3>Working with Javascript</h3>
-<p>The WebGL displays created using <a href="#rglwidget"><code>rglwidget</code></a> rely on a large body of Javascript code included in this package. To help in development of this code, the <a name="makeDependency"><a href="https://dmurdoch.github.io/rgl/dev/reference/makeDependency.html"><code>makeDependency</code></a></a> function was written. It may be useful in other packages that include Javascript.</p>
+<p>The WebGL displays created using <a href="#rglwidget"><code>rglwidget</code></a> rely on a large body of Javascript code included in this package. To help in development of this code, the <a name="makeDependency"><a href="https://dmurdoch.github.io/rgl/reference/makeDependency.html"><code>makeDependency</code></a></a> function was written. It may be useful in other packages that include Javascript.</p>
 </div>
 <div id="other-functions" class="section level3">
 <h3>Other functions</h3>
 <p>This section is for miscellaneous functions that don’t fall in any of the other categories in this document.</p>
-<p>The <a name="setGraphicsDelay"><a href="https://dmurdoch.github.io/rgl/dev/reference/setGraphicsDelay.html"><code>setGraphicsDelay</code></a></a> function is designed to work around what appears to be a bug on macOS: if a standard plot window is opened too quickly after an <code>rgl</code> window, R can crash. This function inserts a one second delay when it appears to be needed.</p>
+<p>The <a name="setGraphicsDelay"><a href="https://dmurdoch.github.io/rgl/reference/setGraphicsDelay.html"><code>setGraphicsDelay</code></a></a> function is designed to work around what appears to be a bug on macOS: if a standard plot window is opened too quickly after an <code>rgl</code> window, R can crash. This function inserts a one second delay when it appears to be needed.</p>
 </div>
 </div>
 <div id="warning-work-in-progress" class="section level2">

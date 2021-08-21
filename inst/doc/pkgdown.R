@@ -10,8 +10,10 @@ options(rgl.useNULL = TRUE)
 setupKnitr(autoprint = TRUE)
 
 ## ----eval=FALSE---------------------------------------------------------------
-#  remotes::install_github(c("r-lib/downlit",
-#                            "r-lib/pkgdown",
+#  remotes::install_github(c("rstudio/webshot2",
+#                            "rstudio/chromote",
+#                            "r-lib/downlit",
+#                            "dmurdoch/pkgdown@issue1689",
 #                            "dmurdoch/htmlwidgets@rglpatch"))
 
 ## ----eval=FALSE---------------------------------------------------------------

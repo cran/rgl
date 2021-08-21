@@ -104,14 +104,20 @@ playwidget(list(
                  "Reset", "Slider", "Label"),
   loop = TRUE)
 
-## -----------------------------------------------------------------------------
+## ----eval = requireNamespace("crosstalk")-------------------------------------
+# This example requires the crosstalk package
+# We skip it if crosstalk is not available. 
+
 ids <- with(iris, plot3d(Sepal.Length, Sepal.Width, Petal.Length, 
                   type="s", col=as.numeric(Species)))
 par3d(mouseMode = "selecting")
 rglwidget(shared = rglShared(ids["data"])) %>% 
 rglMouse()
 
-## -----------------------------------------------------------------------------
+## ----eval=requireNamespace("crosstalk")---------------------------------------
+# This example requires the crosstalk package.  
+# We skip it if crosstalk is not available. 
+
 library(crosstalk)
 sd <- SharedData$new(mtcars)
 ids <- plot3d(sd$origData(), col = mtcars$cyl, type = "s")
