@@ -282,7 +282,7 @@ lwd       | 1       | width of lines in pixels
 
 Other properties include 
 "texmipmap", "texmagfilter", "texminfilter", "texenvmap", "fog", 
-"point\_antialias", "line\_antialias", "depth\_mask", "depth\_test", "polygon_offset", "margin" and "floating"; 
+"point\_antialias", "line\_antialias", "depth\_mask", "depth\_test", "polygon_offset", "margin", "floating" and "tag"; 
 see `r linkfn("material3d", "the help page", pkg = "rgl")` for details.
 
 There is also an `r indexfns("rgl.material")` function that works
@@ -475,6 +475,9 @@ Class |  Package | Description
 `r indexfns("ashape3d", pkg = "alphashape3d")` | `alphashape3d` | Alpha-shapes
 `r linkfn("rglId")` | `rgl` | `rgl` object identifiers
 
+The `r indexfns("checkDeldir")` function checks that a compatible version
+of the `deldir` package is installed.
+
 The default `r indexfns("as.mesh3d.default")` method is a simple way
 to construct a mesh from a matrix of vertices; it can use
 `r indexfns("mergeVertices")` (which can also be used on its own)
@@ -532,7 +535,8 @@ Function                             | Description
 `r indexfns("addNormals")`: | add normal vectors to make a shape look smooth
 `r indexfns("subdivision3d")`: | add extra vertices to make it look even smoother
 `r indexfns("merge.mesh3d", backticked("merge"))`: | merge mesh objects
-`r indexfns("facing3d")`:   | subset of mesh facing "up"     
+`r indexfns("facing3d")`:   | subset of mesh facing "up"
+`r indexfns("getBoundary3d")`: | get the boundary of a mesh object
 
 The individual steps in `r linkfn("subdivision3d")` are also available:
 `r indexfns(c("deform.mesh3d", "divide.mesh3d", "normalize.mesh3d"))`. These
@@ -790,6 +794,14 @@ Function    | Description
 `r indexfns("writePLY")`:   | Write PLY files (commonly used in 3D printing)
 `r indexfns(c("readOBJ", "writeOBJ"))`:   | Read or write OBJ files (commonly used in 3D graphics)
 `r indexfns(c("readSTL", "writeSTL"))`:   | Read or write STL files (also common in 3D printing)
+`r indexfns("as.rglscene")`: | Generic function, no methods in `rgl`
+
+The [`rgl2gltf`](https://dmurdoch.github.io/rgl2gltf/dev/)
+package can read or write GLTF and GLB files.  It includes an
+`as.rglscene` method to convert GLTF objects to `rgl` scenes.  The
+code in `rgl`'s `r indexfns("Buffer")` R6 class is based on the GLTF
+format.  It is used by `r linkfn("rglwidget")` to make output
+webpages somewhat smaller than they were previously.
 
 There are also functions to save snapshots or other recordings of a scene,
 without any 3D information being saved:
@@ -913,9 +925,10 @@ Function                             | Description
 `r indexfns(c("close3d", "rgl.close"))`:              | close the current window
 `r indexfns(c("cur3d", "rgl.cur"))`:                | id of the active device
 `r indexfns(c("set3d", "rgl.set"))`:                | set a particular device to be active
-`r indexfns(c("pop3d", "rgl.pop"))`:     | delete an object from the scene
+`r indexfns(c("pop3d", "rgl.pop"))`:     | delete objects from the scene
 `r indexfns(c("clear3d", "rgl.clear"))`:            | delete all objects of certain classes
-`r indexfns(c("ids3d", "rgl.ids"))`:              | ids and types of all current objects
+`r indexfns(c("ids3d", "rgl.ids"))`:              | ids, types and tags of current objects
+`r indexfns("tagged3d")`:                         | find tags or objects with tags
 
 These functions are mainly intended for programming, and 
 have no corresponding `*3d` counterparts:

@@ -35,35 +35,38 @@ rglwidget(controllers = .)
 ## -----------------------------------------------------------------------------
 clear3d() # Remove the earlier display
 
-setosa <- with(subset(iris, Species == "setosa"), 
+with(subset(iris, Species == "setosa"), 
      spheres3d(Sepal.Length, Sepal.Width, Petal.Length, 
                   col=as.numeric(Species),
-                  radius = 0.211))
-versicolor <- with(subset(iris, Species == "versicolor"), 
+                  radius = 0.211,
+                  tag = "setosa"))
+with(subset(iris, Species == "versicolor"), 
      spheres3d(Sepal.Length, Sepal.Width, Petal.Length, 
                col=as.numeric(Species),
-     	       radius = 0.211))
-virginica <- with(subset(iris, Species == "virginica"), 
+     	       radius = 0.211, 
+     	       tag = "versicolor"))
+with(subset(iris, Species == "virginica"), 
      spheres3d(Sepal.Length, Sepal.Width, Petal.Length, 
                col=as.numeric(Species),
-     	       radius = 0.211))
+     	       radius = 0.211,
+     	       tag = "virginica"))
 aspect3d(1,1,1)
-axesid <- decorate3d()
+decorate3d(tag = "axes")
 rglwidget() %>%
-toggleWidget(ids = setosa) %>%
-toggleWidget(ids = versicolor) %>%
-toggleWidget(ids = virginica) %>%
-toggleWidget(ids = axesid) %>% 
+toggleWidget(tags = "setosa") %>%
+toggleWidget(tags = "versicolor") %>%
+toggleWidget(tags = "virginica") %>%
+toggleWidget(tags = "axes") %>% 
 asRow(last = 4)
 
 ## -----------------------------------------------------------------------------
 rglwidget() %>%
 playwidget(start = 0, stop = 3, interval = 1,
 	   subsetControl(1, subsets = list(
-	   			 Setosa = setosa,
-	   			 Versicolor = versicolor,
-	   			 Virginica = virginica,
-	   			 All = c(setosa, versicolor, virginica)
+	   			 Setosa = tagged3d("setosa"),
+	   			 Versicolor = tagged3d("versicolor"),
+	   			 Virginica = tagged3d("virginica"),
+	   			 All = tagged3d(c("setosa", "versicolor", "virginica"))
 	   			 )))
 
 ## -----------------------------------------------------------------------------
@@ -85,7 +88,7 @@ playwidget(
                                      8,   1,   1,   1), 
                                 nrow = 2, byrow = TRUE),
                 attributes = c("x", "red", "green", "blue"),
-                vertices = which, objid = setosa),
+                vertices = which, tag = "setosa"),
 	step = 0.01)
 
 ## -----------------------------------------------------------------------------

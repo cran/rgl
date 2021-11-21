@@ -287,6 +287,7 @@
      * @param {string} msg  The message to give.
      */
     rglwidgetClass.prototype.alertOnce = function(msg) {
+      // debugger;
       if (typeof this.alerted !== "undefined")
         return;
       this.alerted = true;
@@ -359,12 +360,26 @@
       return this.getMaterial(obj, property);
     };
 
-    rglwidgetClass.prototype.getAdj = function (pos, offset, text) {
+    rglwidgetClass.prototype.getAdj = function (obj, index, offset, text) {
+      var len, pos;
+      if (typeof obj.pos === "undefined")
+        return this.flatten(obj.adj);
+      pos = obj.pos[index % obj.pos.length];
       switch(pos) {
-        case 1: return [0.5, 1 + offset];
-        case 2: return [1 + offset/text.length, 0.5];
-        case 3: return [0.5, -offset];
-        case 4: return [-offset/text.length, 0.5];
+        case 0: return [0.5, 0.5, 0.5];
+        case 1: return [0.5, 1 + offset, 0.5];
+        case 3: return [0.5, -offset, 0.5];
+        case 5: return [0.5, 0.5, -offset];
+        case 6: return [0.5, 0.5, 1 + offset];
+        case 2: 
+        case 4: if (typeof text === "undefined")
+                  len = 1;
+                else
+                  len = text.length;
+                if (pos === 2)
+                  return [1 + offset/len, 0.5, 0.5];
+                else
+                  return [-offset/len, 0.5, 0.5];
       }
     };
 
@@ -545,4 +560,65 @@
     rglwidgetClass.prototype.missing = function(x) {
       return x !== "-Inf" && x !== "Inf" &&
              (isNaN(x) || x === null || typeof(x) === "undefined");
+    };
+
+    /**
+     * Write matrix to log
+     * @param M
+     */
+    rglwidgetClass.prototype.logMatrix = function(M) {
+      console.log("matrix(c("+M.m11+","+M.m12+","+M.m13+","+M.m14+",\n"+
+                              M.m21+","+M.m22+","+M.m23+","+M.m24+",\n"+
+                              M.m31+","+M.m32+","+M.m33+","+M.m34+",\n"+
+                              M.m41+","+M.m42+","+M.m43+","+M.m44+"), byrow=TRUE, ncol=4)");
+    };
+    
+    /**
+     * Write vector to log
+     * @param {3 vector} v
+     */
+     
+    rglwidgetClass.prototype.logVec3 = function(v) {
+      console.log("c("+v[0]+","+v[1]+","+v[2]+")");
+    };
+    
+    /**
+     * Sum two vectors
+     * @param {vector} x
+     * @param {vector} y
+     */
+     rglwidgetClass.prototype.vsum = function(x, y) {
+       var i, result = [].concat(x);
+       for (i = 0; i < y.length; i++)
+         result[i] += y[i];
+        return result;
+     };
+     
+    /**
+     * difference of two vectors
+     * @param {vector} x
+     * @param {vector} y
+     */
+     rglwidgetClass.prototype.vdiff = function(x, y) {
+        return this.vsum(x, this.vscale(y, -1));
+     };
+
+    /**
+     * Scale a vector
+     * @param {number} s
+     * @param {vector} x
+     */
+     rglwidgetClass.prototype.vscale = function(x, s) {
+       var i, result = [].concat(x);
+       for (i = 0; i < x.length; i++)
+         result[i] *= s;
+        return result;
+     };
+    
+    /**
+     * Normalize a vector
+     * @param {vector} v
+     */
+    rglwidgetClass.prototype.normalize = function(v) {
+      return this.vscale(v, 1/this.vlen(v));
     };

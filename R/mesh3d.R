@@ -13,7 +13,10 @@ mesh3d <- function( x, y = NULL, z = NULL, vertices,
   
   if (missing(vertices)) {
     xyz <- xyz.coords(x, y, z, recycle=TRUE)
-    vertices <- rbind(xyz$x, xyz$y, xyz$z, 1) 
+    if (length(xyz$x) && length(xyz$y) && length(xyz$z))
+      vertices <- rbind(xyz$x, xyz$y, xyz$z, 1) 
+    else
+      vertices <- matrix(numeric(), nrow = 4)
   } else vertices <- asHomogeneous2(vertices)
   
   # Remove dimnames
@@ -164,8 +167,7 @@ as.mesh3d <- function(x, ...) UseMethod("as.mesh3d")
 as.mesh3d.deldir <- function(x, col = "gray", coords = c("x", "y", "z"), 
 			     smooth = TRUE, normals = NULL, texcoords = NULL,
 			     ...) {
-  if (!requireNamespace("deldir", quietly = TRUE))
-    stop("The ", sQuote("deldir"), " package is required.")
+  checkDeldir(error = TRUE)
   if (!identical(sort(coords), c("x", "y", "z")))
     stop(sQuote("coords"), " should be a permutation of c('x', 'y', 'z')")
   if (!all(coords %in% names(x$summary)))
@@ -235,11 +237,21 @@ as.mesh3d.tri <- function(x, z, col = "gray",
 
 # rendering support
 
-dot3d.mesh3d <- function(x, ..., front = "points", back = "points")
+dot3d.mesh3d <- function(x, ..., front = "points", back = "points") {
+  if (missing(front) && !is.null(x$material$front))
+    front <- x$material$front
+  if (missing(back) && !is.null(x$material$back))
+    back <- x$material$back
   shade3d.mesh3d(x, ..., front = front, back = back)
+}
 
-wire3d.mesh3d <- function(x, ..., front = "lines", back = "lines")
+wire3d.mesh3d <- function(x, ..., front = "lines", back = "lines") {
+  if (missing(front) && !is.null(x$material$front))
+    front <- x$material$front
+  if (missing(back) && !is.null(x$material$back))
+    back <- x$material$back
   shade3d.mesh3d(x, ..., front = front, back = back)
+}
 
 allowedMeshColor <- function(meshColor, modes) {
   meshColor != "edges" || 
@@ -251,6 +263,10 @@ shade3d.mesh3d <- function( x, override = TRUE,
                              texcoords = NULL, 
                              ...,
                              front = "filled", back = "filled") {
+  if (missing(front) && !is.null(x$material$front))
+    front <- x$material$front
+  if (missing(back) && !is.null(x$material$back))
+    back <- x$material$back
   argMaterial <- c(list(front = front, back = back), .getMaterialArgs(...))
   xHasColor <- !is.null(x$material) && !is.null(x$material$color)
   hasMeshColor <- !missing(meshColor)
@@ -336,8 +352,7 @@ shade3d.mesh3d <- function( x, override = TRUE,
   getArgs <- function(inds) {
     args <- c(list(x = vertices[as.numeric(inds),]), material)
     if (!is.null(texcoords))
-      args$texcoords <- cbind(repfn(texcoords[,1], inds, FALSE),
-                              repfn(texcoords[,2], inds, FALSE))
+      args$texcoords <- texcoords[as.numeric(inds),]
     if (!is.null(normals))
       args$normals <- normals[as.numeric(inds),]
     args$color <- repfn(args$color, inds, FALSE)

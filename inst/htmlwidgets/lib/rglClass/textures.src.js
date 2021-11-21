@@ -6,6 +6,19 @@
      * @instance
      */
      
+    rglwidgetClass.prototype.getTexFilter = function(filter) {
+      var gl = this.gl || this.initGL();
+      switch(filter) {
+        case "nearest": return gl.NEAREST;
+        case "linear": return gl.LINEAR;
+        case "nearest.mipmap.nearest": return gl.NEAREST_MIPMAP_NEAREST;
+        case "linear.mipmap.nearest": return gl.LINEAR_MIPMAP_NEAREST;
+        case "nearest.mipmap.linear": return gl.NEAREST_MIPMAP_LINEAR;
+        case "linear.mipmap.linear": return gl.LINEAR_MIPMAP_LINEAR;
+        default: console.error("Unknown filter: "+filter);
+      }
+    };
+     
     /**
      * Handle a texture after its image has been loaded
      * @param { Object } texture - the gl texture object
@@ -45,6 +58,7 @@
           self = this;
 
        image.onload = function() {
+
          var w = image.width,
              h = image.height,
              canvasX = self.getPowerOfTwo(w),

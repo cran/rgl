@@ -6,7 +6,8 @@
 Add a 2D plot or a legend in the background of an RGL window.
 }
 \usage{
-bgplot3d(expression, bg.color = getr3dDefaults("bg", "color"), ...)
+bgplot3d(expression, bg.color = getr3dDefaults("bg", "color"), 
+         magnify = 1, ...)
 legend3d(...)
 }
 \arguments{
@@ -16,8 +17,14 @@ Any plotting commands to produce a plot.
   \item{bg.color}{
 The color to use for the background.
 }
+  \item{magnify}{
+Multiplicative factor to apply to size of window when producing background 
+plot.
+  }
   \item{...}{
-Arguments to pass to the \code{\link{bg3d}} or \code{\link{legend}} function.
+For \code{legend3d}, arguments to pass to \code{bgplot3d}
+or \code{\link{legend}}; for \code{bgplot3d}, 
+arguments to pass to \code{\link{bg3d}}.
 }
 }
 \details{

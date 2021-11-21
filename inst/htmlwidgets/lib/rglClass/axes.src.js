@@ -51,8 +51,11 @@
               val = newval;
             }
           }
-          result[dim] = vertices[best].slice(0,3);
-          result[dim][dim] = undefined;
+          if (typeof best !== "undefined") {
+            result[dim] = vertices[best].slice(0,3);
+            result[dim][dim] = undefined;
+          } else
+            result[dim] = undefined;
         }
       }
       return result;
@@ -78,8 +81,8 @@
           }
           break;
         case "fixedstep":
-          len = Math.floor(range/obj.axes.unit[dim]);
-          delta = obj.axes.unit[dim];
+          len = Math.floor(range/obj.axes.step[dim]);
+          delta = obj.axes.step[dim];
           for (i = 0; i < len; i++)
             result[dim].push(i*delta);          
           break;
@@ -199,7 +202,7 @@
           for (i = 0; i < locations.length; i++) {
             if (Math.abs(values[i])/max < Math.pow(10, -5))
               values[i] = 0;
-            labels.push(this.signif(values[i], 5).toString());
+            labels.push(this.signif(values[i], 4).toString());
           }
           obj.axes.nticks[dim] = locations.length;  
         }
@@ -243,7 +246,7 @@
       bboxMV.scale(scale[0], scale[1], scale[2]);
       bboxMV.translate(bbox[0], bbox[2], bbox[4]);
       bboxMV.multRight(saved.mvMatrix);
-      this.mvMatrix = bboxMV;
+      this.mvMatrix = obj.mvMatrix = bboxMV;
       
       if (this.prmvMatrix === null)
         saved.prmvMatrix = null;
@@ -251,6 +254,8 @@
         saved.prmvMatrix = new CanvasMatrix4(this.prmvMatrix);
         
       this.setprmvMatrix();
+      obj.prmvMatrix = this.prmvMatrix;
+      
       return saved;
     };
     

@@ -38,17 +38,17 @@ the vertices.
 \details{
   
   The \code{meshColor} argument controls how material colours and textures are interpreted.  This parameter
-was added in \pkg{rgl} version 0.100.1 (0.100.27 for \code{dot3d}.  Possible values are:
+was added in \pkg{rgl} version 0.100.1 (0.100.27 for \code{dot3d}).  Possible values are:
 \describe{
 \item{\code{"vertices"}}{Colours and texture coordinates are applied by vertex, in the order
 they appear in the \code{x$vb} matrix.}
-\item{\code{"edges"}}{Colours and textures are applied to each edge:  first to the segments in the \code{x$is} matrix, then
+\item{\code{"edges"}}{Colours are applied to each edge:  first to the segments in the \code{x$is} matrix, then
 the 
 3 edges of each triangle in the \code{x$it} matrix, then the 4
 edges of each quad in the \code{x$ib} matrix.  This mode
 is only supported if both front and back materials are
 \code{"lines"}, and the mesh contains no points.}
-\item{\code{"faces"}}{Colours and textures are applied to each face:  first to the
+\item{\code{"faces"}}{Colours are applied to each face:  first to the
 triangles in the \code{it} matrix, then to the quads in the \code{ib}
 matrix.  Not compatible with meshes containing points or segments.}
 \item{\code{"legacy"}}{Colours and textures are applied in the same way
@@ -71,6 +71,22 @@ draws twice at the same location, which copy is visible
 depends on the order of drawing and the
 \code{\link{material3d}("depth_test")}
 setting.  
+
+Whether points, lines or solid faces are drawn is
+determined in 3 steps:
+\enumerate{
+\item{If arguments \code{"front"} or \code{"back"} are
+specified in the call, those are used.}
+\item{If one or both of those arguments are not
+specified, but the material properties are present in
+the object, those are used.}
+\item{If values are not specified in either of those
+places, \code{shade3d} draws filled surfaces,
+\code{wire3d} draws lines, and \code{dot3d} draws points.
+}
+}
+Note:  For some versions of rgl up to version 0.107.15, 
+rule 2 above was not respected.
 }
 \value{
   \code{dot3d}, \code{wire3d}, and \code{shade3d} are called for their side effect

@@ -39,6 +39,7 @@
 pre > code.sourceCode { white-space: pre; position: relative; }
 pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
 div.sourceCode { margin: 1em 0; }
 pre.sourceCode { margin: 0; }
@@ -153,17 +154,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="what-is-the-problem" class="section level2">
 <h2>What is the problem?</h2>
 <p><a href="https://pkgdown.r-lib.org/">pkgdown</a> is an R package that makes it easy to build a web site for your package. However, the current version 1.6.1 on CRAN doesn’t work so well for packages whose examples use RGL or other packages like <a href="http://rstudio.github.io/leaflet/">leaflet</a> that use <a href="http://www.htmlwidgets.org">htmlwidgets</a>. This document describes current progress in supporting both of these.</p>
-<p>The main problem for <a href="https://pkgdown.r-lib.org/">pkgdown</a> support is that RGL and other <a href="http://www.htmlwidgets.org">htmlwidgets</a> users require multiple Javascript libraries to be linked to each web page. <code>pkgdown</code> 1.6.1 can’t do this, but the current development version on Github adds support for additional dependent libraries. This also requires changes to <a href="https://downlit.r-lib.org/">downlit</a>, and for other widgets, <a href="https://github.com/ramnathv/htmlwidgets/pull/404">changes to htmlwidgets</a>.</p>
+<p>The main problem for <a href="https://pkgdown.r-lib.org/">pkgdown</a> support is that RGL and other <a href="http://www.htmlwidgets.org">htmlwidgets</a> users require multiple Javascript libraries to be linked to each web page. <code>pkgdown</code> 1.6.1 can’t do this, but the current development version on Github adds support for additional dependent libraries. This also require <a href="https://downlit.r-lib.org/">downlit</a> version 0.4.0 or higher.</p>
 </div>
 <div id="installing-the-changes" class="section level2">
 <h2>Installing the changes</h2>
 <p>Installing the changes is fairly easy. Make sure you have the <a href="https://remotes.r-lib.org/">remotes</a> package installed, then run</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>remotes<span class="sc">::</span><span class="fu">install_github</span>(<span class="fu">c</span>(<span class="st">&quot;rstudio/webshot2&quot;</span>,</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>                          <span class="st">&quot;rstudio/chromote&quot;</span>,</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>                          <span class="st">&quot;r-lib/downlit&quot;</span>,</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>                          <span class="st">&quot;dmurdoch/pkgdown@issue1689&quot;</span>,</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>                          <span class="st">&quot;dmurdoch/htmlwidgets@rglpatch&quot;</span>))</span></code></pre></div>
-<p>(Note: this isn’t the latest devel version of <code>pkgdown</code>; as of July 28, 2021 it’s not working…).</p>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>                          <span class="st">&quot;r-lib/pkgdown&quot;</span>))</span></code></pre></div>
 <p>With these development version packages installed, you should see RGL or <code>leaflet</code> output appear automatically in examples. The RGL output is set up to mimic what would happen in a <code>knitr</code> document that uses</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">setupKnitr</span>(<span class="at">autoprint =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
 <p>i.e. the output RGL commands will automatically be included in the display. Low-level changes will be collected into a single display:</p>
@@ -214,7 +212,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="is-this-safe-to-use" class="section level2">
 <h2>Is this safe to use?</h2>
 <p>These are development versions of the packages, so they may contain bugs, either in my changes or in other unreleased changes. I don’t recommend you use them in regular production code. To re-install released versions of the packages, run</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="fu">c</span>(<span class="st">&quot;downlit&quot;</span>, <span class="st">&quot;pkgdown&quot;</span>, <span class="st">&quot;htmlwidgets&quot;</span>, <span class="st">&quot;rgl&quot;</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="fu">c</span>(<span class="st">&quot;pkgdown&quot;</span>, <span class="st">&quot;rgl&quot;</span>))</span></code></pre></div>
 <p>If you do use them and notice any bugs, please <a href="https://github.com/dmurdoch/rgl/issues">report them</a>!</p>
 </div>
 

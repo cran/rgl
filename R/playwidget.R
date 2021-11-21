@@ -1,15 +1,13 @@
 
-#' Widget output function for use in Shiny
-#'
-#' @export
+# Widget output function for use in Shiny
+
 playwidgetOutput <- function(outputId, width = '0px', height = '0px') {
 	registerShinyHandlers()
   shinyWidgetOutput(outputId, 'rglPlayer', width, height, package = 'rgl')
 }
 
-#' Widget render function for use in Shiny
-#'
-#' @export
+# Widget render function for use in Shiny
+
 renderPlaywidget <- function(expr, env = parent.frame(), quoted = FALSE, outputArgs = list()) {
 	registerShinyHandlers()
   if (!quoted) expr <- substitute(expr)  # force quoted
@@ -141,11 +139,16 @@ playwidget <- function(sceneId, controls, start = 0, stop = Inf, interval = 0.05
   result
 }
 
-toggleWidget <- function(sceneId, ids = integer(), 
+toggleWidget <- function(sceneId, ids = tagged3d(tags), tags = NULL, 
                          hidden = integer(),
                          subscenes = NULL, 
-                         label = deparse(substitute(ids)), 
-                         ...) 
+                         label, 
+                         ...) {
+  if (missing(label))
+    if (missing(ids)) 
+       label <- paste(tags, collapse = ", ")
+    else 
+       label <- deparse(substitute(ids)) 
   playwidget(sceneId, 
              subsetControl(subsets = list(ids, hidden), subscenes = subscenes),
              start = 0, stop = 1,
@@ -153,3 +156,4 @@ toggleWidget <- function(sceneId, ids = integer(),
              buttonLabels = label,
              interval = 1,
              ...)
+}

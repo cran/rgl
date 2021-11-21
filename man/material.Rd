@@ -33,6 +33,7 @@ rgl.material(
   polygon_offset = c(0.0, 0.0),
   margin       = "",
   floating     = FALSE,
+  tag          = "",
   ...
 )
 material3d(...)
@@ -124,6 +125,9 @@ material3d(...)
   \item{margin, floating}{Used mainly for text to
   draw annotations in the margins, but supported by
   most kinds of objects:  see \code{\link{mtext3d}}.}
+  \item{tag}{A length 1 string value.  These
+  may be used to identify objects, or encode other meta
+  data about the object.}
   \item{...}{Any of the arguments above can
   be passed to \code{material3d}; see Details below.  \code{rgl.material} will ignore others.}
 }
@@ -134,10 +138,40 @@ There is one read-only property that can be queried
 but not set:
 
 \describe{
-\item{isTransparent}{Is the current colour transparent?}
+\item{isTransparent}{Is the current color transparent?}
 }
   
   Only one side at a time can be culled.
+  
+  Object display colors are determined as follows:
+\itemize{
+\item{If \code{lit = FALSE}, an element of the \code{color} vector property is displayed without modification.  See documentation for individual objects for information on which element is chosen.}
+\item{If \code{lit = TRUE}, the color is determined as follows.}
+\enumerate{
+\item{The color is set to the \code{emission} property
+of the object. }
+\item{For each defined light, the following are added:
+\itemize{
+\item{the product of the \code{ambient} color
+of the light and the \code{ambient} color of the object is added.}
+\item{the \code{color} of the
+object is multiplied by the \code{diffuse} color
+of the light and by a constant depending on
+the angle between the surface and the direction to 
+the light, and added.}
+\item{the \code{specular} color of the object
+is multiplied by the \code{specular} color of the 
+light and a constant depending on the \code{shininess}
+of the object and the direction to the light, and
+added.  The \code{shininess} property mainly
+determines the size of the shiny highlight; adjust
+one or both of the \code{specular} colors to change
+its brightness.}
+}
+
+}
+}
+}
   
   The \code{polygon_offset} property is a two element
 vector giving the \samp{factor} and \samp{units} values

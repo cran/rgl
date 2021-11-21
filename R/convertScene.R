@@ -1,3 +1,4 @@
+
 convertScene <- function(x = scene3d(minimal), width = NULL, height = NULL,
                          elementId = NULL,
                          minimal = TRUE, webgl = TRUE,
@@ -115,12 +116,14 @@ convertScene <- function(x = scene3d(minimal), width = NULL, height = NULL,
       return(result)
     }
     
-    if (type %in% c("light", "bboxdeco"))
+    if (type == "light")
       return(result)
+    
+    result["is_transparent"] <- any(obj$colors[,"a"] < 1); # More later...
     
     mat <- getMaterial(id)
     result["is_lit"] <- mat$lit && type %in% c("triangles", "quads", "surface", "planes",
-                 "spheres", "sprites")
+                 "spheres", "sprites", "bboxdeco")
     
     result["is_smooth"] <- mat$smooth && type %in% c("triangles", "quads", "surface", "planes",
                  "spheres")
@@ -131,7 +134,7 @@ convertScene <- function(x = scene3d(minimal), width = NULL, height = NULL,
                                             (!is.null(obj$texcoords) 
                                              || (type == "sprites" && !sprites_3d))
     
-    result["is_transparent"] <- is_transparent <- (has_texture && mat$isTransparent) || any(obj$colors[,"a"] < 1)
+    result["is_transparent"] <- is_transparent <- (has_texture && mat$isTransparent) || result["is_transparent"]
     
     result["depth_sort"] <- depth_sort <- is_transparent && type %in% c("triangles", "quads", "surface",
                         "spheres", "sprites", "text")
@@ -139,7 +142,7 @@ convertScene <- function(x = scene3d(minimal), width = NULL, height = NULL,
     result["fixed_quads"] <- type %in% c("text", "sprites") && !sprites_3d
     result["is_lines"]    <- type %in% c("lines", "linestrip", "abclines")
     result["is_points"]   <- type == "points" || "points" %in% c(mat$front, mat$back)
-    result["is_twosided"] <- type %in% c("quads", "surface", "triangles", "spheres") && 
+    result["is_twosided"] <- type %in% c("quads", "surface", "triangles", "spheres", "bboxdeco") && 
       length(unique(c(mat$front, mat$back))) > 1
     result["fixed_size"]  <- type == "text" || isTRUE(obj$fixedSize)
     result["fat_lines"]   <- mat$lwd != 1 && (result["is_lines"] || 
@@ -292,9 +295,7 @@ convertScene <- function(x = scene3d(minimal), width = NULL, height = NULL,
       "subscene")
   
   #  Execution starts here!
-  
-  result <- NULL
-  
+
   # Do a few checks first
 
   if (!webgl)
@@ -327,6 +328,8 @@ convertScene <- function(x = scene3d(minimal), width = NULL, height = NULL,
   height <- hfactor*rheight
   
   shared <- x$crosstalk$id
+  
+  result <- NULL
   
   initResult()
   
@@ -383,7 +386,7 @@ convertScene <- function(x = scene3d(minimal), width = NULL, height = NULL,
     warning(gettextf("Object type(s) %s not handled",
          paste("'", unknowntypes, "'", sep="", collapse=", ")), domain = NA)
   
-  keep <- types %in% setdiff(knowntypes, c("light", "bboxdeco"))
+  keep <- types %in% setdiff(knowntypes, c("light"))
   ids <- ids[keep]
   cids <- as.character(ids)
   nflags <- flags[keep]
@@ -392,12 +395,6 @@ convertScene <- function(x = scene3d(minimal), width = NULL, height = NULL,
   rownames(flags) <- cids
   fullviewport <- getObj(result$rootSubscene)$par3d$viewport
   
-  for (i in seq_along(ids)) {
-    obj <- getObj(cids[i])
-    if (obj$type == "sprites" && flags[i, "sprites_3d"]) {
-      obj$objects <- NULL
-    }
-  }
   for (i in seq_along(ids)) {
     obj <- getObj(cids[i])
     obj$flags <- nflags[i]
@@ -434,8 +431,24 @@ convertScene <- function(x = scene3d(minimal), width = NULL, height = NULL,
     }
     setObj(cids[i], obj)
   }
+  # Put the data into the buffer
+  buffer <- Buffer$new()
+  for (i in seq_along(ids)) {
+    obj <- getObj(cids[i])
+    # This list needs to match the one in buffer.src.js
+    for (n in c("vertices", "normals", "indices", 
+                "texcoords", "colors", "centers")) {
+      if (!is.null(obj[[n]]))
+        obj[[n]] <- as.character(buffer$addAccessor(t(obj[[n]])))
+    }
+    setObj(cids[i], obj)
+  }
 
   result$context <- list(shiny = inShiny(), rmarkdown = rmarkdownOutput())
-  
+  buffer$closeBuffers()
+  buf <- buffer$as.list()
+
+  result$buffer <- buf
+
   result
 }

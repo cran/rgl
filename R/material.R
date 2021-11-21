@@ -35,6 +35,7 @@ rgl.material <- function(
   polygon_offset = c(0.0, 0.0),
   margin = "",
   floating = FALSE,
+  tag = "",
   ...
 ) {
   # solid or diffuse component
@@ -99,6 +100,11 @@ rgl.material <- function(
 
   margin <- parseMargin(margin, floating = floating)
   
+  # user data
+  
+  tag <- as.character(tag)
+  rgl.string(tag)
+
   # pack data
 
   idata <- as.integer( c( ncolor, lit, smooth, front, back, fog, 
@@ -107,8 +113,9 @@ rgl.material <- function(
                           point_antialias, line_antialias, 
                           depth_mask, depth_test, 
                           margin$coord - 1, margin$edge, floating,
+
                           color) )
-  cdata <- as.character(c( texture ))
+  cdata <- as.character(c( tag, texture ))
   ddata <- as.numeric(c( shininess, size, lwd, polygon_offset, alpha ))
 
   ret <- .C( rgl_material,
@@ -131,7 +138,7 @@ rgl.getmaterial <- function(ncolors, id = NULL) {
   idata[1] <- ncolors
   idata[11] <- ncolors
   
-  cdata <- paste(rep(" ", 512), collapse="")
+  cdata <- rep(paste(rep(" ", 512), collapse=""), 2)
   ddata <- rep(0, 5+ncolors)
   
   ret <- .C( rgl_getmaterial,
@@ -165,7 +172,7 @@ rgl.getmaterial <- function(ncolors, id = NULL) {
        emission = rgb(idata[18], idata[19], idata[20], maxColorValue = 255),
        shininess = ddata[1],
        smooth = idata[3] > 0,
-       texture = if (cdata == "") NULL else cdata,
+       texture = if (cdata[2] == "") NULL else cdata[2],
        textype      = textypes[idata[7]], 
        texmipmap    = idata[8] == 1,
        texminfilter = minfilters[idata[9] + 1],
@@ -183,7 +190,8 @@ rgl.getmaterial <- function(ncolors, id = NULL) {
        isTransparent = idata[26] == 1,
        polygon_offset = ddata[4:5],
        margin = deparseMargin(list(coord = idata[27] + 1, edge = idata[28:30])),
-       floating = idata[31] == 1
+       floating = idata[31] == 1,
+       tag = cdata[1]
        )
                    
 }

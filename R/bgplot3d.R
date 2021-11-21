@@ -1,6 +1,8 @@
 legend3d <- function(...) {
   args <- list(...)
-  idx <- which(names(args) %in% c("sphere", "fogtype", "bg.color"))
+  bgargs <- setdiff(names(formals(bgplot3d)),
+                    c("expression", "..."))
+  idx <- which(names(args) %in% c("sphere", "fogtype", bgargs))
   if (length(idx)) {
     bgargs <- args[idx]
     args <- args[-idx]
@@ -14,14 +16,15 @@ legend3d <- function(...) {
 }
 
 bgplot3d <- function(expression, bg.color = getr3dDefaults("bg", "color"), 
-                     ...) {
+                     magnify = 1, ...) {
   viewport <- par3d("viewport")
-  width <- viewport["width"]
-  height <- viewport["height"]
+  width <- magnify*viewport["width"]
+  height <- magnify*viewport["height"]
   if (width > 0 && height > 0) {
     filename <- tempfile(fileext = ".png")
     png(filename = filename, width = width, height = height,
         bg = bg.color)
+    grDevices::devAskNewPage(FALSE)
     value <- try(expression)  
     dev.off()
     result <- bg3d(texture = filename, col = "white", lit = FALSE, ...)

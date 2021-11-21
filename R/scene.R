@@ -62,7 +62,13 @@ rgl.clear <- function( type = "shapes", subscene = 0 )  {
 ##
 ##
 
-pop3d <- rgl.pop <- function( type = "shapes", id = 0) {
+pop3d <- rgl.pop <- function( type = "shapes", id = 0, tag = NULL) {
+  if (!is.null(tag)) {
+    if (!missing(id))
+      stop("Only one of 'id' and 'tag' should be specified.")
+    allids <- ids3d(intersect(c("shapes", "bboxdeco"), type))
+    id <- allids$id[allids$tag %in% tag]
+  }
   type <- rgl.enum.nodetype(type)
   save <- par3d(skipRedraw = TRUE)
   on.exit(par3d(save))
@@ -80,15 +86,27 @@ pop3d <- rgl.pop <- function( type = "shapes", id = 0) {
   lowlevel()
 }
 
-ids3d <- rgl.ids <- function( type = "shapes", subscene = NA ) {
+ids3d <- rgl.ids <- function( type = "shapes", subscene = NA, tags = FALSE) {
   type <- c(rgl.enum.nodetype(type), 0)
   if (is.na(subscene)) 
-      subscene <- currentSubscene3d()
+    subscene <- currentSubscene3d()
   
   count <- .C( rgl_id_count, as.integer(type), count = integer(1), subscene = as.integer(subscene))$count
   
-  as.data.frame( .C( rgl_ids, as.integer(type), id=integer(count), 
-                                type=rep("",count), subscene = as.integer(subscene) )[2:3] )
+  result <- as.data.frame( .C( rgl_ids, as.integer(type), id=integer(count), 
+                               type=rep("",count), subscene = as.integer(subscene) )[2:3] )
+  
+  if (tags) {
+    result$tag <- rep("", nrow(result))
+    if (NROW(result)) {
+      hasmaterial <- !(result$type %in% c("light", "userviewpoint", "background", "modelviewpoint", "subscene"))
+      result$tag[hasmaterial] <- vapply(result$id[hasmaterial],
+                                        function(id) {
+                                          rgl.getmaterial(0, id = id)$tag
+                                        }, "")
+    }
+  }
+  result
 }
 
 rgl.attrib.count <- function( id, attrib ) {
@@ -105,9 +123,10 @@ rgl.attrib.count <- function( id, attrib ) {
 }
 
 rgl.attrib.ncol.values <- c(vertices=3, normals=3, colors=4, texcoords=2, dim=2,
-            texts=1, cex=1, adj=2, radii=1, centers=3, ids=1,
+            texts=1, cex=1, adj=3, radii=1, centers=3, ids=1,
 	    usermatrix=4, types=1, flags=1, offsets=1,
-	    family=1, font=1, pos=1, fogscale=1, axes=3)
+	    family=1, font=1, pos=1, fogscale=1, axes=3,
+	    indices=1)
 
 rgl.attrib.info <- function( id = ids3d("all", 0)$id, attribs = NULL, showAll = FALSE) {
   ncol <- rgl.attrib.ncol.values
@@ -168,19 +187,20 @@ rgl.attrib <- function( id, attrib, first=1,
                            c("r", "c"),      # dim
                            "text",	         # texts
                            "cex", 	         # cex
-                           c("x", "y"),	     # adj
+                           c("x", "y", "z"), # adj
                            "r",		     # radii
                            c("x", "y", "z"), # centers
                            "id",	     # ids
                            c("x", "y", "z", "w"), # usermatrix
                            "type",	     # types
                            "flag",	     # flags
-			   "offset",         # offsets
-  			   "family",         # family
-  			   "font",           # font
-			   "pos",            # pos
-			   "fogscale",        # fogscale
-			   c("x", "y", "z")   # axes
+			                     "offset",         # offsets
+  			                   "family",         # family
+  			                   "font",           # font
+			                     "pos",            # pos
+			                     "fogscale",        # fogscale
+			                     c("x", "y", "z"),   # axes
+			                     "vertex"          # indices
                            )[[attrib]]
   if (attrib == 14 && count) # flags
     if (id %in% ids3d("lights", subscene = 0)$id)
@@ -201,7 +221,7 @@ rgl.attrib <- function( id, attrib, first=1,
                           "marklen", "expand")
     result <- result[first:last,]
     result <- as.data.frame(t(result))
-    result$mode <- c("custom", "fixedstep", "fixednum", "pretty", "user", "none")[result$mode + 1]
+    result$mode <- c("custom", "fixednum", "fixedstep", "pretty", "user", "none")[result$mode + 1]
   }
   result
 }
@@ -410,7 +430,7 @@ rgl.light <- function( theta = 0, phi = 0, viewpoint.rel = TRUE, ambient = "#FFF
 ##
 ##
 
-rgl.primitive <- function( type, x, y=NULL, z=NULL, normals=NULL, texcoords=NULL, ... ) {
+rgl.primitive <- function( type, x, y=NULL, z=NULL, normals=NULL, texcoords=NULL, indices=NULL, ... ) {
   rgl.material( ... )
 
   type <- rgl.enum.primtype(type)
@@ -422,17 +442,29 @@ rgl.primitive <- function( type, x, y=NULL, z=NULL, normals=NULL, texcoords=NULL
 
   vertex  <- rgl.vertex(x,y,z)
   nvertex <- rgl.nvertex(vertex)
+  
+  if (is.null(indices)) {
+    nindices <- 0
+    indices <- 0 # to avoid pointing out of range
+  } else {
+    nindices <- length(indices)
+    if (!all(indices > 0 & indices <= nvertex))
+      stop("indices out of range")
+  }
+  
   if (nvertex > 0) {
     
     perelement <- c(points=1, lines=2, triangles=3, quadrangles=4, linestrips=1)[type]
-    if (nvertex %% perelement) 
+    if (nindices > 0) {
+      if (nindices %% perelement)
+        stop("Illegal number of indices") 
+    } else if (nvertex %% perelement) 
       stop("Illegal number of vertices")
     
-    idata   <- as.integer( c(type, nvertex, !is.null(normals), !is.null(texcoords) ) )
+    idata   <- as.integer( c(type, nvertex, !is.null(normals), !is.null(texcoords), nindices, indices - 1 ) )
     
     if (is.null(normals)) normals <- 0
     else {
-    
       normals <- xyz.coords(normals, recycle=TRUE)
       x <- rep(normals$x, len=nvertex)
       y <- rep(normals$y, len=nvertex)
@@ -442,7 +474,6 @@ rgl.primitive <- function( type, x, y=NULL, z=NULL, normals=NULL, texcoords=NULL
     
     if (is.null(texcoords)) texcoords <- 0
     else {
-    
       texcoords <- xy.coords(texcoords, recycle=TRUE)
       s <- rep(texcoords$x, len=nvertex)
       t <- rep(texcoords$y, len=nvertex)
@@ -451,7 +482,7 @@ rgl.primitive <- function( type, x, y=NULL, z=NULL, normals=NULL, texcoords=NULL
     
     ret <- .C( rgl_primitive,
       success = as.integer(FALSE),
-      idata,
+      as.integer(idata),
       as.numeric(vertex),
       as.numeric(normals),
       as.numeric(texcoords),
@@ -716,16 +747,15 @@ rgl.texts <- function(x, y=NULL, z=NULL, text, adj = 0.5, pos = NULL, offset = 0
   
   if (!is.null(pos)) {
     npos <- length(pos)
-    stopifnot(all(pos %in% 1:4))
+    stopifnot(all(pos %in% 0:6))
     stopifnot(length(offset) == 1)
     adj <- offset
   } else {
     pos <- 0
     npos <- 1
   }
-  if (length(adj) == 0) adj <- c(0.5, 0.5)
-  if (length(adj) == 1) adj <- c(adj, 0.5)
-  if (length(adj) > 2) warning("Only the first two entries of 'adj' are used")
+  if (length(adj) > 3) warning("Only the first three entries of 'adj' are used")
+  adj <- c(adj, 0.5, 0.5, 0.5)[1:3]
   
   if (!length(text)) {
     if (nvertex)
@@ -772,7 +802,8 @@ rgl.texts <- function(x, y=NULL, z=NULL, text, adj = 0.5, pos = NULL, offset = 0
 ##
 
 rgl.sprites <- function( x, y=NULL, z=NULL, radius=1.0, shapes=NULL, 
-                         userMatrix=diag(4), fixedSize = FALSE, 
+                         userMatrix=diag(4), fixedSize = FALSE,
+                         adj = 0.5, pos = NULL, offset = 0.25,
 			 ... ) {
   rgl.material(...)
 
@@ -780,10 +811,18 @@ rgl.sprites <- function( x, y=NULL, z=NULL, radius=1.0, shapes=NULL,
   ncenter <- rgl.nvertex(center)
   radius  <- rgl.attr(radius, ncenter)
   nradius <- length(radius)
+
+  pos <- as.integer(pos)
+  npos <- length(pos)
+  if (npos) {
+    pos <- rep(pos, length.out = ncenter)
+    adj <- offset
+  }
+  adj <- c(adj, 0.5, 0.5, 0.5)[1:3]
   if (!nradius) stop("No radius specified")
   if (length(shapes) && length(userMatrix) != 16) stop("Invalid 'userMatrix'")
   if (length(fixedSize) != 1) stop("Invalid 'fixedSize'")
-  idata   <- as.integer( c(ncenter,nradius,length(shapes), fixedSize) )
+  idata   <- as.integer( c(ncenter,nradius,length(shapes), fixedSize, npos) )
   
   ret <- .C( rgl_sprites,
     success = as.integer(FALSE),
@@ -791,7 +830,10 @@ rgl.sprites <- function( x, y=NULL, z=NULL, radius=1.0, shapes=NULL,
     as.numeric(center),
     as.numeric(radius),
     as.integer(shapes),
-    as.numeric(userMatrix),
+    as.numeric(t(userMatrix)),
+    as.numeric(adj),
+    pos,
+    as.numeric(offset),
     NAOK=TRUE
   )
 
@@ -937,4 +979,23 @@ selectionFunction3d <- function(proj, region = proj$region) {
     (llx <= x) & (x <= urx) & (lly <= y) & (y <= ury) & 
     (0 <= z) & (z <= 1)
   }
+}
+
+tagged3d <- function(tags = NULL, ids = NULL, full = FALSE, subscene = 0) {
+  if ((missing(tags) + missing(ids)) != 1) 
+    stop("Exactly one of 'tags' and 'ids' should be specified.")
+  all <- ids3d("all", subscene = subscene, tags = TRUE)
+  if (!missing(tags))
+    all <- all[all$tag %in% tags,]
+  else
+    all <- all[match(ids, all$id),]
+  if (full)
+    all
+  else
+    if (!missing(tags) && !is.null(tags)) 
+      all$id
+    else if (!missing(ids) && !is.null(ids))
+      all$tag
+    else
+      NULL
 }

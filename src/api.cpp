@@ -365,13 +365,13 @@ void rgl::rgl_text_attrib(int* id, int* attrib, int* first, int* count, char** r
     
     if (scenenode)
       for (int i=0; i < *count; i++) {
-      	String s = scenenode->getTextAttribute(bbox, *attrib, i + *first);
-      	if (s.length) {
-      	  *result = R_alloc(s.length + 1, 1);
-	  strncpy(*result, s.text, s.length);
-	  (*result)[s.length] = '\0';
-	}
-	result++;
+        String s = scenenode->getTextAttribute(bbox, *attrib, i + *first);
+        if (s.length) {
+          *result = R_alloc(s.length + 1, 1);
+          strncpy(*result, s.text, s.length);
+          (*result)[s.length] = '\0';
+        }
+        result++;
       }
   }
 } 
@@ -539,26 +539,31 @@ void rgl::rgl_primitive(int* successptr, int* idata, double* vertex, double* nor
     int   ignoreExtent = device->getIgnoreExtent() || currentMaterial.marginCoord >= 0;
     int   useNormals = idata[2];
     int   useTexcoords = idata[3];
-    
+    int   nindices = idata[4];
+    int*  indices = idata + 5;
+
     SceneNode* node;
 
     switch(type) {
     case 1: // RGL_POINTS:
-      node = new PointSet( currentMaterial, nvertex, vertex, ignoreExtent);
+      node = new PointSet( currentMaterial, nvertex, vertex, ignoreExtent, nindices, indices);
       break;
     case 2: // RGL_LINES:
-      node = new LineSet( currentMaterial, nvertex, vertex, ignoreExtent);
+      node = new LineSet( currentMaterial, nvertex, vertex, ignoreExtent, nindices, indices);
       break;
     case 3: // RGL_TRIANGLES:
       node = new TriangleSet( currentMaterial, nvertex, vertex, normals, texcoords, 
-                              ignoreExtent, useNormals, useTexcoords);
+                              ignoreExtent, nindices, indices, 
+                              useNormals, useTexcoords);
       break;
     case 4: // RGL_QUADS:
       node = new QuadSet( currentMaterial, nvertex, vertex, normals, texcoords, 
-                              ignoreExtent, useNormals, useTexcoords);
+                              ignoreExtent, nindices, indices,
+                              useNormals, useTexcoords);
       break;
     case 5: // RGL_LINE_STRIP:
-      node = new LineStripSet( currentMaterial, nvertex, vertex, ignoreExtent);
+      node = new LineStripSet( currentMaterial, nvertex, vertex, ignoreExtent, 
+                               nindices, indices);
       break;
     default:
       node = NULL;
@@ -676,7 +681,9 @@ void rgl::rgl_abclines(int* successptr, int* idata, double* bases, double* direc
   *successptr = success;
 }
 
-void rgl::rgl_sprites(int* successptr, int* idata, double* vertex, double* radius, int* shapes, double* userMatrix)
+void rgl::rgl_sprites(int* successptr, int* idata, double* vertex, 
+                      double* radius, int* shapes, double* userMatrix,
+                      double* adj, int* pos, double* offset)
 {
   int success = RGL_FAIL;
 
@@ -688,6 +695,7 @@ void rgl::rgl_sprites(int* successptr, int* idata, double* vertex, double* radiu
     int nradius = idata[1];
     int nshapes = idata[2];
     bool fixedSize = (bool)idata[3];
+    int npos = idata[4];
     int count = 0;
     Shape** shapelist;
     Scene* scene = NULL;
@@ -713,7 +721,7 @@ void rgl::rgl_sprites(int* successptr, int* idata, double* vertex, double* radiu
     success = as_success( device->add( new SpriteSet(currentMaterial, nvertex, vertex, nradius, radius,
                      device->getIgnoreExtent() || currentMaterial.marginCoord >= 0, 
     						     count, shapelist, userMatrix,
-    						     fixedSize, scene) ) );
+    						     fixedSize, scene, adj, npos, pos, *offset) ) );
     CHECKGLERROR;
   }
 
@@ -994,8 +1002,7 @@ void rgl::rgl_material(int *successptr, int* idata, char** cdata, double* ddata)
   mat.floating = idata[29];
   
   int* colors   = &idata[30];
-
-  char*  pixmapfn = cdata[0];
+  char*  pixmapfn = cdata[1];
 
   mat.shininess   = (float) ddata[0];
   mat.size      = (float) ddata[1];
@@ -1008,6 +1015,16 @@ void rgl::rgl_material(int *successptr, int* idata, char** cdata, double* ddata)
 
   mat.alphablend  = false;
   
+  size_t len_tag = strlen(cdata[0]);
+  if (len_tag) {
+    char* in_tag = new char [len_tag + 1];
+    strncpy(in_tag, cdata[0], len_tag);
+    in_tag[len_tag] = '\0';
+    mat.tag = string(in_tag);
+  } else
+    mat.tag = string();
+  
+
   if ( strlen(pixmapfn) > 0 ) {
     mat.texture = new Texture(pixmapfn, mat.textype, mat.mipmap, mat.minfilter, mat.magfilter, mat.envmap);
     if ( !mat.texture->isValid() ) {
@@ -1044,20 +1061,20 @@ void rgl::rgl_getmaterial(int *successptr, int *id, int* idata, char** cdata, do
     if (deviceManager && (device = deviceManager->getCurrentDevice())) {
       RGLView* rglview = device->getRGLView();
       Scene* scene = rglview->getScene();
-    
+
       Shape* shape = scene->get_shape(*id);
       if (shape) 
         mat = shape->getMaterial(); /* success! successptr will be set below */
       else {
-	BBoxDeco* bboxdeco = scene->get_bboxdeco(*id);
-	if (bboxdeco)
-	  mat = bboxdeco->getMaterial();
-	else {
-	  Background* background = scene->get_background(*id);
-	  if (background)
-	    mat = background->getMaterial();
-	  else
-	    return;
+        BBoxDeco* bboxdeco = scene->get_bboxdeco(*id);
+        if (bboxdeco)
+          mat = bboxdeco->getMaterial();
+        else {
+          Background* background = scene->get_background(*id);
+          if (background)
+            mat = background->getMaterial();
+          else
+            return;
         }
       }
     } else
@@ -1075,8 +1092,8 @@ void rgl::rgl_getmaterial(int *successptr, int *id, int* idata, char** cdata, do
                                (unsigned int*) (idata + 8),
                                (unsigned int*) (idata + 9),
                                (bool*) (idata + 20),
-                               static_cast<int>(strlen(cdata[0])),
-                               cdata[0] );
+                               static_cast<int>(strlen(cdata[1])),
+                               cdata[1] );
   } else {
     idata[6] = (int)mat->textype;
     idata[7] = mat->mipmap ? 1 : 0; 
@@ -1084,6 +1101,7 @@ void rgl::rgl_getmaterial(int *successptr, int *id, int* idata, char** cdata, do
     idata[9] = mat->magfilter; 
     idata[20] = mat->envmap ? 1 : 0; 
     cdata[0][0] = '\0';
+    cdata[1][0] = '\0';
   }
   idata[11] = (int) mat->ambient.getRedub();
   idata[12] = (int) mat->ambient.getGreenub();
@@ -1124,6 +1142,13 @@ void rgl::rgl_getmaterial(int *successptr, int *id, int* idata, char** cdata, do
     idata[10] = i;
   } else 
     idata[10] = 0;
+  
+  /* Can't use tag.length() here, because R has highjacked length() */
+  size_t len_tag = strlen(mat->tag.c_str());
+  cdata[0] = R_alloc(len_tag + 1, 1);
+  strncpy(cdata[0], mat->tag.c_str(), len_tag);
+  (cdata[0])[len_tag] = '\0';
+  
   CHECKGLERROR;
   
   *successptr = RGL_SUCCESS;
@@ -1144,7 +1169,7 @@ void rgl::rgl_texts(int* successptr, int* idata, double* adj, char** text, doubl
     FontArray fonts;
     device->getFonts(fonts, *nfonts, family, style, cex, (bool) *useFreeType);
     success = as_success( device->add( new TextSet(currentMaterial, ntext, text, vertex, 
-                                                   adj[0], adj[1],
+                                                   adj[0], adj[1], adj[2],
                    device->getIgnoreExtent() || currentMaterial.marginCoord >= 0, 
     						   fonts, *npos, pos) ) );
     CHECKGLERROR;

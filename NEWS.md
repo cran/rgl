@@ -1,14 +1,62 @@
-# rgl  0.107.14
+# rgl  0.108.3
+
+## Major changes
+
+* Added `getBoundary3d()` function to extract the boundary
+edges of a mesh.
+* Added material property `tag`, a string associated 
+with each object.  The value is reported by `ids3d(tags = TRUE)` and
+may be used to select objects in most functions that use ids,
+but otherwise is 
+largely ignored by `rgl`.  The `tagged3d()` function returns
+information on tags.
+* Primitive types (points, lines, segments, triangles, quads)
+can now accept an `indices` parameter, similar to the 
+indices in `mesh3d` objects.
+* Added `Buffer` object, based on glTF design, for holding binary
+data for `rglwidget()`.
 
 ## Minor changes
 
+* Allowed for a third coordinate in `text3d()`'s `adj` 
+parameter.
+* Added support for `adj`, `pos` and `offset` to 
+`sprites3d()`.
+* Added support for `pos` values of `0` (at specified
+location), `5` (in front of it), and `6` (behind it) in
+`text3d()`, `sprites3d()` and `plotmath3d()`.
 * `crosstalk` is now a Suggested package, rather than
-  a required one.
+a required one.
+* The `Makevars.ucrt` file has been modified with
+contributions from Tomas Kalibera to work with his winutf8
+build of R.
+* `bgplot3d()` no longer pauses for each page when running
+examples.
+* `deldir` version 1.0-2 is incompatible with `rgl`.  Added
+the `checkDeldir()` function to avoid running it.
+* `shade3d()` treated texture coordinates like colors, and
+  duplicated the first one for the whole face when `meshColor = "faces"` was chosen.
+  Instead, they are now treated like vertex coordinates.
+  (Reported by Michael Sumner in issue #145).
+* Corrected the documentation and made the implementations
+of `asHomogeneous()`, `asEuclidean()` etc. more consistent.
+* An `as.rglscene()` generic has been added, though no methods
+are defined in this package.
+* `downlit` 0.4.0 has been released with support for `rgl`, so instructions
+for installing the devel version have been removed.
   
 ## Bug fixes
 
+* Fixed rendering of text as sprites3d() objects.
 * Added `--static` flag to configure script for FreeType
   installation.  (Suggestion of Simon Urbanek and Prof. Brian Ripley.)
+* `shade3d()`, `wire3d()` and `dots3d()` overrode
+  `"front"` and `"back"` material settings in mesh objects.
+* rglwidget() handling of bounding box decorations had
+  several bugs.
+* `rgl` could not find routines in the DLL on some Windows
+installs (Issue 148.)
+* Some cases where allocations were not protected have been fixed.
   
 # rgl  0.107.10
 
