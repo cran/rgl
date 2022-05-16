@@ -1,7 +1,7 @@
 e73499cb89e0d6e97b8ba271c46739fd *COPYING
-956ed470275aaa2f0c086a984a14199e *DESCRIPTION
+8ae7cf16011d3120219c0c04474cd793 *DESCRIPTION
 57dd2eabecd0289e7d170f2647e4a073 *NAMESPACE
-da2141894f7e532d9ac7ef25aeeee586 *NEWS.md
+c635a52c67d4fe2682dc53b6b292e678 *NEWS.md
 664118a44d0cbf5e0754bf2b3fcce21b *R/Sweave.R
 67e457f4a3ecfa12f8b911faf11e7ab6 *R/addNormals.mesh3d.R
 d62767b6f3a51c93f666e30e437e5556 *R/animate.R
@@ -78,7 +78,7 @@ b3dd6af59f03c97611ad8f6632896fb5 *R/thigmophobe3d.R
 7d0644c5d745d7113dc1257bd601f9b9 *R/webGL.R
 3f3ec6108c694f57c77e23dbf0063e9b *R/webGLcontrols.R
 bf49a233d31d1b3db72726d570ee0918 *R/windows/noOpenGL.R
-8b4eb2be806d8b9409ac6796426be750 *R/zzz.R
+4fe1a53ccd9c0e76a42bb8271928be6c *R/zzz.R
 7c2fb769af90cc28bb294176df5e2631 *README.md
 70fb7cb1338b501b441f81a689d524f4 *build/vignette.rds
 10e89b551cff8c2453ea69fde1b97493 *cleanup
@@ -111,16 +111,16 @@ ef13a1c10dfbc78464e5b704b65447c1 *demo/shinyTabs.R
 5544dce93555cfaced50ee41283e9e58 *inst/demodata/region.dat
 6972272ab9d51f9c3095525f0c17da15 *inst/doc/WebGL.R
 94dc3fbf1243230dbf06a936366b5f82 *inst/doc/WebGL.Rmd
-1e89146eeb1c903a810d0ae7a09eceb6 *inst/doc/WebGL.html
+bafab5c817c9b29b391a7b0baf8f6d58 *inst/doc/WebGL.html
 a79d75b941aa253abda2edb27625cda2 *inst/doc/pkgdown.R
 ef5db6d0057d0cb6b79f7a79fb43a6b1 *inst/doc/pkgdown.Rmd
-c28c913f95745cd5de7c4ba5beabeb69 *inst/doc/pkgdown.html
+67a8d25e572a71f86433f41c9153a1c1 *inst/doc/pkgdown.html
 f99aac24de4ff50cdbf669f6c13844a6 *inst/doc/rgl.R
 2ba4aa9981b92a1c1a1d651280738f9f *inst/doc/rgl.Rmd
-633094e6526e19e6084ee0131946d8bd *inst/doc/rgl.html
+0b64fc269c7c42bec7cacde259467485 *inst/doc/rgl.html
 9cc7fbabd59616c69724412ddf87d9e3 *inst/doc/transparency.R
 002b07c7e555fada70d405ea390aacd2 *inst/doc/transparency.Rmd
-e56e6a80442fe11e7df56918af689dd2 *inst/doc/transparency.html
+4a5075d336b590884d6e90d2862e0743 *inst/doc/transparency.html
 b4ef592c88333c7c509dd74fcd1912d9 *inst/fonts/FreeMono.ttf
 867469f13ff81dec9adf2ae2f6ea2899 *inst/fonts/FreeSans.ttf
 dc0004a804503e126bc99998c7a1c677 *inst/fonts/FreeSerif.ttf
@@ -137,7 +137,7 @@ a08852df1baf53653e9eec1d4b88dca4 *inst/htmlwidgets/lib/rglClass/mouse.src.js
 f4fe316e7edf6f15d154c6e6e9300471 *inst/htmlwidgets/lib/rglClass/pretty.src.js
 84ead2f39fe70612d6b8558252d88789 *inst/htmlwidgets/lib/rglClass/projection.src.js
 affdd5bb24638f5909595f0e7d9c7713 *inst/htmlwidgets/lib/rglClass/rgl.css
-dbb5a537dec81b9a3b436cdd70d41ace *inst/htmlwidgets/lib/rglClass/rglClass.min.js
+afbff4023e94e8413226fde8da20d010 *inst/htmlwidgets/lib/rglClass/rglClass.min.js
 1bad1a7d7c62acaa8c1de102879360cf *inst/htmlwidgets/lib/rglClass/rglClass.src.js
 ee768f63c54007c8d6b3e688688c60fe *inst/htmlwidgets/lib/rglClass/rglTimer.src.js
 e79d4ff9bca20785c3fddfcca21d36e3 *inst/htmlwidgets/lib/rglClass/selection.src.js
@@ -475,7 +475,7 @@ f98a5fba15e844bd7696aff31d2cb65c *src/gl2ps.h
 1d04ab6833c14ba95e190ecdd7a9ed71 *src/glgui.h
 250f1cc2cafe47ca5528170a8e5ff5bf *src/gui.cpp
 2ca359dab037ad2aef6ee87226d34402 *src/gui.h
-1923a61126b606ebeb4209768444739e *src/init.cpp
+4d2456024b14dd222632f9b49ce29677 *src/init.cpp
 190208962b2847c69e26112f22078f92 *src/init.h
 fe7602c5e1f839e5a131e1e75e95a219 *src/lib.h
 c94cdb35c96c9e8ea373f7c0b86a6fbc *src/opengl.h
