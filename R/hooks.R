@@ -27,12 +27,12 @@ rglId <- function(ids = integer()) {
 
 print.rglId <- function(x, rglwidget = getOption("rgl.printRglwidget", FALSE),
 			...) {
-  if (rglwidget)
-    # FIXME:  For lowlevel, this should replace the scene, not update the history
-    print(rglwidget(...))
-  else if (in_pkgdown_example())
-    pkgdown_print(x)
-  else if (in_pkgdown()) # Must not have pkgdown_print defined
-    cat("")
+  if (!par3d("skipRedraw")) {
+    if (rglwidget)
+      # FIXME:  For lowlevel, this should replace the scene, not update the history
+      print(rglwidget(...))
+    else if (in_pkgdown_example())
+      pkgdown::pkgdown_print(x)
+  }
   invisible(x)
 }

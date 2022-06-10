@@ -338,61 +338,50 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <div id="TOC">
 <ul>
 <li><a href="#what-is-the-problem">What is the problem?</a></li>
-<li><a href="#installing-the-changes">Installing the changes</a></li>
+<li><a href="#using-rgl-in-examples.">Using `RGL in examples.</a></li>
 <li><a href="#specifying-the-size-of-figures">Specifying the size of
 figures</a></li>
-<li><a href="#is-this-safe-to-use">Is this safe to use?</a></li>
 </ul>
 </div>
 
 <div id="what-is-the-problem" class="section level2">
 <h2>What is the problem?</h2>
 <p><a href="https://pkgdown.r-lib.org/">pkgdown</a> is an R package that
-makes it easy to build a web site for your package. However, the current
-version 1.6.1 on CRAN doesn’t work so well for packages whose examples
-use RGL or other packages like <a href="http://rstudio.github.io/leaflet/">leaflet</a> that use <a href="http://www.htmlwidgets.org">htmlwidgets</a>. This document
-describes current progress in supporting both of these.</p>
-<p>The main problem for <a href="https://pkgdown.r-lib.org/">pkgdown</a>
-support is that RGL and other <a href="http://www.htmlwidgets.org">htmlwidgets</a> users require multiple
-Javascript libraries to be linked to each web page. <code>pkgdown</code>
-1.6.1 can’t do this, but the current development version on Github adds
-support for additional dependent libraries. This also require <a href="https://downlit.r-lib.org/">downlit</a> version 0.4.0 or
-higher.</p>
+makes it easy to build a web site for your package. However, the
+previous version 1.6.1 on CRAN didn’t work so well for packages whose
+examples use RGL or other packages like <a href="http://rstudio.github.io/leaflet/">leaflet</a> that use <a href="http://www.htmlwidgets.org">htmlwidgets</a>. This document
+described changes that support both of these. The changes are now
+incorporated into <code>pkgdown</code> 2.0.0, so everything but user
+instructions has been removed.</p>
 </div>
-<div id="installing-the-changes" class="section level2">
-<h2>Installing the changes</h2>
-<p>Installing the changes is fairly easy. Make sure you have the <a href="https://remotes.r-lib.org/">remotes</a> package installed, then
-run</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>remotes<span class="sc">::</span><span class="fu">install_github</span>(<span class="fu">c</span>(<span class="st">&quot;rstudio/webshot2&quot;</span>,</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>                          <span class="st">&quot;rstudio/chromote&quot;</span>,</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>                          <span class="st">&quot;r-lib/pkgdown&quot;</span>))</span></code></pre></div>
-<p>With these development version packages installed, you should see RGL
-or <code>leaflet</code> output appear automatically in examples. The RGL
-output is set up to mimic what would happen in a <code>knitr</code>
-document that uses</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">setupKnitr</span>(<span class="at">autoprint =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<div id="using-rgl-in-examples." class="section level2">
+<h2>Using `RGL in examples.</h2>
+<p>If you use RGL in example code, they should appear automatically in
+examples. The RGL output is set up to mimic what would happen in a
+<code>knitr</code> document that uses</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">setupKnitr</span>(<span class="at">autoprint =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
 <p>i.e. the output RGL commands will automatically be included in the
 display. Low-level changes will be collected into a single display:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Show regression plane with z as dependent variable</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rgl)</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="fu">open3d</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Show regression plane with z as dependent variable</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rgl)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">open3d</span>()</span></code></pre></div>
 <pre><code>## null 
 ##   15</code></pre>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">100</span>)</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">100</span>)</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>z <span class="ot">&lt;-</span> <span class="fl">0.2</span><span class="sc">*</span>x <span class="sc">-</span> <span class="fl">0.3</span><span class="sc">*</span>y <span class="sc">+</span> <span class="fu">rnorm</span>(<span class="dv">100</span>, <span class="at">sd =</span> <span class="fl">0.3</span>)</span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>fit <span class="ot">&lt;-</span> <span class="fu">lm</span>(z <span class="sc">~</span> x <span class="sc">+</span> y)</span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="fu">plot3d</span>(x, y, z, <span class="at">type =</span> <span class="st">&quot;s&quot;</span>, <span class="at">col =</span> <span class="st">&quot;red&quot;</span>, <span class="at">size =</span> <span class="dv">1</span>)</span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="co"># No plot here, because of the planes3d() call below</span></span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>coefs <span class="ot">&lt;-</span> <span class="fu">coef</span>(fit)</span>
-<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>a <span class="ot">&lt;-</span> coefs[<span class="st">&quot;x&quot;</span>]</span>
-<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>b <span class="ot">&lt;-</span> coefs[<span class="st">&quot;y&quot;</span>]</span>
-<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>c <span class="ot">&lt;-</span> <span class="sc">-</span><span class="dv">1</span></span>
-<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>d <span class="ot">&lt;-</span> coefs[<span class="st">&quot;(Intercept)&quot;</span>]</span>
-<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a><span class="fu">planes3d</span>(a, b, c, d, <span class="at">alpha =</span> <span class="fl">0.5</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">100</span>)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">100</span>)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>z <span class="ot">&lt;-</span> <span class="fl">0.2</span><span class="sc">*</span>x <span class="sc">-</span> <span class="fl">0.3</span><span class="sc">*</span>y <span class="sc">+</span> <span class="fu">rnorm</span>(<span class="dv">100</span>, <span class="at">sd =</span> <span class="fl">0.3</span>)</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>fit <span class="ot">&lt;-</span> <span class="fu">lm</span>(z <span class="sc">~</span> x <span class="sc">+</span> y)</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="fu">plot3d</span>(x, y, z, <span class="at">type =</span> <span class="st">&quot;s&quot;</span>, <span class="at">col =</span> <span class="st">&quot;red&quot;</span>, <span class="at">size =</span> <span class="dv">1</span>)</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="co"># No plot here, because of the planes3d() call below</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>coefs <span class="ot">&lt;-</span> <span class="fu">coef</span>(fit)</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>a <span class="ot">&lt;-</span> coefs[<span class="st">&quot;x&quot;</span>]</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>b <span class="ot">&lt;-</span> coefs[<span class="st">&quot;y&quot;</span>]</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>c <span class="ot">&lt;-</span> <span class="sc">-</span><span class="dv">1</span></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>d <span class="ot">&lt;-</span> coefs[<span class="st">&quot;(Intercept)&quot;</span>]</span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a><span class="fu">planes3d</span>(a, b, c, d, <span class="at">alpha =</span> <span class="fl">0.5</span>)</span></code></pre></div>
 </div>
 <div id="specifying-the-size-of-figures" class="section level2">
 <h2>Specifying the size of figures</h2>
@@ -425,15 +414,6 @@ override any of <code>fig.width</code>, <code>fig.height</code> and
       fig.asp: 1</code></pre>
 <p>This will make all plots have a width of 5 inches and will make RGL
 plots square.</p>
-</div>
-<div id="is-this-safe-to-use" class="section level2">
-<h2>Is this safe to use?</h2>
-<p>These are development versions of the packages, so they may contain
-bugs, either in my changes or in other unreleased changes. I don’t
-recommend you use them in regular production code. To re-install
-released versions of the packages, run</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="fu">c</span>(<span class="st">&quot;pkgdown&quot;</span>, <span class="st">&quot;rgl&quot;</span>))</span></code></pre></div>
-<p>If you do use them and notice any bugs, please <a href="https://github.com/dmurdoch/rgl/issues">report them</a>!</p>
 </div>
 
 

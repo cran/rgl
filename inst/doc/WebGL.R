@@ -107,7 +107,7 @@ playwidget(list(
                  "Reset", "Slider", "Label"),
   loop = TRUE)
 
-## ----eval = requireNamespace("crosstalk")-------------------------------------
+## ----eval = requireNamespace("crosstalk", quietly=TRUE)-----------------------
 # This example requires the crosstalk package
 # We skip it if crosstalk is not available. 
 
@@ -117,7 +117,7 @@ par3d(mouseMode = "selecting")
 rglwidget(shared = rglShared(ids["data"])) %>% 
 rglMouse()
 
-## ----eval=requireNamespace("crosstalk")---------------------------------------
+## ----eval=requireNamespace("crosstalk", quietly = TRUE)-----------------------
 # This example requires the crosstalk package.  
 # We skip it if crosstalk is not available. 
 

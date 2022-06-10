@@ -8,6 +8,40 @@
 
 using namespace rgl;
 
+/* Code for debugging 
+ 
+static void printMatrix(const char* msg, double* m) {
+  Rprintf("%s:\n%f %f %f %f\n%f %f %f %f\n%f %f %f %f\n%f %f %f %f\n",
+          msg, m[0], m[4], m[8], m[12],
+                                  m[1], m[5], m[9], m[13],
+                                                     m[2], m[6], m[10], m[14],
+                                                                         m[3], m[7], m[11], m[15]);
+}
+
+static void printMatrix(const char* msg, Matrix4x4 m) {
+  double data[16];
+  m.getData(data);
+  printMatrix(msg, data);
+}
+
+static void printMVMatrix(const char* msg) {
+  double m[16] = {0};
+#ifndef RGL_NO_OPENGL
+  glGetDoublev(GL_MODELVIEW_MATRIX, m);
+#endif
+  printMatrix(msg, m);
+}
+
+static void printPRMatrix(const char* msg) {
+  double m[16] = {0};
+#ifndef RGL_NO_OPENGL
+  glGetDoublev(GL_PROJECTION_MATRIX, m);
+#endif
+  printMatrix(msg, m);  
+}
+
+*/
+
 //////////////////////////////////////////////////////////////////////////////
 //
 // CLASS
@@ -46,8 +80,9 @@ Subscene::Subscene(Embedding in_viewport, Embedding in_projection, Embedding in_
 
 Subscene::~Subscene() 
 {
-  for (std::vector<Subscene*>::iterator i = subscenes.begin(); i != subscenes.end(); ++ i ) 
-    delete (*i);
+  // Don't destroy contained subscenes:  they're
+  // still in the scene list
+  
   for (int i=0; i<5; i++) 
     if (cleanupCallback[i]) 
       (*cleanupCallback[i])(userData + 3*i);
@@ -137,18 +172,25 @@ void Subscene::addShape(Shape* shape)
     zsortShapes.push_back(shape);
   } else if ( shape->isClipPlane() ) {
     clipPlanes.push_back(static_cast<ClipPlaneSet*>(shape));
-    shrinkBBox();
+    newBBox();
   } else
     unsortedShapes.push_back(shape);
 }
 
 void Subscene::addBBox(const AABox& bbox, bool changes)
 {
-  data_bbox += bbox;
   bboxChanges |= changes;
-  intersectClipplanes();
-  if (parent && !ignoreExtent) 
-    parent->addBBox(data_bbox, changes);
+  if (data_bbox.isValid()) {
+    /* Update will make it test as valid but not
+     * handle other shapes, so we don't
+     * update unless it is already valid */
+    data_bbox += bbox;
+    intersectClipplanes();
+    if (parent && !ignoreExtent) {
+      parent->bboxChanges |= changes;
+      parent->newBBox();
+    }
+  }
 }
   
 void Subscene::addLight(Light* light)
@@ -161,8 +203,8 @@ void Subscene::addSubscene(Subscene* subscene)
   subscenes.push_back(subscene);
   subscene->parent = this;
   subscene->newEmbedding();
-  if (!subscene->getIgnoreExtent()) 
-    addBBox(subscene->getBoundingBox(), subscene->bboxChanges);
+  if (!subscene->getIgnoreExtent())
+    newBBox();
 }
 
 void Subscene::hideShape(int id)
@@ -184,7 +226,7 @@ void Subscene::hideShape(int id)
     unsortedShapes.erase(std::find_if(unsortedShapes.begin(), unsortedShapes.end(),
                          std::bind(&sameID, placeholders::_1, id)));
       
-  shrinkBBox();
+  newBBox();
 }
 
 void Subscene::hideLight(int id)
@@ -220,7 +262,7 @@ Subscene* Subscene::hideSubscene(int id, Subscene* current)
         current = (*i)->parent;  
       (*i)->parent = NULL;
       subscenes.erase(i);
-      shrinkBBox();
+      newBBox();
       return current;
     } 
   }
@@ -293,18 +335,18 @@ Subscene* Subscene::whichSubscene(int mouseX, int mouseY)
   return result;
 }
 
-int Subscene::getAttributeCount(AABox& bbox, AttribID attrib)
+int Subscene::getAttributeCount(SceneNode* subscene, AttribID attrib)
 {
   switch (attrib) {
     case IDS:	   
     case TYPES:    return (int)shapes.size();
   }
-  return SceneNode::getAttributeCount(bbox, attrib);
+  return SceneNode::getAttributeCount(subscene, attrib);
 }
 
-void Subscene::getAttribute(AABox& bbox, AttribID attrib, int first, int count, double* result)
+void Subscene::getAttribute(SceneNode* subscene, AttribID attrib, int first, int count, double* result)
 {
-  int n = getAttributeCount(bbox, attrib);
+  int n = getAttributeCount(subscene, attrib);
   int ind = 0;
 
   if (first + count < n) n = first + count;
@@ -318,19 +360,19 @@ void Subscene::getAttribute(AABox& bbox, AttribID attrib, int first, int count, 
         }
         return;
     }  
-    SceneNode::getAttribute(bbox, attrib, first, count, result);
+    SceneNode::getAttribute(subscene, attrib, first, count, result);
   }
 }
 
-String Subscene::getTextAttribute(AABox& bbox, AttribID attrib, int index)
+String Subscene::getTextAttribute(SceneNode* subscene, AttribID attrib, int index)
 {
-  int n = getAttributeCount(bbox, attrib);
+  int n = getAttributeCount(subscene, attrib);
   if (index < n && attrib == TYPES) {
     char* buffer = R_alloc(20, 1);    
     shapes[index]->getTypeName(buffer, 20);
     return String(static_cast<int>(strlen(buffer)), buffer);
   } else
-    return SceneNode::getTextAttribute(bbox, attrib, index);
+    return SceneNode::getTextAttribute(subscene, attrib, index);
 }
 
 void Subscene::renderClipplanes(RenderContext* renderContext)
@@ -544,31 +586,17 @@ void Subscene::update(RenderContext* renderContext)
   renderContext->subscene = this;
   
   setupViewport(renderContext);
-  if (bboxChanges) 
-    calcDataBBox();
   
-  Sphere total_bsphere;
-
-  if (data_bbox.isValid()) {
-    
-    // 
-    // GET DATA VOLUME SPHERE
-    //
-
-    total_bsphere = Sphere( (bboxdeco) ? bboxdeco->getBoundingBox(data_bbox) : data_bbox, getModelViewpoint()->scale );
-    if (total_bsphere.radius <= 0.0)
-      total_bsphere.radius = 1.0;
-
-  } else {
-    total_bsphere = Sphere( Vertex(0,0,0), 1 );
-  }
+  // Make sure bounding box is up to date.
+  
+  getBoundingBox();
   
   // Now get the matrices.  First we compute the projection matrix.  If we're inheriting,
   // just use the parent.
   
   if (do_projection > EMBED_INHERIT) {
     projMatrix.getData(saveprojection);
-    setupProjMatrix(renderContext, total_bsphere);
+    setupProjMatrix(renderContext);
   } else
     projMatrix = parent->projMatrix;
   
@@ -577,7 +605,7 @@ void Subscene::update(RenderContext* renderContext)
   // every subscene.
   
   if (do_projection > EMBED_INHERIT || do_model > EMBED_INHERIT)
-    setupModelViewMatrix(renderContext, total_bsphere.center);
+    setupModelViewMatrix(renderContext);
   else
     modelMatrix = parent->modelMatrix;
     
@@ -622,6 +650,10 @@ void Subscene::render(RenderContext* renderContext, bool opaquePass)
     glClear(clearFlags);
   }
   SAVEGLERROR;
+  
+  // Make sure bounding boxes are up to date.
+  
+  getBoundingBox();
   
   // Now render the current scene.  First we load the projection matrix, then the modelview matrix.
   
@@ -734,18 +766,40 @@ void Subscene::render(RenderContext* renderContext, bool opaquePass)
 #endif
 }
 
+// static void printbbox(AABox bbox) {
+//   Rprintf("%.3g %.3g %.3g %.3g %.3g %.3g\n",
+//           bbox.vmin.x, bbox.vmax.x,
+//           bbox.vmin.y, bbox.vmax.y,
+//           bbox.vmin.z, bbox.vmax.z);  
+// }
+
 void Subscene::calcDataBBox()
 {
   data_bbox.invalidate();
   
   std::vector<Subscene*>::const_iterator subiter;
   bboxChanges = false;
-  
   for(subiter = subscenes.begin(); subiter != subscenes.end(); ++subiter) {
     Subscene* subscene = *subiter;
     if (!subscene->getIgnoreExtent()) {
-      subscene->calcDataBBox();
-      data_bbox += subscene->getBoundingBox();
+      AABox sub_bbox = subscene->getBoundingBox();
+      
+      if (!sub_bbox.isEmpty()) {
+        Matrix4x4 M;
+        if (subscene->getEmbedding(EM_MODEL) > EMBED_INHERIT) {
+          double matrix[16];
+          subscene->getUserMatrix(matrix);
+          M.loadData(matrix);
+        } else
+          M.setIdentity();
+        if (subscene->getEmbedding(EM_PROJECTION) > EMBED_INHERIT) {
+          double scale[3];
+          subscene->getScale(scale);
+          M = Matrix4x4::scaleMatrix(scale[0], scale[1], scale[2])*M;
+        }
+        sub_bbox = sub_bbox.transform(M);
+        data_bbox += sub_bbox;
+      }
       bboxChanges |= subscene->bboxChanges;
     }
   }
@@ -760,6 +814,8 @@ void Subscene::calcDataBBox()
     }
   }
   intersectClipplanes(); 
+  if (!data_bbox.isValid())
+    data_bbox.setEmpty();
 }
 
 void Subscene::intersectClipplanes(void) 
@@ -772,18 +828,22 @@ void Subscene::intersectClipplanes(void)
   }
 }
 
-/* Call this when adding a clipplane that can shrink things */
-void Subscene::shrinkBBox(void)
+/* Call this when the bbox changes */
+void Subscene::newBBox(void)
 {
-  if (parent) parent->shrinkBBox();
-  else {
-      calcDataBBox();
-  }
+  data_bbox.invalidate();
+  if (parent && !ignoreExtent) 
+    parent->newBBox();
 }
+
 // ---------------------------------------------------------------------------
 void Subscene::setIgnoreExtent(int in_ignoreExtent)
 {
-  ignoreExtent = (bool)in_ignoreExtent;
+  if (ignoreExtent != (bool)in_ignoreExtent) {
+    ignoreExtent = (bool)in_ignoreExtent;
+    if (parent)
+      parent->newBBox();
+  }
 }
 
 void Subscene::setupViewport(RenderContext* rctx)
@@ -803,12 +863,12 @@ void Subscene::setupViewport(RenderContext* rctx)
   pviewport = rect;
 }
 
-void Subscene::setupProjMatrix(RenderContext* rctx, const Sphere& viewSphere)
+void Subscene::setupProjMatrix(RenderContext* rctx)
 {
   if (do_projection == EMBED_REPLACE) 
     projMatrix.setIdentity();
 
-  getUserViewpoint()->setupProjMatrix(rctx, viewSphere);   
+  getUserViewpoint()->setupProjMatrix(rctx, getViewSphere());   
 }
 
 // The ModelView matrix has components of the user view (the translation at the start)
@@ -816,24 +876,48 @@ void Subscene::setupProjMatrix(RenderContext* rctx, const Sphere& viewSphere)
 // the latter from the modelViewpoint, possibly after applying the same from the parents.
 // We always reconstruct from scratch rather than trying to use the matrix in place.
 
-void Subscene::setupModelViewMatrix(RenderContext* rctx, Vertex center)
+void Subscene::setupModelViewMatrix(RenderContext* rctx)
 {
   modelMatrix.setIdentity();
   getUserViewpoint()->setupViewer(rctx);
-  setupModelMatrix(rctx, center);
+  setupModelMatrix(rctx);
 }
 
-void Subscene::setupModelMatrix(RenderContext* rctx, Vertex center)
+void Subscene::setupModelMatrix(RenderContext* rctx)
 {
-  /* The recursive call below will set the active subscene
-     modelMatrix, not the inherited one. */
+  /* This sets the active subscene
+     modelMatrix, not the local one (though often
+     they're the same one). */
      
-  if (do_model < EMBED_REPLACE && parent)
-    parent->setupModelMatrix(rctx, center);
+  if (do_model < EMBED_REPLACE && parent) 
+    parent->setupModelMatrix(rctx);
     
   if (do_model > EMBED_INHERIT)
-    getModelViewpoint()->setupTransformation(rctx, center);
+    getModelViewpoint()->setupTransformation(rctx);
   
+  if (do_model == EMBED_REPLACE) {
+    Vertex center = getViewSphere().center;
+
+    rctx->subscene->modelMatrix = 
+      rctx->subscene->modelMatrix * 
+      Matrix4x4::translationMatrix(-center.x, -center.y, -center.z);
+  }
+}
+
+// 
+// GET DATA VOLUME SPHERE
+//
+
+Sphere Subscene::getViewSphere() 
+{
+  Sphere total_bsphere;
+  if (data_bbox.isValid()) {
+    total_bsphere = Sphere( (bboxdeco) ? bboxdeco->getBoundingBox(data_bbox) : data_bbox, getModelViewpoint()->scale );
+    if (total_bsphere.radius <= 0.0)
+      total_bsphere.radius = 1.0;
+    } else
+    total_bsphere = Sphere( Vertex(0,0,0), 1 );
+  return total_bsphere;
 }
 
 void Subscene::disableLights(RenderContext* rctx)
@@ -868,6 +952,9 @@ void Subscene::setupLights(RenderContext* rctx)
   }
 
   SAVEGLERROR;
+  
+  if (nlights == 0 && parent)
+    parent->setupLights(rctx);
 
   if (anyviewpoint) {
     //
@@ -939,8 +1026,17 @@ void Subscene::renderZsort(RenderContext* renderContext)
 
 const AABox& Subscene::getBoundingBox()
 { 
-  if (bboxChanges) 
-      calcDataBBox();
+  if (bboxChanges || !data_bbox.isValid()) {
+    // Rprintf("recalc bbox for %d\n", getObjID());
+    calcDataBBox();
+    // Rprintf("%d: ", getObjID());
+    // if (data_bbox.isEmpty())
+    //   Rprintf("empty\n");
+    // else if (data_bbox.isValid())
+    //   Rprintf("%.1f %.1f\n", data_bbox.vmin.x, data_bbox.vmax.x);
+    // else
+    //   Rprintf("invalid\n", data_bbox.vmin.x, data_bbox.vmax.x);
+  }
   return data_bbox; 
 }
 
@@ -1003,6 +1099,7 @@ void Subscene::setUserMatrix(double* src)
 {
   ModelViewpoint* this_modelviewpoint = getModelViewpoint();
   this_modelviewpoint->setUserMatrix(src);
+  newBBox();
 }
 
 void Subscene::getUserProjection(double* dest)
@@ -1620,3 +1717,4 @@ Subscene* Subscene::getRootSubscene()
 {
   return parent ? parent->getRootSubscene() : this;
 }
+

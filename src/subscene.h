@@ -38,10 +38,11 @@ class Subscene : public SceneNode {
   */
 private:
 
+  Sphere getViewSphere();
   void setupViewport(RenderContext* rctx);
-  void setupProjMatrix(RenderContext* rctx, const Sphere& viewSphere);
-  void setupModelMatrix(RenderContext* rctx, Vertex center);
-  void setupModelViewMatrix(RenderContext* rctx, Vertex center);
+  void setupProjMatrix(RenderContext* rctx);
+  void setupModelMatrix(RenderContext* rctx);
+  void setupModelViewMatrix(RenderContext* rctx);
   void setDefaultMouseMode();
   
   void disableLights(RenderContext* rctx);
@@ -126,11 +127,6 @@ public:
   Subscene* getChild(int which) const { return subscenes[which]; }
   
   /**
-   * obtain bounding box
-   **/
-  const AABox& getBoundingBox() const { return data_bbox; }
-    
-  /**
    * get the bbox
    */
   BBoxDeco* get_bboxdeco();
@@ -161,10 +157,10 @@ public:
   int get_id_count(TypeID type, bool recursive);
   int get_ids(TypeID type, int* ids, char** types, bool recursive);
 
-  virtual int getAttributeCount(AABox& bbox, AttribID attrib);
+  virtual int getAttributeCount(SceneNode* subscene, AttribID attrib);
   
-  virtual void getAttribute(AABox& bbox, AttribID attrib, int first, int count, double* result);
-  virtual String getTextAttribute(AABox& bbox, AttribID attrib, int index);
+  virtual void getAttribute(SceneNode* subscene, AttribID attrib, int first, int count, double* result);
+  virtual String getTextAttribute(SceneNode* subscene, AttribID attrib, int index);
 
   /* Update matrices etc. in preparation for rendering */
   void update(RenderContext* renderContext);
@@ -276,10 +272,10 @@ private:
   void calcDataBBox();
   
   /**
-   * shrink bounding-box when something has been removed
+   * Need to recalc bbox
    **/
 
-  void shrinkBBox();
+  void newBBox();
   
   /**
    * bounding box of subscene

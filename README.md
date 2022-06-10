@@ -33,30 +33,6 @@ The currently active development site is here:
 
 <https://github.com/dmurdoch/rgl>
 
-## NOTE ABOUT DEVEL VERSIONS
-
-`rgl` can make use of development versions of some packages: `webshot2`,
-`chromote`, `pkgdown`. Though it doesn’t require any of these, they each
-provide some nice features:
-
--   `webshot2` and `chromote` support good quality PNG snapshots of
-    `rgl` scenes, even on servers that don’t have a graphics display.
--   The devel version of `pkgdown` supports inclusion of `rgl` graphics
-    in example code in automatically built package websites. (It also
-    supports inclusion of `htmlwidgets` for other dynamic web packages
-    like `plotly`, `leaflet`, etc.)
-
-Unfortunately, being development versions, these packages sometimes
-introduce bugs that break `rgl` usage. Currently (November 8, 2021) the
-main branches of all packages are fine. I recommend the following code
-to install them:
-
-``` r
-remotes::install_github(c("rstudio/webshot2",
-                          "rstudio/chromote",
-                          "r-lib/pkgdown"))
-```
-
 ## INSTALLATION
 
 Most users will want to install the latest CRAN release. For Windows,
@@ -123,19 +99,23 @@ A browser with WebGL enabled. See <https://get.webgl.org>.
 
 ## Installing OpenGL support
 
-**Debian:**  
-aptitude install libgl1-mesa-dev libglu1-mesa-dev
+**Debian and variants including Ubuntu:**
 
-**Fedora:**  
-yum install mesa-libGL-devel mesa-libGLU-devel libpng-devel
+    aptitude install libgl1-mesa-dev libglu1-mesa-dev
 
-**macOS:**  
+**Fedora:**
+
+    yum install mesa-libGL-devel mesa-libGLU-devel libpng-devel
+
+**macOS:**
+
 Install XQuartz.  
 `rgl` should work with XQuartz 2.7.11 or newer, but it will probably
 need rebuilding if the XQuartz version changes. XQuartz normally needs
 re-installation whenever the macOS version changes.
 
-**Windows:**  
+**Windows:**
+
 Windows normally includes OpenGL support, but to get the appropriate
 include files etc., you will need the appropriate version of
 [Rtools](https://cran.r-project.org/bin/windows/Rtools/) matched to your
@@ -146,9 +126,7 @@ R version.
 The **libpng** library version 1.2.9 or newer is needed for pixmap
 import/export support.
 
-The **freetype** library is needed for resizable anti-aliased fonts. On
-Windows, it will be downloaded from <https://github.com/rwinlib> during
-the install.
+The **freetype** library is needed for resizable anti-aliased fonts.
 
 ## BUILDING/INSTALLING
 
@@ -157,7 +135,7 @@ Binary builds of `rgl` are available for some platforms on CRAN.
 For source builds, install the prerequisites as described above,
 download the tarball and at the command line run
 
-    R CMD INSTALL rgl_0.108.3.tar.gz
+    R CMD INSTALL rgl_0.108.41.tar.gz
 
 (with the appropriate version of the tarball). The build uses an
 `autoconf` configure script; to see the options, expand the tarball and
@@ -187,7 +165,7 @@ As of version 0.104.1, it is possible to build the package without
 OpenGL support on Unix-alikes (including macOS) with the configure
 option –disable-opengl For example,
 
-    R CMD INSTALL --configure-args="--disable-opengl" rgl_0.108.3.tar.gz 
+    R CMD INSTALL --configure-args="--disable-opengl" rgl_0.108.41.tar.gz 
 
 On Windows, OpenGL support cannot currently be disabled.
 
@@ -220,4 +198,6 @@ Fernandez i Marin for help debugging the build.
 George Helffrich for draping code.  
 Ivan Krylov for window_group code in X11.  
 Michael Sumner for as.mesh3d.default enhancement.  
-Tomas Kalibera for `winutf8` help.
+Tomas Kalibera for `winutf8` help.  
+David Hugh-Jones for documentation improvements.  
+Trevor Davis for a `snapshot3d` patch.

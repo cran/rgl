@@ -442,6 +442,12 @@ struct BBoxDeco::BBoxDecoImpl {
       const Vertex4 view(0.0f,0.0f,1.0f,0.0f);
       
       float cos_a = view * q;
+
+      /* break tie using x coordinate */
+      if (cos_a == 0.0f) {
+        const Vertex4 view2(1.0f,0.0f,0.0f,0.0f);
+        cos_a = view2 * q;
+      }
       
       const bool front = (cos_a >= 0.0f) ? true : false;
       
@@ -463,25 +469,21 @@ struct BBoxDeco::BBoxDecoImpl {
       }
     }
     
-    AxisInfo*  axis;
     Edge*  axisedge;
     int    nedges;
     
     switch(coord)
     {
       case 0:
-        axis     = &(bboxdeco.xaxis);       
         axisedge = xaxisedge;
         nedges   = 4;
         break;
       case 1:
-        axis     = &(bboxdeco.yaxis);
         axisedge = yaxisedge;
         nedges   = 8;
         break;
       case 2:
       default:
-        axis     = &(bboxdeco.zaxis);
         axisedge = zaxisedge;
         nedges   = 4;
         break;
@@ -520,13 +522,14 @@ struct BBoxDeco::BBoxDecoImpl {
   
   static Edge* fixedEdge(Material* material)
   {
-    Edge* axisedge;
-    int i,j, lim, coord = material->marginCoord;
+    Edge* axisedge = xaxisedge;
+    int i,j, lim = 4, coord = material->marginCoord;
     bool match;
     switch(coord) {
       case 0: 
-        axisedge = xaxisedge;
-        lim = 4;
+        // Initialized to this case to suppress "may be unused" message
+        // axisedge = xaxisedge;
+        // lim = 4;
         break;
       case 1: 
         axisedge = yaxisedge; 
@@ -652,6 +655,11 @@ void BBoxDeco::render(RenderContext* renderContext)
       const Vertex4 view(0.0f,0.0f,1.0f,0.0f);
       
       float cos_a = view * q;
+      
+      if (cos_a == 0.0f) {
+        Vertex4 view2(1.0f,0.0f,0.0f,0.0f);
+        cos_a = view2 * q;
+      }
       
       const bool front = (cos_a >= 0.0f) ? true : false;
       
@@ -901,7 +909,7 @@ void BBoxDeco::getAxisCallback(userAxisPtr *fn, void** user, int axis)
   *user = axisData[axis];
 }
 
-int BBoxDeco::getAttributeCount(AABox& bbox, AttribID attrib) 
+int BBoxDeco::getAttributeCount(SceneNode* subscene, AttribID attrib) 
 {
   switch (attrib) {    
     case TEXTS: {
@@ -911,10 +919,12 @@ int BBoxDeco::getAttributeCount(AABox& bbox, AttribID attrib)
       if (count == 0) return 0; 
     }
     /* if non-zero, we want labels for every vertex, so fall through. */
-    case VERTICES:
+    case VERTICES: {
+      AABox bbox = ((Subscene*)subscene)->getBoundingBox();
       return xaxis.getNticks(bbox.vmin.x, bbox.vmax.x)
            + yaxis.getNticks(bbox.vmin.y, bbox.vmax.y)
            + zaxis.getNticks(bbox.vmin.z, bbox.vmax.z);
+    }
     case COLORS:
       return material.colors.getLength();
     case FLAGS:
@@ -922,20 +932,21 @@ int BBoxDeco::getAttributeCount(AABox& bbox, AttribID attrib)
     case AXES:
       return 5;
   }
-  return SceneNode::getAttributeCount(bbox, attrib);
+  return SceneNode::getAttributeCount(subscene, attrib);
 }
 
-void BBoxDeco::getAttribute(AABox& bbox, AttribID attrib, int first, int count, double* result)
+void BBoxDeco::getAttribute(SceneNode* subscene, AttribID attrib, int first, int count, double* result)
 {
-  int n = getAttributeCount(bbox, attrib);
+  int n = getAttributeCount(subscene, attrib);
 
   if (first + count < n) n = first + count;
   if (first < n) {
     switch(attrib) {
-    case VERTICES:  
+    case VERTICES:  {
     
       float low, high;
       int i, thisn;
+      AABox bbox = ((Subscene*)subscene)->getBoundingBox();
       i = 0;
      
       low = bbox.vmin.x;
@@ -974,6 +985,7 @@ void BBoxDeco::getAttribute(AABox& bbox, AttribID attrib, int first, int count, 
         i++;  
       }
       return;
+    }
     case COLORS:
       while (first < n) {
 	Color color = material.colors.getColor(first);
@@ -1006,18 +1018,19 @@ void BBoxDeco::getAttribute(AABox& bbox, AttribID attrib, int first, int count, 
       *result++ = expand;
       return;
     }
-    SceneNode::getAttribute(bbox, attrib, first, count, result);
+    SceneNode::getAttribute(subscene, attrib, first, count, result);
   }
 }
 
-String BBoxDeco::getTextAttribute(AABox& bbox, AttribID attrib, int index)
+String BBoxDeco::getTextAttribute(SceneNode* subscene, AttribID attrib, int index)
 {
-  int n = getAttributeCount(bbox, attrib);
+  int n = getAttributeCount(subscene, attrib);
   
   if (index < n) {
     int count;
     switch(attrib) {
-    case TEXTS: 
+    case TEXTS: {
+      AABox bbox = ((Subscene*)subscene)->getBoundingBox();
       count = xaxis.getNticks(bbox.vmin.x, bbox.vmax.x);
       if (index < count) {
         if (xaxis.mode == AXIS_CUSTOM)
@@ -1042,6 +1055,7 @@ String BBoxDeco::getTextAttribute(AABox& bbox, AttribID attrib, int index)
           return String(0, NULL);
       }
       break;
+    }
     }
   }
   return String(0, NULL);

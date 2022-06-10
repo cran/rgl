@@ -38,6 +38,8 @@ scene3d <- function(minimal = TRUE) {
           result$ignoreExtent <- flags["ignoreExtent", 1]
     	if ("fixedSize" %in% rownames(flags))
     	  result$fixedSize <- flags["fixedSize", 1]
+    	if ("rotating" %in% rownames(flags))
+    	  result$rotating <- flags["rotating", 1]
     	if ("fastTransparency" %in% rownames(flags))
     	  result$fastTransparency <- flags["fastTransparency", 1]
     	if ("flipped" %in% rownames(flags))
@@ -182,11 +184,13 @@ print.rglsubscene <- function(x, ...) {
 }
   
 
-plot3d.rglscene <- function(x, add=FALSE, ...) {
+plot3d.rglscene <- function(x, add=FALSE, open3dParams = getr3dDefaults(), ...) {
   root <- x$rootSubscene
   if (is.null(root)) root <- x  # Should work with pre-subscene objects
   if (!add) {
-    params <- getr3dDefaults()
+    args <- list(...)
+    params <- open3dParams
+    params[names(args)] <- args
     if (!is.null(x$material)) {
       if (is.null(params$material)) params$material <- list()
       params$material[names(x$material)] <- x$material
@@ -246,8 +250,10 @@ plot3d.rglsubscene <- function(x, objects, root = TRUE, ...) {
 			    newviewport = x$par3d$viewport,
 			    copyLights = FALSE)
 			   
-  if (!is.null(x$par3d$scale))
-    par3d(scale = x$par3d$scale)
+  if (!is.null(scale <- x$par3d$scale))
+    par3d(scale = scale)
+  if (!is.null(userMatrix <- x$par3d$userMatrix))
+    par3d(userMatrix = userMatrix)
   listeners <- list(x$par3d$listeners) # list contains old ids
   names(listeners) <- subscene         # names are new ids
     
@@ -279,6 +285,7 @@ plot3d.rglsubscene <- function(x, objects, root = TRUE, ...) {
         dotranslations(child)
     }
     dotranslations(subscene)
+    useSubscene3d(subscene)
     return(results)
   } else
     return(list(results=results, objects=objects, listeners=listeners))
@@ -394,29 +401,36 @@ plot3d.rglbboxdeco <- function(x, ...) {
   args <- list()     
   v <- x$vertices
   t <- x$texts
-  ind <- is.na(v[,2]) & is.na(v[,3])
-  if (any(ind)) {
-    args$xat <- v[ind,1]
-    if (!is.null(t))
-      args$xlab <- t[ind]
-    else
-      args$xlab <- signif(args$xat, 4)
+  m <- x$axes$mode
+  if (m[1] != "pretty") {
+    ind <- is.na(v[,2]) & is.na(v[,3])
+    if (any(ind)) {
+      args$xat <- v[ind,1]
+      if (!is.null(t))
+        args$xlab <- t[ind]
+      else
+        args$xlab <- signif(args$xat, 4)
+    }
   }
-  ind <- is.na(v[,1]) & is.na(v[,3])
-  if (any(ind)) {
-    args$yat <- v[ind,2]
-    if (!is.null(t))
-      args$ylab <- t[ind]
-    else
-      args$ylab <- signif(args$yat, 4)
+  if (m[2] != "pretty") {
+    ind <- is.na(v[,1]) & is.na(v[,3])
+    if (any(ind)) {
+      args$yat <- v[ind,2]
+      if (!is.null(t))
+        args$ylab <- t[ind]
+      else
+        args$ylab <- signif(args$yat, 4)
+    }
   }
-  ind <- is.na(v[,1]) & is.na(v[,2])
-  if (any(ind)) {
-    args$zat <- v[ind,3]
-    if (!is.null(t))
-      args$zlab <- t[ind]
-    else
-      args$zlab <- signif(args$zat, 4)
+  if (m[3] != "pretty") {
+    ind <- is.na(v[,1]) & is.na(v[,2])
+    if (any(ind)) {
+      args$zat <- v[ind,3]
+      if (!is.null(t))
+        args$zlab <- t[ind]
+      else
+        args$zlab <- signif(args$zat, 4)
+    }
   }
   args$draw_front <- x$draw_front
   args <- c(args, x$material)

@@ -3,7 +3,8 @@ convertScene <- function(x = scene3d(minimal), width = NULL, height = NULL,
                          elementId = NULL,
                          minimal = TRUE, webgl = TRUE,
                          snapshot = FALSE,
-                         oldConvertBBox = FALSE) {
+                         oldConvertBBox = FALSE,
+                         useBuffer = TRUE) {
   
   # Lots of utility functions and constants defined first; execution starts way down there...
   
@@ -96,7 +97,8 @@ convertScene <- function(x = scene3d(minimal), width = NULL, height = NULL,
            "is_lines", "sprites_3d", 
            "is_subscene", "is_clipplanes",
            "fixed_size", "is_points", "is_twosided",
-           "fat_lines", "is_brush", "has_fog")
+           "fat_lines", "is_brush", "has_fog",
+           "rotating")
   
   getFlags <- function(id) {
     
@@ -132,7 +134,9 @@ convertScene <- function(x = scene3d(minimal), width = NULL, height = NULL,
     
     result["has_texture"] <- has_texture <- !is.null(mat$texture) &&
                                             (!is.null(obj$texcoords) 
-                                             || (type == "sprites" && !sprites_3d))
+                                             || (type == "sprites" && !sprites_3d)
+                                             || (type == "background" && obj$sphere)
+                                             || (type == "spheres"))
     
     result["is_transparent"] <- is_transparent <- (has_texture && mat$isTransparent) || result["is_transparent"]
     
@@ -142,9 +146,11 @@ convertScene <- function(x = scene3d(minimal), width = NULL, height = NULL,
     result["fixed_quads"] <- type %in% c("text", "sprites") && !sprites_3d
     result["is_lines"]    <- type %in% c("lines", "linestrip", "abclines")
     result["is_points"]   <- type == "points" || "points" %in% c(mat$front, mat$back)
-    result["is_twosided"] <- type %in% c("quads", "surface", "triangles", "spheres", "bboxdeco") && 
-      length(unique(c(mat$front, mat$back))) > 1
+    result["is_twosided"] <- (type %in% c("quads", "surface", "triangles", "spheres", "bboxdeco") && 
+      length(unique(c(mat$front, mat$back))) > 1) ||
+      (type == "background" && obj$sphere)
     result["fixed_size"]  <- type == "text" || isTRUE(obj$fixedSize)
+    result["rotating"] <- isTRUE(obj$rotating)
     result["fat_lines"]   <- mat$lwd != 1 && (result["is_lines"] || 
                   "lines" %in% unlist(mat[c("front", "back")]))
     result["is_brush"] <- !is.na(brushId) && id == brushId
@@ -226,7 +232,7 @@ convertScene <- function(x = scene3d(minimal), width = NULL, height = NULL,
     # plot the clipping planes as they affect the bounding box
     plotClipplanes(subscene)
     
-    mat$front <- mat$back <- "fill"
+    mat$front <- mat$back <- "filled"
     
     if (any(inds <- is.na(verts[,2]) & is.na(verts[,3])) && length(keep <- intersect(bbox[1:2], verts[inds, 1])))
       res <- c(res, do.call(axis3d, c(list(edge = "x", at = verts[inds, 1][keep], labels = text[inds][keep]), mat)))
@@ -429,26 +435,64 @@ convertScene <- function(x = scene3d(minimal), width = NULL, height = NULL,
       obj$material$floating <- margin$floating
       obj$material$edge <- margin$edge
     }
-    setObj(cids[i], obj)
-  }
-  # Put the data into the buffer
-  buffer <- Buffer$new()
-  for (i in seq_along(ids)) {
-    obj <- getObj(cids[i])
-    # This list needs to match the one in buffer.src.js
-    for (n in c("vertices", "normals", "indices", 
-                "texcoords", "colors", "centers")) {
-      if (!is.null(obj[[n]]))
-        obj[[n]] <- as.character(buffer$addAccessor(t(obj[[n]])))
+    if (is.list(obj$userTextures) && 
+        length(obj$userTextures) &&
+        !is.list(obj$userTextures[[1]])) {
+      textureNames <- names(obj$userTextures)
+      userTextures <- as.character(obj$userTextures)
+      obj$userTextures <- list()
+      for (j in seq_along(userTextures)) {
+        texturefile <- userTextures[j]
+        obj$userTextures[[j]] <- list(file = texturefile,
+                                      uri = image_uri(texturefile))
+      }
+      names(obj$userTextures) <- textureNames
     }
     setObj(cids[i], obj)
   }
+  if (useBuffer) {
+    # Put the data into the buffer
+    buffer <- Buffer$new()
+    for (i in seq_along(ids)) {
+      obj <- getObj(cids[i])
+      # This list needs to match the one in buffer.src.js
+      for (n in c("vertices", "normals", "indices", 
+                  "texcoords", "colors", "centers")) {
+        if (!is.null(obj[[n]])) {
+          normalized <- FALSE
+          normalization <- ""
+          if (length(obj[[n]]) > 6 &&  # Don't bother for short ones
+              n %in% c("colors","texcoords") &&
+              0 <= (objrange <- range(obj[[n]]))[1] &&
+              objrange[2] <= 1) {
+            scaled <- 255*obj[[n]]
+            rounded <- round(scaled)
+            normalized <- max(abs(scaled - rounded))/255 < 1.e-7
+            if (normalized)
+              normalization <- "ubyte"
+            else {
+              scaled <- 65535*obj[[n]]
+              rounded <- round(scaled)
+              normalized <- max(abs(scaled - rounded))/65535 < 1.e-7
+              if (normalized)
+                normalization <- "ushort"
+            }
+          }
+          if (normalized)
+            obj[[n]] <- as.character(buffer$addAccessor(t(rounded), types = normalization, normalized = TRUE))
+          else
+            obj[[n]] <- as.character(buffer$addAccessor(t(obj[[n]])))
+        }
+      }
+      setObj(cids[i], obj)
+    }
+    buffer$closeBuffers()
+    buf <- buffer$as.list()
+    
+    result$buffer <- buf
+  }
 
   result$context <- list(shiny = inShiny(), rmarkdown = rmarkdownOutput())
-  buffer$closeBuffers()
-  buf <- buffer$as.list()
-
-  result$buffer <- buf
 
   result
 }

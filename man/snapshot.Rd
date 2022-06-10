@@ -1,6 +1,7 @@
 \name{snapshot3d}
 \alias{rgl.snapshot}
 \alias{snapshot3d}
+\alias{RGL_USE_WEBSHOT}
 \title{Export screenshot}
 \description{
   Saves the screenshot to a file.
@@ -10,7 +11,7 @@ rgl.snapshot( filename, fmt = "png", top = TRUE )
 snapshot3d( filename = tempfile(fileext = ".png"), 
             fmt = "png", top = TRUE,
             ..., scene, width = NULL, height = NULL,
-            webshot = TRUE)
+            webshot = as.logical(Sys.getenv("RGL_USE_WEBSHOT", "TRUE")) )
 }
 \arguments{
   \item{filename}{path to file to save.}
@@ -45,8 +46,11 @@ filename of the saved file is returned invisibly.
 \note{
 When \code{rgl.useNULL()} is \code{TRUE}, only \code{webshot = TRUE}
 will produce a snapshot.  It requires the \pkg{webshot2}
-package, which as of this writing is not available on CRAN; to
-install it, use \code{remotes::install_github("rstudio/webshot2")}
+package and a Chrome browser.  If no suitable browser is
+found, \code{snapshot3d()} will revert to \code{rgl.snapshot()}.
+To override the automatic search, set
+environment variable \env{CHROMOTE_CHROME}
+to the path to a suitable browser.
 
 \code{rgl.snapshot} works by taking an image from the displayed
 window on-screen.
@@ -65,7 +69,13 @@ size.
 There are slight differences between the displays with
 \code{webshot = TRUE} and \code{webshot = FALSE}, as the 
 former are rendered using WebGL while the latter are rendered
-using OpenGL.  Often the \code{webshot = TRUE} displays have better quality.
+using OpenGL.  Often the \code{webshot = TRUE} displays
+have better quality, but they are usually slower to
+produce, sometimes drastically so.  
+
+Set the environment
+variable \env{RGL_USE_WEBSHOT} to \code{"FALSE"} if
+you want \code{rgl.snapshot} to be used by default.
 }
 \seealso{\code{\link{movie3d}}, \code{\link{rgl.viewpoint}}}
 

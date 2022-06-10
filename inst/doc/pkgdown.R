@@ -10,11 +10,6 @@ options(rgl.useNULL = TRUE)
 setupKnitr(autoprint = TRUE)
 
 ## ----eval=FALSE---------------------------------------------------------------
-#  remotes::install_github(c("rstudio/webshot2",
-#                            "rstudio/chromote",
-#                            "r-lib/pkgdown"))
-
-## ----eval=FALSE---------------------------------------------------------------
 #  setupKnitr(autoprint = TRUE)
 
 ## -----------------------------------------------------------------------------
@@ -36,7 +31,4 @@ b <- coefs["y"]
 c <- -1
 d <- coefs["(Intercept)"]
 planes3d(a, b, c, d, alpha = 0.5)
-
-## ----eval=FALSE---------------------------------------------------------------
-#  install.packages(c("pkgdown", "rgl"))
 

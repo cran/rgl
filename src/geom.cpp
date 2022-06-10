@@ -20,6 +20,12 @@ void AABox::invalidate(void)
   vmin = Vertex(  FLT_MAX,  FLT_MAX,  FLT_MAX );
 }
 
+void AABox::setEmpty(void)
+{
+  vmax = Vertex( -123.0, -123.0, -123.0);
+  vmin = Vertex(  123.0,  123.0,  123.0);
+}
+
 void AABox::operator += (const Vertex& v)
 {
   if (!ISNAN(v.x)) {
@@ -57,12 +63,39 @@ bool AABox::operator < (const AABox& that) const
 
 bool AABox::isValid(void) const
 {
-  return ((vmax.x >= vmin.x) && (vmax.y >= vmin.y) && (vmax.z >= vmin.z)) ? true : false;
+  return (isEmpty() || ((vmax.x >= vmin.x) && (vmax.y >= vmin.y) && (vmax.z >= vmin.z))) ? true: false;
+}
+
+bool AABox::isEmpty(void) const
+{
+  return (vmin.x > vmax.x && vmin.x == 123.0) ? true : false;
 }
 
 Vertex AABox::getCenter(void) const
 {
   return Vertex( (vmax + vmin) * 0.5f );
+}
+
+AABox AABox::transform(Matrix4x4& M)
+{
+  if (!isValid()) return AABox();
+  AABox result;
+  if (isEmpty()) {
+    result.setEmpty();
+    return result;
+  }
+  Vertex corner;
+  for (int i = 0; i < 2; i++) {
+    corner.x = i ? vmax.x : vmin.x;
+    for (int j = 0; j < 2; j++) {
+      corner.y = j ? vmax.y : vmin.y;
+      for (int k = 0; k < 2; k++) {
+        corner.z = k ? vmax.z : vmin.z;
+        result += M*corner;
+      }
+    }
+  }
+  return result;
 }
 
 //////////////////////////////////////////////////////////////////////////////

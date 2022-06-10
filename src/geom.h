@@ -19,11 +19,15 @@ public:
    : vmin(that.vmin), vmax(that.vmax)
   { }
   void invalidate(void);
-  bool isValid(void) const;
+  bool isValid(void) const; /* use +Max, -Max to indicate it needs recalc */
+  bool isEmpty(void) const; /* use 1, -1 to indicate empty */
+  void setEmpty(void);
+  
   void operator += (const AABox& aabox);
   void operator += (const Sphere& sphere);
   void operator += (const Vertex& vertex);
   bool operator < (const AABox& aabox) const;
+  AABox transform(Matrix4x4& M);
   Vertex getCenter(void) const;
   Vertex vmin, vmax;
 };

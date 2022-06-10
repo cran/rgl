@@ -61,8 +61,11 @@ clear3d     <- function(type = c("shapes", "bboxdeco", "material"),
 # in place for any entries that are not listed.  
 # Unrecognized args are left in place.
 
-.fixMaterialArgs <- function(..., Params = material3d()) {
+.fixMaterialArgs <- function(..., Params = material3d(), col) {
    f <- function(...) list(...)
+   dots <- list(...)
+   if (!missing(col)) 
+     Params$color <- col
    formals(f) <- c(Params, formals(f))
    names <- as.list(names(Params))
    names(names) <- names
@@ -71,14 +74,26 @@ clear3d     <- function(type = c("shapes", "bboxdeco", "material"),
    body(f) <- as.call(c(b[1], names, b[-1]))
    f(...)
 } 
+
+# This one just expands the argument names to match the
+# standard names
+.fixMaterialArgs2 <- function(..., col) {
+  call <- do.call(call, list("rgl.material", ...))
+  result <- as.list(match.call(rgl.material, call))[-1]
+  if (!missing(col) && is.null(result$color))
+    result$color <- col
+  result
+}
      
 # This one just gets the material args
 # If warn is TRUE, give a warning instead of ignoring extras.
 
-.getMaterialArgs <- function(..., material = list(), warn = FALSE) {
+.getMaterialArgs <- function(..., material = list(), warn = FALSE, col = material[["col"]]) {
   fullyNamed <- as.list(match.call(rgl.material, 
                            as.call(c(list(as.name("rgl.material"),
                                         ...), material))))[-1]
+  if (!is.null(col) && !("color" %in% names(fullyNamed)))
+    fullyNamed$color <- col
   good <- names(fullyNamed) %in% .material3d
   if (warn && !all(good))
     warning("Argument(s) ", paste(names(fullyNamed)[!good], collapse = ", "), " not matched.")
@@ -125,7 +140,16 @@ bg3d        <- function(...) {
     sphere <- FALSE
     fogtype <- "none"
   }
-  new <- .fixMaterialArgs(sphere = sphere, fogtype = fogtype, 
+  dots <- list(...)
+  if ("fogtype" %in% names(dots))
+    fogtype <- dots$fogtype
+  if ("fogScale" %in% names(dots))
+    fogScale <- dots$fogScale
+  else
+    fogScale <- 1
+  new <- .fixMaterialArgs(sphere = sphere, 
+                          fogtype = fogtype, 
+                          fogScale = fogScale,
                           color = c("black", "white"), 
   			  back = "lines", lit = FALSE, Params = save)
   do.call("rgl.bg", .fixMaterialArgs(..., Params = new))
@@ -240,6 +264,7 @@ abclines3d   <- function(x,y=NULL,z=NULL,a,b=NULL,c=NULL,...) {
 sprites3d   <- function(x, y = NULL, z = NULL, radius = 1, 
                         shapes = NULL, userMatrix, fixedSize = FALSE,  
                         adj = 0.5, pos = NULL, offset = 0.25,
+                        rotating = FALSE,
 												...) {
   .check3d(); save <- material3d(); on.exit(material3d(save))
   if (missing(userMatrix)) {
@@ -253,6 +278,7 @@ sprites3d   <- function(x, y = NULL, z = NULL, radius = 1,
 
   do.call("rgl.sprites", c(list(x=x,y=y,z=z,radius=radius,shapes=shapes,
                                 userMatrix=userMatrix, fixedSize = fixedSize, 
+                                rotating = rotating,
                                 adj = adj, pos = pos, offset = offset), 
           .fixMaterialArgs(..., Params = save)))
 }
@@ -316,6 +342,14 @@ open3d <- function(..., params = getr3dDefaults(),
 	  register_pkgdown_methods()
 	
     args <- list(...)
+    if (missing(useNULL) && !is.null(params$useNULL)) {
+      useNULL <- params$useNULL
+      params$useNULL <- NULL
+    }
+    if (missing(silent) && !is.null(params$silent)) {
+      silent <- params$silent
+      params$silent <- NULL
+    }
     if (!is.null(args$antialias) 
         || !is.null(args$antialias <- r3dDefaults$antialias)) {
     	saveopt <- options(rgl.antialias = args$antialias)
@@ -383,16 +417,22 @@ set3d <- function(dev, silent = FALSE) {
 
 requireWebshot2 <- function() {
   suppressMessages(res <- requireNamespace("webshot2", quietly = TRUE))
+  if (res) 
+    res <- requireNamespace("chromote") &&
+           !is.null(path <- chromote::find_chrome()) &&
+           nchar(path) > 0 &&
+           file.exists(path)
   res
 }
 
 snapshot3d <- function(filename = tempfile(fileext = ".png"), 
                        fmt = "png", top = TRUE, ..., scene, width = NULL, height = NULL,
-                       webshot = TRUE) {
+                       webshot = as.logical(Sys.getenv("RGL_USE_WEBSHOT", 
+                                                                                                                     "TRUE"))) {
   force(filename)
   
   if (webshot && !requireWebshot2()) {
-    warning("webshot = TRUE requires the webshot2 package; using rgl.snapshot() instead")
+    warning("webshot = TRUE requires the webshot2 package and Chrome browser; using rgl.snapshot() instead")
     webshot <- FALSE
   }
   saveopts <- options(rgl.useNULL = webshot)
@@ -454,10 +494,14 @@ snapshot3d <- function(filename = tempfile(fileext = ".png"),
                          height = height,
                          webgl = TRUE), 
                f1)
-    capture.output(webshot2::webshot(f1, file = filename, selector = "#webshot",
+    unlink(filename)
+    res <- try(capture.output(webshot2::webshot(f1, file = filename, selector = "#webshot",
                         vwidth = width + 100, vheight = height, ...),
-                   type = "message")
-    invisible(filename)
-  } else
-    rgl.snapshot(filename, fmt, top)
+                   type = "message"))
+    if (!inherits(res, "try-error") && file.exists(filename) && file.size(filename) > 0)
+      return(invisible(filename))
+    
+    warning("webshot2::webshot() failed; trying rgl.snapshot()")
+  }
+  rgl.snapshot(filename, fmt, top)
 }

@@ -7,35 +7,54 @@ typeUnsignedInt   <- 5125
 typeFloat         <- 5126
 typeDouble        <- 5130  # Not supported in glTF
 
-getType <- function(x, useDouble = FALSE) {
-  r <- range(x, na.rm = TRUE)
-  if (is.integer(x) && !any(is.na(x))) {
-    if (r[1] < 0) {
+gltfTypes <- c(byte = 5120, ubyte = 5121,
+                   short = 5122, ushort = 5123,
+                   uint = 5125, float = 5126,                     int = 5124, double = 5130)
+
+getType <- function(x, types = "anyGLTF") {
+  types <- match.arg(types, 
+                     c(names(gltfTypes), c("anyGLTF", "any")), 
+                     several.ok = TRUE)
+  if ("anyGLTF" %in% types)
+    types <- c(types, names(gltfTypes)[1:6])
+  if ("any" %in% types)
+    types <- c(types, names(gltfTypes))
+  types <- unique(setdiff(types, c("anyGLTF", "any")))
+  r <- suppressWarnings(range(x, na.rm = TRUE))
+  if (is.integer(x) && 
+      !any(is.na(x)) &&
+      (r[1] >= 0 && 
+       any(c("byte", "short", "int", "ubyte", "ushort", "uint") %in% types) ||
+      (r[1] < 0 && 
+       any(c("byte", "short", "int") %in% types))))
+      {
+    if (r[1] < 0 && ("byte" %in% types)) {
       if (-128 <= r[1] && r[2] <= 127)
-        typeSignedByte
-      else if (-32768 <= r[1] && r[2] <= 32767)
-        typeSignedShort
+        "byte"
+      else if (-32768 <= r[1] && r[2] <= 32767 && ("short" %in% types))
+        "short"
       else
-        typeSignedInt
+        "int"
     } else {
-      if (r[2] <= 255)
-        typeUnsignedByte
-      else if (r[2] <= 65535)
-        typeUnsignedShort
+      if (r[2] <= 255 && ("ubyte" %in% types))
+        "ubyte"
+      else if (r[2] <= 65535 && ("ushort" %in% types))
+        "ushort"
       else
-        typeUnsignedInt
+        "uint"
     }
   } else if (is.numeric(x)) {
     if ((-32768 <= r[1] && r[2] <= 32767 ||
          0 <= r[1] && r[2] <= 65535) && 
-        isTRUE(all(x == as.integer(x))))
-      getType(as.integer(x))
-    else if (!useDouble)
-      typeFloat
-    else
-      typeDouble
+        isTRUE(all(x == as.integer(x))) &&
+        any(c("byte", "short", "ubyte", "ushort") %in% types))
+      getType(as.integer(x), types)
+    else if ("float" %in% types)
+      "float"
+    else if ("double" %in% types)
+      "double"
   } else
-    stop('Unrecognized type')
+    stop('Unrecognized or disallowed type')
 }
 
 #' @title R6 Class for binary buffers in glTF files.
@@ -266,7 +285,7 @@ Buffer <- R6Class("Buffer",
       },
 
 #' @description
-#'   Open a connecton to a buffer view.
+#'   Open a connection to a buffer view.
 #'
 #' @param bufv Which bufferView.
 #'
@@ -313,7 +332,8 @@ Buffer <- R6Class("Buffer",
 #'
 #' @param acc Accessor number.
 #'
-#' @return A vector or array as specified in the accessor.
+#' @return A vector or array as specified in the accessor.  For the `MATn` types, the 3rd index
+#' indexes the element.
 #'
       readAccessor = function(acc) {
         typenames <- c("5120" = "byte", "5121" = "unsigned_byte",
@@ -377,7 +397,7 @@ Buffer <- R6Class("Buffer",
                            values)                 # default
         if (len > 1)
           if (grepl("MAT", atype)) {
-            values <- matrix(values, ncol = sqrt(len), byrow = TRUE)
+            values <- array(values, dim=c(sqrt(len), sqrt(len), count))
           } else
             values <- matrix(values, ncol = len, byrow = TRUE)
         values
@@ -388,24 +408,25 @@ Buffer <- R6Class("Buffer",
 #'
 #' @param values Values to write.
 #' @param target Optional target use for values.
-#' @param glTF Whether this is for glTF use.
+#' @param types Which types can be used?
+#' @param normalized Are normalized integers allowed?
 #' @param useDouble Whether to write doubles or singles.
 #'
 #' @return New accessor number
 
-      addAccessor = function(values, target = NULL, useDouble = FALSE) {
-        componentType <- getType(values, useDouble)
-        size <- switch(as.character(componentType),
-            "5120" =,       # typeSignedByte
-            "5121" = 1,     # typeUnsignedByte = 1,
-            "5122" =,       # typeSignedShort =,
-            "5123" = 2,     # typeUnsignedShort = 2,
-            "5124" =,       # typeUnsignedInt =,
-            "5125" =,       # typeSignedInt =,
-            "5126" = 4,     # typeFloat = 4,
-            "5130" = 8)     # typeDouble = 8)
+      addAccessor = function(values, target = NULL, types = "anyGLTF", normalized = FALSE) {
+        componentTypeName <- getType(values, types)
+        size <- switch(componentTypeName,
+            "byte" =,       # typeSignedByte
+            "ubyte" = 1,     # typeUnsignedByte = 1,
+            "short" =,       # typeSignedShort =,
+            "ushort" = 2,     # typeUnsignedShort = 2,
+            "uint" =,       # typeUnsignedInt =,
+            "int" =,       # typeSignedInt =,
+            "float" = 4,     # typeFloat = 4,
+            "double" = 8)     # typeDouble = 8)
 
-        bufferView <- self$addBufferView(c(values), componentType,
+        bufferView <- self$addBufferView(c(values), gltfTypes[componentTypeName],
                                     size = size, target = target)
         if (is.matrix(values) && nrow(values) > 1) {
           count <- ncol(values)
@@ -414,10 +435,16 @@ Buffer <- R6Class("Buffer",
           count <- length(values)
           type <- "SCALAR"
         }
+        if (normalized && 
+            !(componentTypeName %in% 
+              c("byte", "ubyte", "short", "ushort")))
+          stop("Only bytes and short values can be normalized")
         accessor <- list(bufferView = bufferView,
-                         componentType = componentType,
+                         componentType = gltfTypes[[componentTypeName]], # double to drop name
                          count = count,
                          type = type)
+        if (normalized)
+          accessor$normalized <- TRUE
 
         private$accessors <- c(private$accessors, list(accessor))
         length(private$accessors) - 1
@@ -438,7 +465,7 @@ Buffer <- R6Class("Buffer",
         bytes <- buffer$bytes
         if (is.null(bytes)) {
           if (is.null(buffer$uri))
-            return(dataURI(raw(0), mime = "application/octet-stream"))
+            return(base64enc::dataURI(raw(0), mime = "application/octet-stream"))
           else {
             self$load(buffer$uri, buf)
             self$closeBuffer(buf)

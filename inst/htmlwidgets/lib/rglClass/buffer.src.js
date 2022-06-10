@@ -55,6 +55,10 @@
     };
 
     rglwidgetClass.prototype.getBufferedData = function(v) {
+      return this.readAccessor(parseInt(v, 10), this.scene.buffer);
+    };
+    
+    rglwidgetClass.prototype.readAccessor = function(acc, buf) {
       var typeSignedByte = 5120, 
           typeUnsignedByte = 5121, 
           typeSignedShort = 5122, 
@@ -63,8 +67,7 @@
           typeUnsignedInt = 5125, 
           typeFloat = 5126, 
           typeDouble = 5130, 
-          buf = this.scene.buffer, 
-          accessor = buf.accessors[parseInt(v, 10)], 
+          accessor = buf.accessors[acc], 
           bufferView = buf.bufferViews[accessor.bufferView], 
           buffer = buf.buffers[bufferView.buffer], 
           bytes, 
@@ -137,12 +140,31 @@
         values = new Float64Array(buffer.bytes, offset, count);
         break;
       }
+
       /* This is all very inefficient, but is convenient
              to work with the old code. */
       k = 0;
       for (i = 0; i < nrows; i++) {
         row = [];
-        for (j = 0; j < rowsize; j++) row.push(values[k++]);
+        for (j = 0; j < rowsize; j++) {
+          if (accessor.normalized) {
+            switch(accessor.componentType) {
+              case typeSignedByte:
+                row.push(Math.max(values[k++]/127, -1.0));
+                break;
+              case typeSignedShort:
+                row.push(Math.max(values[k++]/32767, -1.0));
+                break;
+              case typeUnsignedByte:
+                row.push(values[k++]/255);
+                break;
+              case typeUnsignedShort:
+                row.push(values[k++]/65535);
+                break;
+            }
+          } else
+            row.push(values[k++]);
+        }
         arr.push(row);
       }
       return arr;

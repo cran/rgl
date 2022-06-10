@@ -1,5 +1,5 @@
 Package: rgl
-Version: 0.108.3.2
+Version: 0.109.2
 Title: 3D Visualization Using OpenGL
 Authors@R: c(person("Duncan", "Murdoch", role = c("aut", "cre"),
                      email = "murdoch.duncan@gmail.com"),
@@ -27,11 +27,13 @@ Authors@R: c(person("Duncan", "Murdoch", role = c("aut", "cre"),
 Depends: R (>= 3.3.0)
 Suggests: MASS, rmarkdown, deldir (>= 1.0-4), orientlib, lattice,
         misc3d, magick, plotrix (>= 3.7-3), tripack, interp,
-        alphashape3d, tcltk, js (>= 1.2), akima, webshot2, downlit (>=
-        0.4.0), pkgdown, extrafont, shiny, manipulateWidget (>= 0.9.0),
-        testthat, markdown, crosstalk
+        alphashape3d, tcltk, js (>= 1.2), webshot2 (>= 0.1.0), downlit
+        (>= 0.4.0), pkgdown (>= 2.0.0), extrafont, shiny,
+        manipulateWidget (>= 0.9.0), testthat, markdown, crosstalk, V8,
+        chromote
 Imports: graphics, grDevices, stats, utils, htmlwidgets, htmltools,
-        knitr (>= 1.33), jsonlite (>= 0.9.20), magrittr, R6
+        knitr (>= 1.33), jsonlite (>= 0.9.20), magrittr, R6, base64enc,
+        mime
 Enhances: waldo
 Description: Provides medium to high level functions for 3D interactive graphics, including
     functions modelled on base graphics (plot3d(), etc.) as well as functions for
@@ -40,17 +42,17 @@ Description: Provides medium to high level functions for 3D interactive graphics
     WebGL, PLY, OBJ, STL as well as 2D image formats, including PNG, Postscript, SVG, PGF.
 License: GPL
 URL: https://github.com/dmurdoch/rgl, https://dmurdoch.github.io/rgl/
-SystemRequirements: OpenGL, GLU Library, XQuartz (on OSX), zlib
+SystemRequirements: OpenGL and GLU Library (Required for display in R.
+        See "Installing OpenGL support" in README.md. Not needed if
+        only browser displays using rglwidget() are wanted.), zlib
         (optional), libpng (>=1.2.9, optional), FreeType (optional),
-        pandoc (>=1.14, needed for vignettes; if not present, markdown
-        package will be used)
+        pandoc (>=1.14, needed for vignettes)
 BugReports: https://github.com/dmurdoch/rgl/issues
-VignetteBuilder: knitr
+VignetteBuilder: knitr, rmarkdown
 Biarch: true
-Additional_repositories: https://dmurdoch.github.io/drat
 RoxygenNote: 7.1.2
 NeedsCompilation: yes
-Packaged: 2022-05-09 20:04:12 UTC; murdoch
+Packaged: 2022-06-07 11:34:46 UTC; murdoch
 Author: Duncan Murdoch [aut, cre],
   Daniel Adler [aut],
   Oleg Nenadic [ctb],
@@ -74,4 +76,4 @@ Author: Duncan Murdoch [aut, cre],
   Michael Sumner [ctb]
 Maintainer: Duncan Murdoch <murdoch.duncan@gmail.com>
 Repository: CRAN
-Date/Publication: 2022-05-16 09:50:02 UTC
+Date/Publication: 2022-06-10 06:40:07 UTC

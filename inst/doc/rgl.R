@@ -7,7 +7,8 @@ set.seed(123)
 with(iris, plot3d(Sepal.Length, Sepal.Width, Petal.Length, 
                   type="s", col=as.numeric(Species)))
 
-## ----persp3d, fig.height=3, fig.width=6, fig.keep="last"----------------------
+## ----persp3d, fig.height=3, fig.width=6, fig.keep="last", eval=requireNamespace("MASS",quietly=TRUE)----
+# This example requires the MASS package
 library(MASS)
 # from the fitdistr example
 set.seed(123)
@@ -38,6 +39,11 @@ triangles3d(cbind(x=rnorm(9), y=rnorm(9), z=rnorm(9)), col = "green")
 decorate3d()
 bg3d("lightgray")
 aspect3d(1,1,1)
+
+## ---- eval = FALSE------------------------------------------------------------
+#  myview <- par3d("userMatrix")
+#  # ... later ...
+#  par3d(userMatrix = myview)
 
 ## -----------------------------------------------------------------------------
 filename <- tempfile(fileext = ".png")
@@ -94,7 +100,8 @@ par3d("mouseMode")
 close3d()
 persp3d(volcano, col = "green")
 
-## -----------------------------------------------------------------------------
+## ----eval=requireNamespace("orientlib", quietly = TRUE) && requireNamespace("lattice", quietly = TRUE)----
+# Only evaluated if the lattice & orientlib packages are installed
 lattice::wireframe(volcano, col = "green", 
 		   screen = rglToLattice())
 angles <- rglToBase()

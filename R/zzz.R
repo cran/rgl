@@ -124,17 +124,13 @@
 
   if (!rgl.useNULL()) 
     setGraphicsDelay(unixos = unixos)
-
-  # handle pkgdown_print and fig_settings before they are in the CRAN version
-
-  if (requireNamespace("pkgdown", quietly = TRUE)) {
-    
-    if ("pkgdown_print" %in% getNamespaceExports("pkgdown")) {
-      pkgdown_print <<- getExportedValue("pkgdown", "pkgdown_print")
-    }
-    if ("fig_settings" %in% getNamespaceExports("pkgdown"))
-      pkgdown_fig_settings <<- getExportedValue("pkgdown", "fig_settings")
-  }         
+  
+  # Are we running in reprex::reprex?  If so, do
+  # the knitr setup so our output appears there.
+  
+  if (in_reprex()) {
+    setupKnitr(autoprint = TRUE)
+  }
 }
 
 # Do we need a delay opening graphics?    
@@ -202,3 +198,6 @@ rgl.init <- function(initValue = 0, onlyNULL = FALSE, debug = getOption("rgl.deb
   .C( rgl_quit, success=FALSE )
   
 }
+
+in_reprex <- function() 
+  !is.null(getOption("reprex.current_venue"))
