@@ -1,7 +1,7 @@
 e73499cb89e0d6e97b8ba271c46739fd *COPYING
-e540b0d08c65b97753da9a2cba2151ed *DESCRIPTION
+bbb4e0b332a2e9b3bde8417ceb7c8725 *DESCRIPTION
 2fc0a0ab25c0e678d81d535c3a0f3cfe *NAMESPACE
-d9fc817cc2d141d8854cb5db126affb8 *NEWS.md
+78760e40140ab414835c32789af94300 *NEWS.md
 664118a44d0cbf5e0754bf2b3fcce21b *R/Sweave.R
 67e457f4a3ecfa12f8b911faf11e7ab6 *R/addNormals.mesh3d.R
 d62767b6f3a51c93f666e30e437e5556 *R/animate.R
@@ -29,7 +29,7 @@ d55ef045a0119182af274b982c383a6f *R/drape3d.R
 e6fb7cb7e95424fc81bf48f458fd5c4b *R/filledContour3d.R
 fe8d5f9a3ff97345b7fef7be46e808f7 *R/fonts.R
 2ae4367baeca1f59568a6325b65b9c32 *R/getBoundary.R
-05b7b33c2a05812d8841b78598c70851 *R/getscene.R
+bf5dcd2f1598bdccf0874ff33c21b767 *R/getscene.R
 878f2258edc9e9958e09aad1939575d9 *R/grid3d.R
 3547d37b3a9de3947f855f948129e5ff *R/hooks.R
 0db39cbfb3fe01c3cd5ac549cbb61d2d *R/identify3d.R
@@ -79,8 +79,8 @@ c20ba1ca95350a9dd167a9b0f3ffae40 *R/turn3d.R
 3f3ec6108c694f57c77e23dbf0063e9b *R/webGLcontrols.R
 bf49a233d31d1b3db72726d570ee0918 *R/windows/noOpenGL.R
 2642b375c08905e773c5511ed1ec97ef *R/zzz.R
-b4994cf7801310ffa5234f32ffac9e5c *README.md
-e87ada7ef735aecc84edc909fe03894a *build/vignette.rds
+77452d589e75295fde4f37867e375e37 *README.md
+5d1746a65de712089784658ff0c31914 *build/vignette.rds
 10e89b551cff8c2453ea69fde1b97493 *cleanup
 ee1550a64d84ea5b26e1b7641f11078c *configure
 d401e18053b62d5bddd3116c7693d35a *configure.ac
@@ -111,13 +111,13 @@ ef13a1c10dfbc78464e5b704b65447c1 *demo/shinyTabs.R
 5544dce93555cfaced50ee41283e9e58 *inst/demodata/region.dat
 9c674320312fbe3692069bb15a2bd24b *inst/doc/WebGL.R
 04dd1f2d773d8fb27b86c6353c313dd9 *inst/doc/WebGL.Rmd
-78f0c52fa59f1e29e21c5aafbbc6e9bb *inst/doc/WebGL.html
+2db3b836d4c06228126bb9d097a726c4 *inst/doc/WebGL.html
 d7cbcf7446607268da24a6ddf0c448a6 *inst/doc/pkgdown.R
 6227ee792d7fba32627b3fa51c882dd4 *inst/doc/pkgdown.Rmd
 c080b89d0653403eff4d2c42c6dd26f7 *inst/doc/pkgdown.html
 12959586a167d4d4442872d4b88c809a *inst/doc/rgl.R
 f8e5cf1ecb64753a29de78ed552ff4c4 *inst/doc/rgl.Rmd
-a42f1b4cecf9d7950e3f4a538571b45a *inst/doc/rgl.html
+f072df8d3efca9cb5ad4bb93ff58140c *inst/doc/rgl.html
 9cc7fbabd59616c69724412ddf87d9e3 *inst/doc/transparency.R
 002b07c7e555fada70d405ea390aacd2 *inst/doc/transparency.Rmd
 4a5075d336b590884d6e90d2862e0743 *inst/doc/transparency.html
@@ -133,7 +133,7 @@ ad3b153c62394e7c510ec7ce6315378d *inst/htmlwidgets/lib/rglClass/JSDoc.json
 1135e5d04e71ff918b4248025fe555d9 *inst/htmlwidgets/lib/rglClass/controls.src.js
 f135d27d4b239b47c02dc529d0b3330d *inst/htmlwidgets/lib/rglClass/draw.src.js
 500b34d6e6cbe199ead38156c9bf5f0f *inst/htmlwidgets/lib/rglClass/init.src.js
-b71712266518a1153c3caa22713b1040 *inst/htmlwidgets/lib/rglClass/mouse.src.js
+b21d7ef4f3c0060e1cd7e264db2cdb4b *inst/htmlwidgets/lib/rglClass/mouse.src.js
 0144a563d14d284cf6092d408397d569 *inst/htmlwidgets/lib/rglClass/pieces.src.js
 f4fe316e7edf6f15d154c6e6e9300471 *inst/htmlwidgets/lib/rglClass/pretty.src.js
 d579e619041e8dafa569236f36af1c1a *inst/htmlwidgets/lib/rglClass/projection.src.js
@@ -511,8 +511,8 @@ b2be2ae826114fb41cfd9edbca9eb739 *src/useNULL/Makevars
 5dad4b46bd394730ed904ced7eceaf33 *src/win32gui.cpp
 305ea9cb6c67ba53cd2e719ceb614479 *src/win32gui.h
 9bd9cbf263308cb6792ba619767c79b7 *src/win32lib.cpp
-b644c44adc01c2fda4c5fc6626b37652 *src/x11gui.cpp
-989fa9b098bd3853853ad77f2a0d00d2 *src/x11gui.h
+499fa4d51610371a532d2c40466a6c48 *src/x11gui.cpp
+5a31996f072a8e64d3fd4a4b31879d0c *src/x11gui.h
 bb033aaefa628fb5e2c2eb0628db269c *src/x11lib.cpp
 c1cfc4a2398fb865c5cb4da26b1c5c8c *tests/bbox3dtests.R
 c3199d2881d143df1931b2f6215953e3 *tests/boundary.R
