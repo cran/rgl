@@ -1,3 +1,53 @@
+
+# rgl 0.110.2
+
+## Major changes
+
+* Material property `"blend"` has been added, to allow
+various kinds of blending for semi-transparent objects
+(issue #245).
+
+## Minor changes
+
+* The `Buffer` object now handles reading of sparse
+accessors.
+* Low level drawing of primitives has been made more
+memory efficient.  This is only likely to make a 
+noticeable change with very large objects, where R
+was running out of memory because of unnecessary
+duplication. (Related to issue #260.)
+* Recycling of x, y and z vectors in several functions
+is more consistent.
+* The `polygon3d()` function now chooses coordinates
+automatically, as `triangulate()` does (PR #262.)
+* The `mtext3d()` and related functions such as
+`title3d()' now accept language objects
+other than expressions, as `plotmath3d()` always has 
+(issue #273).
+
+## Bug fixes
+
+* The bounding box could be calculated incorrectly
+if data all had large values (issue #250).
+* Shiny displays failed to load the shaders (issue #249).
+* `transform3d()` failed due to missing argument (issue #253).
+* `readOBJ()` is now more flexible in what kinds of
+separators it will accept. (issue #258).
+* Failure to initialize could cause a segfault.
+* On non-macOS platforms, gray-scale textures failed
+to display, with a message about an invalid enumerant.
+* The third coordinate for `adj` that was added in 0.108.3
+was not rendered properly in `rglwidget()` displays of
+text.  This sometimes caused text to disappear when it
+was near the far limit of the display (issue #269).
+* The X11 error fix in 0.109.6 could result in R
+freezing in `Rcmdr`.
+* Low level drawing functions are now more consistent
+about returning an invisible `NULL` if asked to plot zero
+items, rather than raising an error or crashing (issue #274).
+* Calling `axis3d()` with no ticks or labels no longer triggers
+an error, it now silently returns `NULL`.
+
 # rgl  0.109.6
 
 ## Minor changes

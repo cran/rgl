@@ -121,13 +121,20 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   for (var i = 0; i < sheets.length; i++) {
     if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
     try { var rules = sheets[i].cssRules; } catch (e) { continue; }
-    for (var j = 0; j < rules.length; j++) {
+    var j = 0;
+    while (j < rules.length) {
       var rule = rules[j];
       // check if there is a div.sourceCode rule
-      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
       var style = rule.style.cssText;
       // check if color or background-color is set
-      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
       // replace div.sourceCode by a pre.sourceCode rule
       sheets[i].deleteRule(j);
       sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
@@ -338,12 +345,14 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 <div id="TOC">
 <ul>
-<li><a href="#introduction">Introduction</a></li>
-<li><a href="#correct-drawing">Correct Drawing</a></li>
-<li><a href="#incorrect-sorting">Incorrect sorting</a></li>
-<li><a href="#mask-or-not">Mask or Not?</a></li>
-<li><a href="#recommendation">Recommendation</a></li>
-<li><a href="#example">Example</a></li>
+<li><a href="#introduction" id="toc-introduction">Introduction</a></li>
+<li><a href="#correct-drawing" id="toc-correct-drawing">Correct
+Drawing</a></li>
+<li><a href="#incorrect-sorting" id="toc-incorrect-sorting">Incorrect
+sorting</a></li>
+<li><a href="#mask-or-not" id="toc-mask-or-not">Mask or Not?</a></li>
+<li><a href="#recommendation" id="toc-recommendation">Recommendation</a></li>
+<li><a href="#example" id="toc-example">Example</a></li>
 </ul>
 </div>
 

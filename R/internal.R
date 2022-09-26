@@ -71,8 +71,10 @@ rgl.string <- function( x ) {
 # vertex data object
 #
 
-rgl.vertex <- function(x,y=NULL,z=NULL) {
-  xyz <- xyz.coords(x,y,z,recycle=TRUE)
+rgl.vertex <- function(x, y = NULL, z = NULL) {
+  xyz <- xyz.coords(x, y, z, recycle=TRUE)
+  # This is not the same as just rbind(xyz$x,xyz$y,xyz$z)!
+  # xyz.coords puts all of named vector x into xyz$x
   return( matrix( rbind(xyz$x,xyz$y,xyz$z), nrow=3, dimnames=list( c("x","y","z"), NULL ) ) )
 }
 

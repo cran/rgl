@@ -52,7 +52,8 @@ clear3d     <- function(type = c("shapes", "bboxdeco", "material"),
     "texture", "textype", "texmipmap",
     "texminfilter", "texmagfilter", "texenvmap",
     "depth_mask", "depth_test", "isTransparent",
-    "polygon_offset", "margin", "floating", "tag")
+    "polygon_offset", "margin", "floating", "tag",
+    "blend")
 
 .material3d.readOnly <- "isTransparent"
 
@@ -190,7 +191,7 @@ observer3d <- function(x, y=NULL, z=NULL, auto=FALSE) {
   if (missing(x))
     location <- c(NA, NA, NA)
   else {
-    xyz <- xyz.coords(x,y,z)
+    xyz <- xyz.coords(x,y,z, recycle = TRUE)
     location <- c(xyz$x, xyz$y, xyz$z)
     if (length(location) != 3) stop("A single point must be specified for the observer location") 
   }    
@@ -310,7 +311,7 @@ shade3d <- function(x,...) UseMethod("shade3d")
 translate3d <- function(obj,x,y,z,...) UseMethod("translate3d")
 scale3d <- function(obj,x,y,z,...) UseMethod("scale3d")
 rotate3d <- function(obj,angle,x,y,z,matrix,...) UseMethod("rotate3d")
-transform3d <- function(obj,matrix,...) rotate3d(obj, matrix=matrix, ...)
+transform3d <- function(obj,matrix,...) rotate3d(obj, matrix = matrix, angle = NA, x = NA, y = NA, z = NA)
 
 subdivision3d <- function(x,...) UseMethod("subdivision3d")
 

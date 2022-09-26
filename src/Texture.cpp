@@ -183,13 +183,10 @@ void Texture::init(RenderContext* renderContext)
     bytesperpixel = 1;
     switch(internalFormat)
     {
-    case GL_LUMINANCE:
-      format = GL_LUMINANCE;
-      break;
     case GL_ALPHA:
       format = GL_ALPHA;
       break;
-    case GL_LUMINANCE_ALPHA:
+    default:
       format = GL_LUMINANCE;
       break;
     }
@@ -278,7 +275,6 @@ void Texture::beginUse(RenderContext* renderContext)
 
   if (type == ALPHA) {
     glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
   }
 #endif
 }

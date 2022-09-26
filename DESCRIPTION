@@ -1,5 +1,5 @@
 Package: rgl
-Version: 0.109.6
+Version: 0.110.2
 Title: 3D Visualization Using OpenGL
 Authors@R: c(person("Duncan", "Murdoch", role = c("aut", "cre"),
                      email = "murdoch.duncan@gmail.com"),
@@ -51,9 +51,9 @@ SystemRequirements: OpenGL and GLU Library (Required for display in R.
 BugReports: https://github.com/dmurdoch/rgl/issues
 VignetteBuilder: knitr, rmarkdown
 Biarch: true
-RoxygenNote: 7.1.2
+RoxygenNote: 7.2.0
 NeedsCompilation: yes
-Packaged: 2022-07-07 23:44:06 UTC; murdoch
+Packaged: 2022-09-05 13:37:46 UTC; murdoch
 Author: Duncan Murdoch [aut, cre],
   Daniel Adler [aut],
   Oleg Nenadic [ctb],
@@ -78,4 +78,4 @@ Author: Duncan Murdoch [aut, cre],
   Mike Stein [ctb]
 Maintainer: Duncan Murdoch <murdoch.duncan@gmail.com>
 Repository: CRAN
-Date/Publication: 2022-07-08 23:30:02 UTC
+Date/Publication: 2022-09-26 12:10:03 UTC

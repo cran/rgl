@@ -388,7 +388,7 @@ rgl.light <- function( theta = 0, phi = 0, viewpoint.rel = TRUE, ambient = "#FFF
   if ( !is.null(x) ) {
     if ( !missing(theta) || !missing(phi) )
       warning("'theta' and 'phi' ignored when 'x' is present")
-    xyz <- xyz.coords(x,y,z)
+    xyz <- xyz.coords(x,y,z, recycle = TRUE)
     x <- xyz$x
     y <- xyz$y
     z <- xyz$z
@@ -435,11 +435,6 @@ rgl.primitive <- function( type, x, y=NULL, z=NULL, normals=NULL, texcoords=NULL
   rgl.material( ... )
 
   type <- rgl.enum.primtype(type)
-  
-  xyz <- xyz.coords(x,y,z,recycle=TRUE)
-  x <- xyz$x
-  y <- xyz$y
-  z <- xyz$z
 
   vertex  <- rgl.vertex(x,y,z)
   nvertex <- rgl.nvertex(vertex)
@@ -481,19 +476,17 @@ rgl.primitive <- function( type, x, y=NULL, z=NULL, normals=NULL, texcoords=NULL
       texcoords <- rgl.texcoords(s,t)
     } 
     
-    ret <- .C( rgl_primitive,
-      success = as.integer(FALSE),
+    success <- .Call( rgl_primitive,
       as.integer(idata),
       as.numeric(vertex),
       as.numeric(normals),
-      as.numeric(texcoords),
-      NAOK = TRUE
+      as.numeric(texcoords)
     )
         
-    if (! ret$success)
+    if (!success)
       stop("'rgl_primitive' failed")
       
-    lowlevel(ret$success)
+    lowlevel(success)
   }
 }
 
@@ -623,29 +616,29 @@ rgl.surface <- function( x, z, y, coords=1:3,  ..., normal_x=NULL, normal_y=NULL
 
 rgl.spheres <- function( x, y=NULL, z=NULL, radius=1.0, fastTransparency = TRUE, ...) {
   rgl.material(...)
-
+  
   vertex  <- rgl.vertex(x,y,z)
   nvertex <- rgl.nvertex(vertex)
   radius  <- rgl.attr(radius, nvertex)
   nradius <- length(radius)
-  if (!nradius) stop("No radius specified")
-  
-  idata <- as.integer( c( nvertex, nradius ) )
-   
-  ret <- .C( rgl_spheres,
-    success = as.integer(FALSE),
-    idata,
-    as.numeric(vertex),    
-    as.numeric(radius),
-    as.integer(fastTransparency),
-    NAOK=TRUE
-  )
-
-  if (! ret$success)
-    stop("'rgl_spheres' failed")
+  if (nvertex && nradius) {
     
-  lowlevel(ret$success)
-
+    idata <- as.integer( c( nvertex, nradius ) )
+    
+    ret <- .C( rgl_spheres,
+               success = as.integer(FALSE),
+               idata,
+               as.numeric(vertex),    
+               as.numeric(radius),
+               as.integer(fastTransparency),
+               NAOK=TRUE
+    )
+    
+    if (! ret$success)
+      stop("'rgl_spheres' failed")
+    
+    lowlevel(ret$success)
+  }
 }
 
 ##
@@ -654,26 +647,28 @@ rgl.spheres <- function( x, y=NULL, z=NULL, radius=1.0, fastTransparency = TRUE,
 
 rgl.planes <- function( a, b=NULL, c=NULL, d=0,...) {
   rgl.material(...)
-
+  
   normals  <- rgl.vertex(a, b, c)
   nnormals <- rgl.nvertex(normals)
   noffsets <- length(d)
   
-  idata <- as.integer( c( nnormals, noffsets ) )
-   
-  ret <- .C( rgl_planes,
-    success = as.integer(FALSE),
-    idata,
-    as.numeric(normals),    
-    as.numeric(d),
-    NAOK=TRUE
-  )
-
-  if (! ret$success)
-    stop("'rgl_planes' failed")
+  if (nnormals && noffsets) {
     
-  lowlevel(ret$success)
-
+    idata <- as.integer( c( nnormals, noffsets ) )
+    
+    ret <- .C( rgl_planes,
+               success = as.integer(FALSE),
+               idata,
+               as.numeric(normals),    
+               as.numeric(d),
+               NAOK=TRUE
+    )
+    
+    if (! ret$success)
+      stop("'rgl_planes' failed")
+    
+    lowlevel(ret$success)
+  }
 }
 
 ##
@@ -684,22 +679,22 @@ rgl.clipplanes <- function( a, b=NULL, c=NULL, d=0) {
   normals  <- rgl.vertex(a, b, c)
   nnormals <- rgl.nvertex(normals)
   noffsets <- length(d)
-  
-  idata <- as.integer( c( nnormals, noffsets ) )
-   
-  ret <- .C( rgl_clipplanes,
-    success = as.integer(FALSE),
-    idata,
-    as.numeric(normals),    
-    as.numeric(d),
-    NAOK=TRUE
-  )
-
-  if (! ret$success)
-    stop("'rgl_clipplanes' failed")
+  if (nnormals && noffsets) {
+    idata <- as.integer( c( nnormals, noffsets ) )
     
-  lowlevel(ret$success)
-
+    ret <- .C( rgl_clipplanes,
+               success = as.integer(FALSE),
+               idata,
+               as.numeric(normals),    
+               as.numeric(d),
+               NAOK=TRUE
+    )
+    
+    if (! ret$success)
+      stop("'rgl_clipplanes' failed")
+    
+    lowlevel(ret$success)
+  }
 }
 
 
@@ -709,27 +704,27 @@ rgl.clipplanes <- function( a, b=NULL, c=NULL, d=0) {
 
 rgl.abclines <- function(x, y=NULL, z=NULL, a, b=NULL, c=NULL, ...) {
   rgl.material(...)
-
+  
   bases  <- rgl.vertex(x, y, z)
   nbases <- rgl.nvertex(bases)
   directions <- rgl.vertex(a, b, c)
   ndirs <-  rgl.nvertex(directions)
-  
-  idata <- as.integer( c( nbases, ndirs ) )
-   
-  ret <- .C( rgl_abclines,
-    success = as.integer(FALSE),
-    idata,
-    as.numeric(bases),    
-    as.numeric(directions),
-    NAOK=TRUE
-  )
-
-  if (! ret$success)
-    stop("'rgl_abclines' failed")
+  if (nbases && ndirs) {
+    idata <- as.integer( c( nbases, ndirs ) )
     
-  lowlevel(ret$success)
-
+    ret <- .C( rgl_abclines,
+               success = as.integer(FALSE),
+               idata,
+               as.numeric(bases),    
+               as.numeric(directions),
+               NAOK=TRUE
+    )
+    
+    if (! ret$success)
+      stop("'rgl_abclines' failed")
+    
+    lowlevel(ret$success)
+  }
 }
 
 
@@ -742,7 +737,7 @@ rgl.texts <- function(x, y=NULL, z=NULL, text, adj = 0.5, pos = NULL, offset = 0
                       cex=par3d("cex"), useFreeType=par3d("useFreeType"), 
                       ... ) {
   rgl.material( ... )
-
+  
   vertex  <- rgl.vertex(x,y,z)
   nvertex <- rgl.nvertex(vertex)
   
@@ -763,39 +758,40 @@ rgl.texts <- function(x, y=NULL, z=NULL, text, adj = 0.5, pos = NULL, offset = 0
       warning("No text to plot")
     return(invisible(integer(0)))
   }
+  if (nvertex) {
+    text    <- rep(text, length.out=nvertex)
     
-  text    <- rep(text, length.out=nvertex)
-  
-  idata <- as.integer(nvertex)
-  
-  nfonts <- max(length(family), length(font), length(cex)) 
-  family <- rep(family, length.out = nfonts)
-  font <- rep(font, length.out = nfonts)
-  cex <- rep(cex, length.out = nfonts)  
-  
-  family[font == 5] <- "symbol"
-  font <- ifelse( font < 0 | font > 4, 1, font)  
-  
-  ret <- .C( rgl_texts,
-    success = as.integer(FALSE),
-    idata,
-    as.double(adj),
-    as.character(text),
-    as.numeric(vertex),
-    as.integer(nfonts),
-    as.character(family), 
-    as.integer(font),
-    as.numeric(cex),
-    as.integer(useFreeType),
-    as.integer(npos),
-    as.integer(pos),
-    NAOK=TRUE
-  )
-  
-  if (! ret$success)
-    stop("'rgl_texts' failed")
-
-  lowlevel(ret$success)
+    idata <- as.integer(nvertex)
+    
+    nfonts <- max(length(family), length(font), length(cex)) 
+    family <- rep(family, length.out = nfonts)
+    font <- rep(font, length.out = nfonts)
+    cex <- rep(cex, length.out = nfonts)  
+    
+    family[font == 5] <- "symbol"
+    font <- ifelse( font < 0 | font > 4, 1, font)  
+    
+    ret <- .C( rgl_texts,
+               success = as.integer(FALSE),
+               idata,
+               as.double(adj),
+               as.character(text),
+               as.numeric(vertex),
+               as.integer(nfonts),
+               as.character(family), 
+               as.integer(font),
+               as.numeric(cex),
+               as.integer(useFreeType),
+               as.integer(npos),
+               as.integer(pos),
+               NAOK=TRUE
+    )
+    
+    if (! ret$success)
+      stop("'rgl_texts' failed")
+    
+    lowlevel(ret$success)
+  }
 }
 
 ##
@@ -805,14 +801,14 @@ rgl.texts <- function(x, y=NULL, z=NULL, text, adj = 0.5, pos = NULL, offset = 0
 rgl.sprites <- function( x, y=NULL, z=NULL, radius=1.0, shapes=NULL, 
                          userMatrix=diag(4), fixedSize = FALSE,
                          adj = 0.5, pos = NULL, offset = 0.25, rotating = FALSE, 
-			 ... ) {
+                         ... ) {
   rgl.material(...)
-
+  
   center  <- rgl.vertex(x,y,z)
   ncenter <- rgl.nvertex(center)
   radius  <- rgl.attr(radius, ncenter)
   nradius <- length(radius)
-
+  
   pos <- as.integer(pos)
   npos <- length(pos)
   if (npos) {
@@ -820,28 +816,29 @@ rgl.sprites <- function( x, y=NULL, z=NULL, radius=1.0, shapes=NULL,
     adj <- offset
   }
   adj <- c(adj, 0.5, 0.5, 0.5)[1:3]
-  if (!nradius) stop("No radius specified")
-  if (length(shapes) && length(userMatrix) != 16) stop("Invalid 'userMatrix'")
-  if (length(fixedSize) != 1) stop("Invalid 'fixedSize'")
-  idata   <- as.integer( c(ncenter,nradius,length(shapes), fixedSize, npos, rotating) )
-  
-  ret <- .C( rgl_sprites,
-    success = as.integer(FALSE),
-    idata,
-    as.numeric(center),
-    as.numeric(radius),
-    as.integer(shapes),
-    as.numeric(t(userMatrix)),
-    as.numeric(adj),
-    pos,
-    as.numeric(offset),
-    NAOK=TRUE
-  )
-
-  if (! ret$success)
-    stop("'rgl_sprites' failed")
-
-  lowlevel(ret$success)
+  if (ncenter && nradius) {
+    if (length(shapes) && length(userMatrix) != 16) stop("Invalid 'userMatrix'")
+    if (length(fixedSize) != 1) stop("Invalid 'fixedSize'")
+    idata   <- as.integer( c(ncenter,nradius,length(shapes), fixedSize, npos, rotating) )
+    
+    ret <- .C( rgl_sprites,
+               success = as.integer(FALSE),
+               idata,
+               as.numeric(center),
+               as.numeric(radius),
+               as.integer(shapes),
+               as.numeric(t(userMatrix)),
+               as.numeric(adj),
+               pos,
+               as.numeric(offset),
+               NAOK=TRUE
+    )
+    
+    if (! ret$success)
+      stop("'rgl_sprites' failed")
+    
+    lowlevel(ret$success)
+  }
 }
 
 ##

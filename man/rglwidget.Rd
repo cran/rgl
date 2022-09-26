@@ -80,7 +80,7 @@ For a snapshot, you can use
 
 The \code{webGLoptions} argument is a list which will
 be passed when the WebGL context is created.  See
-the WebGL 1.0 specification on \url{https://www.khronos.org/registry/webgl/specs/} for possible
+the WebGL 1.0 specification on \url{https://registry.khronos.org/webgl/specs/} for possible
 settings.  The default in \code{rglwidget} differs
 from the WebGL default by setting \code{preserveDrawingBuffer = TRUE} in order to allow other tools to read
 the image, but please note that some implementations
@@ -167,8 +167,7 @@ Duncan Murdoch
 \code{\link{hook_webgl}} for an earlier approach to this problem. \code{\link{rglwidgetOutput}} for Shiny details.
 }
 \examples{
-save <- getOption("rgl.useNULL")
-options(rgl.useNULL=TRUE)
+save <- options(rgl.useNULL=TRUE)
 example("plot3d", "rgl")
 widget <- rglwidget()
 if (interactive() || in_pkgdown_example())
@@ -182,5 +181,7 @@ if (interactive() && !in_pkgdown_example()) {
   browseURL(filename)
 }
 }
+
+options(save)
 }
 
