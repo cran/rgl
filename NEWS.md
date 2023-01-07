@@ -1,3 +1,33 @@
+# rgl 0.111.6
+
+## Minor changes
+
+* Added a panning example to the help page for `setUserCallbacks()`.
+* Replaced all calls to `sprintf` from C/C++ code with calls to
+`snprintf`.
+* `surface3d` and `rgl.surface` are now more flexible,
+allowing any of the 3 coordinates to be a vector or matrix
+as long as at least one is a matrix.
+* `material3d` can now specify an `id` to query properties
+for individual objects.
+* Since `rgl.material` is soon to be deprecated and no
+longer contain the list of material types in its
+argument list, `rgl.material.names` and `rgl.material.readonly` have been
+added.  
+* Similarly, `rgl.par3d.names` and `rgl.par3d.readonly`
+contain lists of properties that may be set or queried
+in `par3d()`.
+* Made some examples conditional on interactive use
+to save time on CRAN.
+
+## Bug fixes
+
+* Default mouse modes used when a window is opened by an `rgl.*`
+call (which is not recommended!) now match
+the defaults in `rgl::r3dDefaults`.
+* Missing values could cause `surface3d()` to segfault.
+* The C source code for `gl2psGetFileFormat` missed declaring
+a prototype.
 
 # rgl 0.110.2
 
@@ -21,7 +51,7 @@ is more consistent.
 * The `polygon3d()` function now chooses coordinates
 automatically, as `triangulate()` does (PR #262.)
 * The `mtext3d()` and related functions such as
-`title3d()' now accept language objects
+`title3d()` now accept language objects
 other than expressions, as `plotmath3d()` always has 
 (issue #273).
 
@@ -129,7 +159,7 @@ longer suggested.
   
 ## Bug fixes
 
-* as.mesh3d.rglobject() didn't handle objects with indices
+* `as.mesh3d.rglobject()` didn't handle objects with indices
 properly.
 * In WebGL, the front vs back calculation sometimes
 got the wrong result (issue #164).
@@ -223,7 +253,7 @@ location), `5` (in front of it), and `6` (behind it) in
 * `crosstalk` is now a Suggested package, rather than
 a required one.
 * The `Makevars.ucrt` file has been modified with
-contributions from Tomas Kalibera to work with his winutf8
+contributions from Tomas Kalibera to work with his `winutf8`
 build of R.
 * `bgplot3d()` no longer pauses for each page when running
 examples.

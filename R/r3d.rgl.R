@@ -46,7 +46,7 @@ clear3d     <- function(type = c("shapes", "bboxdeco", "material"),
 
 # Environment
 
-.material3d <- c("color", "alpha", "lit", "ambient", "specular",
+rgl.material.names <- c("color", "alpha", "lit", "ambient", "specular",
     "emission", "shininess", "smooth", "front", "back", "size", 
     "lwd", "fog", "point_antialias", "line_antialias",
     "texture", "textype", "texmipmap",
@@ -55,7 +55,7 @@ clear3d     <- function(type = c("shapes", "bboxdeco", "material"),
     "polygon_offset", "margin", "floating", "tag",
     "blend")
 
-.material3d.readOnly <- "isTransparent"
+rgl.material.readonly <- "isTransparent"
 
 # This function expands a list of arguments by putting
 # all entries from Params (i.e. the current settings by default)
@@ -95,37 +95,42 @@ clear3d     <- function(type = c("shapes", "bboxdeco", "material"),
                                         ...), material))))[-1]
   if (!is.null(col) && !("color" %in% names(fullyNamed)))
     fullyNamed$color <- col
-  good <- names(fullyNamed) %in% .material3d
+  good <- names(fullyNamed) %in% rgl.material.names
   if (warn && !all(good))
     warning("Argument(s) ", paste(names(fullyNamed)[!good], collapse = ", "), " not matched.")
   fullyNamed[good]
 }
 
-material3d  <- function(...) {
-    args <- list(...)
-    argnames <- setdiff(names(args), .material3d.readOnly)
-    if (!length(args))
-	argnames <- .material3d
-    else {
-	if (is.null(names(args)) && all(unlist(lapply(args, is.character)))) {
-	    argnames <- unlist(args)
-	    args <- NULL
-	}
-	
-	if (length(args) == 1) {
-	    if (is.list(args[[1]]) | is.null(args[[1]])) {
-		args <- args[[1]]
-		argnames <- names(args)
-	    }
-	}
+material3d  <- function(..., id = NULL) {
+  args <- list(...)
+  argnames <- names(args)
+  if (length(argnames) && !is.null(id))
+    stop("Material properties cannot be set on existing objects.")
+  if (length(id) > 1)
+   stop("Material properties may only be queried for single objects.")
+  argnames <- setdiff(argnames, rgl.material.readonly)
+  if (!length(args))
+    argnames <- rgl.material.names
+  else {
+    if (is.null(names(args)) && all(unlist(lapply(args, is.character)))) {
+      argnames <- unlist(args)
+      args <- NULL
     }
-    value <- rgl.getmaterial()[argnames]
-    if (length(args)) {
-    	args <- do.call(".fixMaterialArgs", args)
-        do.call("rgl.material", args)
-        return(invisible(value))
-    } else if (length(argnames) == 1) return(value[[1]])
-    else return(value)
+    
+    if (length(args) == 1) {
+      if (is.list(args[[1]]) | is.null(args[[1]])) {
+        args <- args[[1]]
+        argnames <- names(args)
+      }
+    }
+  }
+  value <- rgl.getmaterial(id = id)[argnames]
+  if (length(args)) {
+    args <- do.call(".fixMaterialArgs", args)
+    do.call("rgl.material", args)
+    return(invisible(value))
+  } else if (length(argnames) == 1) return(value[[1]])
+  else return(value)
 }
 
 bg3d        <- function(...) {

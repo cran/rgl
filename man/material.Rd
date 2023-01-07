@@ -1,11 +1,45 @@
-\name{rgl.material}
+\name{material3d}
 \alias{rgl.material}
 \alias{material3d}
-\title{Set material properties}
+\alias{rgl.material.names}
+\alias{rgl.material.readonly}
+\concept{color}
+\concept{lit}
+\concept{ambient}
+\concept{specular}
+\concept{emission}
+\concept{shininess}
+\concept{alpha}
+\concept{smooth}
+\concept{texture}
+\concept{textype}
+\concept{texmipmap}
+\concept{texmagfilter}
+\concept{texminfilter}
+\concept{texenvmap}
+\concept{front}
+\concept{back}
+\concept{size}
+\concept{lwd}
+\concept{fog}
+\concept{point_antialias}
+\concept{line_antialias}
+\concept{depth_mask}
+\concept{depth_test}
+\concept{polygon_offset}
+\concept{margin}
+\concept{floating}
+\concept{tag}
+\concept{blend}
+\concept{isTransparent}
+
+\title{Get or set material properties}
 \description{
-  Set material properties for geometry appearance.
+  Get or set material properties for geometry appearance.
 }
 \usage{
+material3d(..., id = NULL)
+
 rgl.material(
   color        = "white",
   alpha        = 1.0,
@@ -38,9 +72,15 @@ rgl.material(
   col,
   ...
 )
-material3d(...)
+rgl.material.names
+rgl.material.readonly
 }
 \arguments{
+  \item{...}{\code{material3d} passes these to \code{rgl.material}; \code{rgl.material} ignores unrecognized arguments. See Details below.}
+  \item{id}{
+  the \pkg{rgl} id of an object to query, or \code{NULL}
+  to query or set the defaults.
+  }
   \item{color}{
     vector of R color characters. Represents the diffuse component in case of lighting calculation (lit = TRUE),
     otherwise it describes the solid color characteristics.
@@ -157,14 +197,18 @@ destination alpha or its opposite.}
   }
   }
   \item{col}{An allowed abbreviation of \code{color}.}
-  \item{...}{Any of the arguments above can
-  be passed to \code{material3d}; see Details below.  \code{rgl.material} will ignore others.}
+
 }
 \details{
   Values can be queried by specifying their names
 in a character vector, e.g. \code{material3d("color")}.
-There is one read-only property that can be queried
-but not set:
+The \code{rgl.material.names} variable contains the
+full list of material names.
+The \code{rgl.material.readonly} variable contains
+the subset of material properties that are read-only
+so they can be queried
+but not set.
+Currently there is only one:
 
 \describe{
 \item{isTransparent}{Is the current color transparent?}
@@ -222,12 +266,12 @@ Experimentation may be needed to get it right.  The first
 example in \code{?\link{persp3d}} uses this property to add 
 grid lines to a surface.
   
-  \code{material3d} is an alternate interface to the material properties, modelled after
-\code{\link{par3d}}:  rather than setting defaults for parameters that are not specified, 
-they will be left unchanged.  \code{material3d} may also be used to query the material
+  \code{material3d} is the recommended interface to the material properties, modelled after
+\code{\link{par3d}}:  unspecified parameters, 
+will be left unchanged, whereas \code{rgl.material}
+will set them to the defaults shown above.  
+\code{material3d} may also be used to query the material
 properties; see the examples below.
-
-  The current implementation does not return parameters for textures.
 
   The \code{material} member of the \code{\link{r3dDefaults}} list may be used to 
 set default values for material properties.
@@ -235,14 +279,14 @@ set default values for material properties.
   The \code{...} parameter to \code{rgl.material} is ignored.
 }
 \value{
-\code{rgl.material()} is called for the side effect of setting the material properties.
-It returns a value invisibly which is not intended for use by the user.
-
-Users should use \code{material3d()} to query material properties.  It returns values similarly
+Users should use \code{material3d()} to set and query material properties.  It returns values similarly
 to \code{\link{par3d}} as follows:
 When setting properties, it returns the previous values in a named list.  A named list is also
 returned when more than one value is queried.  When a single value is queried it is returned 
 directly.
+
+\code{rgl.material()} is called for the side effect of setting the material properties.
+It returns a value invisibly which is not intended for use by the user.
 } 
 \note{
   If \code{point_antialias} is \code{TRUE}, points will be drawn as circles in WebGL; otherwise, they
@@ -254,10 +298,9 @@ Within R, lines tend to appear heavier with \code{line_antialias == TRUE}.  Ther
 in WebGL.
 }
 \seealso{
-\code{\link{rgl.primitive}},
-\code{\link{rgl.bbox}},
-\code{\link{rgl.bg}},
-\code{\link{rgl.light}}
+\code{\link{bbox3d}},
+\code{\link{bg3d}},
+\code{\link{light3d}}
 }
 \examples{
 save <- material3d("color")
@@ -290,4 +333,3 @@ quads3d(rbind(translate3d(quad, -0.5, 0, -0.5),
         blend = c("src_alpha", "one"))
 }
 \keyword{dynamic}
-
