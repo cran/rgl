@@ -109,7 +109,7 @@ persp(volcano, col = "green", shade = TRUE,
       theta = angles$theta, phi = angles$phi)
 
 ## ----echo=FALSE---------------------------------------------------------------
-setdiff(ls("package:rgl"), documentedfns)
+setdiff(ls("package:rgl"), c(documentedfns, deprecatedfns))
 
 ## ----echo=FALSE, results="asis"-----------------------------------------------
 writeIndex(cols = if (knitr::is_html_output()) 5 else 4)

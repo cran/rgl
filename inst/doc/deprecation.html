@@ -12,7 +12,7 @@
 
 <meta name="author" content="Duncan Murdoch" />
 
-<meta name="date" content="2023-01-06" />
+<meta name="date" content="2023-01-18" />
 
 <title>Deprecating the rgl.* interface</title>
 
@@ -341,7 +341,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <h1 class="title toc-ignore">Deprecating the <code>rgl.*</code>
 interface</h1>
 <h4 class="author">Duncan Murdoch</h4>
-<h4 class="date">2023-01-06</h4>
+<h4 class="date">2023-01-18</h4>
 
 
 <div id="TOC">
@@ -565,13 +565,15 @@ gives a reasonable view.</p>
 <p>Many functions in <code>rgl</code> and other packages use
 <code>...</code> to set material or <code>par3d</code> properties in a
 call, and for some, <code>...</code> will contain other optional
-arguments. When <code>rgl.material()</code> is no longer exported it
-will be harder for other functions to know all the possible material
-properties, so new variables</p>
+arguments. Some packages used the argument list of
+<code>rgl.material()</code> to identify the material property names.
+Going forward, packages should use the variables</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>rgl.material.names</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>rgl.material.readonly</span></code></pre></div>
-<p>have been added. These are character variables holding all the
-material property names. There are also variables</p>
+<p>These are character variables holding all the material property
+names. (<code>rgl.material.names</code> contains all names;
+<code>rgl.material.readonly</code> is the read-only subset of that
+list.) There are also variables</p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>rgl.par3d.names</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>rgl.par3d.readonly</span></code></pre></div>
 <p>which give the same information for <code>par3d</code>.</p>

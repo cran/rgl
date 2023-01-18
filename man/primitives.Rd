@@ -1,9 +1,11 @@
-\name{points3d}
+\name{primitives}
+\alias{primitives}
 \alias{points3d}
 \alias{lines3d}
 \alias{segments3d}
 \alias{triangles3d}
 \alias{quads3d}
+\alias{3dobjects}
 \title{Add primitive shape}
 \description{
 Adds a shape node to the current scene.

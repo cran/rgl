@@ -12,7 +12,7 @@
 
 <meta name="author" content="Duncan Murdoch" />
 
-<meta name="date" content="2023-01-06" />
+<meta name="date" content="2023-01-18" />
 
 <title>rgl Overview</title>
 
@@ -340,7 +340,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 <h1 class="title toc-ignore">rgl Overview</h1>
 <h4 class="author">Duncan Murdoch</h4>
-<h4 class="date">January 06, 2023</h4>
+<h4 class="date">January 18, 2023</h4>
 
 
 <div id="TOC">
@@ -443,13 +443,13 @@ low level structure inspired by (but incompatible with) the
 <code>grid</code> package.</p>
 <p>This document gives an overview. See the help pages for details.</p>
 <p>For installation instructions, see the <code>README</code> file in
-the top level directory of the source tarball rgl_0.111.6.tar.gz (or a
+the top level directory of the source tarball rgl_1.0.1.tar.gz (or a
 later version).</p>
 <div id="about-this-document" class="section level3">
 <h3>About this document</h3>
 <p>This document was written in R Markdown, using the <code>knitr</code>
 package for production. It corresponds to <code>rgl</code> version
-0.111.6.</p>
+1.0.1.</p>
 <p>Most of the highlighted function names are HTML links. The internal
 links should work in any browser; the links to help topics should work
 if you view the vignette from within the R help system.</p>
@@ -564,23 +564,23 @@ The “primitive” shapes are those that are native to OpenGL:</p>
 </thead>
 <tbody>
 <tr class="odd">
-<td><a name="points3d"><a href="https://dmurdoch.github.io/rgl/dev/reference/3dobjects.html"><code>points3d</code></a></a>:</td>
+<td><a name="points3d"><a href="https://dmurdoch.github.io/rgl/dev/reference/primitives.html"><code>points3d</code></a></a>:</td>
 <td>adds points</td>
 </tr>
 <tr class="even">
-<td><a name="lines3d"><a href="https://dmurdoch.github.io/rgl/dev/reference/3dobjects.html"><code>lines3d</code></a></a>:</td>
+<td><a name="lines3d"><a href="https://dmurdoch.github.io/rgl/dev/reference/primitives.html"><code>lines3d</code></a></a>:</td>
 <td>adds lines</td>
 </tr>
 <tr class="odd">
-<td><a name="segments3d"><a href="https://dmurdoch.github.io/rgl/dev/reference/3dobjects.html"><code>segments3d</code></a></a>:</td>
+<td><a name="segments3d"><a href="https://dmurdoch.github.io/rgl/dev/reference/primitives.html"><code>segments3d</code></a></a>:</td>
 <td>adds line segments</td>
 </tr>
 <tr class="even">
-<td><a name="triangles3d"><a href="https://dmurdoch.github.io/rgl/dev/reference/3dobjects.html"><code>triangles3d</code></a></a>:</td>
+<td><a name="triangles3d"><a href="https://dmurdoch.github.io/rgl/dev/reference/primitives.html"><code>triangles3d</code></a></a>:</td>
 <td>adds triangles</td>
 </tr>
 <tr class="odd">
-<td><a name="quads3d"><a href="https://dmurdoch.github.io/rgl/dev/reference/3dobjects.html"><code>quads3d</code></a></a>:</td>
+<td><a name="quads3d"><a href="https://dmurdoch.github.io/rgl/dev/reference/primitives.html"><code>quads3d</code></a></a>:</td>
 <td>adds quadrilaterals</td>
 </tr>
 </tbody>
@@ -744,29 +744,21 @@ from the primitives.</p>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="fu">bg3d</span>(<span class="st">&quot;lightgray&quot;</span>)</span>
 <span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="fu">aspect3d</span>(<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">1</span>)</span></code></pre></div>
 <p>Besides the <code>*3d</code> functions mentioned above, there are
-even lower-level functions
-<a name="rgl.primitive"><a href="https://dmurdoch.github.io/rgl/dev/reference/primitive.html"><code>rgl.primitive</code></a></a>,
-<a name="rgl.points"><a href="https://dmurdoch.github.io/rgl/dev/reference/primitive.html"><code>rgl.points</code></a></a>,
-<a name="rgl.linestrips"><a href="https://dmurdoch.github.io/rgl/dev/reference/primitive.html"><code>rgl.linestrips</code></a></a>,
-<a name="rgl.lines"><a href="https://dmurdoch.github.io/rgl/dev/reference/primitive.html"><code>rgl.lines</code></a></a>,
-<a name="rgl.triangles"><a href="https://dmurdoch.github.io/rgl/dev/reference/primitive.html"><code>rgl.triangles</code></a></a>,
-<a name="rgl.quads"><a href="https://dmurdoch.github.io/rgl/dev/reference/primitive.html"><code>rgl.quads</code></a></a>,
-<a name="rgl.texts"><a href="https://dmurdoch.github.io/rgl/dev/reference/primitive.html"><code>rgl.texts</code></a></a>,
-<a name="rgl.abclines"><a href="https://dmurdoch.github.io/rgl/dev/reference/primitive.html"><code>rgl.abclines</code></a></a>,
-<a name="rgl.planes"><a href="https://dmurdoch.github.io/rgl/dev/reference/primitive.html"><code>rgl.planes</code></a></a>,
-<a name="rgl.bg"><a href="https://dmurdoch.github.io/rgl/dev/reference/primitive.html"><code>rgl.bg</code></a></a>,
-<a name="rgl.clipplanes"><a href="https://dmurdoch.github.io/rgl/dev/reference/primitive.html"><code>rgl.clipplanes</code></a></a>,
-<a name="rgl.bbox"><a href="https://dmurdoch.github.io/rgl/dev/reference/primitive.html"><code>rgl.bbox</code></a></a>,
-<a name="rgl.spheres"><a href="https://dmurdoch.github.io/rgl/dev/reference/primitive.html"><code>rgl.spheres</code></a></a>,
-<a name="rgl.sprites"><a href="https://dmurdoch.github.io/rgl/dev/reference/primitive.html"><code>rgl.sprites</code></a></a>,
-<a name="rgl.surface"><a href="https://dmurdoch.github.io/rgl/dev/reference/primitive.html"><code>rgl.surface</code></a></a>.<br />
-You should avoid using these functions, which do not work well with the
-higher level <code>*3d</code> functions. See the
+deprecated functions <code>rgl.abclines</code>, <code>rgl.bbox</code>,
+<code>rgl.bg</code>, <code>rgl.clipplanes</code>,
+<code>rgl.lines</code>, <code>rgl.linestrips</code>,
+<code>rgl.planes</code>, <code>rgl.points</code>,
+<code>rgl.primitive</code>, <code>rgl.quads</code>,
+<code>rgl.setAxisCallback</code>, <code>rgl.spheres</code>,
+<code>rgl.sprites</code>, <code>rgl.surface</code>,
+<code>rgl.texts</code>, <code>rgl.triangles</code>. You should avoid
+using all of these functions, which do not work properly with the
+<code>*3d</code> functions and will soon be removed from
+<code>rgl</code>. See the
 <a href="https://dmurdoch.github.io/rgl/dev/reference/r3d.html">?r3d</a>
-help topic for details. The functions
-<a name="rgl.setAxisCallback"><a href="https://dmurdoch.github.io/rgl/dev/reference/rgl.setAxisCallback.html"><code>rgl.setAxisCallback</code></a></a>,
-<a name="rgl.getAxisCallback"><a href="https://dmurdoch.github.io/rgl/dev/reference/rgl.setAxisCallback.html"><code>rgl.getAxisCallback</code></a></a>
-provide low-level support for
+help topic for details. The function
+<a name="rgl.getAxisCallback"><a href="https://dmurdoch.github.io/rgl/dev/reference/rgl.getAxisCallback.html"><code>rgl.getAxisCallback</code></a></a>
+provides low-level support for
 <a href="#setAxisCallbacks"><code>setAxisCallbacks</code></a>.</p>
 </div>
 </div>
@@ -830,10 +822,8 @@ characteristics include <code>ambient</code>, <code>diffuse</code>, and
 <code>diffuse</code> component depends on the angle between the surface
 and the light, while the <code>specular</code> component also takes the
 viewer’s position into account.</p>
-<p>The
-<a name="rgl.light"><a href="https://dmurdoch.github.io/rgl/dev/reference/light.html"><code>rgl.light</code></a></a>
-function is a lower-level function with different defaults; users should
-normally use <a href="#light3d"><code>light3d</code></a>.</p>
+<p>The deprecated <code>rgl.light</code> function should no longer be
+used; use <a href="#light3d"><code>light3d</code></a> instead.</p>
 </div>
 <div id="materials" class="section level3">
 <h3>Materials</h3>
@@ -931,10 +921,8 @@ surface</td>
 see
 <a href="https://dmurdoch.github.io/rgl/dev/reference/material.html">the
 help page</a> for details.</p>
-<p>There is also an
-<a name="rgl.material"><a href="https://dmurdoch.github.io/rgl/dev/reference/material.html"><code>rgl.material</code></a></a>
-function that works at a lower level; users should normally avoid
-it.</p>
+<p>There is also a deprecated <code>rgl.material</code> function that
+works at a lower level; users should avoid it.</p>
 </div>
 <div id="textures" class="section level3">
 <h3>Textures</h3>
@@ -1003,7 +991,7 @@ text: there are font families named <code>&quot;sans&quot;</code>,
 types. In <code>rgl</code>, the <code>&quot;symbol&quot;</code> family is not
 supported.</p>
 <p>New font families can be defined using the low-level function
-<a name="rglFonts"><a href="https://dmurdoch.github.io/rgl/dev/reference/rgl.texts.html"><code>rglFonts</code></a></a>,
+<a name="rglFonts"><a href="https://dmurdoch.github.io/rgl/dev/reference/rglFonts.html"><code>rglFonts</code></a></a>,
 or more simply using the higher level function
 <a name="rglExtrafonts"><a href="https://dmurdoch.github.io/rgl/dev/reference/rglExtrafonts.html"><code>rglExtrafonts</code></a></a>.
 The latter function requires the <code>extrafont</code> package to be
@@ -1090,9 +1078,7 @@ computing the bounding box?</td>
 <td>modelMatrix</td>
 <td>read-only</td>
 <td>The OpenGL ModelView matrix; partly set by
-<a name="view3d"><a href="https://dmurdoch.github.io/rgl/dev/reference/viewpoint.html"><code>view3d</code></a></a>
-or the obsolete
-<a name="rgl.viewpoint"><a href="https://dmurdoch.github.io/rgl/dev/reference/viewpoint.html"><code>rgl.viewpoint</code></a></a></td>
+<a name="view3d"><a href="https://dmurdoch.github.io/rgl/dev/reference/viewpoint.html"><code>view3d</code></a></a></td>
 </tr>
 <tr class="even">
 <td>projMatrix</td>
@@ -1144,6 +1130,8 @@ or the obsolete
 </tr>
 </tbody>
 </table>
+<p>The deprecated <code>rgl.viewpoint</code> function should not be
+used.</p>
 </div>
 <div id="default-settings" class="section level3">
 <h3>Default settings</h3>
@@ -1683,17 +1671,12 @@ out of memory if your scenes are really big.</p></li>
 <div id="older-methods" class="section level3">
 <h3>Older methods</h3>
 <p>The original way to insert an <code>rgl</code> scene in a document
-was to use the
-<a name="writeWebGL"><a href="https://dmurdoch.github.io/rgl/dev/reference/writeWebGL.html"><code>writeWebGL</code></a></a>
-function to write HTML code to insert in a document. Later,
-<code>Sweave</code> and <code>knitr</code> hooks were added. These are
-no longer maintained, and it is recommended that you update old
-documents to use the newer methods. See the
-<a href="#writeWebGL"><code>writeWebGL</code></a>,
-<a href="#rgl.Sweave"><code>rgl.Sweave</code></a> and
-<a href="#hook_rgl"><code>hook_rgl</code></a> help topics for details on
-these if you must use them. If you are reading documents that suggest
-using those methods, let the author know they need updating!</p>
+was to use the deprecated <code>writeWebGL</code> function to write HTML
+code to insert in a document. Later, <code>Sweave</code> and
+<code>knitr</code> hooks were added. These are no longer supported, and
+you should update old documents to use the newer methods. If you are
+reading documents that suggest using those methods, let the author know
+they need updating!</p>
 </div>
 </div>
 <div id="utility-functions" class="section level2">
@@ -1817,9 +1800,8 @@ function</td>
 produces the selection function from information about the projection
 and mouse selection region; it is used internally in the functions
 above.</p>
-<p>The
-<a name="rgl.select3d"><a href="https://dmurdoch.github.io/rgl/dev/reference/select3d.html"><code>rgl.select3d</code></a></a>
-function is an obsolete version of <code>select3d</code>, and
+<p>The deprecated <code>rgl.select3d</code> function is an obsolete
+version of <code>select3d</code>, and
 <a name="rgl.select"><a href="https://dmurdoch.github.io/rgl/dev/reference/rgl.select.html"><code>rgl.select</code></a></a>
 is a low-level support function.</p>
 </div>
@@ -1923,28 +1905,24 @@ for use by other software, or to read them in.</p>
 (See also <a href="WebGL.html">User Interaction in WebGL</a>.)</td>
 </tr>
 <tr class="odd">
-<td><a href="#writeWebGL"><code>writeWebGL</code></a>:</td>
-<td>Deprecated.</td>
-</tr>
-<tr class="even">
 <td><a name="writeASY"><a href="https://dmurdoch.github.io/rgl/dev/reference/writeASY.html"><code>writeASY</code></a></a>:</td>
 <td>Write files for Asymptote</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td><a name="writePLY"><a href="https://dmurdoch.github.io/rgl/dev/reference/writePLY.html"><code>writePLY</code></a></a>:</td>
 <td>Write PLY files (commonly used in 3D printing)</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td><a name="readOBJ"><a href="https://dmurdoch.github.io/rgl/dev/reference/writeOBJ.html"><code>readOBJ</code></a></a>,
 <a name="writeOBJ"><a href="https://dmurdoch.github.io/rgl/dev/reference/writeOBJ.html"><code>writeOBJ</code></a></a>:</td>
 <td>Read or write OBJ files (commonly used in 3D graphics)</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td><a name="readSTL"><a href="https://dmurdoch.github.io/rgl/dev/reference/readSTL.html"><code>readSTL</code></a></a>,
 <a name="writeSTL"><a href="https://dmurdoch.github.io/rgl/dev/reference/readSTL.html"><code>writeSTL</code></a></a>:</td>
 <td>Read or write STL files (also common in 3D printing)</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td><a name="as.rglscene"><a href="https://dmurdoch.github.io/rgl/dev/reference/as.rglscene.html"><code>as.rglscene</code></a></a>:</td>
 <td>Generic function, no methods in <code>rgl</code></td>
 </tr>
@@ -2170,22 +2148,6 @@ printing. Finally, the function
 allows you to use hand-written shaders in WebGL, and
 <a name="getShaders"><a href="https://dmurdoch.github.io/rgl/dev/reference/setUserShaders.html"><code>getShaders</code></a></a>
 allows you to see what shader would be used.</p>
-<p>The older approach uses the
-<a href="#writeWebGL"><code>writeWebGL</code></a> function to export a
-scene to HTML and Javascript code.<br />
-These functions write HTML and Javascript for working with the exported
-scene:
-<a name="propertySlider"><a href="https://dmurdoch.github.io/rgl/dev/reference/propertySetter.html"><code>propertySlider</code></a></a>,
-<a name="clipplaneSlider"><a href="https://dmurdoch.github.io/rgl/dev/reference/webGLcontrols.html"><code>clipplaneSlider</code></a></a>,
-<a name="subsetSlider"><a href="https://dmurdoch.github.io/rgl/dev/reference/webGLcontrols.html"><code>subsetSlider</code></a></a>,
-<a name="toggleButton"><a href="https://dmurdoch.github.io/rgl/dev/reference/webGLcontrols.html"><code>toggleButton</code></a></a>,
-<a name="propertySetter"><a href="https://dmurdoch.github.io/rgl/dev/reference/propertySetter.html"><code>propertySetter</code></a></a>,
-<a name="subsetSetter"><a href="https://dmurdoch.github.io/rgl/dev/reference/webGLcontrols.html"><code>subsetSetter</code></a></a>,
-<a name="ageSetter"><a href="https://dmurdoch.github.io/rgl/dev/reference/ageSetter.html"><code>ageSetter</code></a></a>,
-<a name="par3dinterpSetter"><a href="https://dmurdoch.github.io/rgl/dev/reference/propertySetter.html"><code>par3dinterpSetter</code></a></a>,
-<a name="vertexSetter"><a href="https://dmurdoch.github.io/rgl/dev/reference/propertySetter.html"><code>vertexSetter</code></a></a>,
-<a name="matrixSetter"><a href="https://dmurdoch.github.io/rgl/dev/reference/propertySetter.html"><code>matrixSetter</code></a></a>.
-Use the newer functions instead.</p>
 </div>
 <div id="working-with-the-scene" class="section level3">
 <h3>Working with the scene</h3>
@@ -2212,33 +2174,27 @@ primitive and are mainly intended for internal use.</p>
 <td>open a new window</td>
 </tr>
 <tr class="even">
-<td><a name="close3d"><a href="https://dmurdoch.github.io/rgl/dev/reference/open3d.html"><code>close3d</code></a></a>,
-<a name="rgl.close"><a href="https://dmurdoch.github.io/rgl/dev/reference/open3d.html"><code>rgl.close</code></a></a>:</td>
+<td><a name="close3d"><a href="https://dmurdoch.github.io/rgl/dev/reference/open3d.html"><code>close3d</code></a></a>:</td>
 <td>close the current window</td>
 </tr>
 <tr class="odd">
-<td><a name="cur3d"><a href="https://dmurdoch.github.io/rgl/dev/reference/open3d.html"><code>cur3d</code></a></a>,
-<a name="rgl.cur"><a href="https://dmurdoch.github.io/rgl/dev/reference/open3d.html"><code>rgl.cur</code></a></a>:</td>
+<td><a name="cur3d"><a href="https://dmurdoch.github.io/rgl/dev/reference/open3d.html"><code>cur3d</code></a></a>:</td>
 <td>id of the active device</td>
 </tr>
 <tr class="even">
-<td><a name="set3d"><a href="https://dmurdoch.github.io/rgl/dev/reference/open3d.html"><code>set3d</code></a></a>,
-<a name="rgl.set"><a href="https://dmurdoch.github.io/rgl/dev/reference/open3d.html"><code>rgl.set</code></a></a>:</td>
+<td><a name="set3d"><a href="https://dmurdoch.github.io/rgl/dev/reference/open3d.html"><code>set3d</code></a></a>:</td>
 <td>set a particular device to be active</td>
 </tr>
 <tr class="odd">
-<td><a name="pop3d"><a href="https://dmurdoch.github.io/rgl/dev/reference/scene.html"><code>pop3d</code></a></a>,
-<a name="rgl.pop"><a href="https://dmurdoch.github.io/rgl/dev/reference/scene.html"><code>rgl.pop</code></a></a>:</td>
+<td><a name="pop3d"><a href="https://dmurdoch.github.io/rgl/dev/reference/scene.html"><code>pop3d</code></a></a>:</td>
 <td>delete objects from the scene</td>
 </tr>
 <tr class="even">
-<td><a name="clear3d"><a href="https://dmurdoch.github.io/rgl/dev/reference/scene.html"><code>clear3d</code></a></a>,
-<a name="rgl.clear"><a href="https://dmurdoch.github.io/rgl/dev/reference/scene.html"><code>rgl.clear</code></a></a>:</td>
+<td><a name="clear3d"><a href="https://dmurdoch.github.io/rgl/dev/reference/scene.html"><code>clear3d</code></a></a>:</td>
 <td>delete all objects of certain classes</td>
 </tr>
 <tr class="odd">
-<td><a name="ids3d"><a href="https://dmurdoch.github.io/rgl/dev/reference/scene.html"><code>ids3d</code></a></a>,
-<a name="rgl.ids"><a href="https://dmurdoch.github.io/rgl/dev/reference/scene.html"><code>rgl.ids</code></a></a>:</td>
+<td><a name="ids3d"><a href="https://dmurdoch.github.io/rgl/dev/reference/scene.html"><code>ids3d</code></a></a>:</td>
 <td>ids, types and tags of current objects</td>
 </tr>
 <tr class="even">
@@ -2247,6 +2203,11 @@ primitive and are mainly intended for internal use.</p>
 </tr>
 </tbody>
 </table>
+<p>Some of these functions have alternate names for back compatibility:
+FALSE, FALSE, FALSE. Either name will work, but the <code>*3d</code>
+version is recommended for new code. Some have deprecated versions:
+<code>rgl.clear</code>, <code>rgl.set</code>. Those should not be
+called.</p>
 <p>These functions are mainly intended for programming, and have no
 corresponding <code>*3d</code> counterparts:</p>
 <table>
@@ -2266,7 +2227,7 @@ corresponding <code>*3d</code> counterparts:</p>
 <td>bring the current window to the top</td>
 </tr>
 <tr class="even">
-<td><a name="rgl.dev.list"><a href="https://dmurdoch.github.io/rgl/dev/reference/rgl.open.html"><code>rgl.dev.list</code></a></a>:</td>
+<td><a name="rgl.dev.list"><a href="https://dmurdoch.github.io/rgl/dev/reference/open3d.html"><code>rgl.dev.list</code></a></a>:</td>
 <td>ids of all active devices</td>
 </tr>
 <tr class="odd">
@@ -2292,11 +2253,9 @@ generic function is intended to extract coordinates in a form suitable
 for passing to <a href="#triangles3d"><code>triangles3d</code></a>.
 Currently a method is provided for
 <a href="#rglId"><code>rglId</code></a> objects.</p>
-<p>In addition to these, there are some other related functions which
-should rarely be called by users:
-<a name="rgl.init"><a href="https://dmurdoch.github.io/rgl/dev/reference/rgl.init.html"><code>rgl.init</code></a></a>,
-<a name="rgl.open"><a href="https://dmurdoch.github.io/rgl/dev/reference/rgl.init.html"><code>rgl.open</code></a></a>,
-<a name="rgl.quit"><a href="https://dmurdoch.github.io/rgl/dev/reference/rgl.init.html"><code>rgl.quit</code></a></a>.</p>
+<p>In addition to these, there are some deprecated functions which
+should not be called: <code>rgl.init</code>, <code>rgl.open</code>,
+<code>rgl.close</code>, <code>rgl.quit</code>.</p>
 </div>
 <div id="working-with-3-d-vectors" class="section level3">
 <h3>Working with 3-D vectors</h3>
@@ -2441,8 +2400,9 @@ delay when it appears to be needed.</p>
 <code>rgl</code> package are not described, or do not have examples.
 There may even be functions that are missed completely, if the following
 list is not empty:</p>
-<pre><code>## [1] &quot;gltfTypes&quot;             &quot;rgl.material.names&quot;    &quot;rgl.material.readonly&quot;
-## [4] &quot;rgl.par3d.names&quot;       &quot;rgl.par3d.readonly&quot;</code></pre>
+<pre><code>## [1] &quot;gltfTypes&quot;             &quot;rgl.cur&quot;               &quot;rgl.ids&quot;              
+## [4] &quot;rgl.material.names&quot;    &quot;rgl.material.readonly&quot; &quot;rgl.par3d.names&quot;      
+## [7] &quot;rgl.par3d.readonly&quot;    &quot;rgl.pop&quot;</code></pre>
 </div>
 <div id="index-of-functions" class="section level2">
 <h2>Index of Functions</h2>
@@ -2453,359 +2413,303 @@ document:<br></p>
 <tbody>
 <tr class="odd">
 <td align="left"><a href="#%&gt;%">%&gt;%</a>  </td>
-<td align="left"><a href="#dodecahedron3d">dodecahedron3d</a>  </td>
-<td align="left"><a href="#par3dinterpSetter">par3dinterpSetter</a>  </td>
-<td align="left"><a href="#rgl.planes">rgl.planes</a>  </td>
-<td align="left"><a href="#shapelist3d">shapelist3d</a>  </td>
+<td align="left"><a href="#cylinder3d">cylinder3d</a>  </td>
+<td align="left"><a href="#movie3d">movie3d</a>  </td>
+<td align="left"><a href="#rgl.getAxisCallback">rgl.getAxisCallback</a>  </td>
+<td align="left"><a href="#shinySetPar3d">shinySetPar3d</a>  </td>
 </tr>
 <tr class="even">
 <td align="left"><a href="#Buffer">Buffer</a>  </td>
-<td align="left"><a href="#dot3d">dot3d</a>  </td>
-<td align="left"><a href="#particles3d">particles3d</a>  </td>
-<td align="left"><a href="#rgl.points">rgl.points</a>  </td>
-<td align="left"><a href="#shinyGetPar3d">shinyGetPar3d</a>  </td>
+<td align="left"><a href="#decorate3d">decorate3d</a>  </td>
+<td align="left"><a href="#mtext3d">mtext3d</a>  </td>
+<td align="left"><a href="#rgl.getMouseCallbacks">rgl.getMouseCallbacks</a>  </td>
+<td align="left"><a href="#show2d">show2d</a>  </td>
 </tr>
 <tr class="odd">
 <td align="left"><a href="#GramSchmidt">GramSchmidt</a>  </td>
-<td align="left"><a href="#drape3d">drape3d</a>  </td>
-<td align="left"><a href="#pch3d">pch3d</a>  </td>
-<td align="left"><a href="#rgl.pop">rgl.pop</a>  </td>
-<td align="left"><a href="#shinyResetBrush">shinyResetBrush</a>  </td>
+<td align="left"><a href="#deform.mesh3d">deform.mesh3d</a>  </td>
+<td align="left"><a href="#newSubscene3d">newSubscene3d</a>  </td>
+<td align="left"><a href="#rgl.getWheelCallback">rgl.getWheelCallback</a>  </td>
+<td align="left"><a href="#snapshot3d">snapshot3d</a>  </td>
 </tr>
 <tr class="even">
 <td align="left"><a href="#Sweave.snapshot">Sweave.snapshot</a>  </td>
-<td align="left"><a href="#elementId2Prefix">elementId2Prefix</a>  </td>
-<td align="left"><a href="#persp3d">persp3d</a>  </td>
-<td align="left"><a href="#rgl.postscript">rgl.postscript</a>  </td>
-<td align="left"><a href="#shinySetPar3d">shinySetPar3d</a>  </td>
+<td align="left"><a href="#delFromSubscene3d">delFromSubscene3d</a>  </td>
+<td align="left"><a href="#next3d">next3d</a>  </td>
+<td align="left"><a href="#rgl.pixels">rgl.pixels</a>  </td>
+<td align="left"><a href="#spheres3d">spheres3d</a>  </td>
 </tr>
 <tr class="odd">
 <td align="left"><a href="#abclines3d">abclines3d</a>  </td>
-<td align="left"><a href="#ellipse3d">ellipse3d</a>  </td>
-<td align="left"><a href="#pipe">pipe</a>  </td>
-<td align="left"><a href="#rgl.primitive">rgl.primitive</a>  </td>
-<td align="left"><a href="#show2d">show2d</a>  </td>
+<td align="left"><a href="#deldir">deldir</a>  </td>
+<td align="left"><a href="#normalize.mesh3d">normalize.mesh3d</a>  </td>
+<td align="left"><a href="#rgl.postscript">rgl.postscript</a>  </td>
+<td align="left"><a href="#spin3d">spin3d</a>  </td>
 </tr>
 <tr class="even">
 <td align="left"><a href="#addNormals">addNormals</a>  </td>
-<td align="left"><a href="#expect_known_scene">expect_known_scene</a>  </td>
-<td align="left"><a href="#planes3d">planes3d</a>  </td>
+<td align="left"><a href="#divide.mesh3d">divide.mesh3d</a>  </td>
+<td align="left"><a href="#observer3d">observer3d</a>  </td>
 <td align="left"><a href="#rgl.projection">rgl.projection</a>  </td>
-<td align="left"><a href="#snapshot3d">snapshot3d</a>  </td>
+<td align="left"><a href="#sprites3d">sprites3d</a>  </td>
 </tr>
 <tr class="odd">
 <td align="left"><a href="#addToSubscene3d">addToSubscene3d</a>  </td>
-<td align="left"><a href="#extrude3d">extrude3d</a>  </td>
-<td align="left"><a href="#play3d">play3d</a>  </td>
-<td align="left"><a href="#rgl.quads">rgl.quads</a>  </td>
-<td align="left"><a href="#spheres3d">spheres3d</a>  </td>
+<td align="left"><a href="#dodecahedron3d">dodecahedron3d</a>  </td>
+<td align="left"><a href="#observer3d">observer3d</a>  </td>
+<td align="left"><a href="#rgl.select">rgl.select</a>  </td>
+<td align="left"><a href="#subdivision3d">subdivision3d</a>  </td>
 </tr>
 <tr class="even">
 <td align="left"><a href="#ageControl">ageControl</a>  </td>
-<td align="left"><a href="#facing3d">facing3d</a>  </td>
-<td align="left"><a href="#playwidget">playwidget</a>  </td>
-<td align="left"><a href="#rgl.quit">rgl.quit</a>  </td>
-<td align="left"><a href="#spin3d">spin3d</a>  </td>
-</tr>
-<tr class="odd">
-<td align="left"><a href="#ageSetter">ageSetter</a>  </td>
-<td align="left"><a href="#figHeight">figHeight</a>  </td>
-<td align="left"><a href="#playwidgetOutput">playwidgetOutput</a>  </td>
-<td align="left"><a href="#rgl.select">rgl.select</a>  </td>
-<td align="left"><a href="#sprites3d">sprites3d</a>  </td>
-</tr>
-<tr class="even">
-<td align="left"><a href="#all.equal.mesh3d">all.equal.mesh3d</a>  </td>
-<td align="left"><a href="#figWidth">figWidth</a>  </td>
-<td align="left"><a href="#plot3d">plot3d</a>  </td>
-<td align="left"><a href="#rgl.select3d">rgl.select3d</a>  </td>
-<td align="left"><a href="#subdivision3d">subdivision3d</a>  </td>
-</tr>
-<tr class="odd">
-<td align="left"><a href="#arc3d">arc3d</a>  </td>
-<td align="left"><a href="#filledContour3d">filledContour3d</a>  </td>
-<td align="left"><a href="#plotmath3d">plotmath3d</a>  </td>
-<td align="left"><a href="#rgl.set">rgl.set</a>  </td>
+<td align="left"><a href="#dot3d">dot3d</a>  </td>
+<td align="left"><a href="#octahedron3d">octahedron3d</a>  </td>
+<td align="left"><a href="#rgl.setMouseCallbacks">rgl.setMouseCallbacks</a>  </td>
 <td align="left"><a href="#subsceneInfo">subsceneInfo</a>  </td>
 </tr>
-<tr class="even">
-<td align="left"><a href="#arrow3d">arrow3d</a>  </td>
-<td align="left"><a href="#gc3d">gc3d</a>  </td>
-<td align="left"><a href="#points3d">points3d</a>  </td>
-<td align="left"><a href="#rgl.setAxisCallback">rgl.setAxisCallback</a>  </td>
+<tr class="odd">
+<td align="left"><a href="#all.equal.mesh3d">all.equal.mesh3d</a>  </td>
+<td align="left"><a href="#drape3d">drape3d</a>  </td>
+<td align="left"><a href="#oh3d">oh3d</a>  </td>
+<td align="left"><a href="#rgl.setWheelCallback">rgl.setWheelCallback</a>  </td>
 <td align="left"><a href="#subsceneList">subsceneList</a>  </td>
 </tr>
-<tr class="odd">
-<td align="left"><a href="#as.mesh3d">as.mesh3d</a>  </td>
-<td align="left"><a href="#getBoundary3d">getBoundary3d</a>  </td>
-<td align="left"><a href="#polygon3d">polygon3d</a>  </td>
-<td align="left"><a href="#rgl.setMouseCallbacks">rgl.setMouseCallbacks</a>  </td>
+<tr class="even">
+<td align="left"><a href="#arc3d">arc3d</a>  </td>
+<td align="left"><a href="#elementId2Prefix">elementId2Prefix</a>  </td>
+<td align="left"><a href="#open3d">open3d</a>  </td>
+<td align="left"><a href="#rgl.snapshot">rgl.snapshot</a>  </td>
 <td align="left"><a href="#subsetControl">subsetControl</a>  </td>
 </tr>
-<tr class="even">
-<td align="left"><a href="#as.mesh3d.default">as.mesh3d.default</a>  </td>
-<td align="left"><a href="#getShaders">getShaders</a>  </td>
-<td align="left"><a href="#pop3d">pop3d</a>  </td>
-<td align="left"><a href="#rgl.setWheelCallback">rgl.setWheelCallback</a>  </td>
-<td align="left"><a href="#subsetSetter">subsetSetter</a>  </td>
-</tr>
 <tr class="odd">
-<td align="left"><a href="#as.rglscene">as.rglscene</a>  </td>
-<td align="left"><a href="#getWidgetId">getWidgetId</a>  </td>
-<td align="left"><a href="#projectDown">projectDown</a>  </td>
-<td align="left"><a href="#rgl.snapshot">rgl.snapshot</a>  </td>
-<td align="left"><a href="#subsetSlider">subsetSlider</a>  </td>
-</tr>
-<tr class="even">
-<td align="left"><a href="#as.tmesh3d">as.tmesh3d</a>  </td>
-<td align="left"><a href="#getr3dDefaults">getr3dDefaults</a>  </td>
-<td align="left"><a href="#propertyControl">propertyControl</a>  </td>
-<td align="left"><a href="#rgl.spheres">rgl.spheres</a>  </td>
+<td align="left"><a href="#arrow3d">arrow3d</a>  </td>
+<td align="left"><a href="#ellipse3d">ellipse3d</a>  </td>
+<td align="left"><a href="#par3d">par3d</a>  </td>
+<td align="left"><a href="#rgl.useNULL">rgl.useNULL</a>  </td>
 <td align="left"><a href="#surface3d">surface3d</a>  </td>
 </tr>
-<tr class="odd">
-<td align="left"><a href="#as.triangles3d">as.triangles3d</a>  </td>
-<td align="left"><a href="#grid3d">grid3d</a>  </td>
-<td align="left"><a href="#propertySetter">propertySetter</a>  </td>
-<td align="left"><a href="#rgl.sprites">rgl.sprites</a>  </td>
+<tr class="even">
+<td align="left"><a href="#as.mesh3d">as.mesh3d</a>  </td>
+<td align="left"><a href="#expect_known_scene">expect_known_scene</a>  </td>
+<td align="left"><a href="#par3dinterp">par3dinterp</a>  </td>
+<td align="left"><a href="#rgl.user2window">rgl.user2window</a>  </td>
 <td align="left"><a href="#tagged3d">tagged3d</a>  </td>
 </tr>
-<tr class="even">
-<td align="left"><a href="#asEuclidean">asEuclidean</a>  </td>
-<td align="left"><a href="#highlevel">highlevel</a>  </td>
-<td align="left"><a href="#propertySlider">propertySlider</a>  </td>
-<td align="left"><a href="#rgl.surface">rgl.surface</a>  </td>
+<tr class="odd">
+<td align="left"><a href="#as.mesh3d.default">as.mesh3d.default</a>  </td>
+<td align="left"><a href="#extrude3d">extrude3d</a>  </td>
+<td align="left"><a href="#par3dinterpControl">par3dinterpControl</a>  </td>
+<td align="left"><a href="#rgl.window2user">rgl.window2user</a>  </td>
 <td align="left"><a href="#terrain3d">terrain3d</a>  </td>
 </tr>
-<tr class="odd">
-<td align="left"><a href="#asEuclidean2">asEuclidean2</a>  </td>
-<td align="left"><a href="#hook_rgl">hook_rgl</a>  </td>
-<td align="left"><a href="#qmesh3d">qmesh3d</a>  </td>
-<td align="left"><a href="#rgl.texts">rgl.texts</a>  </td>
+<tr class="even">
+<td align="left"><a href="#as.rglscene">as.rglscene</a>  </td>
+<td align="left"><a href="#facing3d">facing3d</a>  </td>
+<td align="left"><a href="#particles3d">particles3d</a>  </td>
+<td align="left"><a href="#rglExtrafonts">rglExtrafonts</a>  </td>
 <td align="left"><a href="#tetrahedron3d">tetrahedron3d</a>  </td>
 </tr>
-<tr class="even">
-<td align="left"><a href="#asHomogeneous">asHomogeneous</a>  </td>
-<td align="left"><a href="#hook_webgl">hook_webgl</a>  </td>
-<td align="left"><a href="#quads3d">quads3d</a>  </td>
-<td align="left"><a href="#rgl.triangles">rgl.triangles</a>  </td>
+<tr class="odd">
+<td align="left"><a href="#as.tmesh3d">as.tmesh3d</a>  </td>
+<td align="left"><a href="#figHeight">figHeight</a>  </td>
+<td align="left"><a href="#pch3d">pch3d</a>  </td>
+<td align="left"><a href="#rglFonts">rglFonts</a>  </td>
 <td align="left"><a href="#text3d">text3d</a>  </td>
 </tr>
-<tr class="odd">
-<td align="left"><a href="#asHomogeneous2">asHomogeneous2</a>  </td>
-<td align="left"><a href="#icosahedron3d">icosahedron3d</a>  </td>
-<td align="left"><a href="#r3dDefaults">r3dDefaults</a>  </td>
-<td align="left"><a href="#rgl.useNULL">rgl.useNULL</a>  </td>
+<tr class="even">
+<td align="left"><a href="#as.triangles3d">as.triangles3d</a>  </td>
+<td align="left"><a href="#figWidth">figWidth</a>  </td>
+<td align="left"><a href="#persp3d">persp3d</a>  </td>
+<td align="left"><a href="#rglId">rglId</a>  </td>
 <td align="left"><a href="#texts3d">texts3d</a>  </td>
 </tr>
-<tr class="even">
-<td align="left"><a href="#asRow">asRow</a>  </td>
-<td align="left"><a href="#identify3d">identify3d</a>  </td>
-<td align="left"><a href="#readOBJ">readOBJ</a>  </td>
-<td align="left"><a href="#rgl.user2window">rgl.user2window</a>  </td>
+<tr class="odd">
+<td align="left"><a href="#asEuclidean">asEuclidean</a>  </td>
+<td align="left"><a href="#filledContour3d">filledContour3d</a>  </td>
+<td align="left"><a href="#pipe">pipe</a>  </td>
+<td align="left"><a href="#rglMouse">rglMouse</a>  </td>
 <td align="left"><a href="#thigmophobe3d">thigmophobe3d</a>  </td>
 </tr>
-<tr class="odd">
-<td align="left"><a href="#ashape3d">ashape3d</a>  </td>
-<td align="left"><a href="#identityMatrix">identityMatrix</a>  </td>
-<td align="left"><a href="#readSTL">readSTL</a>  </td>
-<td align="left"><a href="#rgl.viewpoint">rgl.viewpoint</a>  </td>
+<tr class="even">
+<td align="left"><a href="#asEuclidean2">asEuclidean2</a>  </td>
+<td align="left"><a href="#gc3d">gc3d</a>  </td>
+<td align="left"><a href="#planes3d">planes3d</a>  </td>
+<td align="left"><a href="#rglShared">rglShared</a>  </td>
 <td align="left"><a href="#title3d">title3d</a>  </td>
 </tr>
-<tr class="even">
-<td align="left"><a href="#aspect3d">aspect3d</a>  </td>
-<td align="left"><a href="#ids3d">ids3d</a>  </td>
-<td align="left"><a href="#registerSceneChange">registerSceneChange</a>  </td>
-<td align="left"><a href="#rgl.window2user">rgl.window2user</a>  </td>
+<tr class="odd">
+<td align="left"><a href="#asHomogeneous">asHomogeneous</a>  </td>
+<td align="left"><a href="#getBoundary3d">getBoundary3d</a>  </td>
+<td align="left"><a href="#play3d">play3d</a>  </td>
+<td align="left"><a href="#rglToBase">rglToBase</a>  </td>
 <td align="left"><a href="#tkpar3dsave">tkpar3dsave</a>  </td>
 </tr>
-<tr class="odd">
-<td align="left"><a href="#axes3d">axes3d</a>  </td>
-<td align="left"><a href="#in_pkgdown_example">in_pkgdown_example</a>  </td>
-<td align="left"><a href="#renderPlaywidget">renderPlaywidget</a>  </td>
-<td align="left"><a href="#rglExtrafonts">rglExtrafonts</a>  </td>
+<tr class="even">
+<td align="left"><a href="#asHomogeneous2">asHomogeneous2</a>  </td>
+<td align="left"><a href="#getShaders">getShaders</a>  </td>
+<td align="left"><a href="#playwidget">playwidget</a>  </td>
+<td align="left"><a href="#rglToLattice">rglToLattice</a>  </td>
 <td align="left"><a href="#tkspin3d">tkspin3d</a>  </td>
 </tr>
-<tr class="even">
-<td align="left"><a href="#axis3d">axis3d</a>  </td>
-<td align="left"><a href="#layout3d">layout3d</a>  </td>
-<td align="left"><a href="#renderRglwidget">renderRglwidget</a>  </td>
-<td align="left"><a href="#rglFonts">rglFonts</a>  </td>
+<tr class="odd">
+<td align="left"><a href="#asRow">asRow</a>  </td>
+<td align="left"><a href="#getWidgetId">getWidgetId</a>  </td>
+<td align="left"><a href="#playwidgetOutput">playwidgetOutput</a>  </td>
+<td align="left"><a href="#rglwidget">rglwidget</a>  </td>
 <td align="left"><a href="#tkspinControl">tkspinControl</a>  </td>
 </tr>
-<tr class="odd">
-<td align="left"><a href="#bbox3d">bbox3d</a>  </td>
-<td align="left"><a href="#legend3d">legend3d</a>  </td>
-<td align="left"><a href="#rgl.Sweave">rgl.Sweave</a>  </td>
-<td align="left"><a href="#rglId">rglId</a>  </td>
+<tr class="even">
+<td align="left"><a href="#ashape3d">ashape3d</a>  </td>
+<td align="left"><a href="#getr3dDefaults">getr3dDefaults</a>  </td>
+<td align="left"><a href="#plot3d">plot3d</a>  </td>
+<td align="left"><a href="#rglwidgetOutput">rglwidgetOutput</a>  </td>
 <td align="left"><a href="#tmesh3d">tmesh3d</a>  </td>
 </tr>
-<tr class="even">
-<td align="left"><a href="#bg3d">bg3d</a>  </td>
-<td align="left"><a href="#light3d">light3d</a>  </td>
-<td align="left"><a href="#rgl.Sweave.off">rgl.Sweave.off</a>  </td>
-<td align="left"><a href="#rglMouse">rglMouse</a>  </td>
-<td align="left"><a href="#toggleButton">toggleButton</a>  </td>
-</tr>
 <tr class="odd">
-<td align="left"><a href="#bgplot3d">bgplot3d</a>  </td>
-<td align="left"><a href="#lines3d">lines3d</a>  </td>
-<td align="left"><a href="#rgl.abclines">rgl.abclines</a>  </td>
-<td align="left"><a href="#rglShared">rglShared</a>  </td>
+<td align="left"><a href="#aspect3d">aspect3d</a>  </td>
+<td align="left"><a href="#grid3d">grid3d</a>  </td>
+<td align="left"><a href="#plotmath3d">plotmath3d</a>  </td>
+<td align="left"><a href="#rotate3d">rotate3d</a>  </td>
 <td align="left"><a href="#toggleWidget">toggleWidget</a>  </td>
 </tr>
 <tr class="even">
-<td align="left"><a href="#box3d">box3d</a>  </td>
-<td align="left"><a href="#lowlevel">lowlevel</a>  </td>
-<td align="left"><a href="#rgl.attrib">rgl.attrib</a>  </td>
-<td align="left"><a href="#rglToBase">rglToBase</a>  </td>
+<td align="left"><a href="#axes3d">axes3d</a>  </td>
+<td align="left"><a href="#highlevel">highlevel</a>  </td>
+<td align="left"><a href="#points3d">points3d</a>  </td>
+<td align="left"><a href="#rotationMatrix">rotationMatrix</a>  </td>
 <td align="left"><a href="#transform3d">transform3d</a>  </td>
 </tr>
 <tr class="odd">
-<td align="left"><a href="#checkDeldir">checkDeldir</a>  </td>
-<td align="left"><a href="#makeDependency">makeDependency</a>  </td>
-<td align="left"><a href="#rgl.attrib.count">rgl.attrib.count</a>  </td>
-<td align="left"><a href="#rglToLattice">rglToLattice</a>  </td>
+<td align="left"><a href="#axis3d">axis3d</a>  </td>
+<td align="left"><a href="#hook_rgl">hook_rgl</a>  </td>
+<td align="left"><a href="#polygon3d">polygon3d</a>  </td>
+<td align="left"><a href="#scale3d">scale3d</a>  </td>
 <td align="left"><a href="#translate3d">translate3d</a>  </td>
 </tr>
 <tr class="even">
-<td align="left"><a href="#clear3d">clear3d</a>  </td>
-<td align="left"><a href="#material3d">material3d</a>  </td>
-<td align="left"><a href="#rgl.attrib.info">rgl.attrib.info</a>  </td>
-<td align="left"><a href="#rglwidget">rglwidget</a>  </td>
+<td align="left"><a href="#bbox3d">bbox3d</a>  </td>
+<td align="left"><a href="#hook_webgl">hook_webgl</a>  </td>
+<td align="left"><a href="#pop3d">pop3d</a>  </td>
+<td align="left"><a href="#scaleMatrix">scaleMatrix</a>  </td>
 <td align="left"><a href="#translationMatrix">translationMatrix</a>  </td>
 </tr>
 <tr class="odd">
-<td align="left"><a href="#clearSubsceneList">clearSubsceneList</a>  </td>
-<td align="left"><a href="#matrixSetter">matrixSetter</a>  </td>
-<td align="left"><a href="#rgl.bbox">rgl.bbox</a>  </td>
-<td align="left"><a href="#rglwidgetOutput">rglwidgetOutput</a>  </td>
+<td align="left"><a href="#bg3d">bg3d</a>  </td>
+<td align="left"><a href="#icosahedron3d">icosahedron3d</a>  </td>
+<td align="left"><a href="#projectDown">projectDown</a>  </td>
+<td align="left"><a href="#scene3d">scene3d</a>  </td>
 <td align="left"><a href="#tri">tri</a>  </td>
 </tr>
 <tr class="even">
-<td align="left"><a href="#clipMesh3d">clipMesh3d</a>  </td>
-<td align="left"><a href="#merge.mesh3d">merge.mesh3d</a>  </td>
-<td align="left"><a href="#rgl.bg">rgl.bg</a>  </td>
-<td align="left"><a href="#rotate3d">rotate3d</a>  </td>
+<td align="left"><a href="#bgplot3d">bgplot3d</a>  </td>
+<td align="left"><a href="#identify3d">identify3d</a>  </td>
+<td align="left"><a href="#propertyControl">propertyControl</a>  </td>
+<td align="left"><a href="#sceneChange">sceneChange</a>  </td>
 <td align="left"><a href="#triSht">triSht</a>  </td>
 </tr>
 <tr class="odd">
-<td align="left"><a href="#clipObj3d">clipObj3d</a>  </td>
-<td align="left"><a href="#mergeVertices">mergeVertices</a>  </td>
-<td align="left"><a href="#rgl.bringtotop">rgl.bringtotop</a>  </td>
-<td align="left"><a href="#rotationMatrix">rotationMatrix</a>  </td>
+<td align="left"><a href="#box3d">box3d</a>  </td>
+<td align="left"><a href="#identityMatrix">identityMatrix</a>  </td>
+<td align="left"><a href="#qmesh3d">qmesh3d</a>  </td>
+<td align="left"><a href="#segments3d">segments3d</a>  </td>
 <td align="left"><a href="#triangles3d">triangles3d</a>  </td>
 </tr>
 <tr class="even">
-<td align="left"><a href="#clipplaneControl">clipplaneControl</a>  </td>
-<td align="left"><a href="#mesh3d">mesh3d</a>  </td>
-<td align="left"><a href="#rgl.clear">rgl.clear</a>  </td>
-<td align="left"><a href="#scale3d">scale3d</a>  </td>
+<td align="left"><a href="#checkDeldir">checkDeldir</a>  </td>
+<td align="left"><a href="#ids3d">ids3d</a>  </td>
+<td align="left"><a href="#quads3d">quads3d</a>  </td>
+<td align="left"><a href="#select3d">select3d</a>  </td>
 <td align="left"><a href="#triangulate">triangulate</a>  </td>
 </tr>
 <tr class="odd">
-<td align="left"><a href="#clipplaneSlider">clipplaneSlider</a>  </td>
-<td align="left"><a href="#mfrow3d">mfrow3d</a>  </td>
-<td align="left"><a href="#rgl.clipplanes">rgl.clipplanes</a>  </td>
-<td align="left"><a href="#scaleMatrix">scaleMatrix</a>  </td>
+<td align="left"><a href="#clear3d">clear3d</a>  </td>
+<td align="left"><a href="#in_pkgdown_example">in_pkgdown_example</a>  </td>
+<td align="left"><a href="#r3dDefaults">r3dDefaults</a>  </td>
+<td align="left"><a href="#selectionFunction3d">selectionFunction3d</a>  </td>
 <td align="left"><a href="#turn3d">turn3d</a>  </td>
 </tr>
 <tr class="even">
-<td align="left"><a href="#clipplanes3d">clipplanes3d</a>  </td>
-<td align="left"><a href="#mouseMode">mouseMode</a>  </td>
-<td align="left"><a href="#rgl.close">rgl.close</a>  </td>
-<td align="left"><a href="#scene3d">scene3d</a>  </td>
+<td align="left"><a href="#clearSubsceneList">clearSubsceneList</a>  </td>
+<td align="left"><a href="#layout3d">layout3d</a>  </td>
+<td align="left"><a href="#readOBJ">readOBJ</a>  </td>
+<td align="left"><a href="#selectpoints3d">selectpoints3d</a>  </td>
 <td align="left"><a href="#useSubscene3d">useSubscene3d</a>  </td>
 </tr>
 <tr class="odd">
-<td align="left"><a href="#close3d">close3d</a>  </td>
-<td align="left"><a href="#movie3d">movie3d</a>  </td>
-<td align="left"><a href="#rgl.cur">rgl.cur</a>  </td>
-<td align="left"><a href="#sceneChange">sceneChange</a>  </td>
+<td align="left"><a href="#clipMesh3d">clipMesh3d</a>  </td>
+<td align="left"><a href="#legend3d">legend3d</a>  </td>
+<td align="left"><a href="#readSTL">readSTL</a>  </td>
+<td align="left"><a href="#set3d">set3d</a>  </td>
 <td align="left"><a href="#vertexControl">vertexControl</a>  </td>
 </tr>
 <tr class="even">
+<td align="left"><a href="#clipObj3d">clipObj3d</a>  </td>
+<td align="left"><a href="#light3d">light3d</a>  </td>
+<td align="left"><a href="#registerSceneChange">registerSceneChange</a>  </td>
+<td align="left"><a href="#setAxisCallbacks">setAxisCallbacks</a>  </td>
+<td align="left"><a href="#view3d">view3d</a>  </td>
+</tr>
+<tr class="odd">
+<td align="left"><a href="#clipplaneControl">clipplaneControl</a>  </td>
+<td align="left"><a href="#lines3d">lines3d</a>  </td>
+<td align="left"><a href="#renderPlaywidget">renderPlaywidget</a>  </td>
+<td align="left"><a href="#setGraphicsDelay">setGraphicsDelay</a>  </td>
+<td align="left"><a href="#view3d">view3d</a>  </td>
+</tr>
+<tr class="even">
+<td align="left"><a href="#clipplanes3d">clipplanes3d</a>  </td>
+<td align="left"><a href="#lowlevel">lowlevel</a>  </td>
+<td align="left"><a href="#renderRglwidget">renderRglwidget</a>  </td>
+<td align="left"><a href="#setUserCallbacks">setUserCallbacks</a>  </td>
+<td align="left"><a href="#wire3d">wire3d</a>  </td>
+</tr>
+<tr class="odd">
+<td align="left"><a href="#close3d">close3d</a>  </td>
+<td align="left"><a href="#makeDependency">makeDependency</a>  </td>
+<td align="left"><a href="#rgl.Sweave">rgl.Sweave</a>  </td>
+<td align="left"><a href="#setUserShaders">setUserShaders</a>  </td>
+<td align="left"><a href="#writeASY">writeASY</a>  </td>
+</tr>
+<tr class="even">
 <td align="left"><a href="#compare_proxy.mesh3d">compare_proxy.mesh3d</a>  </td>
-<td align="left"><a href="#mtext3d">mtext3d</a>  </td>
-<td align="left"><a href="#rgl.dev.list">rgl.dev.list</a>  </td>
-<td align="left"><a href="#segments3d">segments3d</a>  </td>
-<td align="left"><a href="#vertexSetter">vertexSetter</a>  </td>
+<td align="left"><a href="#material3d">material3d</a>  </td>
+<td align="left"><a href="#rgl.Sweave.off">rgl.Sweave.off</a>  </td>
+<td align="left"><a href="#setupKnitr">setupKnitr</a>  </td>
+<td align="left"><a href="#writeOBJ">writeOBJ</a>  </td>
 </tr>
 <tr class="odd">
 <td align="left"><a href="#contourLines3d">contourLines3d</a>  </td>
-<td align="left"><a href="#newSubscene3d">newSubscene3d</a>  </td>
-<td align="left"><a href="#rgl.getAxisCallback">rgl.getAxisCallback</a>  </td>
-<td align="left"><a href="#select3d">select3d</a>  </td>
-<td align="left"><a href="#view3d">view3d</a>  </td>
+<td align="left"><a href="#merge.mesh3d">merge.mesh3d</a>  </td>
+<td align="left"><a href="#rgl.attrib">rgl.attrib</a>  </td>
+<td align="left"><a href="#shade3d">shade3d</a>  </td>
+<td align="left"><a href="#writePLY">writePLY</a>  </td>
 </tr>
 <tr class="even">
 <td align="left"><a href="#cube3d">cube3d</a>  </td>
-<td align="left"><a href="#next3d">next3d</a>  </td>
-<td align="left"><a href="#rgl.getMouseCallbacks">rgl.getMouseCallbacks</a>  </td>
-<td align="left"><a href="#selectionFunction3d">selectionFunction3d</a>  </td>
-<td align="left"><a href="#view3d">view3d</a>  </td>
+<td align="left"><a href="#mergeVertices">mergeVertices</a>  </td>
+<td align="left"><a href="#rgl.attrib.count">rgl.attrib.count</a>  </td>
+<td align="left"><a href="#shadow3d">shadow3d</a>  </td>
+<td align="left"><a href="#writeSTL">writeSTL</a>  </td>
 </tr>
 <tr class="odd">
 <td align="left"><a href="#cuboctahedron3d">cuboctahedron3d</a>  </td>
-<td align="left"><a href="#normalize.mesh3d">normalize.mesh3d</a>  </td>
-<td align="left"><a href="#rgl.getWheelCallback">rgl.getWheelCallback</a>  </td>
-<td align="left"><a href="#selectpoints3d">selectpoints3d</a>  </td>
-<td align="left"><a href="#wire3d">wire3d</a>  </td>
+<td align="left"><a href="#mesh3d">mesh3d</a>  </td>
+<td align="left"><a href="#rgl.attrib.info">rgl.attrib.info</a>  </td>
+<td align="left"><a href="#shapelist3d">shapelist3d</a>  </td>
+<td align="left"></td>
 </tr>
 <tr class="even">
 <td align="left"><a href="#cur3d">cur3d</a>  </td>
-<td align="left"><a href="#observer3d">observer3d</a>  </td>
-<td align="left"><a href="#rgl.ids">rgl.ids</a>  </td>
-<td align="left"><a href="#set3d">set3d</a>  </td>
-<td align="left"><a href="#writeASY">writeASY</a>  </td>
+<td align="left"><a href="#mfrow3d">mfrow3d</a>  </td>
+<td align="left"><a href="#rgl.bringtotop">rgl.bringtotop</a>  </td>
+<td align="left"><a href="#shinyGetPar3d">shinyGetPar3d</a>  </td>
+<td align="left"></td>
 </tr>
 <tr class="odd">
 <td align="left"><a href="#currentSubscene3d">currentSubscene3d</a>  </td>
-<td align="left"><a href="#observer3d">observer3d</a>  </td>
-<td align="left"><a href="#rgl.init">rgl.init</a>  </td>
-<td align="left"><a href="#setAxisCallbacks">setAxisCallbacks</a>  </td>
-<td align="left"><a href="#writeOBJ">writeOBJ</a>  </td>
-</tr>
-<tr class="even">
-<td align="left"><a href="#cylinder3d">cylinder3d</a>  </td>
-<td align="left"><a href="#octahedron3d">octahedron3d</a>  </td>
-<td align="left"><a href="#rgl.light">rgl.light</a>  </td>
-<td align="left"><a href="#setGraphicsDelay">setGraphicsDelay</a>  </td>
-<td align="left"><a href="#writePLY">writePLY</a>  </td>
-</tr>
-<tr class="odd">
-<td align="left"><a href="#decorate3d">decorate3d</a>  </td>
-<td align="left"><a href="#oh3d">oh3d</a>  </td>
-<td align="left"><a href="#rgl.lines">rgl.lines</a>  </td>
-<td align="left"><a href="#setUserCallbacks">setUserCallbacks</a>  </td>
-<td align="left"><a href="#writeSTL">writeSTL</a>  </td>
-</tr>
-<tr class="even">
-<td align="left"><a href="#deform.mesh3d">deform.mesh3d</a>  </td>
-<td align="left"><a href="#open3d">open3d</a>  </td>
-<td align="left"><a href="#rgl.linestrips">rgl.linestrips</a>  </td>
-<td align="left"><a href="#setUserShaders">setUserShaders</a>  </td>
-<td align="left"><a href="#writeWebGL">writeWebGL</a>  </td>
-</tr>
-<tr class="odd">
-<td align="left"><a href="#delFromSubscene3d">delFromSubscene3d</a>  </td>
-<td align="left"><a href="#par3d">par3d</a>  </td>
-<td align="left"><a href="#rgl.material">rgl.material</a>  </td>
-<td align="left"><a href="#setupKnitr">setupKnitr</a>  </td>
-<td align="left"></td>
-</tr>
-<tr class="even">
-<td align="left"><a href="#deldir">deldir</a>  </td>
-<td align="left"><a href="#par3dinterp">par3dinterp</a>  </td>
-<td align="left"><a href="#rgl.open">rgl.open</a>  </td>
-<td align="left"><a href="#shade3d">shade3d</a>  </td>
-<td align="left"></td>
-</tr>
-<tr class="odd">
-<td align="left"><a href="#divide.mesh3d">divide.mesh3d</a>  </td>
-<td align="left"><a href="#par3dinterpControl">par3dinterpControl</a>  </td>
-<td align="left"><a href="#rgl.pixels">rgl.pixels</a>  </td>
-<td align="left"><a href="#shadow3d">shadow3d</a>  </td>
+<td align="left"><a href="#mouseMode">mouseMode</a>  </td>
+<td align="left"><a href="#rgl.dev.list">rgl.dev.list</a>  </td>
+<td align="left"><a href="#shinyResetBrush">shinyResetBrush</a>  </td>
 <td align="left"></td>
 </tr>
 </tbody>
