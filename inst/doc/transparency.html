@@ -438,14 +438,14 @@ one of the others (based on <a href="https://paroj.github.io/gltut/Positioning/T
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>xyz <span class="ot">&lt;-</span> xyz[<span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">6</span>, <span class="dv">4</span>,<span class="dv">5</span>,<span class="dv">9</span>, <span class="dv">7</span>,<span class="dv">8</span>,<span class="dv">3</span>),]</span>
 <span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">open3d</span>()</span></code></pre></div>
 <pre><code>## null 
-##   17</code></pre>
+##   34</code></pre>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par3d</span>(<span class="at">userMatrix =</span> M)</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">triangles3d</span>(xyz, <span class="at">col =</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">&quot;red&quot;</span>, <span class="st">&quot;green&quot;</span>, <span class="st">&quot;blue&quot;</span>), <span class="at">each =</span> <span class="dv">3</span>))</span></code></pre></div>
 <p>To see the effect of the calculations above, consider the following
 four displays.</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">open3d</span>()</span></code></pre></div>
 <pre><code>## null 
-##   18</code></pre>
+##   35</code></pre>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par3d</span>(<span class="at">userMatrix =</span> M)</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">layout3d</span>(<span class="fu">matrix</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">9</span>, <span class="at">ncol =</span> <span class="dv">3</span>, <span class="at">byrow=</span><span class="cn">TRUE</span>),</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>         <span class="at">widths =</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">2</span>), <span class="at">heights =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">3</span>,<span class="dv">3</span>), </span>
@@ -474,7 +474,7 @@ first drawn appears more opaque than it should.</p>
 transparency, and each use the recommended setting:</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">open3d</span>()</span></code></pre></div>
 <pre><code>## null 
-##   19</code></pre>
+##   36</code></pre>
 <div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par3d</span>(<span class="at">userMatrix =</span> M)</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">triangles3d</span>(xyz[<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>,], <span class="at">col =</span> <span class="st">&quot;red&quot;</span>, <span class="at">alpha =</span> <span class="fl">0.3</span>, <span class="at">depth_mask =</span> <span class="cn">FALSE</span>)</span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="fu">triangles3d</span>(xyz[<span class="dv">4</span><span class="sc">:</span><span class="dv">6</span>,], <span class="at">col =</span> <span class="st">&quot;green&quot;</span>, <span class="at">alpha =</span> <span class="fl">0.7</span>, <span class="at">depth_mask =</span> <span class="cn">TRUE</span>)</span>
@@ -483,7 +483,7 @@ transparency, and each use the recommended setting:</p>
 lighting affects the display:</p>
 <div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">open3d</span>()</span></code></pre></div>
 <pre><code>## null 
-##   20</code></pre>
+##   37</code></pre>
 <div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par3d</span>(<span class="at">userMatrix =</span> M)</span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="fu">layout3d</span>(<span class="fu">matrix</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">9</span>, <span class="at">ncol =</span> <span class="dv">3</span>, <span class="at">byrow=</span><span class="cn">TRUE</span>),</span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>         <span class="at">widths =</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">2</span>), <span class="at">heights =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">3</span>,<span class="dv">3</span>), </span>

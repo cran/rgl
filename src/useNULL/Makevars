@@ -4,7 +4,7 @@
 # This file is part of the RGL project.
 #
 
-CXX_STD = CXX11
+# CXX_STD = CXX11
 PKG_CFLAGS=$(C_VISIBILITY)
 
 PKG_CPPFLAGS= -DHAVE_PNG_H -I/usr/local/include/libpng16 -DRGL_NO_OPENGL

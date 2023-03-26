@@ -68,6 +68,7 @@ Subscene::Subscene(Embedding in_viewport, Embedding in_projection, Embedding in_
   projMatrix.setIdentity(); 
   mouseListeners.push_back(this);
   for (int i=0; i<5; i++) {
+    mouseMode[i] = mmNONE;
     beginCallback[i] = NULL;
     updateCallback[i] = NULL;
     endCallback[i] = NULL;
@@ -211,20 +212,20 @@ void Subscene::hideShape(int id)
 {
   std::vector<Shape*>::iterator ishape 
      = std::find_if(shapes.begin(), shapes.end(), 
-       std::bind(&sameID, placeholders::_1, id));
+       std::bind(&sameID, std::placeholders::_1, id));
   if (ishape == shapes.end()) return;
         
   Shape* shape = *ishape;
   shapes.erase(ishape);
   if ( shape->isBlended() )
     zsortShapes.erase(std::find_if(zsortShapes.begin(), zsortShapes.end(),
-                                   std::bind(&sameID, placeholders::_1, id)));
+                                   std::bind(&sameID, std::placeholders::_1, id)));
   else if ( shape->isClipPlane() )
     clipPlanes.erase(std::find_if(clipPlanes.begin(), clipPlanes.end(),
-                     std::bind(&sameID, placeholders::_1, id)));
+                     std::bind(&sameID, std::placeholders::_1, id)));
   else
     unsortedShapes.erase(std::find_if(unsortedShapes.begin(), unsortedShapes.end(),
-                         std::bind(&sameID, placeholders::_1, id)));
+                         std::bind(&sameID, std::placeholders::_1, id)));
       
   newBBox();
 }
@@ -232,7 +233,7 @@ void Subscene::hideShape(int id)
 void Subscene::hideLight(int id)
 {
   std::vector<Light*>::iterator ilight = std::find_if(lights.begin(), lights.end(),
-                            std::bind(&sameID, placeholders::_1, id));
+                            std::bind(&sameID, std::placeholders::_1, id));
   if (ilight != lights.end()) {
     lights.erase(ilight);
   }

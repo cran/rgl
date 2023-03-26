@@ -1008,8 +1008,9 @@ void rgl::rgl_material(int *successptr, int* idata, char** cdata, double* ddata)
   mat.floating = idata[29];
   mat.blend[0] = idata[30];
   mat.blend[1] = idata[31];
+  mat.texmode = (Texture::Mode) idata[32]; 
   
-  int* colors   = &idata[32];
+  int* colors   = &idata[33];
   char*  pixmapfn = cdata[1];
 
   mat.shininess   = (float) ddata[0];
@@ -1028,13 +1029,14 @@ void rgl::rgl_material(int *successptr, int* idata, char** cdata, double* ddata)
     char* in_tag = new char [len_tag + 1];
     strncpy(in_tag, cdata[0], len_tag);
     in_tag[len_tag] = '\0';
-    mat.tag = string(in_tag);
+    mat.tag = std::string(in_tag);
   } else
-    mat.tag = string();
+    mat.tag = std::string();
   
 
   if ( strlen(pixmapfn) > 0 ) {
-    mat.texture = new Texture(pixmapfn, mat.textype, mat.mipmap, mat.minfilter, mat.magfilter, mat.envmap);
+    mat.texture = new Texture(pixmapfn, mat.textype, mat.texmode, 
+                              mat.mipmap, mat.minfilter, mat.magfilter, mat.envmap);
     if ( !mat.texture->isValid() ) {
       mat.texture->unref();
       // delete mat.texture;
@@ -1096,10 +1098,10 @@ void rgl::rgl_getmaterial(int *successptr, int *id, int* idata, char** cdata, do
   idata[5] = mat->fog ? 1 : 0;
   if (mat->texture) {
     mat->texture->getParameters( (Texture::Type*) (idata + 6),
+                               (Texture::Mode*) (idata + 33),   
                                (bool*) (idata + 7),
                                (unsigned int*) (idata + 8),
                                (unsigned int*) (idata + 9),
-                               (bool*) (idata + 20),
                                static_cast<int>(strlen(cdata[1])),
                                cdata[1] );
   } else {
@@ -1107,7 +1109,6 @@ void rgl::rgl_getmaterial(int *successptr, int *id, int* idata, char** cdata, do
     idata[7] = mat->mipmap ? 1 : 0; 
     idata[8] = mat->minfilter; 
     idata[9] = mat->magfilter; 
-    idata[20] = mat->envmap ? 1 : 0; 
     cdata[0][0] = '\0';
     cdata[1][0] = '\0';
   }
@@ -1120,6 +1121,7 @@ void rgl::rgl_getmaterial(int *successptr, int *id, int* idata, char** cdata, do
   idata[17] = (int) mat->emission.getRedub();
   idata[18] = (int) mat->emission.getGreenub();
   idata[19] = (int) mat->emission.getBlueub();
+  idata[20] = mat->envmap ? 1 : 0; 
   idata[21] = mat->point_antialias ? 1 : 0;
   idata[22] = mat->line_antialias ? 1 : 0;
   idata[23] = mat->depth_mask ? 1 : 0;
@@ -1132,8 +1134,9 @@ void rgl::rgl_getmaterial(int *successptr, int *id, int* idata, char** cdata, do
   idata[30] = mat->floating;
   idata[31] = mat->blend[0];
   idata[32] = mat->blend[1];
+  idata[33] = mat->texmode;
 
-  for (i=0, j=33; (i < mat->colors.getLength()) && (i < (unsigned int)idata[0]); i++) {
+  for (i=0, j=34; (i < mat->colors.getLength()) && (i < (unsigned int)idata[0]); i++) {
     idata[j++] = (int) mat->colors.getColor(i).getRedub();
     idata[j++] = (int) mat->colors.getColor(i).getGreenub();
     idata[j++] = (int) mat->colors.getColor(i).getBlueub();

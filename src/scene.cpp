@@ -2,8 +2,8 @@
 // This file is part of RGL.
 //
 
-#include "gl2ps.h"
 #include "scene.h"
+#include "gl2ps.h"
 #include "SpriteSet.h"
 #include "rglmath.h"
 #include "render.h"
@@ -103,7 +103,7 @@ bool Scene::pop(TypeID type, int id)
   }
   iter = std::find_if(nodes.begin(), nodes.end(), 
 //		      std::bind(std::ptr_fun(&sameID), placeholders::_1, id));
-          std::bind(&sameID, placeholders::_1, id));
+          std::bind(&sameID, std::placeholders::_1, id));
   if (iter != nodes.end()) {
     SceneNode* node = *iter;  
     if (node == &rootSubscene) 

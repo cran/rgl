@@ -1,5 +1,5 @@
-#include "gl2ps.h"
 #include "Material.h"
+#include "gl2ps.h"
 #include "opengl.h"
 #include "Texture.h"
 #include "R.h"
@@ -34,7 +34,8 @@ Material::Material(Color bg, Color fg)
   line_antialias(false),
   depth_mask(true),
   depth_test(1),  // "less"
-  textype(Texture::RGB),    
+  textype(Texture::RGB),
+  texmode(Texture::MODULATE),
   mipmap(false),
   minfilter(1),
   magfilter(1),

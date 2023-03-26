@@ -5,7 +5,6 @@
 #include "platform.h"
 #include "RenderContext.h"
 
-using namespace std;
 using namespace rgl;
 
 //////////////////////////////////////////////////////////////////////////////
@@ -17,6 +16,7 @@ using namespace rgl;
 Texture::Texture(
   const char* in_filename
 , Type in_type
+, Mode in_mode
 , bool in_mipmap
 , unsigned int in_minfilter
 , unsigned int in_magfilter
@@ -25,6 +25,7 @@ Texture::Texture(
   texName = 0;
   pixmap = new Pixmap();
   type   = in_type;
+  mode   = in_mode;
   mipmap = in_mipmap;
   envmap = in_envmap;
   magfilter = (in_magfilter) ? GL_LINEAR : GL_NEAREST;
@@ -88,11 +89,12 @@ bool Texture::isValid() const
   return (pixmap) ? true : false;
 }
 
-void Texture::getParameters(Type *out_type, bool *out_mipmap, 
+void Texture::getParameters(Type *out_type, Mode *out_mode, bool *out_mipmap, 
                             unsigned int *out_minfilter, unsigned int *out_magfilter, 
-                            bool *out_envmap, int buflen, char *out_filename)
+                            int buflen, char *out_filename)
 {
   *out_type = type;
+  *out_mode = mode;
   *out_mipmap = mipmap;
   switch(minfilter) {
       case GL_NEAREST:
@@ -118,11 +120,9 @@ void Texture::getParameters(Type *out_type, bool *out_mipmap,
         break;
   }
   *out_magfilter = (magfilter == GL_LINEAR) ? 1 : 0;
-  *out_envmap = envmap;
   strncpy(out_filename, filename, buflen);
 }
 
-#ifndef MODERN_OPENGL
 #ifndef RGL_NO_OPENGL
 static unsigned int texsize(unsigned int s)
 {
@@ -139,7 +139,6 @@ static void printGluErrorMessage(GLint error)
   snprintf(buf, 256, "GLU Library Error : %s", (const char*) gluError);
   printMessage(buf);
 }
-#endif
 #endif
 
 void Texture::init(RenderContext* renderContext)
@@ -173,6 +172,25 @@ void Texture::init(RenderContext* renderContext)
     break;
   case RGBA:
     internalFormat = GL_RGBA;
+    break;
+  }
+  
+  switch(mode)
+  {
+  case REPLACE:
+    internalMode = GL_REPLACE;
+    break;
+  case MODULATE:
+    internalMode = GL_MODULATE;
+    break;
+  case DECAL:
+    internalMode = GL_DECAL;
+    break;
+  case BLEND:
+    internalMode = GL_BLEND;
+    break;
+  case ADD:
+    internalMode = GL_ADD;
     break;
   }
 
@@ -216,36 +234,36 @@ void Texture::init(RenderContext* renderContext)
   GLint glTexSize;
   glGetIntegerv(GL_MAX_TEXTURE_SIZE,  &glTexSize );        
   
-  #ifdef MODERN_OPENGL
-  glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, pixmap->width, pixmap->height, 0, format, gl_type , pixmap->data);
-  if (mipmap)
-    glGenerateMipmap(GL_TEXTURE_2D);
-  #else
-  unsigned int maxSize = static_cast<unsigned int>(glTexSize);
-  if (mipmap) {                  
-    int gluError = gluBuild2DMipmaps(GL_TEXTURE_2D, internalFormat, pixmap->width, pixmap->height, format, gl_type, pixmap->data);    
-    if (gluError)
-      printGluErrorMessage(gluError);
+  if (GLAD_GL_VERSION_3_0) {
+    glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, pixmap->width, pixmap->height, 0, format, gl_type , pixmap->data);
+    if (mipmap)
+      glGenerateMipmap(GL_TEXTURE_2D);
   } else {
-    unsigned int width  = texsize(pixmap->width);
-    unsigned int height = texsize(pixmap->height);
-    
-    if ( (width > maxSize) || (height > maxSize) ) {
-      char buf[256];
-      snprintf(buf, 256, "GL Library : Maximum texture size of %dx%d exceeded.\n(Perhaps enabling mipmapping could help.)", maxSize,maxSize);
-      printMessage(buf);
-    } else if ( (pixmap->width != width) || ( pixmap->height != height) ) {
-      char* data = new char[width * height * bytesperpixel];
-      int gluError = gluScaleImage(format, pixmap->width, pixmap->height, gl_type, pixmap->data, width, height, gl_type, data);
+    unsigned int maxSize = static_cast<unsigned int>(glTexSize);
+    if (mipmap) {                  
+      int gluError = gluBuild2DMipmaps(GL_TEXTURE_2D, internalFormat, pixmap->width, pixmap->height, format, gl_type, pixmap->data);    
       if (gluError)
         printGluErrorMessage(gluError);
-      glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, width, height, 0, format, gl_type , data);
-      delete[] data;
     } else {
-      glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, pixmap->width, pixmap->height, 0, format, gl_type , pixmap->data);
+      unsigned int width  = texsize(pixmap->width);
+      unsigned int height = texsize(pixmap->height);
+      
+      if ( (width > maxSize) || (height > maxSize) ) {
+        char buf[256];
+        snprintf(buf, 256, "GL Library : Maximum texture size of %dx%d exceeded.\n(Perhaps enabling mipmapping could help.)", maxSize,maxSize);
+        printMessage(buf);
+      } else if ( (pixmap->width != width) || ( pixmap->height != height) ) {
+        char* data = new char[width * height * bytesperpixel];
+        int gluError = gluScaleImage(format, pixmap->width, pixmap->height, gl_type, pixmap->data, width, height, gl_type, data);
+        if (gluError)
+          printGluErrorMessage(gluError);
+        glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, width, height, 0, format, gl_type , data);
+        delete[] data;
+      } else {
+        glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, pixmap->width, pixmap->height, 0, format, gl_type , pixmap->data);
+      }
     }
   }
-  #endif /* not MODERN_OPENGL */
   
   if (envmap) {
     glTexGeni(GL_S, GL_TEXTURE_GEN_MODE, GL_SPHERE_MAP);
@@ -270,7 +288,7 @@ void Texture::beginUse(RenderContext* renderContext)
   
 
   glEnable(GL_TEXTURE_2D);
-  glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+  glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, internalMode);
   glBindTexture(GL_TEXTURE_2D, texName);
 
   if (type == ALPHA) {

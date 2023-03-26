@@ -25,7 +25,8 @@
       f.is_points = rglwidgetClass.isSet(flags, rglwidgetClass.f_is_points);
       f.is_transparent = rglwidgetClass.isSet(flags, rglwidgetClass.f_is_transparent);
       f.is_twosided = rglwidgetClass.isSet(flags, rglwidgetClass.f_is_twosided);
-      f.needs_vnormal = (f.is_lit && !f.fixed_quads && !f.is_brush) || (f.is_twosided && f.has_normals);
+      f.needs_vnormal = !rglwidgetClass.isSet(flags, rglwidgetClass.f_sprites_3d) &&
+        (f.is_lit && !f.fixed_quads && !f.is_brush) || (f.is_twosided && f.has_normals);
       f.rotating = rglwidgetClass.isSet(flags, rglwidgetClass.f_rotating);
       f.round_points = round_points;
       return f;
@@ -49,7 +50,9 @@
      * @param  textype - texture type for object 
      * @param  antialias - use antialiasing?
      */
-    rglwidgetClass.getDefines = function(id, type, flags, nclipplanes, nlights, normals, pointSize, textype, antialias, fl) {
+    rglwidgetClass.getDefines = function(id, type, flags,
+      nclipplanes, nlights, normals, pointSize, textype,
+      texmode, texenvmap, antialias, fl) {
       var
         title, defines;
       
@@ -79,6 +82,9 @@
       if (fl.has_texture) {
         defines = defines + "#define HAS_TEXTURE 1\n";
         defines = defines + "#define TEXTURE_" + textype + "\n";
+        defines = defines + "#define TEXMODE_" + texmode + "\n";
+        if (texenvmap)
+          defines = defines + "#define USE_ENVMAP 1\n";
       }
       
       if (fl.is_brush)
@@ -136,16 +142,18 @@
         this.countClipplanes(), this.countLights(), 
         obj.normals, 
         this.getMaterial(obj, "size"), 
-        this.getMaterial(obj, "textype"), 
+        this.getMaterial(obj, "textype"),
+        this.getMaterial(obj, "texmode"),
+        this.getMaterial(obj, "texenvmap"),
         this.getMaterial(obj, "point_antialias"),
         obj.defFlags
       );
 
       if (typeof vertex === "undefined")
-        vertex = document.getElementById("rgl-vertex-shader").text;
+        vertex = rglwidgetClass.rgl_vertex_shader();
         
       if (typeof fragment === "undefined") 
-        fragment = document.getElementById("rgl-fragment-shader").text;
+        fragment = rglwidgetClass.rgl_fragment_shader();
 
 //      console.log("vertex:");
 //      console.log(header + vertex);

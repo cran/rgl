@@ -56,6 +56,7 @@ public:
   bool         depth_mask;
   int	       depth_test;  // 0=GL_NEVER, 1=GL_LESS, etc.
   Texture::Type textype;
+  Texture::Mode texmode;
   bool	       mipmap;
   unsigned int minfilter;
   unsigned int magfilter;
@@ -64,7 +65,7 @@ public:
   int          marginCoord;
   int          edge[3];
   bool         floating;
-  string       tag;
+  std::string       tag;
   int          blend[2];
   
   double       glVersion;

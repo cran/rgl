@@ -52,7 +52,8 @@ plot(rnorm(1000), rnorm(1000))
 dev.off()
 open3d()
 xyz <- cbind(c(0,1,1,0), 0, c(0,0,1,1))
-quads3d(xyz, texture = filename, texcoords = xyz[,c(1, 3)]*2, col = "white", specular = "black")
+quads3d(xyz, texture = filename, texcoords = xyz[,c(1, 3)]*2, 
+        col = "white", specular = "black")
 
 ## -----------------------------------------------------------------------------
 cols <- rainbow(7)

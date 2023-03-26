@@ -86,7 +86,7 @@ clear3d     <- function(type = c("shapes", "bboxdeco", "material"),
 rgl.material.names <- c("color", "alpha", "lit", "ambient", "specular",
     "emission", "shininess", "smooth", "front", "back", "size", 
     "lwd", "fog", "point_antialias", "line_antialias",
-    "texture", "textype", "texmipmap",
+    "texture", "textype", "texmode", "texmipmap",
     "texminfilter", "texmagfilter", "texenvmap",
     "depth_mask", "depth_test", "isTransparent",
     "polygon_offset", "margin", "floating", "tag",
@@ -94,12 +94,37 @@ rgl.material.names <- c("color", "alpha", "lit", "ambient", "specular",
 
 rgl.material.readonly <- "isTransparent"
 
+# Warn about putting a texture on a black surface, but only
+# if the surface is black because that's the default.
+
+warnBlackTexture <- function(...,
+                             defaults = material3d(),
+                             color = col, col = "missing",
+                             texture = NULL,
+                             texmode = defaults$texmode) {
+  if (!is.null(texture) &&
+      length(color) == 1 &&
+      !is.na(color) &&
+      color == "missing" &&
+      !is.na(texmode) && 
+      texmode == "modulate" &&
+      isTRUE(getOption("rgl.warnBlackTexture", TRUE)) &&
+      length(defaults$color) &&
+      !is.na(defaults$color[1]) &&
+      defaults$color[1] %in% c("#000000", "black")) {
+    warning("Texture will be invisible on black surface", call. = FALSE) 
+  }
+}
+
 # This function expands a list of arguments by putting
 # all entries from Params (i.e. the current settings by default)
 # in place for any entries that are not listed.  
 # Unrecognized args are left in place.
 
 .fixMaterialArgs <- function(..., Params = material3d(), col) {
+   warnBlackTexture(..., 
+                    col = if (missing(col)) "missing" else col,
+                    defaults = Params)
    f <- function(...) list(...)
    dots <- list(...)
    if (!missing(col)) 
@@ -163,6 +188,8 @@ material3d  <- function(..., id = NULL) {
   }
   value <- rgl.getmaterial(id = id)[argnames]
   if (length(args)) {
+    save <- options(rgl.warnBlackTexture = FALSE)
+    on.exit(options(save))
     args <- do.call(".fixMaterialArgs", args)
     do.call("rgl.material0", args)
     return(invisible(value))
@@ -315,6 +342,7 @@ view3d      <- function(theta = 0.0, phi = 15.0,
   
   if (! ret$success)
     stop("'rgl_viewpoint' failed")
+  lowlevel()
 }
 
 bbox3d	    <- function(xat = NULL, 
