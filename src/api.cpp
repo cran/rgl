@@ -8,8 +8,8 @@
 
 #include "lib.h"
 #include "R.h"
-#include "api.h"
 #include "platform.h"
+#include "api.h"
 
 using namespace rgl;
 //
@@ -119,16 +119,16 @@ SEXP rgl::rgl_dev_getcurrent(void)
   SEXP result;
   if (deviceManager) {
     int id = deviceManager->getCurrent();
-    PROTECT(result = ScalarInteger(id));
+    PROTECT(result = Rf_ScalarInteger(id));
     if (id) {
-      PROTECT(result = namesgets(result, ScalarString(mkChar(deviceManager->getDevice(id)->getDevtype()))));
+      PROTECT(result = Rf_namesgets(result, Rf_ScalarString(Rf_mkChar(deviceManager->getDevice(id)->getDevtype()))));
       CHECKGLERROR;     
       UNPROTECT(1);
     }
     UNPROTECT(1);
     return result;
   }
-  return ScalarInteger(0);
+  return Rf_ScalarInteger(0);
 }
 
 //
@@ -144,19 +144,19 @@ SEXP rgl::rgl_dev_list(void)
   SEXP result, names;
   if (deviceManager) {
     int n = deviceManager->getDeviceCount();
-    PROTECT(result = allocVector(INTSXP, n));
+    PROTECT(result = Rf_allocVector(INTSXP, n));
     deviceManager->getDeviceIds(INTEGER(result), n);
-    PROTECT(names = allocVector(STRSXP, n));
+    PROTECT(names = Rf_allocVector(STRSXP, n));
     for (int i = 0; i < n; i++) {
       Device* device = deviceManager->getDevice(INTEGER(result)[i]);
-      SET_STRING_ELT(names, i, mkChar(device->getDevtype()));
+      SET_STRING_ELT(names, i, Rf_mkChar(device->getDevtype()));
     }
-    PROTECT(result = namesgets(result, names));
+    PROTECT(result = Rf_namesgets(result, names));
     CHECKGLERROR;
     UNPROTECT(3);
     return result;
   }
-  return allocVector(INTSXP, 0);
+  return Rf_allocVector(INTSXP, 0);
 }
 
 
@@ -365,11 +365,11 @@ void rgl::rgl_text_attrib(int* id, int* attrib, int* first, int* count, char** r
     
     if (scenenode)
       for (int i=0; i < *count; i++) {
-        String s = scenenode->getTextAttribute(subscene, *attrib, i + *first);
-        if (s.length) {
-          *result = R_alloc(s.length + 1, 1);
-          strncpy(*result, s.text, s.length);
-          (*result)[s.length] = '\0';
+        std::string s = scenenode->getTextAttribute(subscene, *attrib, i + *first);
+        if (s.size()) {
+          *result = R_alloc(s.size() + 1, 1);
+          strncpy(*result, s.c_str(), s.size());
+          (*result)[s.size()] = '\0';
         }
         result++;
       }
@@ -583,7 +583,7 @@ SEXP rgl::rgl_primitive(SEXP idata, SEXP vertex, SEXP normals, SEXP texcoords)
     CHECKGLERROR;
   }
 
-  return ScalarInteger(success);
+  return Rf_ScalarInteger(success);
 }
 
 void rgl::rgl_surface(int* successptr, int* idata, double* x, double* z, double* y, 
@@ -860,7 +860,7 @@ void rgl::rgl_addtosubscene(int* successptr, int* count, int* ids)
 	  subscene->add(node);
 	  success = RGL_SUCCESS;
 	} else 
-	  warning("id %d not found in scene", ids[i]);
+	  Rf_warning("id %d not found in scene", ids[i]);
       }
       rglview->update();
     }
@@ -908,13 +908,10 @@ void rgl::rgl_delfromsubscene(int* successptr, int* count, int* ids)
 	    success++;
 	    break;
 	  default:
-	    char buffer[20];
-	    buffer[19] = 0;
-	    node->getTypeName(buffer, 20);
-	    warning("id %d is type %s; cannot hide", ids[i], buffer);
+	    Rf_warning("id %d is type %s; cannot hide", ids[i], node->getTypeName().c_str());
           }
 	else 
-	  warning("id %d not found in scene", ids[i]);
+	  Rf_warning("id %d not found in scene", ids[i]);
       }
       rglview->update();
     }
@@ -1008,9 +1005,10 @@ void rgl::rgl_material(int *successptr, int* idata, char** cdata, double* ddata)
   mat.floating = idata[29];
   mat.blend[0] = idata[30];
   mat.blend[1] = idata[31];
-  mat.texmode = (Texture::Mode) idata[32]; 
+  mat.texmode = (Texture::Mode) idata[32];
+  bool deleteFile = (idata[33]) ? true : false;
   
-  int* colors   = &idata[33];
+  int* colors   = &idata[34];
   char*  pixmapfn = cdata[1];
 
   mat.shininess   = (float) ddata[0];
@@ -1036,7 +1034,8 @@ void rgl::rgl_material(int *successptr, int* idata, char** cdata, double* ddata)
 
   if ( strlen(pixmapfn) > 0 ) {
     mat.texture = new Texture(pixmapfn, mat.textype, mat.texmode, 
-                              mat.mipmap, mat.minfilter, mat.magfilter, mat.envmap);
+                              mat.mipmap, mat.minfilter, mat.magfilter, mat.envmap,
+                              deleteFile);
     if ( !mat.texture->isValid() ) {
       mat.texture->unref();
       // delete mat.texture;
@@ -1064,6 +1063,7 @@ void rgl::rgl_getmaterial(int *successptr, int *id, int* idata, char** cdata, do
 {
   Material* mat = &currentMaterial;
   unsigned int i,j;
+  std::string filename;
   
   if (*id > 0) {
     Device* device;
@@ -1102,15 +1102,12 @@ void rgl::rgl_getmaterial(int *successptr, int *id, int* idata, char** cdata, do
                                (bool*) (idata + 7),
                                (unsigned int*) (idata + 8),
                                (unsigned int*) (idata + 9),
-                               static_cast<int>(strlen(cdata[1])),
-                               cdata[1] );
+                               &filename);
   } else {
     idata[6] = (int)mat->textype;
     idata[7] = mat->mipmap ? 1 : 0; 
     idata[8] = mat->minfilter; 
     idata[9] = mat->magfilter; 
-    cdata[0][0] = '\0';
-    cdata[1][0] = '\0';
   }
   idata[11] = (int) mat->ambient.getRedub();
   idata[12] = (int) mat->ambient.getGreenub();
@@ -1156,11 +1153,8 @@ void rgl::rgl_getmaterial(int *successptr, int *id, int* idata, char** cdata, do
   } else 
     idata[10] = 0;
   
-  /* Can't use tag.length() here, because R has highjacked length() */
-  size_t len_tag = strlen(mat->tag.c_str());
-  cdata[0] = R_alloc(len_tag + 1, 1);
-  strncpy(cdata[0], mat->tag.c_str(), len_tag);
-  (cdata[0])[len_tag] = '\0';
+  cdata[0] = copyStringToR(mat->tag);
+  cdata[1] = copyStringToR(filename);
   
   CHECKGLERROR;
   

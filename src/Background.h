@@ -28,8 +28,8 @@ public:
   GLbitfield getClearFlags(RenderContext* renderContext);
   int getAttributeCount(SceneNode* subscene, AttribID attrib);
   void getAttribute(SceneNode* subscene, AttribID attrib, int first, int count, double* result);
-  String  getTextAttribute(SceneNode* subscene, AttribID attrib, int index);
-  void getTypeName(char* buffer, int buflen) { strncpy(buffer, "background", buflen); };
+  std::string getTextAttribute(SceneNode* subscene, AttribID attrib, int index);
+  virtual std::string getTypeName() { return "background"; };
   SceneNode* getQuad() { return quad; };
 
 protected:

@@ -18,6 +18,7 @@ rglwidget(x = scene3d(minimal), width = figWidth(), height = figHeight(),
           shared = NULL, minimal = TRUE, 
           webgl, snapshot, 
           shinyBrush = NULL, 
+          altText = "3D plot",
           ...,
           oldConvertBBox = FALSE)
 }
@@ -46,6 +47,8 @@ component that will hold the scene.
   no effect?  See \code{\link{scene3d}}.}
   \item{shinyBrush}{The name of a Shiny \code{input} element
   to receive information about mouse selections.}
+  \item{altText}{Text to include for screen-readers or browsers
+  that don't handle WebGL.  See Details below.}
   \item{oldConvertBBox}{See Details below.}
   \item{...}{Additional arguments
 to pass to \code{htmlwidgets::\link{createWidget}}.}
@@ -107,6 +110,18 @@ for the labels, segments for the ticks.  By default it now
 generates these in Javascript, allowing axis labels to move as
 they do in the display in \R.  If you prefer the old conversion,
 set \code{oldConvertBBox = TRUE}.
+}
+\section{R Markdown specifics}{
+In an R Markdown document, you would normally call
+\code{\link{setupKnitr}(autoprint = TRUE)} and would not 
+make explicit calls to \code{rglwidget()}.  If you do
+make such calls, the graphics will be inserted into the
+document. 
+
+In \pkg{knitr} versions greater than 1.42.5,
+the \code{altText} argument will be ignored and the alternate
+text will be set from chunk option \code{fig.alt} or 
+\code{fig.cap} as with other graphics.
 }
 \section{Shiny specifics}{
 

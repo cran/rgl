@@ -133,12 +133,13 @@ AxisInfo::AxisInfo()
 }
 
 AxisInfo::AxisInfo(int in_nticks, double* in_ticks, char** in_texts, int in_len, float in_unit)
-: textArray(in_nticks, in_texts)
 {
  
   int i;
 
   nticks = in_nticks;
+  for (i = 0; i < nticks; i++)
+  	textArray.push_back(in_texts[i]);
   len    = in_len;
   unit   = in_unit;
   ticks  = NULL;
@@ -188,7 +189,7 @@ AxisInfo::~AxisInfo()
 }
 
 void AxisInfo::draw(RenderContext* renderContext, Vertex4& v, Vertex4& dir, Matrix4x4& modelview, 
-                    Vertex& marklen, String& string) {
+                    Vertex& marklen, std::string& string) {
 #ifndef RGL_NO_OPENGL
   Vertex4 p;
   GLboolean valid;
@@ -224,9 +225,8 @@ void AxisInfo::draw(RenderContext* renderContext, Vertex4& v, Vertex4& dir, Matr
       adj = fabs(eyedir.y)/fabs(eyedir.x)/2.0f;
       if (eyedir.x < 0) adj = 1.0f - adj;
     }
-  
     if (renderContext->font)
-      renderContext->font->draw(string.text, string.length, adj, 0.5, 0.5, 0, 
+      renderContext->font->draw(string.c_str(), string.size(), adj, 0.5, 0.5, 0, 
                                 *renderContext);
   }      
 #endif
@@ -550,7 +550,7 @@ struct BBoxDeco::BBoxDecoImpl {
       if (match)
         return &axisedge[j];
     }
-    error("fixedEdge: material->floating=%d marginCoord=%d edge=%d %d %d\n", material->floating,
+    Rf_error("fixedEdge: material->floating=%d marginCoord=%d edge=%d %d %d\n", material->floating,
              material->marginCoord, material->edge[0], material->edge[1], material->edge[2]);
     return axisedge;
   }
@@ -750,10 +750,10 @@ void BBoxDeco::render(RenderContext* renderContext)
         {
           // draw axis and tickmarks
           
-          StringArrayIterator iter(&axis->textArray);
+          std::vector<std::string>::iterator  iter;
           
           
-          for (iter.first(), j=0; (j<axis->nticks) && (!iter.isDone());j++, iter.next()) {
+          for (iter = axis->textArray.begin(), j=0; (j<axis->nticks) && (iter != axis->textArray.end());++iter, j++) {
             
             float value = axis->ticks[j];
             
@@ -761,9 +761,8 @@ void BBoxDeco::render(RenderContext* renderContext)
             
             if ((value >= low) && (value <= high)) {
               
-              String string = iter.getCurrent();
               *valueptr = value;
-              axis->draw(renderContext, v, edge->dir, modelview, marklen, string);
+              axis->draw(renderContext, v, edge->dir, modelview, marklen, *iter);
             }
             
           }
@@ -782,7 +781,7 @@ void BBoxDeco::render(RenderContext* renderContext)
             char text[32];
             snprintf(text, 32, "%.4g", value);
               
-            String string(static_cast<int>(strlen(text)),text);
+            std::string string = text;
               
             axis->draw(renderContext, v, edge->dir, modelview, marklen, string);
           }
@@ -798,7 +797,7 @@ void BBoxDeco::render(RenderContext* renderContext)
             char text[32];
             snprintf(text, 32, "%.4g", value);
                 
-            String s (static_cast<int>(strlen(text)),text);
+            std::string s = text;
                 
             axis->draw(renderContext, v, edge->dir, modelview, marklen, s );
                 
@@ -825,7 +824,7 @@ void BBoxDeco::render(RenderContext* renderContext)
               char text[32];
               snprintf(text, 32, "%.4g", value);
                     
-              String s (static_cast<int>(strlen(text)),text);
+              std::string s = text;
                     
               axis->draw(renderContext, v, edge->dir, modelview, marklen, s );
             }
@@ -1017,7 +1016,7 @@ void BBoxDeco::getAttribute(SceneNode* subscene, AttribID attrib, int first, int
   }
 }
 
-String BBoxDeco::getTextAttribute(SceneNode* subscene, AttribID attrib, int index)
+std::string BBoxDeco::getTextAttribute(SceneNode* subscene, AttribID attrib, int index)
 {
   int n = getAttributeCount(subscene, attrib);
   
@@ -1031,7 +1030,7 @@ String BBoxDeco::getTextAttribute(SceneNode* subscene, AttribID attrib, int inde
         if (xaxis.mode == AXIS_CUSTOM)
           return xaxis.textArray[index];
         else
-          return String(0, NULL);
+          return "";
       }  
       index -= count;
       count = yaxis.getNticks(bbox.vmin.y, bbox.vmax.y);
@@ -1039,7 +1038,7 @@ String BBoxDeco::getTextAttribute(SceneNode* subscene, AttribID attrib, int inde
         if (yaxis.mode == AXIS_CUSTOM)
           return yaxis.textArray[index];
         else
-          return String(0, NULL);
+          return "";
       }  
       index -= count;
       count = zaxis.getNticks(bbox.vmin.z, bbox.vmax.z);
@@ -1047,11 +1046,11 @@ String BBoxDeco::getTextAttribute(SceneNode* subscene, AttribID attrib, int inde
         if (zaxis.mode == AXIS_CUSTOM)
           return zaxis.textArray[index];
         else
-          return String(0, NULL);
+          return "";
       }
       break;
     }
     }
   }
-  return String(0, NULL);
+  return "";
 }

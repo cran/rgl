@@ -3,7 +3,7 @@ source("setup.R")
 setupKnitr(autoprint = FALSE)
 set.seed(123)
 
-## -----------------------------------------------------------------------------
+## ----elementId----------------------------------------------------------------
 library(rgl)
 plotids <- with(iris, plot3d(Sepal.Length, Sepal.Width, Petal.Length, 
                   type="s", col=as.numeric(Species)))
@@ -16,7 +16,7 @@ toggleWidget(sceneId = "plot3drgl", ids = plotids["data"], label = "Data")
 names(plotids)
 unclass(plotids)
 
-## -----------------------------------------------------------------------------
+## ----Pipes--------------------------------------------------------------------
 rglwidget() %>%
 toggleWidget(ids = plotids["data"], label = "Data")
 
@@ -24,7 +24,7 @@ toggleWidget(ids = plotids["data"], label = "Data")
 #  rglwidget() |>
 #  toggleWidget(ids = plotids["data"], label = "Data")
 
-## -----------------------------------------------------------------------------
+## ----"Control before widget"--------------------------------------------------
 toggleWidget(NA, ids = plotids["data"], label = "Data") %>%
 rglwidget(controllers = .) 
 
@@ -32,7 +32,7 @@ rglwidget(controllers = .)
 #  toggleWidget(NA, ids = plotids["data"], label = "Data") |>
 #    w => rglwidget(controllers = w)
 
-## -----------------------------------------------------------------------------
+## ----"Toggle subsets"---------------------------------------------------------
 clear3d() # Remove the earlier display
 
 with(subset(iris, Species == "setosa"), 
@@ -59,7 +59,7 @@ toggleWidget(tags = "virginica") %>%
 toggleWidget(tags = "axes") %>% 
 asRow(last = 4)
 
-## -----------------------------------------------------------------------------
+## ----Slider-------------------------------------------------------------------
 rglwidget() %>%
 playwidget(start = 0, stop = 3, interval = 1,
 	   subsetControl(1, subsets = list(
@@ -69,7 +69,7 @@ playwidget(start = 0, stop = 3, interval = 1,
 	   			 All = tagged3d(c("setosa", "versicolor", "virginica"))
 	   			 )))
 
-## -----------------------------------------------------------------------------
+## ----"par3dinterpControl()"---------------------------------------------------
 M <- r3dDefaults$userMatrix
 fn <- par3dinterp(time = (0:2)*0.75, userMatrix = list(M,
                                       rotate3d(M, pi/2, 1, 0, 0),
@@ -78,7 +78,7 @@ rglwidget() %>%
 playwidget(par3dinterpControl(fn, 0, 3, steps=15),
  	   step = 0.01, loop = TRUE, rate = 0.5)
 
-## -----------------------------------------------------------------------------
+## ----"vertexControl()"--------------------------------------------------------
 setosavals <- subset(iris, Species == "setosa")
 which <- which.min(setosavals$Sepal.Width)
 init <- setosavals$Sepal.Length[which]
@@ -91,7 +91,7 @@ playwidget(
                 vertices = which, tag = "setosa"),
 	step = 0.01)
 
-## -----------------------------------------------------------------------------
+## ----"ageControl()"-----------------------------------------------------------
 time <- 0:500
 xyz <- cbind(cos(time/20), sin(time/10), time)
 lineid <- plot3d(xyz, type="l", col = "black")["data"]
@@ -107,7 +107,7 @@ playwidget(list(
                  "Reset", "Slider", "Label"),
   loop = TRUE)
 
-## ----eval = requireNamespace("crosstalk", quietly=TRUE)-----------------------
+## ----crosstalk,eval = requireNamespace("crosstalk", quietly=TRUE)-------------
 # This example requires the crosstalk package
 # We skip it if crosstalk is not available. 
 
@@ -117,7 +117,7 @@ par3d(mouseMode = "selecting")
 rglwidget(shared = rglShared(ids["data"])) %>% 
 rglMouse()
 
-## ----eval=requireNamespace("crosstalk", quietly = TRUE)-----------------------
+## ----"rglShared()",eval=requireNamespace("crosstalk", quietly = TRUE)---------
 # This example requires the crosstalk package.  
 # We skip it if crosstalk is not available. 
 

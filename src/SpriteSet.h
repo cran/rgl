@@ -32,12 +32,12 @@ public:
    **/
   virtual void render(RenderContext* renderContext);
   
-  virtual void getTypeName(char* buffer, int buflen) { strncpy(buffer, "sprites", buflen); };
+  virtual std::string getTypeName() { return "sprites"; };
   
   virtual int getElementCount(void);
   int getAttributeCount(SceneNode* subscene, AttribID attrib);
   void getAttribute(SceneNode* subscene, AttribID attrib, int first, int count, double* result);
-  String getTextAttribute(SceneNode* subscene, AttribID attrib, int index);
+  std::string getTextAttribute(SceneNode* subscene, AttribID attrib, int index);
   
   /**
    * location of individual items

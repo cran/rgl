@@ -12,7 +12,7 @@
 
 <meta name="author" content="Duncan Murdoch" />
 
-<meta name="date" content="2023-03-13" />
+<meta name="date" content="2023-07-04" />
 
 <title>Deprecating the rgl.* interface</title>
 
@@ -341,7 +341,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <h1 class="title toc-ignore">Deprecating the <code>rgl.*</code>
 interface</h1>
 <h4 class="author">Duncan Murdoch</h4>
-<h4 class="date">2023-03-13</h4>
+<h4 class="date">2023-07-04</h4>
 
 
 <div id="TOC">
@@ -399,71 +399,71 @@ of the <code>rgl.*</code> interface.</p>
 <code>rgl</code> device will be used. The <code>par3d()</code> settings
 will be set to their defaults.</p>
 <p>The <code>open3d()</code> function has arguments</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="cf">function</span>(..., </span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>         <span class="at">params =</span> <span class="fu">getr3dDefaults</span>(), </span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>         <span class="at">useNULL =</span> <span class="fu">rgl.useNULL</span>(), </span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">silent =</span> <span class="cn">FALSE</span> )</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="cf">function</span>(..., </span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a>         <span class="at">params =</span> <span class="fu">getr3dDefaults</span>(), </span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a>         <span class="at">useNULL =</span> <span class="fu">rgl.useNULL</span>(), </span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a>         <span class="at">silent =</span> <span class="cn">FALSE</span> )</span></code></pre></div>
 <p>and allows <code>par3d()</code> values to be specified, and uses the
 <code>r3dDefaults</code> variable to set default values for
 <code>par3d()</code>, <code>material3d()</code>, and
 <code>bg3d()</code>. Initially <code>r3dDefaults</code> is defined
 as</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">list</span>(<span class="at">userMatrix =</span> <span class="fu">rotationMatrix</span>(<span class="dv">290</span><span class="sc">*</span>pi<span class="sc">/</span><span class="dv">180</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>),</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>     <span class="at">mouseMode =</span> <span class="fu">c</span>(<span class="st">&quot;none&quot;</span>, <span class="st">&quot;trackball&quot;</span>, <span class="st">&quot;zoom&quot;</span>, <span class="st">&quot;fov&quot;</span>, <span class="st">&quot;pull&quot;</span>),</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>     <span class="at">FOV =</span> <span class="dv">30</span>,</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>     <span class="at">family =</span> <span class="st">&quot;sans&quot;</span>,</span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>     <span class="at">bg =</span> <span class="fu">list</span>(<span class="at">color=</span><span class="st">&quot;white&quot;</span>,</span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>               <span class="at">fogtype =</span> <span class="st">&quot;none&quot;</span>),</span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>     <span class="at">material =</span> <span class="fu">list</span>(<span class="at">color=</span><span class="st">&quot;black&quot;</span>, <span class="at">fog =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="fu">list</span>(<span class="at">userMatrix =</span> <span class="fu">rotationMatrix</span>(<span class="dv">290</span><span class="sc">*</span>pi<span class="sc">/</span><span class="dv">180</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>),</span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>     <span class="at">mouseMode =</span> <span class="fu">c</span>(<span class="st">&quot;none&quot;</span>, <span class="st">&quot;trackball&quot;</span>, <span class="st">&quot;zoom&quot;</span>, <span class="st">&quot;fov&quot;</span>, <span class="st">&quot;pull&quot;</span>),</span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a>     <span class="at">FOV =</span> <span class="dv">30</span>,</span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a>     <span class="at">family =</span> <span class="st">&quot;sans&quot;</span>,</span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a>     <span class="at">bg =</span> <span class="fu">list</span>(<span class="at">color=</span><span class="st">&quot;white&quot;</span>,</span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a>               <span class="at">fogtype =</span> <span class="st">&quot;none&quot;</span>),</span>
+<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a>     <span class="at">material =</span> <span class="fu">list</span>(<span class="at">color=</span><span class="st">&quot;black&quot;</span>, <span class="at">fog =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a>)</span></code></pre></div>
 <p>Users can create their own default lists; e.g. to get the same result
 as <code>rgl.open()</code> would give, use</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">open3d</span>(<span class="at">params =</span> <span class="fu">list</span>())</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="fu">open3d</span>(<span class="at">params =</span> <span class="fu">list</span>())</span></code></pre></div>
 <p>or</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>r3dDefaults <span class="ot">&lt;-</span> <span class="fu">list</span>()</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">open3d</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>r3dDefaults <span class="ot">&lt;-</span> <span class="fu">list</span>()</span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a><span class="fu">open3d</span>()</span></code></pre></div>
 </div>
 <div id="material-properties" class="section level2">
 <h2>Material properties</h2>
 <p>The <code>rgl.material()</code> function has a large number of
 parameters. The pre-deprecation arguments were:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="cf">function</span>(</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">color        =</span> <span class="st">&quot;white&quot;</span>,</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">alpha        =</span> <span class="fl">1.0</span>,</span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">lit          =</span> <span class="cn">TRUE</span>, </span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">ambient      =</span> <span class="st">&quot;black&quot;</span>,</span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">specular     =</span> <span class="st">&quot;white&quot;</span>, </span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">emission     =</span> <span class="st">&quot;black&quot;</span>, </span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">shininess    =</span> <span class="fl">50.0</span>, </span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">smooth       =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">texture      =</span> <span class="cn">NULL</span>, </span>
-<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">textype      =</span> <span class="st">&quot;rgb&quot;</span>, </span>
-<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">texmipmap    =</span> <span class="cn">FALSE</span>, </span>
-<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">texminfilter =</span> <span class="st">&quot;linear&quot;</span>, </span>
-<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">texmagfilter =</span> <span class="st">&quot;linear&quot;</span>,</span>
-<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">texenvmap    =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>  <span class="at">front        =</span> <span class="st">&quot;filled&quot;</span>, </span>
-<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>  <span class="at">back         =</span> <span class="st">&quot;filled&quot;</span>,</span>
-<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>  <span class="at">size         =</span> <span class="fl">3.0</span>,</span>
-<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>  <span class="at">lwd          =</span> <span class="fl">1.0</span>, </span>
-<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>  <span class="at">fog          =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>  <span class="at">point_antialias =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>  <span class="at">line_antialias =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>  <span class="at">depth_mask   =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a>  <span class="at">depth_test   =</span> <span class="st">&quot;less&quot;</span>,</span>
-<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a>  <span class="at">polygon_offset =</span> <span class="fu">c</span>(<span class="fl">0.0</span>, <span class="fl">0.0</span>),</span>
-<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a>  <span class="at">margin =</span> <span class="st">&quot;&quot;</span>,</span>
-<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a>  <span class="at">floating =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a>  <span class="at">tag =</span> <span class="st">&quot;&quot;</span>,</span>
-<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a>  <span class="at">blend =</span> <span class="fu">c</span>(<span class="st">&quot;src_alpha&quot;</span>, <span class="st">&quot;one_minus_src_alpha&quot;</span>),</span>
-<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a>  col,</span>
-<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a>  ...</span>
-<span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="cf">function</span>(</span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>  <span class="at">color        =</span> <span class="st">&quot;white&quot;</span>,</span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a>  <span class="at">alpha        =</span> <span class="fl">1.0</span>,</span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a>  <span class="at">lit          =</span> <span class="cn">TRUE</span>, </span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a>  <span class="at">ambient      =</span> <span class="st">&quot;black&quot;</span>,</span>
+<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a>  <span class="at">specular     =</span> <span class="st">&quot;white&quot;</span>, </span>
+<span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a>  <span class="at">emission     =</span> <span class="st">&quot;black&quot;</span>, </span>
+<span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a>  <span class="at">shininess    =</span> <span class="fl">50.0</span>, </span>
+<span id="cb5-9"><a href="#cb5-9" tabindex="-1"></a>  <span class="at">smooth       =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb5-10"><a href="#cb5-10" tabindex="-1"></a>  <span class="at">texture      =</span> <span class="cn">NULL</span>, </span>
+<span id="cb5-11"><a href="#cb5-11" tabindex="-1"></a>  <span class="at">textype      =</span> <span class="st">&quot;rgb&quot;</span>, </span>
+<span id="cb5-12"><a href="#cb5-12" tabindex="-1"></a>  <span class="at">texmipmap    =</span> <span class="cn">FALSE</span>, </span>
+<span id="cb5-13"><a href="#cb5-13" tabindex="-1"></a>  <span class="at">texminfilter =</span> <span class="st">&quot;linear&quot;</span>, </span>
+<span id="cb5-14"><a href="#cb5-14" tabindex="-1"></a>  <span class="at">texmagfilter =</span> <span class="st">&quot;linear&quot;</span>,</span>
+<span id="cb5-15"><a href="#cb5-15" tabindex="-1"></a>  <span class="at">texenvmap    =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb5-16"><a href="#cb5-16" tabindex="-1"></a>  <span class="at">front        =</span> <span class="st">&quot;filled&quot;</span>, </span>
+<span id="cb5-17"><a href="#cb5-17" tabindex="-1"></a>  <span class="at">back         =</span> <span class="st">&quot;filled&quot;</span>,</span>
+<span id="cb5-18"><a href="#cb5-18" tabindex="-1"></a>  <span class="at">size         =</span> <span class="fl">3.0</span>,</span>
+<span id="cb5-19"><a href="#cb5-19" tabindex="-1"></a>  <span class="at">lwd          =</span> <span class="fl">1.0</span>, </span>
+<span id="cb5-20"><a href="#cb5-20" tabindex="-1"></a>  <span class="at">fog          =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb5-21"><a href="#cb5-21" tabindex="-1"></a>  <span class="at">point_antialias =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb5-22"><a href="#cb5-22" tabindex="-1"></a>  <span class="at">line_antialias =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb5-23"><a href="#cb5-23" tabindex="-1"></a>  <span class="at">depth_mask   =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb5-24"><a href="#cb5-24" tabindex="-1"></a>  <span class="at">depth_test   =</span> <span class="st">&quot;less&quot;</span>,</span>
+<span id="cb5-25"><a href="#cb5-25" tabindex="-1"></a>  <span class="at">polygon_offset =</span> <span class="fu">c</span>(<span class="fl">0.0</span>, <span class="fl">0.0</span>),</span>
+<span id="cb5-26"><a href="#cb5-26" tabindex="-1"></a>  <span class="at">margin =</span> <span class="st">&quot;&quot;</span>,</span>
+<span id="cb5-27"><a href="#cb5-27" tabindex="-1"></a>  <span class="at">floating =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb5-28"><a href="#cb5-28" tabindex="-1"></a>  <span class="at">tag =</span> <span class="st">&quot;&quot;</span>,</span>
+<span id="cb5-29"><a href="#cb5-29" tabindex="-1"></a>  <span class="at">blend =</span> <span class="fu">c</span>(<span class="st">&quot;src_alpha&quot;</span>, <span class="st">&quot;one_minus_src_alpha&quot;</span>),</span>
+<span id="cb5-30"><a href="#cb5-30" tabindex="-1"></a>  col,</span>
+<span id="cb5-31"><a href="#cb5-31" tabindex="-1"></a>  ...</span>
+<span id="cb5-32"><a href="#cb5-32" tabindex="-1"></a>)</span></code></pre></div>
 <p>Thus a call like <code>rgl.material(color = &quot;black&quot;)</code> will set
 the color to black, and will also set all of the other parameters to the
 default values listed above.</p>
 <p>On the other hand, the arguments to <code>material3d()</code> are</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="cf">function</span> (..., <span class="at">id =</span> <span class="cn">NULL</span>)  </span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="cf">function</span> (..., <span class="at">id =</span> <span class="cn">NULL</span>)  </span></code></pre></div>
 <p>Calling <code>material3d(color = &quot;black&quot;)</code> will set the color
 to black and leave all other parameters unchanged.</p>
 </div>
@@ -539,15 +539,15 @@ is used will fix this.</p>
 <p>The arguments to <code>rgl.surface()</code> and
 <code>surface3d()</code> functions are different. The argument lists
 are</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rgl.surface</span>( x, z, y, </span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>             <span class="at">coords =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>,  ..., </span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>             <span class="at">normal_x =</span> <span class="cn">NULL</span>, <span class="at">normal_y =</span> <span class="cn">NULL</span>, <span class="at">normal_z =</span> <span class="cn">NULL</span>,</span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>             <span class="at">texture_s =</span> <span class="cn">NULL</span>, <span class="at">texture_t =</span> <span class="cn">NULL</span>)</span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="fu">surface3d</span>(x, <span class="at">y =</span> <span class="cn">NULL</span>, <span class="at">z =</span> <span class="cn">NULL</span>,</span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>          ...,</span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>          <span class="at">normal_x =</span> <span class="cn">NULL</span>, <span class="at">normal_y =</span> <span class="cn">NULL</span>,</span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>          <span class="at">normal_z =</span> <span class="cn">NULL</span>,</span>
-<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>          <span class="at">texture_s =</span> <span class="cn">NULL</span>, <span class="at">texture_t=</span><span class="cn">NULL</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="fu">rgl.surface</span>( x, z, y, </span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a>             <span class="at">coords =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>,  ..., </span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a>             <span class="at">normal_x =</span> <span class="cn">NULL</span>, <span class="at">normal_y =</span> <span class="cn">NULL</span>, <span class="at">normal_z =</span> <span class="cn">NULL</span>,</span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a>             <span class="at">texture_s =</span> <span class="cn">NULL</span>, <span class="at">texture_t =</span> <span class="cn">NULL</span>)</span>
+<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a><span class="fu">surface3d</span>(x, <span class="at">y =</span> <span class="cn">NULL</span>, <span class="at">z =</span> <span class="cn">NULL</span>,</span>
+<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a>          ...,</span>
+<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a>          <span class="at">normal_x =</span> <span class="cn">NULL</span>, <span class="at">normal_y =</span> <span class="cn">NULL</span>,</span>
+<span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a>          <span class="at">normal_z =</span> <span class="cn">NULL</span>,</span>
+<span id="cb7-9"><a href="#cb7-9" tabindex="-1"></a>          <span class="at">texture_s =</span> <span class="cn">NULL</span>, <span class="at">texture_t=</span><span class="cn">NULL</span>)</span></code></pre></div>
 <p>Notice that the arguments are in a different order. Another
 difference is that <code>rgl.surface()</code> expects the surface to be
 defined in the <code>y</code> coordinate and viewed in the orientation
@@ -568,14 +568,14 @@ call, and for some, <code>...</code> will contain other optional
 arguments. Some packages used the argument list of
 <code>rgl.material()</code> to identify the material property names.
 Going forward, packages should use the variables</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>rgl.material.names</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>rgl.material.readonly</span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a>rgl.material.names</span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a>rgl.material.readonly</span></code></pre></div>
 <p>These are character variables holding all the material property
 names. (<code>rgl.material.names</code> contains all names;
 <code>rgl.material.readonly</code> is the read-only subset of that
 list.) There are also variables</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>rgl.par3d.names</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>rgl.par3d.readonly</span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a>rgl.par3d.names</span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a>rgl.par3d.readonly</span></code></pre></div>
 <p>which give the same information for <code>par3d</code>.</p>
 <p>Since these variables are recently added, you will need to add a
 dependence on <code>rgl (&gt;= 0.111.5)</code> if you use them.</p>

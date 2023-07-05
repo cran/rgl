@@ -149,7 +149,7 @@ processUpstream <- function(upstream, elementId = NULL, playerId = NULL) {
   if (inherits(upstream, c("shiny.tag", "htmlwidget")))
     upstream <- tagList(upstream)
        
-  if (is.character(upstream) && !is.na(upstream))
+  if (is.character(upstream) && !is.na(upstream[1]))
     return(list(prevRglWidget = upstream))
   
   if (is.list(upstream)) {
@@ -265,7 +265,8 @@ rglwidget <- local({
            minimal = TRUE, 
            webgl,
            snapshot,
-           shinyBrush = NULL, ...,
+           shinyBrush = NULL, 
+           altText = "3D plot", ...,
            oldConvertBBox = FALSE) {
     
   if (missing(snapshot)) {
@@ -353,6 +354,9 @@ rglwidget <- local({
 
     x$webGLoptions <- webGLoptions
 
+    if (inShiny())
+      x$altText <- altText
+    
     # create widget
     attr(x, "TOJSON_ARGS") <- list(na = "string")
     result <- structure(htmlwidgets::createWidget(
@@ -366,6 +370,15 @@ rglwidget <- local({
       ...
     ), origScene = origScene)
     
+    # We always emit aria-labelledby.  We need to 
+    # choose here whether to write the label, or rely
+    # on other code to write it.  We let other code write it
+    # in new knitr and Shiny, and otherwise do it ourselves.
+    
+    if (!in_knitr_with_altText_support() && !inShiny())
+      result <- htmlwidgets::prependContent(result, 
+                  tags$p(altText, id = ariaLabelId(elementId),
+                         hidden = NA))
   } else {
     if (is.list(upstream$objects)) {
       result <- img(src = image_uri(x), width = width, height = height)
@@ -384,6 +397,14 @@ rglwidget <- local({
   }
   result
 }})
+
+ariaLabelId <- function(id)
+  paste0(id, "-aria")
+
+widget_html.rglWebGL <- function(id, style, class, ...){
+  tags$div(id = id, style = style, class = class, 
+           "aria-labelledby" = ariaLabelId(id))
+}
 
 print.rglMouseSelection <- function(x, verbose = FALSE, ...) {
   if (!is.null(x$region)) {

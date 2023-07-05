@@ -1,6 +1,7 @@
 #ifndef TEXTURE_H
 #define TEXTURE_H
 
+#include <string>
 #include "pixmap.h"
 #include "types.h"
 
@@ -29,15 +30,18 @@ public:
    , bool mipmap
    , unsigned int minfilter
    , unsigned int magfilter
-   , bool envmap);
+   , bool envmap
+   , bool deleteFile);
   virtual ~Texture();
   bool isValid() const;
   void beginUse(RenderContext* renderContext);
   void endUse(RenderContext* renderContext);
   bool is_envmap() const { return envmap; }
   bool hasAlpha() const { return (type == ALPHA || type == LUMINANCE_ALPHA || type == RGBA ); }
-  void getParameters(Type *out_type, Mode *out_mode, bool *out_mipmap, unsigned int *out_minfilter, 
-                     unsigned int *out_magfilter, int bufsize, char *out_filename) ;
+  void getParameters(Type *out_type, Mode *out_mode, bool *out_mipmap, 
+                     unsigned int *out_minfilter, 
+                     unsigned int *out_magfilter, 
+                     std::string *out_filename);
   Pixmap* getPixmap() const { return pixmap; }
 private:
   void init(RenderContext* renderContext);
@@ -49,10 +53,11 @@ private:
   GLenum  minfilter;
   GLenum  magfilter;
   bool    envmap;
-  char*   filename;
+  std::string   filename;
 #ifndef RGL_NO_OPENGL
   GLint   internalMode;
 #endif
+  bool    deleteFile;
 };
 
 } // namespace rgl

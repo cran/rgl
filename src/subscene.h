@@ -160,7 +160,7 @@ public:
   virtual int getAttributeCount(SceneNode* subscene, AttribID attrib);
   
   virtual void getAttribute(SceneNode* subscene, AttribID attrib, int first, int count, double* result);
-  virtual String getTextAttribute(SceneNode* subscene, AttribID attrib, int index);
+  virtual std::string getTextAttribute(SceneNode* subscene, AttribID attrib, int index);
 
   /* Update matrices etc. in preparation for rendering */
   void update(RenderContext* renderContext);
@@ -215,7 +215,7 @@ public:
   UserViewpoint* getUserViewpoint();
   ModelViewpoint* getModelViewpoint();
 
-  virtual void getTypeName(char* buffer, int buflen) { strncpy(buffer, "subscene", buflen); };
+  virtual std::string getTypeName() { return "subscene"; };
   
   Background* get_background(); 
   

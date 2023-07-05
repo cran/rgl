@@ -20,7 +20,9 @@ Texture::Texture(
 , bool in_mipmap
 , unsigned int in_minfilter
 , unsigned int in_magfilter
-, bool in_envmap)
+, bool in_envmap
+, bool in_deleteFile
+)
 {
   texName = 0;
   pixmap = new Pixmap();
@@ -28,6 +30,7 @@ Texture::Texture(
   mode   = in_mode;
   mipmap = in_mipmap;
   envmap = in_envmap;
+  deleteFile = in_deleteFile;
   magfilter = (in_magfilter) ? GL_LINEAR : GL_NEAREST;
   if (mipmap) {
     switch(in_minfilter) {
@@ -61,10 +64,9 @@ Texture::Texture(
     }
   }
   
-  filename = new char [1 + strlen(in_filename)];
-  memcpy(filename, in_filename, 1 + strlen(in_filename));
+  filename = in_filename;
   
-  if ( !pixmap->load(filename) ) {
+  if ( !pixmap->load(filename.c_str()) ) {
     delete pixmap;
     pixmap = NULL;
   }
@@ -79,8 +81,8 @@ Texture::~Texture()
 #endif
   if (pixmap)
     delete pixmap;
-  if (filename)
-    delete[] filename;
+  if (filename.size() && deleteFile)
+    std::remove(filename.c_str());
 }
 
 
@@ -89,9 +91,9 @@ bool Texture::isValid() const
   return (pixmap) ? true : false;
 }
 
-void Texture::getParameters(Type *out_type, Mode *out_mode, bool *out_mipmap, 
+void Texture::getParameters(Type *out_type, Mode *out_mode, bool *out_mipmap,
                             unsigned int *out_minfilter, unsigned int *out_magfilter, 
-                            int buflen, char *out_filename)
+                            std::string *out_filename)
 {
   *out_type = type;
   *out_mode = mode;
@@ -120,7 +122,7 @@ void Texture::getParameters(Type *out_type, Mode *out_mode, bool *out_mipmap,
         break;
   }
   *out_magfilter = (magfilter == GL_LINEAR) ? 1 : 0;
-  strncpy(out_filename, filename, buflen);
+  *out_filename = filename;
 }
 
 #ifndef RGL_NO_OPENGL

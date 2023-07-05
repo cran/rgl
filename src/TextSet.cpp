@@ -25,7 +25,7 @@ TextSet::TextSet(Material& in_material, int in_ntexts, char** in_texts, double *
                  int in_ignoreExtent, FontArray& in_fonts,
                  int in_npos,
                  const int* in_pos)
- : Shape(in_material, in_ignoreExtent), textArray(in_ntexts, in_texts),
+ : Shape(in_material, in_ignoreExtent),
    npos(in_npos)
 {
   int i;
@@ -40,6 +40,9 @@ TextSet::TextSet(Material& in_material, int in_ntexts, char** in_texts, double *
   // init vertex array
 
   vertexArray.alloc(in_ntexts);
+  for (i = 0; i < in_ntexts; i++) {
+  	textArray.push_back(in_texts[i]);
+  }
 
   fonts = in_fonts;
 #ifdef HAVE_FREETYPE  
@@ -55,9 +58,9 @@ TextSet::TextSet(Material& in_material, int in_ntexts, char** in_texts, double *
     boundingBox += vertexArray[i];
       
     if (!fonts[i % fonts.size()])
-      error("font not available");
-    if (!fonts[i % fonts.size()]->valid(textArray[i].text))
-      error("text %d contains unsupported character", i+1);
+      Rf_error("font not available");
+    if (!fonts[i % fonts.size()]->valid(textArray[i].c_str()))
+      Rf_error("text %d contains unsupported character", i+1);
   }
   
   pos = new int[npos];
@@ -103,8 +106,8 @@ void TextSet::drawPrimitive(RenderContext* renderContext, int index)
     if (valid) {
       font = fonts[index % fonts.size()];
       if (font) {
-        String text = textArray[index];
-        font->draw( text.text, text.length, adjx, adjy, adjz,
+        std::string text = textArray[index];
+        font->draw( text.c_str(), text.size(), adjx, adjy, adjz,
                     pos[index % npos], *renderContext );
       }
     }
@@ -170,7 +173,7 @@ void TextSet::getAttribute(SceneNode* subscene, AttribID attrib, int first, int 
   }
 }
 
-String TextSet::getTextAttribute(SceneNode* subscene, AttribID attrib, int index)
+std::string TextSet::getTextAttribute(SceneNode* subscene, AttribID attrib, int index)
 {
   int n = getAttributeCount(subscene, attrib);
   if (index < n) {
@@ -179,7 +182,7 @@ String TextSet::getTextAttribute(SceneNode* subscene, AttribID attrib, int index
       return textArray[index];
     case FAMILY:
       char* family = fonts[index]->family;
-      return String(static_cast<int>(strlen(family)), family);
+      return family;
     }
   }
   return Shape::getTextAttribute(subscene, attrib, index);
