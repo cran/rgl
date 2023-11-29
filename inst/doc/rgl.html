@@ -12,7 +12,7 @@
 
 <meta name="author" content="Duncan Murdoch" />
 
-<meta name="date" content="2023-07-04" />
+<meta name="date" content="2023-11-28" />
 
 <title>rgl Overview</title>
 
@@ -340,7 +340,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 <h1 class="title toc-ignore">rgl Overview</h1>
 <h4 class="author">Duncan Murdoch</h4>
-<h4 class="date">July 04, 2023</h4>
+<h4 class="date">November 28, 2023</h4>
 
 
 <div id="TOC">
@@ -443,13 +443,13 @@ low level structure inspired by (but incompatible with) the
 <code>grid</code> package.</p>
 <p>This document gives an overview. See the help pages for details.</p>
 <p>For installation instructions, see the <code>README</code> file in
-the top level directory of the source tarball rgl_1.2.1.tar.gz (or a
+the top level directory of the source tarball rgl_1.2.8.tar.gz (or a
 later version).</p>
 <div id="about-this-document" class="section level3">
 <h3>About this document</h3>
 <p>This document was written in R Markdown, using the <code>knitr</code>
 package for production. It corresponds to <code>rgl</code> version
-1.2.1.</p>
+1.2.8.</p>
 <p>Most of the highlighted function names are HTML links. The internal
 links should work in any browser; the links to help topics should work
 if you view the vignette from within the R help system.</p>
@@ -958,7 +958,7 @@ a quad, because the texture coordinates run from 0 to 2 in both
 <div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a>filename <span class="ot">&lt;-</span> <span class="fu">tempfile</span>(<span class="at">fileext =</span> <span class="st">&quot;.png&quot;</span>)</span>
 <span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a><span class="fu">png</span>(<span class="at">filename =</span> filename)</span>
 <span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">rnorm</span>(<span class="dv">1000</span>), <span class="fu">rnorm</span>(<span class="dv">1000</span>))</span>
-<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a><span class="fu">dev.off</span>()</span></code></pre></div>
+<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a><span class="fu">safe.dev.off</span>()</span></code></pre></div>
 <pre><code>## quartz_off_screen 
 ##                 2</code></pre>
 <div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a><span class="fu">open3d</span>()</span></code></pre></div>
@@ -2430,7 +2430,7 @@ vector contains constants used in OpenGL and glTF.</p>
 <code>rgl</code> package are not described, or do not have examples.
 There may even be functions that are missed completely, if the following
 list is not empty:</p>
-<pre><code>## [1] &quot;textureSource&quot;</code></pre>
+<pre><code>## [1] &quot;safe.dev.off&quot;  &quot;textureSource&quot;</code></pre>
 </div>
 <div id="index-of-functions" class="section level2">
 <h2>Index of Functions</h2>

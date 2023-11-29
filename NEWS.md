@@ -1,3 +1,21 @@
+# rgl 1.2.8
+
+## Minor changes
+
+* ARIA support now declares `rgl` scenes with `role = "img"`.
+
+## Bug fixes
+
+* The ARIA support caused `htmlwidgets::saveWidget()` to fail when
+run in a Shiny session.
+* `text3d()` and `mtext3d()` did not pass the `cex` argument to 
+`plotmath3d()` (pull request #384).
+* `polygon3d()` failed when given exactly 3 points (issue #388).
+* `snapshot3d()` failed on Windows with some versions of `webshot2` (issue #391).
+* Fixed issues caused by misuse of `dev.off()` using new function
+`safe.dev.off()`.
+* Fixed issue with `warning()` call reported by CRAN.
+
 # rgl 1.2.1
 
 ## Major changes
