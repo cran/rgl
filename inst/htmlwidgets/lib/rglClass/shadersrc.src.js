@@ -102,7 +102,7 @@ return  "#line 2 1\n"+
 "#endif // IS_TWOSIDED\n"+
 "  \n"+
 "#ifdef NEEDS_VNORMAL\n"+
-"  vNormal = vec4(normalize(vNormal.xyz/vNormal.w), 1);\n"+
+"  vNormal = vec4(normalize(vNormal.xyz), 1);\n"+
 "#endif\n"+
 "  \n"+
 "#if defined(HAS_TEXTURE) || defined(IS_TEXT)\n"+
@@ -259,11 +259,19 @@ return  "#line 2 2\n"+
 "#endif\n"+
 "    \n"+
 "#if NLIGHTS > 0\n"+
+"    // Simulate two-sided lighting\n"+
+"    if (n.z < 0.0)\n"+
+"      n = -n;\n"+
 "    for (int i=0;i<NLIGHTS;i++) {\n"+
 "      colDiff = vec4(vCol.rgb * diffuse[i], vCol.a);\n"+
 "      lightdir = lightDir[i];\n"+
-"      if (!viewpoint[i])\n"+
-"        lightdir = (mvMatrix * vec4(lightdir, 1.)).xyz;\n"+
+"      if (!viewpoint[i]) {\n"+
+"        if (finite[i]) {\n"+
+"          lightdir = (mvMatrix * vec4(lightdir, 1.)).xyz;\n"+
+"        } else {\n"+
+"          lightdir = (mvMatrix * vec4(lightdir, 0.)).xyz;\n"+
+"        }\n"+
+"      }\n"+
 "      if (!finite[i]) {\n"+
 "        halfVec = normalize(lightdir + eye);\n"+
 "      } else {\n"+

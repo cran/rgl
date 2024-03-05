@@ -1,8 +1,21 @@
-# rgl 1.2.8
+# rgl 1.3.0
+
+## Major changes
+
+* `sprites3d()` now supports plotting different 3D symbols
+at each location (issue #406).
 
 ## Minor changes
 
 * ARIA support now declares `rgl` scenes with `role = "img"`.
+* The vignettes in this package now use
+`markdown::html_format`, so they no longer require Pandoc
+(though Pandoc-using output formats like `html_document` will still be supported).
+*  Christophe Geuzaine's GL2PS library (used by `rgl.postscript()`)
+   updated to version 1.4.2, and blending (transparency)
+   has been enabled in formats that support it.
+*  The `Makevars.ucrt` file has been changed for compatibility
+   with an upcoming change to Windows Rtools. (Pull request #412 submitted by Tomas Kalibera).
 
 ## Bug fixes
 
@@ -15,6 +28,12 @@ run in a Shiny session.
 * Fixed issues caused by misuse of `dev.off()` using new function
 `safe.dev.off()`.
 * Fixed issue with `warning()` call reported by CRAN.
+* Smooth shapes were not rendered correctly by `rglwidget()`.
+  This was especially noticeable for spheres with `fov = 0`, but was present in other cases as well (issue #401).
+* `textype = "alpha"` was not rendered correctly by `rglwidget()` (issue #408).
+* `setUserCallbacks()` and related functions failed when
+the `subscene` argument was anything other than the root
+subscene.
 
 # rgl 1.2.1
 

@@ -3,6 +3,9 @@ title: "rgl Overview"
 author: "Duncan Murdoch"
 date: "`r format(Sys.time(), '%B %d, %Y')`"
 output:
+  markdown::html_format:
+    options:
+      toc: true
   rmarkdown::html_vignette:
     fig_height: 5
     fig_width: 5
@@ -16,7 +19,7 @@ output:
     toc: yes
 vignette: >
   %\VignetteIndexEntry{rgl Overview}
-  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEngine{knitr::knitr}
 ---
 
 ```{r setup, echo=FALSE, results="asis"}
@@ -72,7 +75,6 @@ with(iris, plot3d(Sepal.Length, Sepal.Width, Petal.Length,
                   type="s", col=as.numeric(Species)))
 ```
 
-\noindent
 can be used to plot three columns of the `iris` data.
 Allowed plot types include `"p", "l", "h", "s"`,
 meaning points, lines, segments from z=0, and spheres.  There's
