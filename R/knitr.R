@@ -258,7 +258,8 @@ fns <- local({
                                          left   = "margin-left:0;margin-right:auto;",
                                          right  = "margin-left:auto;margin-right:0;",
                                          ""))))
-    result <- do.call("knit_print", c(list(content, options), x$args))
+    
+    result <- do.call("knit_print", c(list(x = content, options = options), x$args))
     if (!latex)
       class(result) <- c(class(result), "knit_asis_htmlwidget")
     

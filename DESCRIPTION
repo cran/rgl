@@ -1,5 +1,5 @@
 Package: rgl
-Version: 1.3.1
+Version: 1.3.12
 Title: 3D Visualization Using OpenGL
 Authors@R: c(person("Duncan", "Murdoch", role = c("aut", "cre"),
                      email = "murdoch.duncan@gmail.com"),
@@ -24,7 +24,8 @@ Authors@R: c(person("Duncan", "Murdoch", role = c("aut", "cre"),
               person("George", "Helffrich", role = "ctb"),
               person("Ivan", "Krylov", role = "ctb"),
               person("Michael", "Sumner", role = "ctb"),
-              person("Mike", "Stein", role = "ctb"))
+              person("Mike", "Stein", role = "ctb"),
+              person("Jonathon", "Love", role = "ctb"))
 Depends: R (>= 3.6.0)
 Suggests: MASS, markdown (>= 1.12), rmarkdown (>= 2.16), deldir (>=
         1.0-4), orientlib, lattice, misc3d, magick, plotrix (>= 3.7-3),
@@ -52,7 +53,7 @@ VignetteBuilder: knitr
 Biarch: true
 RoxygenNote: 7.2.3
 NeedsCompilation: yes
-Packaged: 2024-03-05 10:42:47 UTC; murdoch
+Packaged: 2024-10-28 10:03:27 UTC; murdoch
 Author: Duncan Murdoch [aut, cre],
   Daniel Adler [aut],
   Oleg Nenadic [ctb],
@@ -74,7 +75,8 @@ Author: Duncan Murdoch [aut, cre],
   George Helffrich [ctb],
   Ivan Krylov [ctb],
   Michael Sumner [ctb],
-  Mike Stein [ctb]
+  Mike Stein [ctb],
+  Jonathon Love [ctb]
 Maintainer: Duncan Murdoch <murdoch.duncan@gmail.com>
 Repository: CRAN
-Date/Publication: 2024-03-05 14:10:02 UTC
+Date/Publication: 2024-10-28 11:40:07 UTC

@@ -1,7 +1,9 @@
 ## ----setup, include = FALSE---------------------------------------------------
 knitr::opts_chunk$set(
   collapse = FALSE,  # Bug in knitr 1.42 requires FALSE here
-  comment = "#>")
+  comment = "#>",
+  snapshot = FALSE,
+  screenshot.force = FALSE)
 library(rgl)
 setupKnitr(autoprint = TRUE)
 

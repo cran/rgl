@@ -1,4 +1,30 @@
-# rgl 1.3.0
+# rgl 1.3.12
+
+## Minor changes
+
+* `readSTL()` can now read (some) ASCII format STL files.
+* The configure script has had minor changes, and autoconf
+support files have been updated.
+* `uname` is no longer used during startup (PR #435
+submitted by Jonathon Love).
+
+## Bug fixes
+
+* Background plots did not always appear (issue #421).
+* Changing the background resulted in an additional background
+object instead of replacing the current one.
+* Colors weren't handled correctly by `writePLY()` (issue #425).
+* `bbox3d()` objects ignored the `xlen`, `ylen` and `zlen`
+settings when rendered using `rglwidget()` (issue #415).
+* In certain cases, the `WebGL` vignette started with the
+mouse mode set to "selecting".
+* The `rglwidget()` function gets a new argument `fastTransparency`
+which makes WebGL mimic the `rgl` device when drawing transparent
+objects.  The default value is `TRUE` unless option
+`rgl.fastTransparency` is set to `FALSE`.
+* `writeSTL()` now writes `endsolid`, which is required by some apps.
+
+# rgl 1.3.1
 
 ## Major changes
 
