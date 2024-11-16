@@ -21,16 +21,16 @@ rglwidget() %>%
 toggleWidget(ids = plotids["data"], label = "Data")
 
 ## ----eval=FALSE---------------------------------------------------------------
-#  rglwidget() |>
-#  toggleWidget(ids = plotids["data"], label = "Data")
+# rglwidget() |>
+# toggleWidget(ids = plotids["data"], label = "Data")
 
 ## ----"Control before widget"--------------------------------------------------
 toggleWidget(NA, ids = plotids["data"], label = "Data") %>%
 rglwidget(controllers = .) 
 
 ## ----eval=FALSE---------------------------------------------------------------
-#  toggleWidget(NA, ids = plotids["data"], label = "Data") |>
-#    w => rglwidget(controllers = w)
+# toggleWidget(NA, ids = plotids["data"], label = "Data") |>
+#   w => rglwidget(controllers = w)
 
 ## ----"Toggle subsets"---------------------------------------------------------
 clear3d() # Remove the earlier display

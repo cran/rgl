@@ -9,7 +9,7 @@ options(rgl.useNULL = TRUE)
 setupKnitr(autoprint = TRUE)
 
 ## ----eval=FALSE---------------------------------------------------------------
-#  setupKnitr(autoprint = TRUE)
+# setupKnitr(autoprint = TRUE)
 
 ## -----------------------------------------------------------------------------
 # Show regression plane with z as dependent variable
