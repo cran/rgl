@@ -7,6 +7,6 @@
 # CXX_STD = CXX11
 PKG_CFLAGS=$(C_VISIBILITY)
 
-PKG_CPPFLAGS=-I/opt/R/arm64/include -DHAVE_PNG_H -I/opt/R/arm64/include/libpng16 -DRGL_NO_OPENGL -DR_NO_REMAP
+PKG_CPPFLAGS=-I/opt/R/arm64/include -DHAVE_PNG_H -I/opt/R/arm64/include/libpng16 -DRGL_NO_OPENGL -DR_NO_REMAP -Iext/earcut
 PKG_LIBS= -L/opt/R/arm64/lib -lpng16
 
