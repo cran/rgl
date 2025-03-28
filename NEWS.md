@@ -1,3 +1,11 @@
+# rgl 1.3.18
+
+* Internal code changes to satisfy `R CMD check` requirements.
+* Some memory leaks reported in issue #451 have been fixed.
+* The OpenGL "glad" loader has been updated to version 2.0.8.
+* A number of implicit type conversions have been made explicit
+to avoid compiler warnings.
+
 # rgl 1.3.17
 
 ## Bug fix

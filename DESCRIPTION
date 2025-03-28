@@ -1,5 +1,5 @@
 Package: rgl
-Version: 1.3.17
+Version: 1.3.18
 Title: 3D Visualization Using OpenGL
 Authors@R: c(person("Duncan", "Murdoch", role = c("aut", "cre"),
                      email = "murdoch.duncan@gmail.com"),
@@ -54,7 +54,7 @@ VignetteBuilder: knitr
 Biarch: true
 RoxygenNote: 7.2.3
 NeedsCompilation: yes
-Packaged: 2025-01-17 19:19:08 UTC; murdoch
+Packaged: 2025-03-27 16:42:16 UTC; murdoch
 Author: Duncan Murdoch [aut, cre],
   Daniel Adler [aut],
   Oleg Nenadic [ctb],
@@ -81,4 +81,4 @@ Author: Duncan Murdoch [aut, cre],
   Mapbox team [ctb, cph]
 Maintainer: Duncan Murdoch <murdoch.duncan@gmail.com>
 Repository: CRAN
-Date/Publication: 2025-01-17 20:50:02 UTC
+Date/Publication: 2025-03-28 07:20:02 UTC
