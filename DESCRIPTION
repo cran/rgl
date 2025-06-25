@@ -1,5 +1,5 @@
 Package: rgl
-Version: 1.3.18
+Version: 1.3.24
 Title: 3D Visualization Using OpenGL
 Authors@R: c(person("Duncan", "Murdoch", role = c("aut", "cre"),
                      email = "murdoch.duncan@gmail.com"),
@@ -28,12 +28,12 @@ Authors@R: c(person("Duncan", "Murdoch", role = c("aut", "cre"),
               person("Jonathon", "Love", role = "ctb"),
               person("Mapbox team", role = c("ctb", "cph")))
 Depends: R (>= 3.6.0)
-Suggests: MASS, markdown (>= 1.12), rmarkdown (>= 2.16), deldir (>=
-        1.0-4), orientlib, lattice, misc3d, magick, plotrix (>= 3.7-3),
-        tripack, interp, alphashape3d, tcltk, js (>= 1.2), webshot2 (>=
-        0.1.0), downlit (>= 0.4.0), pkgdown (>= 2.0.0), extrafont,
-        shiny, manipulateWidget (>= 0.9.0), testthat, crosstalk, V8,
-        chromote, jpeg, png
+Suggests: MASS, rmarkdown (>= 2.16), deldir (>= 1.0-4), orientlib,
+        lattice, misc3d, magick, plotrix (>= 3.7-3), tripack, interp,
+        alphashape3d, tcltk, js (>= 1.2), webshot2 (>= 0.1.0), downlit
+        (>= 0.4.0), pkgdown (>= 2.0.0), extrafont, shiny,
+        manipulateWidget (>= 0.9.0), testthat, crosstalk, V8, chromote,
+        jpeg, png, markdown
 Imports: graphics, grDevices, stats, utils, htmlwidgets (>= 1.6.0),
         htmltools, knitr (>= 1.33), jsonlite (>= 0.9.20), magrittr, R6,
         base64enc, mime
@@ -48,13 +48,14 @@ URL: https://github.com/dmurdoch/rgl, https://dmurdoch.github.io/rgl/
 SystemRequirements: OpenGL and GLU Library (Required for display in R.
         See "Installing OpenGL support" in README.md. Not needed if
         only browser displays using rglwidget() are wanted.), zlib
-        (optional), libpng (>=1.2.9, optional), FreeType (optional)
+        (optional), libpng (>=1.2.9, optional), FreeType (optional),
+        pandoc (>=1.14, needed for vignettes)
 BugReports: https://github.com/dmurdoch/rgl/issues
-VignetteBuilder: knitr
+VignetteBuilder: knitr, rmarkdown
 Biarch: true
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.2
 NeedsCompilation: yes
-Packaged: 2025-03-27 16:42:16 UTC; murdoch
+Packaged: 2025-06-24 20:16:05 UTC; murdoch
 Author: Duncan Murdoch [aut, cre],
   Daniel Adler [aut],
   Oleg Nenadic [ctb],
@@ -81,4 +82,4 @@ Author: Duncan Murdoch [aut, cre],
   Mapbox team [ctb, cph]
 Maintainer: Duncan Murdoch <murdoch.duncan@gmail.com>
 Repository: CRAN
-Date/Publication: 2025-03-28 07:20:02 UTC
+Date/Publication: 2025-06-25 13:50:02 UTC

@@ -1,3 +1,25 @@
+# rgl 1.3.24
+
+* The `shapelist3d()` function did not handle material names
+properly (issue #462).
+* The `markdown` package no longer supports `rgl`, so the change
+in `rgl` 1.3.1 to use it has been reverted.  This means Pandoc
+is once again necessary to build the vignettes.
+* Links from help pages to vignettes have been repaired
+and added, using new `\HTMLVignette{}{}{}` and
+`\HTMLVignetteCRAN{}{}{}{}` macros.
+* To support those macros, two environment variables are used.
+`VignetteRdPath` (default `"../html/"`) should be the lead-in of
+the URL for the HTML version of an Rd help file referenced from a 
+vignette, and `RdVignettePath`
+(default `"../doc/"`) should be the lead-in of the URL for a vignette
+referenced from an Rd file.
+* `abclines3d()` did not handle multiple colors properly, sometimes causing a crash (issue #476).
+* The `COPYING.GL2PS` file containing the license for
+the code used in `rgl.postscript()` has been moved so
+that it will be installed at the top level of the
+package.
+
 # rgl 1.3.18
 
 * Internal code changes to satisfy `R CMD check` requirements.

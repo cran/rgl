@@ -1,6 +1,8 @@
 ## ----setup, include=FALSE-----------------------------------------------------
-if (!requireNamespace("rmarkdown", quietly = TRUE)) {
-  warning(call. = FALSE, "These vignettes assume rmarkdown.  This was not found.")
+if (!requireNamespace("rmarkdown", quietly = TRUE) ||
+    !rmarkdown::pandoc_available("1.14")) {
+  warning(call. = FALSE, "These vignettes assume rmarkdown and Pandoc
+          version 1.14.  These were not found. Older versions will not work.")
   knitr::knit_exit()
 }
 knitr::opts_chunk$set(echo = TRUE, snapshot = FALSE, screenshot.force = FALSE)
