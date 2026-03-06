@@ -1,3 +1,8 @@
+# rgl 1.3.36
+
+* Fixed a typo that triggered a C++20 warning.
+* Improved `shinyGetPar3d()` example. 
+
 # rgl 1.3.34
 
 * The WebGL code did not handle the case of lit objects
